@@ -1,25 +1,32 @@
 from abc import ABC, abstractmethod, abstractproperty
 
+from qqqr.encrypt import gtk
 
-class Loginable(ABC):
-    @abstractproperty
-    def gtk(self) -> int:
-        """Get gtk in any way. Allow cached result.
+from ..interface.hook import Emittable
+
+
+class Loginable(ABC, Emittable):
+    def __init__(self, uin: int) -> None:
+        self.uin = uin
+
+    @property
+    def cookie(self):
+        """Get cookie in any way. Allow cached result.
 
         Returns:
-            int: gtk. Cached gtk is preferable.
+            int: cookie. Cached cookie is preferable.
         """
-        return self.new_gtk()
+        return self.new_cookie()
 
     @abstractmethod
-    def new_gtk(self) -> int:
-        """Get a new gtk. Means, cached gtk is not allowed.
+    def new_cookie(self) -> dict[str, str]:
+        """Get a new cookie. Means, cached cookie is not allowed.
 
         Returns:
-            int: gtk. Shouldn't be a cached one.
+            int: cookie. Shouldn't be a cached one.
         """
-        return 0
+        return
 
-    @abstractproperty
-    def uin(self) -> int:
-        return 0
+    @property
+    def gtk(self) -> int:
+        return gtk(self.cookie['p_skey'])

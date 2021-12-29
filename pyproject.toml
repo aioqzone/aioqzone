@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.pytest.ini_options]
+markers = [
+    "needuser: Need user interaction, DO NOT use in ci",
+    "incremental: xfail succ cases if pred case failed or skipped.",
+]
