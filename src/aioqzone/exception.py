@@ -3,8 +3,9 @@ class QzoneError(RuntimeError):
     """
     msg = 'unknown'
 
-    def __init__(self, code: int, *args):
+    def __init__(self, code: int, *args, rdict=None):
         self.code = int(code)
+        self.rdict = rdict
         if len(args) > 0 and isinstance(args[0], str):
             self.msg = args[0]
         RuntimeError.__init__(self, *args)

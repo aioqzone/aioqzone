@@ -3,6 +3,7 @@ import asyncio
 import pytest
 from aiohttp import ClientSession as Session
 from aioqzone.api import QzoneApi
+from aioqzone.api.loginman import MixedLoginMan
 
 
 @pytest.fixture(scope='module')
@@ -14,8 +15,11 @@ def storage():
 def man():
     from os import environ as env
 
-    from aioqzone.api.loginman import UPLoginMan
-    return UPLoginMan(env.get('TEST_UIN'), env.get('TEST_PASSWORD'))
+    return MixedLoginMan(
+        env.get('TEST_UIN'),
+        env.get('TEST_QRSTRATEGY', 'forbid'),    # forbid QR by default.
+        pwd=env.get('TEST_PASSWORD', None)
+    )
 
 
 @pytest.fixture(scope='module')
@@ -41,8 +45,32 @@ class TestFeedMore:
             storage.extend(i)
         assert storage
 
+    @pytest.skip('NotImplemented')
     async def test_complete(self, api: QzoneApi, storage: list):
-        pass
+        if not storage: pytest.skip('storage is empty')
+        fd = api.FeedData()    # TODO
+        await api.emotion_getcomments(fd)
 
+    @pytest.skip('NotImplemented')
     async def test_detail(self, api: QzoneApi, storage: list):
-        pass
+        if not storage: pytest.skip('storage is empty')
+        await api.emotion_msgdetail()
+
+    async def test_heartbeat(self, api: QzoneApi):
+        d = await api.get_feeds_count()
+        for k, v in d.items():
+            assert isinstance(k, str)
+            assert isinstance(v, int)
+
+    @pytest.skip('NotImplemented')
+    async def test_like(self, api: QzoneApi, storage: list):
+        if not storage: pytest.skip('storage is empty')
+        ld = api.LikeData()    # TODO
+        assert await api.like_app(ld, True)
+        assert await api.like_app(ld, False)
+
+    @pytest.skip('NotImplemented')
+    async def test_photo_list(self, api: QzoneApi, storage: list):
+        if not storage: pytest.skip('storage is empty')
+        album = api.AlbumData()    # TODO
+        await api.floatview_photo_list(album, 10)

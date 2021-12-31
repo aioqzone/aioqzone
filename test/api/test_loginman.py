@@ -8,8 +8,16 @@ from qqqr.exception import TencentLoginError
 
 @pytest.fixture(scope='class')
 def up():
-    man = api.UPLoginMan(env.get('TEST_UIN'), env.get('TEST_PASSWORD'))
-    man.register_hook(LoginEvent())
+    man = api.MixedLoginMan(
+        env.get('TEST_UIN'),
+        env.get('TEST_QRSTRATEGY', 'forbid'),
+        pwd=env.get('TEST_PASSWORD', None)
+    )
+
+    class mixed_event(LoginEvent, QREvent):
+        pass
+
+    man.register_hook(mixed_event())
     return man
 
 

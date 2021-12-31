@@ -1,15 +1,21 @@
+import logging
 import re
 from dataclasses import dataclass
-from random import random
+from functools import wraps
+from random import randint, random
+from typing import Any, Callable
 from urllib.parse import parse_qs, quote, unquote
 
 import aioqzone.api.constant as const
 from aiohttp import ClientSession as Session
+from aiohttp.client_exceptions import ClientResponseError
 from jssupport.jsjson import json_loads
 
 from ..exception import QzoneError
 from ..interface.login import Loginable
 from ..utils.time import time_ms
+
+logger = logging.getLogger(__name__)
 
 
 class QzoneApi:
@@ -25,13 +31,68 @@ class QzoneApi:
 
     def aget(self, url: str, params: dict[str, str] = None):
         params = params or {}
-        params |= {'g_tk': self.login.gtk}
+        params = params | {'g_tk': self.login.gtk}
         return self.sess.get(self.host + url, params=params)
 
     def apost(self, url: str, params: dict[str, str] = None, data: dict = None):
         params = params or {}
-        params |= {'g_tk': self.login.gtk}
+        params = params | {'g_tk': self.login.gtk}
         return self.sess.get(self.host + url, params=params, data=data)
+
+    def _relogin_retry(self, func: Callable):
+        """A decorator which will relogin and retry given func if cookie expired.
+
+        'cookie expired' is indicated by:
+        1. QzoneError code -3000 or -4002
+        2. HTTP response code 403
+
+        NOTE: Decorate code as less as possible; Do NOT modify args in the wrapped code.
+        """
+        @wraps(func)
+        async def relogin_wrapper(*args, **kwds):
+            try:
+                return await func(args, **kwds)
+            except QzoneError as e:
+                if e.code not in [-3000, -4002]: raise e
+            except ClientResponseError as e:
+                if e.status != 403: raise e
+
+            logger.warning(f'Cookie expire in {func.__name__}. Relogin...')
+            self.login.new_cookie()
+            return await func(args, **kwds)
+
+        return relogin_wrapper
+
+    def _rtext_handler(
+        self,
+        rtext: str,
+        cb: bool = True,
+        errno: Callable[[dict], int] = None,
+        msg: Callable[[dict], str] = None
+    ) -> dict[str, Any]:
+        """Deal with rtext from Qzone api response, returns parsed json dict.
+        Inner used only.
+
+        Args:
+            rtext (str): response.text()
+            cb (bool, optional): The text is to be parsed by callback_regex. Defaults to True.
+            errno (callable[[dict], int], optional): Error # getter. Defaults to get `code` field of the dict.
+            msg (callable[[dict], str], optional): Error message getter. Defaults to None.
+
+        Raises:
+            QzoneError: if errno != 0
+
+        Returns:
+            dict: json response
+        """
+        if cb: rtext = self.cb_regex.search(rtext).group(1)
+        r = json_loads(rtext)
+        errno = errno or (lambda d: int(d['code']))
+
+        if (err := errno(r)) != 0:
+            if msg: raise QzoneError(err, msg(r), rdict=r)
+            else: raise QzoneError(err, rdict=r)
+        return r
 
     class FeedsMoreTransaction:
         def __init__(self, default=None) -> None:
@@ -86,15 +147,16 @@ class QzoneApi:
             'usertime': time_ms(),
             'externparam': quote(trans.extern[pagenum])
         }
-        async with self.aget(const.feeds3_html_more, default | query) as r:
-            r.raise_for_status()
-            rtext = await r.text(encoding=self.encoding)
 
-        rtext = self.cb_regex.search(rtext).group(1)
-        rjson = json_loads(rtext)
-        if rjson['code'] != 0:
-            raise QzoneError(r['code'], r['message'])
+        @self._relogin_retry
+        async def retry_closure():
+            async with self.aget(const.feeds3_html_more, default | query) as r:
+                r.raise_for_status()
+                rtext = await r.text(encoding=self.encoding)
 
+            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+
+        r = await retry_closure()
         data: dict = r['data']
         trans.extern[pagenum + 1] = unquote(data['main']["externparam"])
         return data['data']
@@ -138,14 +200,16 @@ class QzoneApi:
             "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
         }
 
-        async with self.apost(const.emotion_getcomments, default | body) as r:
-            r.raise_for_status()
-            rtext = await r.text(encoding=self.encoding)
+        @self._relogin_retry
+        async def retry_closure():
+            async with self.apost(const.emotion_getcomments, default | body) as r:
+                r.raise_for_status()
+                rtext = await r.text(encoding=self.encoding)
 
-        r = self.cb_regex.search(rtext).group(1)
-        r = json_loads(r)
-        if r["err"] == 0: return r["newFeedXML"].strip()
-        raise QzoneError(r['err'], rdict=r)
+            return self._rtext_handler(rtext, errno=lambda d: int(d['err']))
+
+        r = await retry_closure()
+        return r["newFeedXML"].strip()
 
     async def emotion_msgdetail(self, owner: int, fid: str):
         """Get detail of a given msg.
@@ -157,10 +221,12 @@ class QzoneApi:
 
         Returns:
             dict: a dict reps the feed in detail
+
+        Raises:
+            `ClientResponseError`
+            `QzoneError`
         """
-        query = {
-            'uin': owner,
-            'tid': fid,
+        default = {
             't1_source': 1,
             'ftype': 0,
             'sort': 0,
@@ -171,9 +237,114 @@ class QzoneApi:
             'format': 'jsonp',
             'need_private_comment': 1,
         }
-        async with self.aget(const.emotion_msgdetail, params=query) as r:
-            r.raise_for_status()
-            rtext = await r.text(encoding=self.encoding)
+        query = {'uin': owner, 'tid': fid}
 
-        r = self.cb_regex.search(rtext).group(1)
-        return json_loads(r)
+        @self._relogin_retry
+        async def retry_closure():
+            async with self.aget(const.emotion_msgdetail, params=default | query) as r:
+                r.raise_for_status()
+                rtext = await r.text(encoding=self.encoding)
+
+            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+
+        return await retry_closure()
+
+    async def get_feeds_count(self) -> dict[str, int]:
+        """Get feeds update count (new feeds, new photos, new comments, etc)
+        NOTE: This api is also the 'keep-alive' signal to avoid cookie from expiring.
+        Call this api every 300s can help keep cookie alive.
+
+        Returns:
+            dict[str, int]: dict of all kinds of updates
+
+        Raises:
+            `ClientResponseError`
+            `QzoneError`
+        """
+        query = {'uin': self.login.uin, 'rd': random()}
+
+        @self._relogin_retry
+        async def retry_closure():
+            async with self.aget(const.get_feeds_count, query) as r:
+                r.raise_for_status()
+                rtext = await r.text(encoding=self.encoding)
+
+            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+
+        return await retry_closure()
+
+    @dataclass(frozen=True)
+    class LikeData:
+        unikey: str
+        curkey: str
+        appid: int
+        typeid: int
+        fid: str
+
+    async def like_app(self, likedata: LikeData, like: bool = True):
+        default = {
+            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
+            'opuin': self.login.uin,
+            'from': 1,
+            'active': 0,
+            'fupdate': 1,
+            'fid': likedata.fid
+        }
+        body = {}
+        url = const.internal_dolike_app if like else const.internal_unlike_app
+
+        @self._relogin_retry
+        async def retry_closure():
+            async with self.apost(url, data=default | body) as r:
+                r.raise_for_status()
+                rtext = await r.text(encoding=self.encoding)
+            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+
+        try:
+            return bool(await retry_closure())
+        except:
+            logger.warning('Error in dolike/unlike.', exc_info=True)
+            return False
+
+    @dataclass(frozen=True)
+    class AlbumData:
+        topicid: str
+        pickey: str
+        hostuin: int
+
+    async def floatview_photo_list(self, album: AlbumData, num: int):
+        default = {
+            'callback': 'viewer_Callback',
+            'cmtOrder': 1,
+            'fupdate': 1,
+            'plat': 'qzone',
+            'source': 'qzone',
+            'cmtNum': 0,
+            'likeNum': 0,
+            'inCharset': 'utf-8',
+            'outCharset': 'utf-8',
+            'callbackFun': 'viewer',
+            'offset': 0,
+            'appid': 311,
+            'isFirst': 1,
+            'need_private_comment': 1,
+        }
+        query = {
+            'topicId': album.topicid,
+            'picKey': album.pickey,
+            'hostUin': album.hostuin,
+            'number': num,
+            'uin': self.login.uin,
+            '_': time_ms(),
+            't': randint(1e8, 1e9 - 1)    # The distribution is not consistent
+        # with photo.js; but the format is.
+        }
+
+        @self._relogin_retry
+        async def retry_closure():
+            async with self.aget(const.floatview_photo_list, params=default | query) as r:
+                r.raise_for_status()
+                rtext = await r.text()
+            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+
+        return await retry_closure()
