@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 from aiohttp import ClientSession as Session
-from aioqzone.api import QzoneApi
 from aioqzone.api.loginman import MixedLoginMan
+from aioqzone.api.raw import QzoneApi
 
 
 @pytest.fixture(scope='module')

@@ -1,350 +1,131 @@
-import logging
-import re
-from dataclasses import dataclass
-from functools import wraps
-from random import randint, random
-from typing import Any, Callable
-from urllib.parse import parse_qs, quote, unquote
+"""
+Make some easy to use api from basic wrappers.
+"""
+from typing import Optional, Union
 
-import aioqzone.api.constant as const
-from aiohttp import ClientSession as Session
-from aiohttp.client_exceptions import ClientResponseError
-from jssupport.jsjson import json_loads
+from pydantic import BaseModel
 
-from ..exception import QzoneError
-from ..interface.login import Loginable
-from ..utils.time import time_ms
-
-logger = logging.getLogger(__name__)
+from .raw import QzoneApi
 
 
-class QzoneApi:
-    """A wrapper for Qzone http interface.
-    """
-    encoding = 'utf-8'
-    host = "https://user.qzone.qq.com"
-    cb_regex = re.compile(r"callback\((\{.*\})", re.S | re.I)
-
-    def __init__(self, session: Session, loginman: Loginable) -> None:
-        self.sess = session
-        self.login = loginman
-
-    def aget(self, url: str, params: dict[str, str] = None):
-        params = params or {}
-        params = params | {'g_tk': self.login.gtk}
-        return self.sess.get(self.host + url, params=params)
-
-    def apost(self, url: str, params: dict[str, str] = None, data: dict = None):
-        params = params or {}
-        params = params | {'g_tk': self.login.gtk}
-        return self.sess.get(self.host + url, params=params, data=data)
-
-    def _relogin_retry(self, func: Callable):
-        """A decorator which will relogin and retry given func if cookie expired.
-
-        'cookie expired' is indicated by:
-        1. QzoneError code -3000 or -4002
-        2. HTTP response code 403
-
-        NOTE: Decorate code as less as possible; Do NOT modify args in the wrapped code.
-        """
-        @wraps(func)
-        async def relogin_wrapper(*args, **kwds):
-            try:
-                return await func(args, **kwds)
-            except QzoneError as e:
-                if e.code not in [-3000, -4002]: raise e
-            except ClientResponseError as e:
-                if e.status != 403: raise e
-
-            logger.warning(f'Cookie expire in {func.__name__}. Relogin...')
-            self.login.new_cookie()
-            return await func(args, **kwds)
-
-        return relogin_wrapper
-
-    def _rtext_handler(
-        self,
-        rtext: str,
-        cb: bool = True,
-        errno: Callable[[dict], int] = None,
-        msg: Callable[[dict], str] = None
-    ) -> dict[str, Any]:
-        """Deal with rtext from Qzone api response, returns parsed json dict.
-        Inner used only.
-
-        Args:
-            rtext (str): response.text()
-            cb (bool, optional): The text is to be parsed by callback_regex. Defaults to True.
-            errno (callable[[dict], int], optional): Error # getter. Defaults to get `code` field of the dict.
-            msg (callable[[dict], str], optional): Error message getter. Defaults to None.
-
-        Raises:
-            QzoneError: if errno != 0
-
-        Returns:
-            dict: json response
-        """
-        if cb: rtext = self.cb_regex.search(rtext).group(1)
-        r = json_loads(rtext)
-        errno = errno or (lambda d: int(d['code']))
-
-        if (err := errno(r)) != 0:
-            if msg: raise QzoneError(err, msg(r), rdict=r)
-            else: raise QzoneError(err, rdict=r)
-        return r
-
-    class FeedsMoreTransaction:
-        def __init__(self, default=None) -> None:
-            self.extern = default or {}
-
-        def parse(self, page):
-            unquoted = self.extern[page]
-            if unquoted == "undefined": return {}
-            return {k: v[-1] for k, v in parse_qs(unquoted, keep_blank_values=True).items()}
-
-    async def feeds3_html_more(self, pagenum: int, trans: FeedsMoreTransaction = None) -> list:
-        """return a list of dict, each dict reps a feed.
-
-        Args:
-            pagenum (int): #page >= 0
-            trans: reps a skim transaction. Mutable.
-
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
-        """
-        default = {
-            'scope': 0,
-            'view': 1,
-            'daylist': '',
-            'uinlist': '',
-            'gid': '',
-            'flag': 1,
-            'filter': 'all',
-            'applist': 'all',
-            'refresh': 0,
-            'aisortEndTime': 0,
-            'aisortOffset': 0,
-            'getAisort': 0,
-            'aisortBeginTime': 0,
-            'firstGetGroup': 0,
-            'icServerTime': 0,
-            'mixnocache': 0,
-            'scene': 0,
-            'dayspac': 'undefined',
-            'sidomain': 'qzonestyle.gtimg.cn',
-            'useutf8': 1,
-            'outputhtmlfeed': 1,
-        }
-        trans = trans or self.FeedsMoreTransaction()
-        query = {
-            'rd': random(),
-            'uin': self.login.uin,
-            'pagenum': pagenum + 1,
-            'begintime': trans.parse(pagenum).get("basetime", "undefined"),
-            'count': 10,    # fixed
-            'usertime': time_ms(),
-            'externparam': quote(trans.extern[pagenum])
-        }
-
-        @self._relogin_retry
-        async def retry_closure():
-            async with self.aget(const.feeds3_html_more, default | query) as r:
-                r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
-
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
-
-        r = await retry_closure()
-        data: dict = r['data']
-        trans.extern[pagenum + 1] = unquote(data['main']["externparam"])
-        return data['data']
-
-    @dataclass(frozen=True)
-    class FeedData:
-        uin: int
-        tid: str
-        feedstype: str
-
-    async def emotion_getcomments(self, feedData: FeedData) -> str:
-        """Get complete html of a given feed
-
-        Args:
-            feedData (dict): [description]
-
-        Returns:
-            str: complete feed html
-
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
-        """
-        default = {
-            "pos": 0,
-            "num": 1,
-            "cmtnum": 1,
-            "t1_source": 1,
-            "who": 1,
-            "inCharset": "utf-8",
-            "outCharset": "utf-8",
-            "plat": "qzone",
-            "source": "ic",
-            "paramstr": 1,
-            "fullContent": 1,
-        }
-        body = {
-            "uin": feedData.uin,
-            "tid": feedData.tid,
-            "feedsType": feedData.feedstype,
-            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
-        }
-
-        @self._relogin_retry
-        async def retry_closure():
-            async with self.apost(const.emotion_getcomments, default | body) as r:
-                r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
-
-            return self._rtext_handler(rtext, errno=lambda d: int(d['err']))
-
-        r = await retry_closure()
-        return r["newFeedXML"].strip()
-
-    async def emotion_msgdetail(self, owner: int, fid: str):
-        """Get detail of a given msg.
-        NOTE: share msg is not support, i.e. `appid=311`
-
-        Args:
-            owner (int): owner uin
-            fid (str): feed id, named fid, tid or feedkey
-
-        Returns:
-            dict: a dict reps the feed in detail
-
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
-        """
-        default = {
-            't1_source': 1,
-            'ftype': 0,
-            'sort': 0,
-            'pos': 0,
-            'num': 20,
-            'callback': 'callback',
-            'code_version': 1,
-            'format': 'jsonp',
-            'need_private_comment': 1,
-        }
-        query = {'uin': owner, 'tid': fid}
-
-        @self._relogin_retry
-        async def retry_closure():
-            async with self.aget(const.emotion_msgdetail, params=default | query) as r:
-                r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
-
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
-
-        return await retry_closure()
-
-    async def get_feeds_count(self) -> dict[str, int]:
-        """Get feeds update count (new feeds, new photos, new comments, etc)
-        NOTE: This api is also the 'keep-alive' signal to avoid cookie from expiring.
-        Call this api every 300s can help keep cookie alive.
-
-        Returns:
-            dict[str, int]: dict of all kinds of updates
-
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
-        """
-        query = {'uin': self.login.uin, 'rd': random()}
-
-        @self._relogin_retry
-        async def retry_closure():
-            async with self.aget(const.get_feeds_count, query) as r:
-                r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
-
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
-
-        return await retry_closure()
-
-    @dataclass(frozen=True)
-    class LikeData:
-        unikey: str
-        curkey: str
+class DummyQapi(QzoneApi):
+    class FeedRep(BaseModel):
+        ver: int
         appid: int
         typeid: int
-        fid: str
+        key: str
+        abstime: int
+        uin: int
+        nickname: str
+        html: str
+        likecnt: Optional[int]
+        relycnt: Optional[int]
+        commentcnt: Optional[int]
 
-    async def like_app(self, likedata: LikeData, like: bool = True):
-        default = {
-            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
-            'opuin': self.login.uin,
-            'from': 1,
-            'active': 0,
-            'fupdate': 1,
-            'fid': likedata.fid
-        }
-        body = {}
-        url = const.internal_dolike_app if like else const.internal_unlike_app
+    async def feeds3_html_more(self, pagenum: int, trans: QzoneApi.FeedsMoreTransaction = None):
+        r = await super().feeds3_html_more(pagenum, trans=trans)
+        return [self.FeedRep.parse_obj(i) for i in r['data']]
 
-        @self._relogin_retry
-        async def retry_closure():
-            async with self.apost(url, data=default | body) as r:
-                r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+    async def emotion_getcomments(self, feedData: QzoneApi.FeedData):
+        r = await super().emotion_getcomments(feedData)
+        return str.strip(r['newFeedXML'])
 
-        try:
-            return bool(await retry_closure())
-        except:
-            logger.warning('Error in dolike/unlike.', exc_info=True)
-            return False
+    class CommentRep(BaseModel):
+        content: str
+        create_time: int
+        owner: dict
+        replyNum: int
+        tid: int
 
-    @dataclass(frozen=True)
-    class AlbumData:
-        topicid: str
-        pickey: str
-        hostuin: int
+    class PicRep(BaseModel):
+        height: int
+        width: int
+        url1: str
+        url2: str
+        url3: str
+        is_video: Optional[bool] = False
 
-    async def floatview_photo_list(self, album: AlbumData, num: int):
-        default = {
-            'callback': 'viewer_Callback',
-            'cmtOrder': 1,
-            'fupdate': 1,
-            'plat': 'qzone',
-            'source': 'qzone',
-            'cmtNum': 0,
-            'likeNum': 0,
-            'inCharset': 'utf-8',
-            'outCharset': 'utf-8',
-            'callbackFun': 'viewer',
-            'offset': 0,
-            'appid': 311,
-            'isFirst': 1,
-            'need_private_comment': 1,
-        }
-        query = {
-            'topicId': album.topicid,
-            'picKey': album.pickey,
-            'hostUin': album.hostuin,
-            'number': num,
-            'uin': self.login.uin,
-            '_': time_ms(),
-            't': randint(1e8, 1e9 - 1)    # The distribution is not consistent
-        # with photo.js; but the format is.
-        }
+    class VideoInfo(BaseModel):
+        cover_height: int
+        cover_width: int
+        url1: str
+        url2: str
+        url3: str
+        video_id: str
 
-        @self._relogin_retry
-        async def retry_closure():
-            async with self.aget(const.floatview_photo_list, params=default | query) as r:
-                r.raise_for_status()
-                rtext = await r.text()
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+    class VideoRep(PicRep):
+        video_info: 'DummyQapi.VideoInfo'
 
-        return await retry_closure()
+    class FeedDetailRep(BaseModel):
+        uin: int
+        name: str
+        tid: str
+        created_time: int
+
+        content: str
+        conlist: Optional[list[dict]] = None
+        pic: Optional[list[Union['DummyQapi.PicRep', 'DummyQapi.VideoRep']]] = None
+
+        cmtnum: int
+        commentlist: list['DummyQapi.CommentRep']
+        fwdnum: int
+
+        source_appid: str
+        source_name: Optional[str] = ""
+
+    async def emotion_msgdetail(self, owner: int, fid: str):
+        r = await super().emotion_msgdetail(owner, fid)
+        return self.FeedDetailRep.parse_obj(r)
+
+    class FeedsCount(BaseModel):
+        aboutHostFeeds_new_cnt: int
+        replyHostFeeds_new_cnt: int
+        myFeeds_new_cnt: int
+        friendFeeds_new_cnt: int
+        friendFeeds_newblog_cnt: int
+        friendFeeds_newphoto_cnt: int
+        specialCareFeeds_new_cnt: int
+        followFeeds_new_cnt: int
+        newfeeds_uinlist: list
+
+    async def get_feeds_count(self):
+        r = await super().get_feeds_count()
+        return self.FeedsCount.parse_obj(r)
+
+    class FloatViewPhoto(BaseModel):
+        albumId: str
+        createTime: str
+        desc: dict
+        ownerName: str
+        ownerUin: int
+        photoOwner: int
+        tid: str
+        topicId: str
+
+        height: int
+        width: int
+
+        pre: str
+        url: str
+        picId: str
+        picKey: str
+
+        cmtTotal: int
+        fwdnum: int
+
+        likeTotal: int
+        likeKey: str
+        likeList: list[dict]
+
+        lloc: str
+        original_tid: str
+        photocubage: int
+        phototype: int
+
+        isMultiPic: Optional[bool] = False
+        is_weixin_mode: Optional[bool] = False
+        is_video: Optional[bool] = False
+
+    async def floatview_photo_list(self, album: QzoneApi.AlbumData, num: int):
+        r = await super().floatview_photo_list(album, num)
+        return [DummyQapi.FloatViewPhoto.parse_obj(i) for i in r['photos']]
