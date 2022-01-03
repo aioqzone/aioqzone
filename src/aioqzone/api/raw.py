@@ -4,7 +4,6 @@ Basic wrapper of Qzone HTTP interface.
 
 import logging
 import re
-from pydantic import BaseModel
 from functools import wraps
 from random import randint, random
 from typing import Any, Callable
@@ -14,9 +13,11 @@ import aioqzone.api.constant as const
 from aiohttp import ClientSession as Session
 from aiohttp.client_exceptions import ClientResponseError
 from jssupport.jsjson import json_loads
+from pydantic import BaseModel
 
 from ..exception import QzoneError
 from ..interface.login import Loginable
+from ..type import FeedData, LikeData
 from ..utils.time import time_ms
 
 logger = logging.getLogger(__name__)
@@ -35,12 +36,12 @@ class QzoneApi:
 
     def aget(self, url: str, params: dict[str, str] = None):
         params = params or {}
-        params = params | {'g_tk': self.login.gtk}
+        params = params | {'g_tk': str(self.login.gtk)}
         return self.sess.get(self.host + url, params=params)
 
     def apost(self, url: str, params: dict[str, str] = None, data: dict = None):
         params = params or {}
-        params = params | {'g_tk': self.login.gtk}
+        params = params | {'g_tk': str(self.login.gtk)}
         return self.sess.get(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
@@ -89,8 +90,12 @@ class QzoneApi:
         Returns:
             dict: json response
         """
-        if cb: rtext = self.cb_regex.search(rtext).group(1)
+        if cb:
+            match = self.cb_regex.search(rtext)
+            assert match
+            rtext = match.group(1)
         r = json_loads(rtext)
+        assert isinstance(r, dict)
         errno = errno or (lambda d: int(d['code']))
 
         if (err := errno(r)) != 0:
@@ -164,11 +169,6 @@ class QzoneApi:
         data: dict[str, Any] = r['data']
         trans.extern[pagenum + 1] = unquote(data['main']["externparam"])
         return data
-
-    class FeedData(BaseModel):
-        uin: int
-        tid: str
-        feedstype: str
 
     async def emotion_getcomments(self, feedData: FeedData):
         """Get complete html of a given feed
@@ -275,13 +275,6 @@ class QzoneApi:
 
         r = await retry_closure()
         return r['data']
-
-    class LikeData(BaseModel):
-        unikey: str
-        curkey: str
-        appid: int
-        typeid: int
-        fid: str
 
     async def like_app(self, likedata: LikeData, like: bool = True):
         """Like or unlike a feed.
