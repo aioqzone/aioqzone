@@ -360,8 +360,8 @@ class QzoneApi:
             'number': num,
             'uin': self.login.uin,
             '_': time_ms(),
-            't': randint(1e8, 1e9 - 1)    # The distribution is not consistent
-        # with photo.js; but the format is.
+            't': randint(1e8, 1e9 - 1)    # type: ignore
+        # The distribution is not consistent with photo.js; but the format is.
         }
 
         @self._relogin_retry

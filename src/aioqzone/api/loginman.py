@@ -24,7 +24,7 @@ class ConstLoginMan(Loginable):
         super().__init__(uin)
         self._cookie = cookie
 
-    def new_cookie(self) -> int:
+    def new_cookie(self) -> dict[str, str]:
         return self._cookie
 
 
@@ -66,10 +66,14 @@ class QRLoginMan(Loginable):
         Raises:
             UserBreak: [description]
         """
+        assert self.hook
+        assert isinstance(self.hook, QREvent)
+        assert isinstance(self.hook, LoginEvent)
+
         man = QRLogin(QzoneAppid, QzoneProxy)
         thread = man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
         self.hook.cancel = thread.stop
-        self.hook.resend = man.show
+        self.hook.resend = lambda: self.hook.QrFetched(man.show())
 
         try:
             self._cookie = thread.result()

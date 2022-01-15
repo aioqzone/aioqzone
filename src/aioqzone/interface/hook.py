@@ -2,7 +2,7 @@
 Define hooks that can trigger user actions.
 """
 
-from typing import Callable
+from typing import Callable, Optional
 
 
 class Event:
@@ -31,10 +31,10 @@ class Emittable:
 class QREvent(Event):
     """Defines usual events happens during QR login."""
 
-    cancel: Callable[[], None]
-    resend: Callable[[], None]
+    cancel: Optional[Callable[[], None]]
+    resend: Optional[Callable[[], None]]
 
-    def QrFetched(self, png: bytes):
+    def QrFetched(self, png: bytes, renew: bool = False):
         """Will be called on new QR code bytes are fetched. Means this will be triggered on:
         1. QR login start
         2. QR expired
@@ -42,6 +42,7 @@ class QREvent(Event):
 
         Args:
             png (bytes): QR bytes (png format)
+            renew (bool): this QR is a refreshed QR.
         """
         pass
 

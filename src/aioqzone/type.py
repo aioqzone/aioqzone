@@ -31,6 +31,36 @@ class FeedRep(BaseModel):
     commentcnt: Optional[int]
 
 
+class FeedMoreAux(BaseModel):
+    hasMoreFeeds: bool
+    dayspac: int
+    pagenum: int
+    externparam: str
+    begintime: int
+    endtime: str
+
+    lastaccesstime: str
+    lastAccessRelateTime: str
+
+    aisortBeginTime: str
+    aisortEndTime: str
+    aisortOffset: str
+    aisortNextTime: str
+
+    daylist: str
+    uinlist: str
+
+    # attach: str
+    # searchtype: str
+    # error: str
+    # hotkey: str
+    # icGroupData: list
+    # host_level: str
+    # friend_level: str
+    # hidedNameList: list
+    # owner_bitmap: str
+
+
 class CommentRep(BaseModel):
     content: str
     create_time: int
