@@ -63,7 +63,7 @@ class QzoneApi:
                 if e.status != 403: raise e
 
             logger.info(f'Cookie expire in {func.__name__}. Relogin...')
-            self.login.new_cookie()
+            await self.login.new_cookie()
             return await func(args, **kwds)
 
         return relogin_wrapper

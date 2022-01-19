@@ -2,7 +2,7 @@
 Define hooks that can trigger user actions.
 """
 
-from typing import Callable, Optional
+from typing import Callable, Optional, Awaitable
 
 
 class Event:
@@ -31,10 +31,10 @@ class Emittable:
 class QREvent(Event):
     """Defines usual events happens during QR login."""
 
-    cancel: Optional[Callable[[], None]]
-    resend: Optional[Callable[[], None]]
+    cancel: Optional[Callable[[], Awaitable[None]]]
+    resend: Optional[Callable[[], Awaitable[None]]]
 
-    def QrFetched(self, png: bytes, renew: bool = False):
+    async def QrFetched(self, png: bytes, renew: bool = False):
         """Will be called on new QR code bytes are fetched. Means this will be triggered on:
         1. QR login start
         2. QR expired
@@ -46,7 +46,7 @@ class QREvent(Event):
         """
         pass
 
-    def QrFailed(self, msg: str = None):
+    async def QrFailed(self, msg: str = None):
         """QR login failed.
         NOTE: Always be called before `LoginEvent.LoginFailed`.
 
@@ -55,7 +55,7 @@ class QREvent(Event):
         """
         pass
 
-    def QrSucceess(self):
+    async def QrSucceess(self):
         """QR login success.
         """
         pass
@@ -63,7 +63,7 @@ class QREvent(Event):
 
 class LoginEvent(Event):
     """Defines usual events happens during login."""
-    def LoginFailed(self, msg: str = None):
+    async def LoginFailed(self, msg: str = None):
         """Will be emitted on login failed.
         NOTE: This event will be triggered on every failure of login attempt.
         Means that logic in this event may be executed multiple times.
@@ -73,7 +73,7 @@ class LoginEvent(Event):
         """
         pass
 
-    def LoginSuccess(self):
-        """Will be emitted on login success.
+    async def LoginSuccess(self):
+        """Will be emitted after login success. Low prior, scheduled by loop instead of awaiting.
         """
         pass

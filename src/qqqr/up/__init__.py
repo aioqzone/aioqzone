@@ -1,3 +1,4 @@
+from http.cookies import SimpleCookie
 import re
 from dataclasses import dataclass
 from random import choice, random
@@ -100,13 +101,14 @@ class UPLogin(LoginBase):
         r[0] = int(r[0])
         return CheckResult(*r)
 
-    async def login(self, r: CheckResult, pastcode: int = 0):
+    async def login(self, r: CheckResult, pastcode: int = 0) -> SimpleCookie[str]:
         if r.code == StatusCode.Authenticated:
             # OK
             pass
         elif r.code == StatusCode.NeedCaptcha and pastcode == 0:
             # 0 -> 1: OK; !0 -> 1: Error
-            return await self.login(await self.passVC(r), StatusCode.NeedCaptcha)
+            cookie = await self.login(await self.passVC(r), StatusCode.NeedCaptcha)
+            return cookie
         elif r.code == StatusCode.NeedVerify and pastcode != StatusCode.NeedVerify:
             # !10009 -> 10009: OK; 10009 -> 10009: Error
             raise NotImplementedError('wait for next version :D')

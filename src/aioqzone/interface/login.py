@@ -9,17 +9,17 @@ class Loginable(ABC, Emittable):
     def __init__(self, uin: int) -> None:
         self.uin = uin
 
-    @property
-    def cookie(self):
+    @abstractproperty
+    def cookie(self) -> dict[str, str]:    # type: ignore
         """Get cookie in any way. Allow cached result.
 
         Returns:
             int: cookie. Cached cookie is preferable.
         """
-        return self.new_cookie()
+        pass
 
     @abstractmethod
-    def new_cookie(self) -> dict[str, str]:
+    async def new_cookie(self) -> dict[str, str]:
         """Get a new cookie. Means, cached cookie is not allowed.
 
         Returns:

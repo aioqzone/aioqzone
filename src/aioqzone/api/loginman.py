@@ -4,6 +4,7 @@ Users can inherit these managers and implement their own caching logic.
 """
 
 import logging
+import asyncio
 from typing import Union
 
 from qqqr.constants import QzoneAppid, QzoneProxy
@@ -33,25 +34,28 @@ class UPLoginMan(Loginable):
 
     def __init__(self, uin: int, pwd: str) -> None:
         super().__init__(uin)
+        self.lock = asyncio.Lock()
         self._pwd = pwd
 
-    def new_cookie(self) -> dict[str, str]:
+    async def new_cookie(self) -> dict[str, str]:
         """
         Raises:
             TencentLoginError
         """
         try:
-            login = UPLogin(QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
-            self._cookie = login.login(login.check())
-            self.hook.LoginSuccess()
-            return self._cookie
+            async with self.lock:
+                login = UPLogin(QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
+                self._cookie = await login.login(await login.check())
+            asyncio.ensure_future(self.hook.LoginSuccess())    # schedule in future
+            return {k: v.value for k, v in self._cookie.items()}
         except TencentLoginError as e:
             logger.warning(str(e))
             raise e
 
     @property
-    def cookie(self):
-        return self._cookie
+    async def cookie(self):
+        async with self.lock:
+            return self._cookie
 
 
 class QRLoginMan(Loginable):
@@ -61,7 +65,7 @@ class QRLoginMan(Loginable):
         super().__init__(uin)
         self.refresh = refresh_time
 
-    def new_cookie(self) -> dict[str, str]:
+    async def new_cookie(self) -> dict[str, str]:
         """
         Raises:
             UserBreak: [description]
@@ -71,24 +75,32 @@ class QRLoginMan(Loginable):
         assert isinstance(self.hook, LoginEvent)
 
         man = QRLogin(QzoneAppid, QzoneProxy)
-        thread = man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
-        self.hook.cancel = thread.stop
-        self.hook.resend = lambda: self.hook.QrFetched(man.show())
+        thread = await man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
+
+        async def tmp_cancel():
+            thread.cancel()
+
+        async def tmp_resend():
+            assert isinstance(self.hook, QREvent)
+            await self.hook.QrFetched(await man.show())
+
+        self.hook.cancel = tmp_cancel
+        self.hook.resend = tmp_resend
 
         try:
             self._cookie = thread.result()
-            self.hook.LoginSuccess()
-            return self._cookie
+            asyncio.ensure_future(self.hook.LoginSuccess())
+            return {k: v.value for k, v in self._cookie.items()}
         except TimeoutError as e:
-            self.hook.QrFailed()
+            await self.hook.QrFailed()
             logger.warning(str(e))
-            self.hook.LoginFailed(str(e))
+            await self.hook.LoginFailed(str(e))
             raise e
         except KeyboardInterrupt as e:
             raise UserBreak from e
         except:
             logger.fatal('Unexpected error in QR login.', exc_info=True)
-            self.hook.LoginFailed(str("二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."))
+            await self.hook.LoginFailed(str("二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."))
             exit(1)
         finally:
             self.hook.cancel = self.hook.resend = None
@@ -107,7 +119,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         if strategy != 'forbid':
             QRLoginMan.__init__(self, uin, refresh_time)
 
-    def new_cookie(self) -> dict[str, str]:
+    async def new_cookie(self) -> dict[str, str]:
         """[summary]
 
         Raises:
@@ -125,7 +137,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         }[self.strategy]
         for c in order:
             try:
-                return c.new_cookie()
+                return await c.new_cookie()
             except (TencentLoginError, TimeoutError) as e:
                 continue
 
@@ -134,5 +146,5 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         else:
             msg = "您可能已被限制登陆."
 
-        self.hook.LoginFailed(msg)
+        await self.hook.LoginFailed(msg)
         raise LoginError(msg, self.strategy)
