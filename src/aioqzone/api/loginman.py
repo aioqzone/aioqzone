@@ -34,28 +34,25 @@ class UPLoginMan(Loginable):
 
     def __init__(self, uin: int, pwd: str) -> None:
         super().__init__(uin)
-        self.lock = asyncio.Lock()
         self._pwd = pwd
 
-    async def new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> dict[str, str]:
         """
         Raises:
             TencentLoginError
         """
         try:
-            async with self.lock:
-                login = UPLogin(QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
-                self._cookie = await login.login(await login.check())
-            asyncio.ensure_future(self.hook.LoginSuccess())    # schedule in future
+            login = UPLogin(QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
+            self._cookie = await login.login(await login.check())
+            asyncio.create_task(self.hook.LoginSuccess())    # schedule in future
             return {k: v.value for k, v in self._cookie.items()}
         except TencentLoginError as e:
             logger.warning(str(e))
             raise e
 
     @property
-    async def cookie(self):
-        async with self.lock:
-            return self._cookie
+    def cookie(self):
+        return self._cookie
 
 
 class QRLoginMan(Loginable):
@@ -65,7 +62,7 @@ class QRLoginMan(Loginable):
         super().__init__(uin)
         self.refresh = refresh_time
 
-    async def new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> dict[str, str]:
         """
         Raises:
             UserBreak: [description]
@@ -89,7 +86,7 @@ class QRLoginMan(Loginable):
 
         try:
             self._cookie = thread.result()
-            asyncio.ensure_future(self.hook.LoginSuccess())
+            asyncio.create_task(self.hook.LoginSuccess())
             return {k: v.value for k, v in self._cookie.items()}
         except TimeoutError as e:
             await self.hook.QrFailed()
@@ -119,7 +116,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         if strategy != 'forbid':
             QRLoginMan.__init__(self, uin, refresh_time)
 
-    async def new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> dict[str, str]:
         """[summary]
 
         Raises:
@@ -137,7 +134,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         }[self.strategy]
         for c in order:
             try:
-                return await c.new_cookie()
+                return await c._new_cookie()
             except (TencentLoginError, TimeoutError) as e:
                 continue
 

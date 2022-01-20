@@ -3,7 +3,6 @@ Basic wrapper of Qzone HTTP interface.
 """
 
 import logging
-import re
 from functools import wraps
 from random import randint, random
 from typing import Any, Callable
@@ -17,7 +16,8 @@ from pydantic import BaseModel
 
 from ..exception import QzoneError
 from ..interface.login import Loginable
-from ..type import FeedData, LikeData
+from ..type import LikeData
+from ..utils.regex import response_callback
 from ..utils.time import time_ms
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,6 @@ class QzoneApi:
     """
     encoding = 'utf-8'
     host = "https://user.qzone.qq.com"
-    cb_regex = re.compile(r"callback\((\{.*\})", re.S | re.I)
 
     def __init__(self, session: Session, loginman: Loginable) -> None:
         self.sess = session
@@ -91,7 +90,7 @@ class QzoneApi:
             dict: json response
         """
         if cb:
-            match = self.cb_regex.search(rtext)
+            match = response_callback.search(rtext)
             assert match
             rtext = match.group(1)
         r = json_loads(rtext)
@@ -101,10 +100,10 @@ class QzoneApi:
         if (err := errno(r)) != 0:
             if msg: raise QzoneError(err, msg(r), rdict=r)
             else: raise QzoneError(err, rdict=r)
-        return r
+        return r    # type: ignore
 
     class FeedsMoreTransaction:
-        def __init__(self, default=None) -> None:
+        def __init__(self, default: dict = None) -> None:
             self.extern = default or {}
 
         def parse(self, page):
@@ -112,12 +111,15 @@ class QzoneApi:
             if unquoted == "undefined": return {}
             return {k: v[-1] for k, v in parse_qs(unquoted, keep_blank_values=True).items()}
 
-    async def feeds3_html_more(self, pagenum: int, trans: FeedsMoreTransaction = None):
+    async def feeds3_html_more(
+        self, pagenum: int, trans: FeedsMoreTransaction = None, count: int = 10
+    ):
         """return a list of dict, each dict reps a page of feeds.
 
         Args:
             pagenum (int): #page >= 0
             trans: reps a skim transaction. Mutable.
+            count: feed count
 
         Raises:
             `ClientResponseError`
@@ -152,7 +154,7 @@ class QzoneApi:
             'uin': self.login.uin,
             'pagenum': pagenum + 1,
             'begintime': trans.parse(pagenum).get("basetime", "undefined"),
-            'count': 10,    # fixed
+            'count': count,
             'usertime': time_ms(),
             'externparam': quote(trans.extern[pagenum])
         }
@@ -170,11 +172,13 @@ class QzoneApi:
         trans.extern[pagenum + 1] = unquote(data['main']["externparam"])
         return data
 
-    async def emotion_getcomments(self, feedData: FeedData):
+    async def emotion_getcomments(self, uin: int, tid: int, feedstype: int):
         """Get complete html of a given feed
 
         Args:
-            feedData (dict): [description]
+            uin (int):
+            tid (int):
+            feedstype (int):
 
         Returns:
             str: complete feed html
@@ -197,9 +201,9 @@ class QzoneApi:
             "fullContent": 1,
         }
         body = {
-            "uin": feedData.uin,
-            "tid": feedData.tid,
-            "feedsType": feedData.feedstype,
+            "uin": uin,
+            "tid": tid,
+            "feedsType": feedstype,
             "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
         }
 

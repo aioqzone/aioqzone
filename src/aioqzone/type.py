@@ -1,14 +1,10 @@
 from typing import Optional, Union
+
 from pydantic import BaseModel
 from pydantic.networks import HttpUrl
 
 
-class FeedData(BaseModel):
-    uin: int
-    tid: str
-    feedstype: str
-
-
+# LikeData is not a response of any API. It's just a type def.
 class LikeData(BaseModel):
     unikey: str
     curkey: str
@@ -16,7 +12,20 @@ class LikeData(BaseModel):
     typeid: int
     fid: str
 
+    @staticmethod
+    def persudo_curkey(uin: int, abstime: int):
+        return str(uin).ljust(12, '0') + str(abstime).ljust(12, '0')
 
+    @staticmethod
+    def persudo_unikey(appid: int, uin: int, **kwds):
+        if appid == 311:
+            fid = kwds.get('fid', None) or kwds.get('key')
+            return f"https://user.qzone.qq.com/{uin}/mood/{fid}"
+
+        raise ValueError(appid)
+
+
+# Below are the response reps of Qzone Apis.
 class FeedRep(BaseModel):
     ver: int
     appid: int
@@ -61,8 +70,11 @@ class FeedMoreAux(BaseModel):
     # owner_bitmap: str
 
 
-class CommentRep(BaseModel):
-    content: str
+class HasContent(BaseModel):
+    content: str = ''
+
+
+class CommentRep(HasContent):
     create_time: int
     owner: dict
     replyNum: int
@@ -91,21 +103,20 @@ class VideoRep(PicRep):
     video_info: VideoInfo
 
 
-class FeedDetailRep(BaseModel):
+class FeedDetailRep(HasContent):
     uin: int
     name: str
     tid: str
     created_time: int
 
-    content: str
-    conlist: Optional[list[dict]] = None
+    rt_con: Optional[HasContent] = None
     pic: Optional[list[Union[PicRep, VideoRep]]] = None
 
     cmtnum: int
     commentlist: list[CommentRep]
     fwdnum: int
 
-    source_appid: str
+    source_appid: str = ""
     source_name: Optional[str] = ""
 
 
@@ -134,9 +145,9 @@ class FloatViewPhoto(BaseModel):
     height: int
     width: int
 
-    pre: str
-    url: str
-    picId: str
+    pre: HttpUrl
+    url: HttpUrl
+    picId: HttpUrl
     picKey: str
 
     cmtTotal: int

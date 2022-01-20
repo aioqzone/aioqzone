@@ -103,4 +103,4 @@ class QRLogin(LoginBase):
 
         f = asyncio.Future()
         expire_callback = expire_callback or send_callback
-        return asyncio.ensure_future(innerloop())
+        return asyncio.create_task(innerloop())
