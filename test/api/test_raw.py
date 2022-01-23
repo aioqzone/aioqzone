@@ -5,7 +5,7 @@ import pytest
 from aiohttp import ClientSession as Session
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
-from aioqzone.type import FeedData, LikeData
+from aioqzone.type import LikeData
 
 first = lambda it, pred: next(filter(pred, it), None)
 
@@ -16,22 +16,23 @@ def storage():
 
 
 @pytest.fixture(scope='module')
-def man():
-    from os import environ as env
-
-    assert (uin := env.get('TEST_UIN'))
-    return MixedLoginMan(
-        int(uin),
-        env.get('TEST_QRSTRATEGY', 'forbid'),    # forbid QR by default.
-        pwd=env.get('TEST_PASSWORD', None)
-    )
-
-
-@pytest.fixture(scope='module')
 def event_loop():
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
+
+
+@pytest.fixture(scope='module')
+async def man():
+    from os import environ as env
+
+    async with Session() as sess:
+        yield MixedLoginMan(
+            sess,
+            int(env['TEST_UIN']),
+            env.get('TEST_QRSTRATEGY', 'forbid'),    # forbid QR by default.
+            pwd=env.get('TEST_PASSWORD', None)
+        )
 
 
 @pytest.fixture(scope='module')
@@ -51,11 +52,14 @@ class TestRaw:
             storage.extend(i)
         assert storage
 
-    @pytest.mark.skip('NotImplemented')
     async def test_complete(self, api: QzoneApi, storage: list):
         if not storage: pytest.skip('storage is empty')
-        fd = FeedData()    # TODO
-        d = await api.emotion_getcomments(fd)
+        f: Optional[dict] = first(storage, None)
+        if f is None: pytest.skip('No feed in storage')
+        assert f
+        from aioqzone.utils.html import HtmlInfo
+        _, info = HtmlInfo.from_html(f['html'])
+        d = await api.emotion_getcomments(f['uin'], f['key'], info.feedstype)
         assert 'newFeedXML' in d
 
     @pytest.mark.skip('NotImplemented')

@@ -31,12 +31,12 @@ def ssl_context():
 class LoginBase:
     login_sig: str = ''
 
-    def __init__(self, app: APPID, proxy: Proxy, info: PT_QR_APP = None) -> None:
+    def __init__(self, sess: Session, app: APPID, proxy: Proxy, info: PT_QR_APP = None) -> None:
         self.app = app
         self.proxy = proxy
         self.info = info if info else PT_QR_APP()
         self.header = {'DNT': '1', 'Referer': 'https://i.qq.com/', 'User-Agent': UA}
-        self.session = Session(headers=self.header)
+        self.session = sess
         self.ssl = ssl_context()
 
     @property

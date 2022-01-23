@@ -172,12 +172,12 @@ class QzoneApi:
         trans.extern[pagenum + 1] = unquote(data['main']["externparam"])
         return data
 
-    async def emotion_getcomments(self, uin: int, tid: int, feedstype: int):
+    async def emotion_getcomments(self, uin: int, tid: str, feedstype: int):
         """Get complete html of a given feed
 
         Args:
             uin (int):
-            tid (int):
+            tid (str):
             feedstype (int):
 
         Returns:

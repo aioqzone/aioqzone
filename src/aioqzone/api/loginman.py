@@ -3,10 +3,11 @@ Collect some built-in login manager w/o caching.
 Users can inherit these managers and implement their own caching logic.
 """
 
-import logging
 import asyncio
+import logging
 from typing import Union
 
+from aiohttp import ClientSession
 from qqqr.constants import QzoneAppid, QzoneProxy
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QRLogin
@@ -32,8 +33,9 @@ class ConstLoginMan(Loginable):
 class UPLoginMan(Loginable):
     hook: LoginEvent
 
-    def __init__(self, uin: int, pwd: str) -> None:
+    def __init__(self, sess: ClientSession, uin: int, pwd: str) -> None:
         super().__init__(uin)
+        self.sess = sess
         self._pwd = pwd
 
     async def _new_cookie(self) -> dict[str, str]:
@@ -42,7 +44,7 @@ class UPLoginMan(Loginable):
             TencentLoginError
         """
         try:
-            login = UPLogin(QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
+            login = UPLogin(self.sess, QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
             self._cookie = await login.login(await login.check())
             asyncio.create_task(self.hook.LoginSuccess())    # schedule in future
             return {k: v.value for k, v in self._cookie.items()}
@@ -58,8 +60,9 @@ class UPLoginMan(Loginable):
 class QRLoginMan(Loginable):
     hook: Union[LoginEvent, QREvent]
 
-    def __init__(self, uin: int, refresh_time: int = 6) -> None:
+    def __init__(self, sess: ClientSession, uin: int, refresh_time: int = 6) -> None:
         super().__init__(uin)
+        self.sess = sess
         self.refresh = refresh_time
 
     async def _new_cookie(self) -> dict[str, str]:
@@ -71,7 +74,7 @@ class QRLoginMan(Loginable):
         assert isinstance(self.hook, QREvent)
         assert isinstance(self.hook, LoginEvent)
 
-        man = QRLogin(QzoneAppid, QzoneProxy)
+        man = QRLogin(self.sess, QzoneAppid, QzoneProxy)
         thread = await man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
 
         async def tmp_cancel():
@@ -108,13 +111,13 @@ class QRLoginMan(Loginable):
 
 
 class MixedLoginMan(UPLoginMan, QRLoginMan):
-    def __init__(self, uin: int, strategy: str, pwd: str = None, refresh_time: int = 6) -> None:
+    def __init__(self, sess: ClientSession,uin: int, strategy: str, pwd: str = None, refresh_time: int = 6) -> None:
         self.strategy = strategy
         if strategy != 'force':
             assert pwd
-            UPLoginMan.__init__(self, uin, pwd)
+            UPLoginMan.__init__(self, sess, uin, pwd)
         if strategy != 'forbid':
-            QRLoginMan.__init__(self, uin, refresh_time)
+            QRLoginMan.__init__(self, sess, uin, refresh_time)
 
     async def _new_cookie(self) -> dict[str, str]:
         """[summary]

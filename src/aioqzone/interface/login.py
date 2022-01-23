@@ -1,7 +1,7 @@
+import asyncio
 from abc import ABC, abstractmethod, abstractproperty
 
 from qqqr.encrypt import gtk
-import asyncio
 
 from ..interface.hook import Emittable
 

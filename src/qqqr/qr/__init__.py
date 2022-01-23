@@ -101,6 +101,5 @@ class QRLogin(LoginBase):
                 raise UserBreak
             raise TimeoutError
 
-        f = asyncio.Future()
         expire_callback = expire_callback or send_callback
         return asyncio.create_task(innerloop())

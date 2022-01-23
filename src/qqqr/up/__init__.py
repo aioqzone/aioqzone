@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from random import choice, random
 from time import time_ns
 
+from aiohttp import ClientSession
+
 from jssupport.execjs import ExecJS
 
 from ..base import LoginBase
@@ -44,8 +46,10 @@ class UPLogin(LoginBase):
     node = 'node'
     _captcha = None
 
-    def __init__(self, app: APPID, proxy: Proxy, user: User, info: PT_QR_APP = None) -> None:
-        super().__init__(app, proxy, info=info)
+    def __init__(
+        self, sess: ClientSession, app: APPID, proxy: Proxy, user: User, info: PT_QR_APP = None
+    ):
+        super().__init__(sess, app, proxy, info=info)
         assert user.uin
         assert user.pwd
         self.user = user

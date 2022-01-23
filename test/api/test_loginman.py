@@ -1,31 +1,43 @@
+import asyncio
 from os import environ as env
 
 import aioqzone.api.loginman as api
 import pytest
+from aiohttp import ClientSession
 from aioqzone.interface.hook import LoginEvent, QREvent
 from qqqr.exception import TencentLoginError
 
 
+@pytest.fixture(scope='module')
+def event_loop():
+    loop = asyncio.new_event_loop()
+    yield loop
+    loop.close()
+
+
 @pytest.fixture(scope='class')
-def up():
-    man = api.MixedLoginMan(
-        env.get('TEST_UIN'),
-        env.get('TEST_QRSTRATEGY', 'forbid'),
-        pwd=env.get('TEST_PASSWORD', None)
-    )
+async def up():
+    async with ClientSession() as sess:
+        man = api.MixedLoginMan(
+            sess,
+            int(env['TEST_UIN']),
+            env.get('TEST_QRSTRATEGY', 'forbid'),
+            pwd=env.get('TEST_PASSWORD', None)
+        )
 
-    class mixed_event(LoginEvent, QREvent):
-        pass
+        class mixed_event(LoginEvent, QREvent):
+            pass
 
-    man.register_hook(mixed_event())
-    return man
+        man.register_hook(mixed_event())
+        yield man
 
 
 @pytest.mark.incremental
 class TestUP:
-    def test_newcookie(self, up: api.UPLoginMan):
+    @pytest.mark.asyncio
+    async def test_newcookie(self, up: api.UPLoginMan):
         try:
-            assert 'p_skey' in up.new_cookie()
+            assert 'p_skey' in await up.new_cookie()
         except TencentLoginError:
             pytest.skip('Login failed.')
 
@@ -37,7 +49,7 @@ class TestUP:
 
 
 @pytest.fixture(scope='class')
-def qr():
+async def qr():
     import cv2 as cv
     import numpy as np
 
@@ -50,15 +62,17 @@ def qr():
             cv.imshow('Scan and login', frombytes(png))
             cv.waitKey()
 
-    man = api.QRLoginMan(env.get('TEST_UIN'))
-    man.register_hook(inner_qrevent())
-    return man
+    async with ClientSession() as sess:
+        man = api.QRLoginMan(sess, int(env['TEST_UIN']))
+        man.register_hook(inner_qrevent())
+        yield man
 
 
 @pytest.mark.needuser
 class TestQR:
-    def test_newcookie(self, qr: api.QRLoginMan):
-        assert 'p_skey' in qr.new_cookie()
+    @pytest.mark.asyncio
+    async def test_newcookie(self, qr: api.QRLoginMan):
+        assert 'p_skey' in await qr.new_cookie()
 
     def test_cookie(self, qr: api.QRLoginMan):
         assert qr.cookie
@@ -66,10 +80,12 @@ class TestQR:
     def test_gtk(self, qr: api.QRLoginMan):
         assert qr.gtk
 
-    def test_cancel(self, qr: api.QRLoginMan):
-        qr.new_cookie()
-        qr.hook.cancel()
+    @pytest.mark.asyncio
+    async def test_cancel(self, qr: api.QRLoginMan):
+        await qr.new_cookie()
+        await qr.hook.cancel()    # type: ignore
 
-    def test_resend(self, qr: api.QRLoginMan):
-        qr.new_cookie()
-        qr.hook.resend()
+    @pytest.mark.asyncio
+    async def test_resend(self, qr: api.QRLoginMan):
+        await qr.new_cookie()
+        await qr.hook.resend()    # type: ignore

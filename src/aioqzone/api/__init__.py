@@ -14,7 +14,7 @@ class DummyQapi(QzoneApi):
         main = r['main']
         return [FeedRep.parse_obj(i) for i in data], FeedMoreAux.parse_obj(main)
 
-    async def emotion_getcomments(self, uin: int, tid: int, feedstype: int):
+    async def emotion_getcomments(self, uin: int, tid: str, feedstype: int):
         r = await super().emotion_getcomments(uin, tid, feedstype)
         return str.strip(r['newFeedXML'])
 

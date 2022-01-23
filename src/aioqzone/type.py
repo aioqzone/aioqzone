@@ -82,25 +82,70 @@ class CommentRep(HasContent):
 
 
 class PicRep(BaseModel):
-    height: int
-    width: int
+    height: int = 0
+    width: int = 0
     url1: HttpUrl
     url2: HttpUrl
     url3: HttpUrl
-    is_video: Optional[bool] = False
+    is_video: Optional[int] = False
+
+    def from_url(self, url: HttpUrl):
+        self.url1 = self.url2 = self.url3 = url
+
+    @classmethod
+    def from_floatview(cls, fv: 'FloatViewPhoto'):
+        if fv.is_video and fv.video_info:
+            return VideoRep.from_floatview(fv)
+        else:
+            return cls(
+                height=fv.height,
+                width=fv.width,
+                is_video=False,
+                url1=fv.pre,
+                url2=fv.picId,
+                url3=fv.url,
+            )
 
 
 class VideoInfo(BaseModel):
-    cover_height: int
-    cover_width: int
+    cover_height: int = 0    # same as VideoRep.height
+    cover_width: int = 0
     url1: HttpUrl
     url2: HttpUrl
     url3: HttpUrl
     video_id: str
 
 
+class VideoInfo2(BaseModel):
+    cover_height: int = 0    # same as VideoRep.height
+    cover_width: int = 0
+    vid: str
+    video_url: HttpUrl
+
+
 class VideoRep(PicRep):
     video_info: VideoInfo
+
+    @classmethod
+    def from_floatview(cls, fv: 'FloatViewPhoto'):
+        assert fv.is_video
+        assert fv.video_info
+        return cls(
+            height=fv.height,
+            width=fv.width,
+            is_video=True,
+            url1=fv.pre,
+            url2=fv.picId,
+            url3=fv.url,
+            video_info=VideoInfo(
+                cover_height=fv.height,
+                cover_width=fv.width,
+                url1=fv.pre,
+                url2='',
+                url3=fv.video_info.video_url,
+                video_id=fv.video_info.vid
+            )
+        )
 
 
 class FeedDetailRep(HasContent):
@@ -109,15 +154,16 @@ class FeedDetailRep(HasContent):
     tid: str
     created_time: int
 
+    # forward from
     rt_con: Optional[HasContent] = None
+    rt_uin: int = 0
+    rt_uinname: str = ""
+    rt_tid: str = ""
     pic: Optional[list[Union[PicRep, VideoRep]]] = None
 
     cmtnum: int
     commentlist: list[CommentRep]
     fwdnum: int
-
-    source_appid: str = ""
-    source_name: Optional[str] = ""
 
 
 class FeedsCount(BaseModel):
@@ -148,7 +194,8 @@ class FloatViewPhoto(BaseModel):
     pre: HttpUrl
     url: HttpUrl
     picId: HttpUrl
-    picKey: str
+    # picKey: str   # = tid,picId
+    video_info: Optional[VideoInfo2] = None
 
     cmtTotal: int
     fwdnum: int
