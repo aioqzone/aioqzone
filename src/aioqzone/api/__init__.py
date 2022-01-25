@@ -12,7 +12,7 @@ class DummyQapi(QzoneApi):
         r = await super().feeds3_html_more(pagenum, trans=trans, count=count)
         data = r['data']
         main = r['main']
-        return [FeedRep.parse_obj(i) for i in data], FeedMoreAux.parse_obj(main)
+        return [FeedRep.parse_obj(i) for i in data if i], FeedMoreAux.parse_obj(main)
 
     async def emotion_getcomments(self, uin: int, tid: str, feedstype: int):
         r = await super().emotion_getcomments(uin, tid, feedstype)

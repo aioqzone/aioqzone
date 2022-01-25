@@ -3,7 +3,8 @@ from typing import Optional
 
 import pytest
 from aiohttp import ClientSession as Session
-from aioqzone.api import DummyQapi as QzoneApi
+import pytest_asyncio
+from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.interface.hook import LoginEvent, QREvent
 from aioqzone.type import FeedRep
@@ -24,14 +25,14 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def sess():
     async with Session() as sess:
         yield sess
 
 
-@pytest.fixture(scope='module')
-def man(sess: Session):
+@pytest_asyncio.fixture(scope='module')
+async def man(sess: Session):
     from os import environ as env
 
     man = MixedLoginMan(
@@ -49,9 +50,9 @@ def man(sess: Session):
     yield man
 
 
-@pytest.fixture(scope='module')
-def api(sess: Session, man: MixedLoginMan):
-    yield QzoneApi(sess, man)
+@pytest_asyncio.fixture(scope='module')
+async def api(sess: Session, man: MixedLoginMan):
+    yield DummyQapi(sess, man)
 
 
 def showqr(png: bytes):
@@ -66,18 +67,19 @@ def showqr(png: bytes):
     cv.waitKey()
 
 
-class TestRaw:
+class TestDummy:
     pytestmark = pytest.mark.asyncio
 
-    async def test_more(self, api: QzoneApi, storage: list):
-        future = asyncio.gather(api.feeds3_html_more(i) for i in range(3))
-        r = future.result()
-        for i in r:
-            assert isinstance(i, list)
-            storage.extend(i)
+    async def test_more(self, api: DummyQapi, storage: list):
+        future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
+        r = await future
+        for ls, aux in r:
+            assert isinstance(ls, list)
+            assert aux.dayspac >= 0
+            storage.extend(ls)
         assert storage
 
-    async def test_complete(self, api: QzoneApi, storage: list[FeedRep]):
+    async def test_complete(self, api: DummyQapi, storage: list[FeedRep]):
         if not storage: pytest.skip('storage is empty')
         f: Optional[FeedRep] = first(storage, None)
         assert f
@@ -85,17 +87,17 @@ class TestRaw:
         _, info = HtmlInfo.from_html(f.html)
         assert (await api.emotion_getcomments(f.uin, f.key, info.feedstype))
 
-    async def test_detail(self, api: QzoneApi, storage: list[FeedRep]):
+    async def test_detail(self, api: DummyQapi, storage: list[FeedRep]):
         if not storage: pytest.skip('storage is empty')
         f: Optional[FeedRep] = first(storage, lambda f: f.appid == 311)
         if f is None: pytest.skip('No 311 feed in storage.')
         assert f
         assert await api.emotion_msgdetail(f.uin, f.key)
 
-    async def test_heartbeat(self, api: QzoneApi):
+    async def test_heartbeat(self, api: DummyQapi):
         assert await api.get_feeds_count()
 
-    async def test_photo_list(self, api: QzoneApi, storage: list[FeedRep]):
+    async def test_photo_list(self, api: DummyQapi, storage: list[FeedRep]):
         if not storage: pytest.skip('storage is empty')
         f: Optional[HtmlContent] = first((HtmlContent.from_html(i.html) for i in storage),
                                          lambda t: t.pic)

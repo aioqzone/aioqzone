@@ -3,7 +3,7 @@ Use this module to get some data from Qzone html feed
 """
 import logging
 import re
-from typing import Optional, Union
+from typing import Optional, Union, cast
 
 from lxml.html import HtmlElement, fromstring
 from pydantic import AnyHttpUrl, BaseModel, HttpUrl
@@ -40,7 +40,7 @@ class HtmlInfo(BaseModel):
             complete=not toggle,
             unikey=likebtn.get('data-unikey'),
             curkey=likebtn.get('data-curkey'),
-            islike=likebtn.get('islike'),
+            islike=likebtn.get('data-islike'),
         )
 
 
@@ -50,23 +50,27 @@ class HtmlContent(BaseModel):
     album: Optional[QzoneApi.AlbumData] = None
 
     @classmethod
-    def from_html(cls, html: Union[HtmlElement, str]):
+    def from_html(cls, html: Union[HtmlElement, str], hostuin: int = 0):
         root: HtmlElement = fromstring(html) if isinstance(html, str) else html
         mxsafe = lambda i: max(i, key=len) if i else HtmlElement()
         finfo = mxsafe(root.cssselect('div.f-info'))
 
         def load_src(ls: list[HtmlElement]):
             for a in ls:
-                src = a.get('src', '')
-                if isinstance(src, HttpUrl): yield src
+                src = next(filter(lambda i: i.tag == 'img', a)).get('src', '')    # type: ignore
+                if src.startswith('http'):
+                    yield src
+                    continue
 
                 m = re.search(r"trueSrc:'(http.*?)'", a.get('onload', ''))
-                if m: yield m.group(1).replace('\\', '')
+                if m: yield cast(HttpUrl, m.group(1).replace('\\', ''))
 
                 if 'onload' in a.attrib:
                     logger.warning('cannot parse @onload: ' + a.get('onload'))
-                else:
+                elif 'src' in a.attrib:
                     logger.warning('cannot parse @src: ' + a.get('src'))
+                else:
+                    logger.warning(f'WTF is this? {dict(a.attrib)}')
 
         lia = root.cssselect('div.f-ct a.img-item')
         data = {k[5:]: v for k, v in lia[0].attrib.items() if k.startswith('data-')}
@@ -74,5 +78,5 @@ class HtmlContent(BaseModel):
         return cls(
             content=finfo.text_content(),
             pic=list(load_src(lia)),
-            album=QzoneApi.AlbumData.parse_obj(data)
+            album=QzoneApi.AlbumData.parse_obj(data | {'hostuin': hostuin})
         )

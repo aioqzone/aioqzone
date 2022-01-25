@@ -1,17 +1,17 @@
-from http.cookies import SimpleCookie
 import re
 from dataclasses import dataclass
 from random import choice, random
 from time import time_ns
 
 from aiohttp import ClientSession
-
+from multidict import istr
 from jssupport.execjs import ExecJS
 
 from ..base import LoginBase
 from ..constants import StatusCode
 from ..exception import TencentLoginError
 from ..type import APPID, PT_QR_APP, Proxy
+from ..utils import get_all_cookie
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = 'https://ssl.ptlogin2.qq.com/login'
@@ -105,7 +105,7 @@ class UPLogin(LoginBase):
         r[0] = int(r[0])
         return CheckResult(*r)
 
-    async def login(self, r: CheckResult, pastcode: int = 0) -> SimpleCookie[str]:
+    async def login(self, r: CheckResult, pastcode: int = 0) -> dict[str, str]:
         if r.code == StatusCode.Authenticated:
             # OK
             pass
@@ -143,9 +143,8 @@ class UPLogin(LoginBase):
             'ptdrvs': r.ptdrvs,
             'sid': r.session,
         }
-        self.header['Referer'] = 'https://xui.ptlogin2.qq.com/'
-        async with self.session.get(LOGIN_URL, params=data, headers=self.header,
-                                    ssl=self.ssl) as response:
+        self.session.headers.update({istr('referer'): 'https://xui.ptlogin2.qq.com/'})
+        async with self.session.get(LOGIN_URL, params=data, ssl=self.ssl) as response:
             response.raise_for_status()
             rl = re.findall(r"'(.*?)'[,\)]", await response.text())
 
@@ -153,14 +152,13 @@ class UPLogin(LoginBase):
         if rl[0] != StatusCode.Authenticated:
             raise TencentLoginError(rl[0], rl[4])
 
-        async with self.session.get(rl[2], allow_redirects=False, headers=self.header,
-                                    ssl=self.ssl) as response:
-            return response.cookies
+        async with self.session.get(rl[2], allow_redirects=False, ssl=self.ssl) as response:
+            return get_all_cookie(response)
 
     def captcha(self, sid: str):
         if not self._captcha:
             from .captcha import Captcha
-            self._captcha = Captcha(self.session, self.ssl, self.app.appid, sid, self.header)
+            self._captcha = Captcha(self.session, self.ssl, self.app.appid, sid)
         return self._captcha
 
     async def passVC(self, r: CheckResult):

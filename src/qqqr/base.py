@@ -1,11 +1,13 @@
 import ssl
+from abc import ABC, abstractmethod
 from urllib.parse import urlencode
 
 from aiohttp import ClientSession as Session
+from multidict import istr
 
 from .type import APPID, PT_QR_APP, Proxy
 
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36 Edg/94.0.992.47"
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.69"
 CIPHERS = [
     "ECDHE+AESGCM",
     "ECDHE+CHACHA20",
@@ -28,14 +30,18 @@ def ssl_context():
     return c
 
 
-class LoginBase:
+class LoginBase(ABC):
     login_sig: str = ''
 
     def __init__(self, sess: Session, app: APPID, proxy: Proxy, info: PT_QR_APP = None) -> None:
         self.app = app
         self.proxy = proxy
         self.info = info if info else PT_QR_APP()
-        self.header = {'DNT': '1', 'Referer': 'https://i.qq.com/', 'User-Agent': UA}
+        sess.headers.update({
+            istr('DNT'): '1',
+            istr('Referer'): 'https://i.qq.com/',
+            istr('User-Agent'): UA
+        })
         self.session = sess
         self.ssl = ssl_context()
 
@@ -66,6 +72,10 @@ class LoginBase:
             self.local_token = int(r.cookies['pt_local_token'].value)
             self.login_sig = r.cookies['pt_login_sig'].value
         return self
+
+    @abstractmethod
+    async def login(self, *args, **kwds) -> dict[str, str]:
+        pass
 
     async def ja3Detect(self) -> dict:
         # for debuging

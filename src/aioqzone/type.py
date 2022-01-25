@@ -11,6 +11,7 @@ class LikeData(BaseModel):
     appid: int
     typeid: int
     fid: str
+    abstime: int
 
     @staticmethod
     def persudo_curkey(uin: int, abstime: int):
@@ -35,9 +36,9 @@ class FeedRep(BaseModel):
     uin: int
     nickname: str
     html: str
-    likecnt: Optional[int]
-    relycnt: Optional[int]
-    commentcnt: Optional[int]
+    # likecnt: Optional[int] = None
+    # relycnt: Optional[int] = None
+    # commentcnt: Optional[int] = None
 
 
 class FeedMoreAux(BaseModel):

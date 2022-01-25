@@ -12,7 +12,9 @@ import aioqzone.api.constant as const
 from aiohttp import ClientSession as Session
 from aiohttp.client_exceptions import ClientResponseError
 from jssupport.jsjson import json_loads
+from multidict import istr
 from pydantic import BaseModel
+from qqqr.base import UA
 
 from ..exception import QzoneError
 from ..interface.login import Loginable
@@ -29,7 +31,8 @@ class QzoneApi:
     encoding = 'utf-8'
     host = "https://user.qzone.qq.com"
 
-    def __init__(self, session: Session, loginman: Loginable) -> None:
+    def __init__(self, session: Session, loginman: Loginable, ua: str=UA) -> None:
+        session.headers.update({istr('User-Agent'): ua})
         self.sess = session
         self.login = loginman
 
@@ -50,11 +53,17 @@ class QzoneApi:
     async def aget(self, url: str, params: dict[str, str] = None):
         params = params or {}
         params = params | {'g_tk': str(await self._get_gtk())}
+        self.sess.headers.update({
+            istr('referer'): f'https://user.qzone.qq.com/{self.login.uin}/infocenter'
+        })
         return self.sess.get(self.host + url, params=params)
 
     async def apost(self, url: str, params: dict[str, str] = None, data: dict = None):
         params = params or {}
         params = params | {'g_tk': str(await self._get_gtk())}
+        self.sess.headers.update({
+            istr('referer'): f'https://user.qzone.qq.com/{self.login.uin}/infocenter'
+        })
         return self.sess.get(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
@@ -76,7 +85,8 @@ class QzoneApi:
                 if e.status != 403: raise e
 
             logger.info(f'Cookie expire in {func.__name__}. Relogin...')
-            await self.login.new_cookie()
+            cookie = await self.login.new_cookie()
+            self.sess.cookie_jar.update_cookies(cookie)
             return await func(*args, **kwds)
 
         return relogin_wrapper
@@ -227,7 +237,7 @@ class QzoneApi:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
-            return self._rtext_handler(rtext, errno=lambda d: int(d['err']))
+            return self._rtext_handler(rtext, msg=lambda d: d['message'])
 
         return await retry_closure()
 
@@ -318,6 +328,7 @@ class QzoneApi:
             'curkey': likedata.curkey,
             'appid': likedata.appid,
             'typeid': likedata.typeid,
+            'abstime': likedata.abstime,
             'fid': likedata.fid
         }
         url = const.internal_dolike_app if like else const.internal_unlike_app
@@ -327,7 +338,7 @@ class QzoneApi:
             async with await self.apost(url, data=default | body) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+            return self._rtext_handler(rtext, errno=lambda d: d['ret'], msg=lambda d: d['msg'])
 
         try:
             return bool(await retry_closure())

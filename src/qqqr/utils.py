@@ -20,3 +20,14 @@ def raise_for_status(response: ClientResponse, *accept_code: int):
             message=response.reason,
             headers=response.headers
         )
+
+
+def get_all_cookie(response: ClientResponse) -> dict[str, str]:
+    cookies = response.headers.getall('Set-Cookie')
+    cookie_kv = (i.split(';')[0].split('=', maxsplit=1) for i in cookies)
+    d = {}
+    for t in cookie_kv:
+        if len(t) < 2: continue
+        k, v = t
+        d[k] = d.get(k) or v
+    return d

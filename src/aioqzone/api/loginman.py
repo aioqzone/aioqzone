@@ -26,7 +26,7 @@ class ConstLoginMan(Loginable):
         super().__init__(uin)
         self._cookie = cookie
 
-    def new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> dict[str, str]:
         return self._cookie
 
 
@@ -45,9 +45,9 @@ class UPLoginMan(Loginable):
         """
         try:
             login = UPLogin(self.sess, QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
-            self._cookie = await login.login(await login.check())
+            cookie = await login.login(await login.check())
             asyncio.create_task(self.hook.LoginSuccess())    # schedule in future
-            return {k: v.value for k, v in self._cookie.items()}
+            return cookie
         except TencentLoginError as e:
             logger.warning(str(e))
             raise e
@@ -58,7 +58,6 @@ class QRLoginMan(Loginable):
 
     def __init__(self, sess: ClientSession, uin: int, refresh_time: int = 6) -> None:
         super().__init__(uin)
-        self._cookie = {}
         self.sess = sess
         self.refresh = refresh_time
 
@@ -85,9 +84,9 @@ class QRLoginMan(Loginable):
         self.hook.resend = tmp_resend
 
         try:
-            self._cookie = await thread
+            cookie = await thread
             asyncio.create_task(self.hook.LoginSuccess())
-            return {k: v.value for k, v in self._cookie.items()}
+            return cookie
         except TimeoutError as e:
             await self.hook.QrFailed()
             logger.warning(str(e))

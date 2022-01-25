@@ -9,6 +9,7 @@ from typing import Iterable
 from urllib.parse import unquote, urlencode
 
 from aiohttp import ClientSession as Session
+from multidict import istr
 from jssupport.execjs import ExecJS
 from jssupport.jsjson import json_loads
 
@@ -110,19 +111,17 @@ class Captcha:
     # (c_login_2.js)showNewVC-->prehandle
     # prehandle(recall)--call tcapcha-frame.*.js-->new_show
     # new_show(html)--js in html->loadImg(url)
-    def __init__(self, session: Session, ssl_context, appid: int, sid: str, header: dict):
+    def __init__(self, session: Session, ssl_context, appid: int, sid: str):
         self.session = session
         self.ssl = ssl_context
         self.appid = appid
         self.sid = sid
 
-        assert 'User-Agent' in header
-        header['Referer'] = 'https://xui.ptlogin2.qq.com/'
-        self.header = header
+        self.session.headers.update({istr('referer'): 'https://xui.ptlogin2.qq.com/'})
 
     @property
     def base64_ua(self):
-        return base64.b64encode(self.header['User-Agent'].encode()).decode()
+        return base64.b64encode(self.session.headers['User-Agent'].encode()).decode()
 
     async def prehandle(self, xlogin_url):
         """
@@ -174,7 +173,7 @@ class Captcha:
             'sess': '',
         }
         self.createIframeStart = time_s()
-        async with self.session.get(PREHANDLE_URL, params=data, headers=self.header,
+        async with self.session.get(PREHANDLE_URL, params=data,
                                     ssl=self.ssl) as r:
             r.raise_for_status()
             r = re.search(CALLBACK + r"\((\{.*\})\)", await r.text()).group(1)
@@ -210,15 +209,15 @@ class Captcha:
             'prehandleLoadTime': time_s() - self.createIframeStart,
             'createIframeStart': self.createIframeStart,
         }
-        async with self.session.get(SHOW_NEW_URL, params=data, headers=self.header,
+        async with self.session.get(SHOW_NEW_URL, params=data,
                                     ssl=self.ssl) as r:
-            self.header['Referer'] = str(r.url)
+            self.session.headers.update({istr('referer'): str(r.url)})
             self.prehandleLoadTime = data['prehandleLoadTime']
             return await r.text()
 
     async def getBlob(self, iframe: str):
         js_url = ScriptHelper.slide_js_url(iframe)
-        async with self.session.get(js_url, headers=self.header, ssl=self.ssl) as r:
+        async with self.session.get(js_url, ssl=self.ssl) as r:
             r.raise_for_status()
             js = await r.text()
         m = re.search(r"'(!function.*;')", js)
@@ -227,11 +226,11 @@ class Captcha:
 
     async def getTdx(self, iframe: str):
         js_url = ScriptHelper.tdx_js_url(iframe)
-        header = self.header.copy()
+        header = self.session.headers.copy()
         header['cookie'] = '; '.join(
             f"{k}={v.value}" for k, v in self.session.cookie_jar.filter_cookies('qq.com').items()
         )
-        async with self.session.get(js_url, headers=self.header) as r:
+        async with self.session.get(js_url) as r:
             r.raise_for_status()
             self.vm = VM(await r.text(), header=header)
 
@@ -276,7 +275,7 @@ class Captcha:
 
     async def rio(self, urls: Iterable[str]):
         async def inner(url):
-            async with self.session.get(url, headers=self.header, ssl=self.ssl) as r:
+            async with self.session.get(url, ssl=self.ssl) as r:
                 r.raise_for_status()
                 return await r.content.read()
 
@@ -355,7 +354,7 @@ class Captcha:
         # 'vData': 'gC*KM-*rjuHBcUjIt9kL6SV6JGdgfzMmP0BiFcaDg_7ctHwCjeoz4quIjb2FTgdJLBeCcKCZB_Mv7suXumolfmpSKZVIp7Un2N3b*fbwHX9aqRgjp5fmsgkf6aOgnhU_ttr_4xJZKVjStGX*hMwgBeHE_zuz-iDKy1coGdurLh559T6MoBdJdMAxtIlGJxAexbt6eDz3Aw5pD_tR01ElO7YY',
         }
         await asyncio.sleep(max(0, waitEnd - time()))
-        async with self.session.post(VERIFY_URL, data=data, headers=self.header,
+        async with self.session.post(VERIFY_URL, data=data,
                                      ssl=self.ssl) as r:
             self.sess = None
             self.createIframeStart = 0

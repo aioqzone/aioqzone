@@ -2,8 +2,9 @@ import asyncio
 from typing import Optional
 
 import pytest
+import pytest_asyncio
 from aiohttp import ClientSession as Session
-from aioqzone.api.loginman import MixedLoginMan
+from aioqzone.api.loginman import ConstLoginMan, MixedLoginMan
 from aioqzone.api.raw import QzoneApi
 from aioqzone.interface.hook import LoginEvent, QREvent
 from aioqzone.type import LikeData
@@ -24,13 +25,13 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def sess():
     async with Session() as sess:
         yield sess
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def man(sess: Session):
     from os import environ as env
 
@@ -49,7 +50,7 @@ async def man(sess: Session):
     yield man
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def api(sess: Session, man: MixedLoginMan):
     yield QzoneApi(sess, man)
 
@@ -73,8 +74,8 @@ class TestRaw:
         future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
         r = await future
         for i in r:
-            assert isinstance(i, list)
-            storage.extend(i)
+            assert isinstance(i['data'], list)
+            storage.extend(i['data'])
         assert storage
 
     async def test_complete(self, api: QzoneApi, storage: list):
@@ -95,6 +96,7 @@ class TestRaw:
 
     async def test_heartbeat(self, api: QzoneApi):
         d = await api.get_feeds_count()
+        assert isinstance(d.pop('newfeeds_uinlist', []), list)
         for k, v in d.items():
             assert isinstance(k, str)
             assert isinstance(v, int)
@@ -107,19 +109,22 @@ class TestRaw:
         fd, info = f
         assert info.unikey
         ld = LikeData(
-            unikey=info.unikey,
-            curkey=info.curkey or LikeData.persudo_curkey(fd['uin'], fd['abstime']),
+            unikey=str(info.unikey),
+            curkey=str(info.curkey) or LikeData.persudo_curkey(fd['uin'], fd['abstime']),
             appid=fd['appid'],
             typeid=fd['typeid'],
-            fid=fd['key']
+            fid=fd['key'],
+            abstime=fd['abstime']
         )
-        assert await api.like_app(ld, True)
-        assert await api.like_app(ld, False)
+
+        assert await api.like_app(ld, not info.islike)
+        assert await api.like_app(ld, bool(info.islike))
 
     async def test_photo_list(self, api: QzoneApi, storage: list):
         if not storage: pytest.skip('storage is empty')
-        f: Optional[HtmlContent] = first((HtmlContent.from_html(i['html']) for i in storage),
-                                         lambda t: t.pic)
+        f: Optional[HtmlContent] = first(
+            (HtmlContent.from_html(i['html'], i['uin']) for i in storage), lambda t: t.pic
+        )
         if f is None: pytest.skip('No feed with pic in storage')
         assert f
         assert f.album
