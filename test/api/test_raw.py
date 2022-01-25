@@ -6,6 +6,7 @@ from aiohttp import ClientSession as Session
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
 from aioqzone.type import LikeData
+from aioqzone.utils.html import HtmlContent, HtmlInfo
 
 first = lambda it, pred: next(filter(pred, it), None)
 
@@ -23,22 +24,26 @@ def event_loop():
 
 
 @pytest.fixture(scope='module')
-async def man():
-    from os import environ as env
-
+async def sess():
     async with Session() as sess:
-        yield MixedLoginMan(
-            sess,
-            int(env['TEST_UIN']),
-            env.get('TEST_QRSTRATEGY', 'forbid'),    # forbid QR by default.
-            pwd=env.get('TEST_PASSWORD', None)
-        )
+        yield sess
 
 
 @pytest.fixture(scope='module')
-async def api(loop, man: MixedLoginMan):
-    async with Session(loop=loop) as sess:
-        yield QzoneApi(sess, man)
+async def man(sess: Session):
+    from os import environ as env
+
+    yield MixedLoginMan(
+        sess,
+        int(env['TEST_UIN']),
+        env.get('TEST_QRSTRATEGY', 'forbid'),    # forbid QR by default.
+        pwd=env.get('TEST_PASSWORD', None)
+    )
+
+
+@pytest.fixture(scope='module')
+async def api(sess: Session, man: MixedLoginMan):
+    yield QzoneApi(sess, man)
 
 
 class TestRaw:
@@ -55,17 +60,15 @@ class TestRaw:
     async def test_complete(self, api: QzoneApi, storage: list):
         if not storage: pytest.skip('storage is empty')
         f: Optional[dict] = first(storage, None)
-        if f is None: pytest.skip('No feed in storage')
         assert f
         from aioqzone.utils.html import HtmlInfo
         _, info = HtmlInfo.from_html(f['html'])
         d = await api.emotion_getcomments(f['uin'], f['key'], info.feedstype)
         assert 'newFeedXML' in d
 
-    @pytest.mark.skip('NotImplemented')
     async def test_detail(self, api: QzoneApi, storage: list):
         if not storage: pytest.skip('storage is empty')
-        f: Optional[dict] = first(storage, lambda f: f.appid == 311)
+        f: Optional[dict] = first(storage, lambda f: int(f['appid']) == 311)
         if f is None: pytest.skip('No 311 feed in storage.')
         assert f
         await api.emotion_msgdetail(f['uin'], f['key'])
@@ -76,15 +79,27 @@ class TestRaw:
             assert isinstance(k, str)
             assert isinstance(v, int)
 
-    @pytest.mark.skip('NotImplemented')
     async def test_like(self, api: QzoneApi, storage: list):
         if not storage: pytest.skip('storage is empty')
-        ld = LikeData()    # TODO
+        f: Optional[tuple[dict, HtmlInfo]] = first(((i, HtmlInfo.from_html(i['html'])[1])
+                                                    for i in storage), lambda t: t[1].unikey)
+        if f is None: pytest.skip('No feed with unikey.')
+        fd, info = f
+        ld = LikeData(
+            unikey=info.unikey,
+            curkey=info.curkey,
+            appid=fd['appid'],
+            typeid=fd['typeid'],
+            fid=fd['key']
+        )
         assert await api.like_app(ld, True)
         assert await api.like_app(ld, False)
 
-    @pytest.mark.skip('NotImplemented')
     async def test_photo_list(self, api: QzoneApi, storage: list):
         if not storage: pytest.skip('storage is empty')
-        album = api.AlbumData()    # TODO
-        await api.floatview_photo_list(album, 10)
+        f: Optional[HtmlContent] = first((HtmlContent.from_html(i['html']) for i in storage),
+                                         lambda t: t.pic)
+        if f is None: pytest.skip('No feed with pic in storage')
+        assert f
+        assert f.album
+        await api.floatview_photo_list(f.album, 10)

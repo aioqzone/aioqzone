@@ -5,7 +5,7 @@ Users can inherit these managers and implement their own caching logic.
 
 import asyncio
 import logging
-from typing import Union
+from typing import Type, Union
 
 from aiohttp import ClientSession
 from qqqr.constants import QzoneAppid, QzoneProxy
@@ -88,7 +88,7 @@ class QRLoginMan(Loginable):
         self.hook.resend = tmp_resend
 
         try:
-            self._cookie = thread.result()
+            self._cookie = await thread
             asyncio.create_task(self.hook.LoginSuccess())
             return {k: v.value for k, v in self._cookie.items()}
         except TimeoutError as e:
@@ -111,7 +111,14 @@ class QRLoginMan(Loginable):
 
 
 class MixedLoginMan(UPLoginMan, QRLoginMan):
-    def __init__(self, sess: ClientSession,uin: int, strategy: str, pwd: str = None, refresh_time: int = 6) -> None:
+    def __init__(
+        self,
+        sess: ClientSession,
+        uin: int,
+        strategy: str,
+        pwd: str = None,
+        refresh_time: int = 6
+    ) -> None:
         self.strategy = strategy
         if strategy != 'force':
             assert pwd
@@ -129,7 +136,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         Returns:
             dict[str, str]: [description]
         """
-        order: list[Loginable] = {
+        order: list[Type[Loginable]] = {
             'force': [QRLoginMan],
             'prefer': [QRLoginMan, UPLoginMan],
             'allow': [UPLoginMan, QRLoginMan],
@@ -137,7 +144,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         }[self.strategy]
         for c in order:
             try:
-                return await c._new_cookie()
+                return await c._new_cookie(self)
             except (TencentLoginError, TimeoutError) as e:
                 continue
 

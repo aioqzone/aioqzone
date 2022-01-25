@@ -5,7 +5,9 @@ import pytest
 from aiohttp import ClientSession as Session
 from aioqzone.api import DummyQapi as QzoneApi
 from aioqzone.api.loginman import MixedLoginMan
-from aioqzone.type import FeedData, FeedRep
+from aioqzone.type import FeedRep
+from aioqzone.utils.html import HtmlContent
+from aioqzone.interface.hook import LoginEvent, QREvent
 
 first = lambda it, pred: next(filter(pred, it), None)
 
@@ -16,18 +18,6 @@ def storage():
 
 
 @pytest.fixture(scope='module')
-def man():
-    from os import environ as env
-
-    assert (uin := env.get('TEST_UIN'))
-    return MixedLoginMan(
-        int(uin),
-        env.get('TEST_QRSTRATEGY', 'forbid'),    # forbid QR by default.
-        pwd=env.get('TEST_PASSWORD', None)
-    )
-
-
-@pytest.fixture(scope='module')
 def event_loop():
     loop = asyncio.new_event_loop()
     yield loop
@@ -35,9 +25,45 @@ def event_loop():
 
 
 @pytest.fixture(scope='module')
-async def api(loop, man: MixedLoginMan):
-    async with Session(loop=loop) as sess:
-        yield QzoneApi(sess, man)
+async def sess():
+    async with Session() as sess:
+        yield sess
+
+
+@pytest.fixture(scope='module')
+def man(sess: Session):
+    from os import environ as env
+
+    man = MixedLoginMan(
+        sess,
+        int(env['TEST_UIN']),
+        env.get('TEST_QRSTRATEGY', 'forbid'),    # forbid QR by default.
+        pwd=env.get('TEST_PASSWORD', None)
+    )
+
+    class inner_qrevent(QREvent, LoginEvent):
+        def QrFetched(self, png: bytes):
+            showqr(png)
+
+    man.register_hook(inner_qrevent())
+    yield man
+
+
+@pytest.fixture(scope='module')
+def api(sess: Session, man: MixedLoginMan):
+    yield QzoneApi(sess, man)
+
+
+def showqr(png: bytes):
+    import cv2 as cv
+    import numpy as np
+
+    def frombytes(b: bytes, dtype='uint8', flags=cv.IMREAD_COLOR) -> np.ndarray:
+        return cv.imdecode(np.frombuffer(b, dtype=dtype), flags=flags)
+
+    cv.destroyAllWindows()
+    cv.imshow('Scan and login', frombytes(png))
+    cv.waitKey()
 
 
 class TestRaw:
@@ -51,12 +77,13 @@ class TestRaw:
             storage.extend(i)
         assert storage
 
-    @pytest.mark.skip('NotImplemented')
     async def test_complete(self, api: QzoneApi, storage: list[FeedRep]):
         if not storage: pytest.skip('storage is empty')
-        fd = FeedData()    # TODO
-        ishtml = bool    # TODO
-        assert ishtml(await api.emotion_getcomments(fd))
+        f: Optional[FeedRep] = first(storage, None)
+        assert f
+        from aioqzone.utils.html import HtmlInfo
+        _, info = HtmlInfo.from_html(f.html)
+        assert (await api.emotion_getcomments(f.uin, f.key, info.feedstype))
 
     async def test_detail(self, api: QzoneApi, storage: list[FeedRep]):
         if not storage: pytest.skip('storage is empty')
@@ -68,8 +95,11 @@ class TestRaw:
     async def test_heartbeat(self, api: QzoneApi):
         assert await api.get_feeds_count()
 
-    @pytest.mark.skip('NotImplemented')
     async def test_photo_list(self, api: QzoneApi, storage: list[FeedRep]):
         if not storage: pytest.skip('storage is empty')
-        album = api.AlbumData()    # TODO
-        await api.floatview_photo_list(album, 10)
+        f: Optional[HtmlContent] = first((HtmlContent.from_html(i.html) for i in storage),
+                                         lambda t: t.pic)
+        if f is None: pytest.skip('No feed with pic in storage')
+        assert f
+        assert f.album
+        await api.floatview_photo_list(f.album, 10)
