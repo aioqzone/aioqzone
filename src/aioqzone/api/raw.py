@@ -33,14 +33,28 @@ class QzoneApi:
         self.sess = session
         self.login = loginman
 
-    def aget(self, url: str, params: dict[str, str] = None):
+    async def _get_gtk(self):
+        """Get gtk with async-lock.
+
+        Raises:
+            QzoneError: if gtk is 0
+
+        Returns:
+            int: gtk != 0
+        """
+        async with self.login.lock:
+            gtk = self.login.gtk
+        if gtk == 0: raise QzoneError(-3000)
+        return gtk
+
+    async def aget(self, url: str, params: dict[str, str] = None):
         params = params or {}
-        params = params | {'g_tk': str(self.login.gtk)}
+        params = params | {'g_tk': str(await self._get_gtk())}
         return self.sess.get(self.host + url, params=params)
 
-    def apost(self, url: str, params: dict[str, str] = None, data: dict = None):
+    async def apost(self, url: str, params: dict[str, str] = None, data: dict = None):
         params = params or {}
-        params = params | {'g_tk': str(self.login.gtk)}
+        params = params | {'g_tk': str(await self._get_gtk())}
         return self.sess.get(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
@@ -55,7 +69,7 @@ class QzoneApi:
         @wraps(func)
         async def relogin_wrapper(*args, **kwds):
             try:
-                return await func(args, **kwds)
+                return await func(*args, **kwds)
             except QzoneError as e:
                 if e.code not in [-3000, -4002]: raise e
             except ClientResponseError as e:
@@ -63,7 +77,7 @@ class QzoneApi:
 
             logger.info(f'Cookie expire in {func.__name__}. Relogin...')
             await self.login.new_cookie()
-            return await func(args, **kwds)
+            return await func(*args, **kwds)
 
         return relogin_wrapper
 
@@ -103,11 +117,11 @@ class QzoneApi:
         return r    # type: ignore
 
     class FeedsMoreTransaction:
-        def __init__(self, default: dict = None) -> None:
+        def __init__(self, default: dict[int, str] = None) -> None:
             self.extern = default or {}
 
-        def parse(self, page):
-            unquoted = self.extern[page]
+        def parse(self, page: int):
+            unquoted = self.extern.get(page, 'undefined')
             if unquoted == "undefined": return {}
             return {k: v[-1] for k, v in parse_qs(unquoted, keep_blank_values=True).items()}
 
@@ -156,12 +170,12 @@ class QzoneApi:
             'begintime': trans.parse(pagenum).get("basetime", "undefined"),
             'count': count,
             'usertime': time_ms(),
-            'externparam': quote(trans.extern[pagenum])
+            'externparam': quote(trans.extern.get(pagenum, 'undefined'))
         }
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.aget(const.feeds3_html_more, default | query) as r:
+            async with await self.aget(const.feeds3_html_more, default | query) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
@@ -209,7 +223,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.apost(const.emotion_getcomments, default | body) as r:
+            async with await self.apost(const.emotion_getcomments, default | body) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
@@ -247,7 +261,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.aget(const.emotion_msgdetail, params=default | query) as r:
+            async with await self.aget(const.emotion_msgdetail, params=default | query) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
@@ -271,7 +285,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.aget(const.get_feeds_count, query) as r:
+            async with await self.aget(const.get_feeds_count, query) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
@@ -310,7 +324,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.apost(url, data=default | body) as r:
+            async with await self.apost(url, data=default | body) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
             return self._rtext_handler(rtext, msg=lambda d: d['message'])
@@ -370,7 +384,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.aget(const.floatview_photo_list, params=default | query) as r:
+            async with await self.aget(const.floatview_photo_list, params=default | query) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext, msg=lambda d: d['message'])

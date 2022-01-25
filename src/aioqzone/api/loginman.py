@@ -52,16 +52,13 @@ class UPLoginMan(Loginable):
             logger.warning(str(e))
             raise e
 
-    @property
-    def cookie(self):
-        return self._cookie
-
 
 class QRLoginMan(Loginable):
     hook: Union[LoginEvent, QREvent]
 
     def __init__(self, sess: ClientSession, uin: int, refresh_time: int = 6) -> None:
         super().__init__(uin)
+        self._cookie = {}
         self.sess = sess
         self.refresh = refresh_time
 
@@ -104,10 +101,6 @@ class QRLoginMan(Loginable):
             exit(1)
         finally:
             self.hook.cancel = self.hook.resend = None
-
-    @property
-    def cookie(self):
-        return self._cookie
 
 
 class MixedLoginMan(UPLoginMan, QRLoginMan):

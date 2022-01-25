@@ -5,6 +5,7 @@ import pytest
 from aiohttp import ClientSession as Session
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
+from aioqzone.interface.hook import LoginEvent, QREvent
 from aioqzone.type import LikeData
 from aioqzone.utils.html import HtmlContent, HtmlInfo
 
@@ -33,12 +34,19 @@ async def sess():
 async def man(sess: Session):
     from os import environ as env
 
-    yield MixedLoginMan(
+    man = MixedLoginMan(
         sess,
         int(env['TEST_UIN']),
         env.get('TEST_QRSTRATEGY', 'forbid'),    # forbid QR by default.
         pwd=env.get('TEST_PASSWORD', None)
     )
+
+    class inner_qrevent(QREvent, LoginEvent):
+        async def QrFetched(self, png: bytes):
+            showqr(png)
+
+    man.register_hook(inner_qrevent())
+    yield man
 
 
 @pytest.fixture(scope='module')
@@ -46,12 +54,24 @@ async def api(sess: Session, man: MixedLoginMan):
     yield QzoneApi(sess, man)
 
 
+def showqr(png: bytes):
+    import cv2 as cv
+    import numpy as np
+
+    def frombytes(b: bytes, dtype='uint8', flags=cv.IMREAD_COLOR) -> np.ndarray:
+        return cv.imdecode(np.frombuffer(b, dtype=dtype), flags=flags)
+
+    cv.destroyAllWindows()
+    cv.imshow('Scan and login', frombytes(png))
+    cv.waitKey()
+
+
 class TestRaw:
     pytestmark = pytest.mark.asyncio
 
     async def test_more(self, api: QzoneApi, storage: list):
-        future = asyncio.gather(api.feeds3_html_more(i) for i in range(3))
-        r = future.result()
+        future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
+        r = await future
         for i in r:
             assert isinstance(i, list)
             storage.extend(i)
@@ -85,9 +105,10 @@ class TestRaw:
                                                     for i in storage), lambda t: t[1].unikey)
         if f is None: pytest.skip('No feed with unikey.')
         fd, info = f
+        assert info.unikey
         ld = LikeData(
             unikey=info.unikey,
-            curkey=info.curkey,
+            curkey=info.curkey or LikeData.persudo_curkey(fd['uin'], fd['abstime']),
             appid=fd['appid'],
             typeid=fd['typeid'],
             fid=fd['key']

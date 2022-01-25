@@ -5,9 +5,9 @@ import pytest
 from aiohttp import ClientSession as Session
 from aioqzone.api import DummyQapi as QzoneApi
 from aioqzone.api.loginman import MixedLoginMan
+from aioqzone.interface.hook import LoginEvent, QREvent
 from aioqzone.type import FeedRep
 from aioqzone.utils.html import HtmlContent
-from aioqzone.interface.hook import LoginEvent, QREvent
 
 first = lambda it, pred: next(filter(pred, it), None)
 
@@ -42,7 +42,7 @@ def man(sess: Session):
     )
 
     class inner_qrevent(QREvent, LoginEvent):
-        def QrFetched(self, png: bytes):
+        async def QrFetched(self, png: bytes):
             showqr(png)
 
     man.register_hook(inner_qrevent())

@@ -56,7 +56,7 @@ def showqr(png: bytes):
 @pytest_asyncio.fixture(scope='class')
 async def qr():
     class inner_qrevent(QREvent, LoginEvent):
-        def QrFetched(self, png: bytes):
+        async def QrFetched(self, png: bytes):
             showqr(png)
 
     async with ClientSession() as sess:
@@ -99,7 +99,7 @@ async def mixed():
         )
 
         class inner_qrevent(QREvent, LoginEvent):
-            def QrFetched(self, png: bytes):
+            async def QrFetched(self, png: bytes):
                 showqr(png)
 
         man.register_hook(inner_qrevent())

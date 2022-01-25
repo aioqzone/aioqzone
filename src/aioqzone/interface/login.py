@@ -9,16 +9,17 @@ from ..interface.hook import Emittable
 class Loginable(ABC, Emittable):
     def __init__(self, uin: int) -> None:
         self.uin = uin
+        self._cookie = {}
         self.lock = asyncio.Lock()
 
-    @abstractproperty
+    @property
     def cookie(self) -> dict[str, str]:    # type: ignore
         """Get cookie in any way. Allow cached result.
 
         Returns:
             int: cookie. Cached cookie is preferable.
         """
-        pass
+        return self._cookie
 
     @abstractmethod
     async def _new_cookie(self) -> dict[str, str]:
@@ -37,8 +38,15 @@ class Loginable(ABC, Emittable):
         else:
             # let the first coro. get result from Qzone.
             async with self.lock:
-                return await self._new_cookie()
+                self._cookie = await self._new_cookie()
+                return self._cookie
 
     @property
     def gtk(self) -> int:
-        return gtk(self.cookie['p_skey'])
+        """cal gtk from pskey.
+
+        Returns:
+            int: gtk. NOTE: 0 denotes no-login.
+        """
+        if (pskey := self.cookie.get('p_skey')) is None: return 0
+        return gtk(pskey)
