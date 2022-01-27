@@ -34,7 +34,7 @@ class UPLoginMan(Loginable):
     hook: LoginEvent
 
     def __init__(self, sess: ClientSession, uin: int, pwd: str) -> None:
-        super().__init__(uin)
+        Loginable.__init__(self, uin)
         self.sess = sess
         self._pwd = pwd
 
@@ -57,7 +57,7 @@ class QRLoginMan(Loginable):
     hook: Union[LoginEvent, QREvent]
 
     def __init__(self, sess: ClientSession, uin: int, refresh_time: int = 6) -> None:
-        super().__init__(uin)
+        Loginable.__init__(self, uin)
         self.sess = sess
         self.refresh = refresh_time
 
@@ -66,7 +66,6 @@ class QRLoginMan(Loginable):
         Raises:
             UserBreak: [description]
         """
-        assert self.hook
         assert isinstance(self.hook, QREvent)
         assert isinstance(self.hook, LoginEvent)
 

@@ -112,7 +112,6 @@ class VideoInfo(BaseModel):
     cover_height: int = 0    # same as VideoRep.height
     cover_width: int = 0
     url1: HttpUrl
-    url2: HttpUrl
     url3: HttpUrl
     video_id: str
 
@@ -142,7 +141,6 @@ class VideoRep(PicRep):
                 cover_height=fv.height,
                 cover_width=fv.width,
                 url1=fv.pre,
-                url2='',
                 url3=fv.video_info.video_url,
                 video_id=fv.video_info.vid
             )
@@ -160,10 +158,11 @@ class FeedDetailRep(HasContent):
     rt_uin: int = 0
     rt_uinname: str = ""
     rt_tid: str = ""
-    pic: Optional[list[Union[PicRep, VideoRep]]] = None
+    rt_createTime: str = ""
+    pic: Optional[list[Union[VideoRep, PicRep]]] = None
 
     cmtnum: int
-    commentlist: list[CommentRep]
+    commentlist: Optional[list[CommentRep]] = None
     fwdnum: int
 
 

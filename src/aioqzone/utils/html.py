@@ -5,9 +5,10 @@ import logging
 import re
 from typing import Optional, Union, cast
 
-from lxml.html import HtmlElement, fromstring
-from pydantic import AnyHttpUrl, BaseModel, HttpUrl
 from aioqzone.api.raw import QzoneApi
+from aioqzone.type import PicRep
+from lxml.html import HtmlElement, fromstring
+from pydantic import BaseModel, HttpUrl
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ class HtmlInfo(BaseModel):
     """Some info that must be extract from html response"""
     feedstype: int
     complete: bool
-    unikey: Optional[Union[AnyHttpUrl, str]] = None
+    unikey: Optional[Union[HttpUrl, str]] = None
     curkey: Optional[Union[HttpUrl, str]] = None
     islike: Optional[int] = 0
 
@@ -37,7 +38,7 @@ class HtmlInfo(BaseModel):
 
         return root, cls(
             feedstype=elm_fd.get("data-feedstype"),
-            complete=not toggle,
+            complete=not len(toggle),
             unikey=likebtn.get('data-unikey'),
             curkey=likebtn.get('data-curkey'),
             islike=likebtn.get('data-islike'),
@@ -46,7 +47,7 @@ class HtmlInfo(BaseModel):
 
 class HtmlContent(BaseModel):
     content: str = ''
-    pic: Optional[list[HttpUrl]] = None
+    pic: Optional[list[PicRep]] = None
     album: Optional[QzoneApi.AlbumData] = None
 
     @classmethod
@@ -55,28 +56,35 @@ class HtmlContent(BaseModel):
         mxsafe = lambda i: max(i, key=len) if i else HtmlElement()
         finfo = mxsafe(root.cssselect('div.f-info'))
 
-        def load_src(ls: list[HtmlElement]):
-            for a in ls:
-                src = next(filter(lambda i: i.tag == 'img', a)).get('src', '')    # type: ignore
-                if src.startswith('http'):
-                    yield src
-                    continue
+        def load_src(a: HtmlElement) -> Optional[HttpUrl]:
+            src: str = next(filter(lambda i: i.tag == 'img', a)).get('src', '')    # type: ignore
+            if src.startswith('http'):
+                return cast(HttpUrl, src)
 
-                m = re.search(r"trueSrc:'(http.*?)'", a.get('onload', ''))
-                if m: yield cast(HttpUrl, m.group(1).replace('\\', ''))
+            m = re.search(r"trueSrc:'(http.*?)'", a.get('onload', ''))
+            if m: return cast(HttpUrl, m.group(1).replace('\\', ''))
 
-                if 'onload' in a.attrib:
-                    logger.warning('cannot parse @onload: ' + a.get('onload'))
-                elif 'src' in a.attrib:
-                    logger.warning('cannot parse @src: ' + a.get('src'))
-                else:
-                    logger.warning(f'WTF is this? {dict(a.attrib)}')
+            if 'onload' in a.attrib:
+                logger.warning('cannot parse @onload: ' + a.get('onload'))
+            elif 'src' in a.attrib:
+                logger.warning('cannot parse @src: ' + a.get('src'))
+            else:
+                logger.warning(f'WTF is this? {dict(a.attrib)}')
 
-        lia = root.cssselect('div.f-ct a.img-item')
-        data = {k[5:]: v for k, v in lia[0].attrib.items() if k.startswith('data-')}
+        lia: list[HtmlElement] = root.cssselect('div.f-ct a.img-item')
+        img_data = lambda a: {k[5:]: v for k, v in a.attrib.items() if k.startswith('data-')}
 
         return cls(
             content=finfo.text_content(),
-            pic=list(load_src(lia)),
-            album=QzoneApi.AlbumData.parse_obj(data | {'hostuin': hostuin})
+            pic=[
+                PicRep(
+                    height=(data := img_data(a)).get('height', 0),
+                    width=data.get('width', 0),
+                    url1=src,
+                    url2=src,
+                    url3=src
+                ) for a in lia if (src := load_src(a))
+            ],
+            album=QzoneApi.AlbumData.parse_obj(img_data(lia[0])
+                                               | {'hostuin': hostuin}) if lia else None
         )
