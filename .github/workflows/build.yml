@@ -1,20 +1,18 @@
-# install dependency and current package
-name: Test
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: build
 
 on:
-  workflow_call:
-    inputs:
-      pytest_arg:
-        required: true
-        type: string
-    secrets:
-      TEST_UIN:
-        required: true
-      TEST_PASSWORD:
-        required: true
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "release"
+      - "release/**"
 
 jobs:
-  install-test:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,7 +26,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: actions/setup-node@v2.5.1
+      # No need to install nodejs
 
       - name: Cache pip
         uses: actions/cache@v2
@@ -43,13 +41,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install -U pip pytest pytest-asyncio
+          python -m pip install -U pip build
           pip install .
 
-      - name: Test with pytest
-        env:
-          TEST_UIN: ${{ secrets.TEST_UIN }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      - name: Build dist
         run: |
-          export PYTHONPATH=$(pwd)/src
-          python -m pytest ${{ inputs.pytest_arg }}
+          python -m build
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*

@@ -7,16 +7,15 @@ on:
   push:
     paths:
       - "src/**"
-      - "test/*"
+      - "test/**"
     branches:
       - dev
-      - "fix*"
 
 jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      arg: test
+      pytest_arg: test
     secrets:
       TEST_UIN: ${{ secrets.TEST_UIN }}
       TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
