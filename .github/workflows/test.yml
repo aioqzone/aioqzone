@@ -1,0 +1,55 @@
+# install dependency and current package
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      arg:
+        required: true
+        type: string
+    secrets:
+      TEST_UIN:
+        required: true
+      TEST_PASSWORD:
+        required: true
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - uses: actions/setup-node@v2.5.1
+
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          # This path is specific to Ubuntu
+          path: ~/.cache/pip
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-pip-${{ hashFiles('setup.cfg') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip pytest pytest-asyncio
+          pip install .
+
+      - name: Test with pytest
+        env:
+          TEST_UIN: ${{ secrets.TEST_UIN }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: |
+          export PYTHONPATH=$(pwd)/src
+          python -m pytest ${{ inputs.arg }}

@@ -1,0 +1,16 @@
+# Trigger a test on QQQR package everyday.
+
+name: QQQR
+
+on:
+  schedule:
+    - cron: 0 20 * * *
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      arg: "-v test/qqqr/test_up.py test/qqqr/test_captcha.py"
+    secrets:
+      TEST_UIN: ${{ secrets.TEST_UIN }}
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
