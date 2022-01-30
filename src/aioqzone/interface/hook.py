@@ -2,7 +2,7 @@
 Define hooks that can trigger user actions.
 """
 
-from typing import Callable, Optional, Awaitable
+from typing import Awaitable, Callable, Optional
 
 
 class Event:

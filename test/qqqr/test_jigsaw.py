@@ -1,10 +1,12 @@
-import os
 from math import floor
+import os
 from os import environ as env
 
 import cv2 as cv
 import pytest
-from qqqr.up.captcha.jigsaw import Jigsaw, Piece
+
+from qqqr.up.captcha.jigsaw import Jigsaw
+from qqqr.up.captcha.jigsaw import Piece
 
 desktoponly = pytest.mark.skipif(
     not env.get('QR_OK', 0), reason='cv.show not available'

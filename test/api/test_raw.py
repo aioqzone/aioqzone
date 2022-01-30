@@ -1,14 +1,18 @@
 import asyncio
 from typing import Optional
 
+from aiohttp import ClientSession as Session
 import pytest
 import pytest_asyncio
-from aiohttp import ClientSession as Session
-from aioqzone.api.loginman import ConstLoginMan, MixedLoginMan
+
+from aioqzone.api.loginman import ConstLoginMan
+from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
-from aioqzone.interface.hook import LoginEvent, QREvent
+from aioqzone.interface.hook import LoginEvent
+from aioqzone.interface.hook import QREvent
 from aioqzone.type import LikeData
-from aioqzone.utils.html import HtmlContent, HtmlInfo
+from aioqzone.utils.html import HtmlContent
+from aioqzone.utils.html import HtmlInfo
 
 first = lambda it, pred: next(filter(pred, it), None)
 

@@ -8,13 +8,18 @@ import logging
 from typing import Type, Union
 
 from aiohttp import ClientSession
-from qqqr.constants import QzoneAppid, QzoneProxy
-from qqqr.exception import TencentLoginError, UserBreak
+
+from qqqr.constants import QzoneAppid
+from qqqr.constants import QzoneProxy
+from qqqr.exception import TencentLoginError
+from qqqr.exception import UserBreak
 from qqqr.qr import QRLogin
-from qqqr.up import UPLogin, User
+from qqqr.up import UPLogin
+from qqqr.up import User
 
 from ..exception import LoginError
-from ..interface.hook import LoginEvent, QREvent
+from ..interface.hook import LoginEvent
+from ..interface.hook import QREvent
 from ..interface.login import Loginable
 
 logger = logging.getLogger(__name__)

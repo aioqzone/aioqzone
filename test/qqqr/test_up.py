@@ -2,9 +2,13 @@ import asyncio
 from os import environ as env
 
 import pytest
-from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
+
+from qqqr.constants import QzoneAppid
+from qqqr.constants import QzoneProxy
+from qqqr.constants import StatusCode
 from qqqr.exception import TencentLoginError
-from qqqr.up import UPLogin, User
+from qqqr.up import UPLogin
+from qqqr.up import User
 
 
 @pytest.fixture(scope='module')

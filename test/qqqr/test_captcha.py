@@ -3,9 +3,13 @@ from math import floor
 from os import environ as env
 
 import pytest
-from qqqr.constants import QzoneAppid, QzoneProxy
-from qqqr.up import UPLogin, User
-from qqqr.up.captcha import Captcha, ScriptHelper
+
+from qqqr.constants import QzoneAppid
+from qqqr.constants import QzoneProxy
+from qqqr.up import UPLogin
+from qqqr.up import User
+from qqqr.up.captcha import Captcha
+from qqqr.up.captcha import ScriptHelper
 from qqqr.up.captcha.jigsaw import Jigsaw
 
 

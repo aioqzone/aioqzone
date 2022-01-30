@@ -2,18 +2,22 @@
 Basic wrapper of Qzone HTTP interface.
 """
 
-import logging
 from functools import wraps
-from random import randint, random
+import logging
+from random import randint
+from random import random
 from typing import Any, Callable
-from urllib.parse import parse_qs, quote, unquote
+from urllib.parse import parse_qs
+from urllib.parse import quote
+from urllib.parse import unquote
 
-import aioqzone.api.constant as const
 from aiohttp import ClientSession as Session
 from aiohttp.client_exceptions import ClientResponseError
-from jssupport.jsjson import json_loads
 from multidict import istr
 from pydantic import BaseModel
+
+import aioqzone.api.constant as const
+from jssupport.jsjson import json_loads
 from qqqr.base import UA
 
 from ..exception import QzoneError
@@ -40,10 +44,10 @@ class QzoneApi:
         """Get gtk with async-lock.
 
         Raises:
-            QzoneError: if gtk is 0
+            :class:`QzoneError`: if gtk is 0
 
         Returns:
-            int: gtk != 0
+            :obj:`int`: gtk != 0
         """
         async with self.login.lock:
             gtk = self.login.gtk

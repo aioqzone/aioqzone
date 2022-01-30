@@ -1,12 +1,14 @@
 import asyncio
 from typing import Optional
 
-import pytest
 from aiohttp import ClientSession as Session
+import pytest
 import pytest_asyncio
+
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
-from aioqzone.interface.hook import LoginEvent, QREvent
+from aioqzone.interface.hook import LoginEvent
+from aioqzone.interface.hook import QREvent
 from aioqzone.type import FeedRep
 from aioqzone.utils.html import HtmlContent
 

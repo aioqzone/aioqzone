@@ -1,5 +1,6 @@
+from abc import ABC
+from abc import abstractmethod
 import asyncio
-from abc import ABC, abstractmethod, abstractproperty
 
 from qqqr.encrypt import gtk
 

@@ -1,5 +1,5 @@
-import subprocess
 from functools import partial
+import subprocess
 from typing import Union
 
 

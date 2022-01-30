@@ -1,7 +1,11 @@
 """
 Make some easy-to-use api from basic wrappers.
 """
-from ..type import FeedDetailRep, FeedMoreAux, FeedRep, FeedsCount, FloatViewPhoto
+from ..type import FeedDetailRep
+from ..type import FeedMoreAux
+from ..type import FeedRep
+from ..type import FeedsCount
+from ..type import FloatViewPhoto
 from .raw import QzoneApi
 
 

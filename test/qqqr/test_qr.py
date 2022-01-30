@@ -2,7 +2,10 @@ import asyncio
 from os import environ as env
 
 import pytest
-from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
+
+from qqqr.constants import QzoneAppid
+from qqqr.constants import QzoneProxy
+from qqqr.constants import StatusCode
 from qqqr.qr import QRLogin
 
 need_interact = pytest.mark.skipif(

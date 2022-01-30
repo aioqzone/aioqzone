@@ -3,12 +3,15 @@ Use this module to get some data from Qzone html feed
 """
 import logging
 import re
-from typing import Optional, Union, cast
+from typing import cast, Iterable, Optional, Union
+
+from lxml.html import fromstring
+from lxml.html import HtmlElement
+from pydantic import BaseModel
+from pydantic import HttpUrl
 
 from aioqzone.api.raw import QzoneApi
 from aioqzone.type import PicRep
-from lxml.html import HtmlElement, fromstring
-from pydantic import BaseModel, HttpUrl
 
 logger = logging.getLogger(__name__)
 
@@ -54,37 +57,40 @@ class HtmlContent(BaseModel):
     def from_html(cls, html: Union[HtmlElement, str], hostuin: int = 0):
         root: HtmlElement = fromstring(html) if isinstance(html, str) else html
         mxsafe = lambda i: max(i, key=len) if i else HtmlElement()
-        finfo = mxsafe(root.cssselect('div.f-info'))
+        img_data = lambda a: {k[5:]: v for k, v in a.attrib.items() if k.startswith('data-')}
 
-        def load_src(a: HtmlElement) -> Optional[HttpUrl]:
-            src: str = next(filter(lambda i: i.tag == 'img', a)).get('src', '')    # type: ignore
+        def load_src(a: Iterable[HtmlElement]) -> Optional[HttpUrl]:
+            o: Optional[HtmlElement] = next(filter(lambda i: i.tag == 'img', a), None)
+            if o is None: return
+            src: str = o.get('src', '')
             if src.startswith('http'):
                 return cast(HttpUrl, src)
 
-            m = re.search(r"trueSrc:'(http.*?)'", a.get('onload', ''))
+            m = re.search(r"trueSrc:'(http.*?)'", o.get('onload', ''))
             if m: return cast(HttpUrl, m.group(1).replace('\\', ''))
 
-            if 'onload' in a.attrib:
-                logger.warning('cannot parse @onload: ' + a.get('onload'))
-            elif 'src' in a.attrib:
-                logger.warning('cannot parse @src: ' + a.get('src'))
+            if 'onload' in o.attrib:
+                logger.warning('cannot parse @onload: ' + o.get('onload'))
+            elif 'src' in o.attrib:
+                logger.warning('cannot parse @src: ' + o.get('src'))
             else:
-                logger.warning(f'WTF is this? {dict(a.attrib)}')
+                logger.warning(f'WTF is this? {dict(o.attrib)}')
 
+        finfo = mxsafe(root.cssselect('div.f-info'))
         lia: list[HtmlElement] = root.cssselect('div.f-ct a.img-item')
-        img_data = lambda a: {k[5:]: v for k, v in a.attrib.items() if k.startswith('data-')}
 
-        return cls(
-            content=finfo.text_content(),
-            pic=[
-                PicRep(
-                    height=(data := img_data(a)).get('height', 0),
-                    width=data.get('width', 0),
-                    url1=src,
-                    url2=src,
-                    url3=src
-                ) for a in lia if (src := load_src(a))
-            ],
-            album=QzoneApi.AlbumData.parse_obj(img_data(lia[0])
-                                               | {'hostuin': hostuin}) if lia else None
-        )
+        try:
+            album = QzoneApi.AlbumData.parse_obj(img_data(lia[0]) | {'hostuin': hostuin})
+        except:
+            album = None
+
+        pic = [
+            PicRep(
+                height=(data := img_data(a)).get('height', 0),
+                width=data.get('width', 0),
+                url1=src,
+                url2=src,
+                url3=src
+            ) for a in lia if (src := load_src(a))    # type: ignore
+        ]
+        return cls(content=finfo.text_content(), pic=pic, album=album)

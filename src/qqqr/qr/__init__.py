@@ -1,14 +1,14 @@
 import asyncio
-import re
-from http.cookies import SimpleCookie
 from random import random
+import re
 from typing import Awaitable, Callable
 
 from ..base import LoginBase
 from ..constants import StatusCode
 from ..encrypt import hash33
 from ..exception import UserBreak
-from ..utils import get_all_cookie, raise_for_status
+from ..utils import get_all_cookie
+from ..utils import raise_for_status
 
 SHOW_QR = 'https://ssl.ptlogin2.qq.com/ptqrshow'
 XLOGIN_URL = 'https://xui.ptlogin2.qq.com/cgi-bin/xlogin'
