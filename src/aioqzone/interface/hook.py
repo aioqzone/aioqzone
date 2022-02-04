@@ -2,12 +2,18 @@
 Define hooks that can trigger user actions.
 """
 
-from typing import Awaitable, Callable, Optional
+import asyncio
+from collections import defaultdict
+from typing import Awaitable, Callable, Generic, Optional, TypeVar
 
 
 class Event:
     """Base class for event system."""
     pass
+
+
+Evt = TypeVar('Evt', bound=Event)
+T = TypeVar('T')
 
 
 class NullEvent(Event):
@@ -18,17 +24,67 @@ class NullEvent(Event):
         assert False, "call `o.register_hook` before accessing o.hook"
 
 
-class Emittable:
+class Emittable(Generic[Evt]):
     """An object has some event to trigger.
     """
-    hook: Event = NullEvent()
+    hook: Evt = NullEvent()    # type: ignore
+    _tasks: dict[str, set[asyncio.Task]]
 
-    def register_hook(self, hook: 'Event'):
+    def __init__(self) -> None:
+        self._tasks = defaultdict(set)
+
+    def register_hook(self, hook: Evt):
         assert not isinstance(hook, NullEvent)
         self.hook = hook
 
+    def add_hook_ref(self, hook_cls: str, coro: Awaitable[T]) -> asyncio.Task[T]:
+        task = asyncio.create_task(coro)
+        self._tasks[hook_cls].add(task)
+        task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
+        return task
 
-class QREvent(Event):
+    async def wait(self, *hook_cls: str, timeout: float = None):
+        s = set()
+        for i in hook_cls:
+            s |= self._tasks[i]
+        if not s: return set(), set()
+        return await asyncio.wait(s, timeout=timeout)
+
+    def clear(self, *hook_cls: str, cancel: bool = True):
+        """Clear the given task sets
+
+        :param hook_cls: task class names
+        :param cancel: Cancel the task if a set is not empty, defaults to True. Else will just clear the ref.
+        """
+        for i in hook_cls:
+            if (s := self._tasks[i]) and not cancel:
+                s.clear()
+                continue
+            while s:
+                t = s.pop()
+                t.cancel()
+
+
+class LoginEvent(Event):
+    """Defines usual events happens during login."""
+    async def LoginFailed(self, msg: str = None):
+        """Will be emitted on login failed.
+
+        .. note::
+            This event will be triggered on every failure of login attempt.
+            Means that logic in this event may be executed multiple times.
+
+        :param msg: Err msg, defaults to None.
+        """
+        pass
+
+    async def LoginSuccess(self):
+        """Will be emitted after login success. Low prior, scheduled by loop instead of awaiting.
+        """
+        pass
+
+
+class QREvent(LoginEvent):
     """Defines usual events happens during QR login."""
 
     cancel: Optional[Callable[[], Awaitable[None]]]
@@ -40,40 +96,25 @@ class QREvent(Event):
         2. QR expired
         3. QR is refreshed
 
-        Args:
-            png (bytes): QR bytes (png format)
-            renew (bool): this QR is a refreshed QR.
+        :param png: QR bytes (png format)
+        :param renew: this QR is a refreshed QR, defaults to False
+
+        .. warning::
+            Develpers had better not rely on the parameter :param renew:.
+            Maintain the state by yourself is not difficult.
         """
         pass
 
     async def QrFailed(self, msg: str = None):
         """QR login failed.
-        NOTE: Always be called before `LoginEvent.LoginFailed`.
 
-        Args:
-            msg (str, optional): Error msg. Defaults to None.
+        .. note: This event should always be called before :meth:`.LoginEvent.LoginFailed`.
+
+        :param msg: Error msg, defaults to None.
         """
         pass
 
     async def QrSucceess(self):
         """QR login success.
-        """
-        pass
-
-
-class LoginEvent(Event):
-    """Defines usual events happens during login."""
-    async def LoginFailed(self, msg: str = None):
-        """Will be emitted on login failed.
-        NOTE: This event will be triggered on every failure of login attempt.
-        Means that logic in this event may be executed multiple times.
-
-        Args:
-            msg (str, optional): Err msg. Defaults to None.
-        """
-        pass
-
-    async def LoginSuccess(self):
-        """Will be emitted after login success. Low prior, scheduled by loop instead of awaiting.
         """
         pass

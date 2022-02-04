@@ -75,13 +75,13 @@ class QRLogin(LoginBase):
             raise_for_status(r, 302)
             return get_all_cookie(r)
 
-    async def loop(
+    def loop(
         self,
         send_callback: Callable[[bytes], Awaitable[None]],
         expire_callback: Callable[[bytes], Awaitable[None]] = None,
         refresh_time: int = 6,
         polling_freq: float = 3,
-    ) -> asyncio.Future[dict[str, str]]:
+    ) -> asyncio.Task[dict[str, str]]:
         expire_callback = expire_callback or send_callback
 
         async def innerloop():

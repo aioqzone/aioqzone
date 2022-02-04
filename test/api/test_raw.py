@@ -8,7 +8,6 @@ import pytest_asyncio
 from aioqzone.api.loginman import ConstLoginMan
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
-from aioqzone.interface.hook import LoginEvent
 from aioqzone.interface.hook import QREvent
 from aioqzone.type import LikeData
 from aioqzone.utils.html import HtmlContent
@@ -46,7 +45,7 @@ async def man(sess: Session):
         pwd=env.get('TEST_PASSWORD', None)
     )
 
-    class inner_qrevent(QREvent, LoginEvent):
+    class inner_qrevent(QREvent):
         async def QrFetched(self, png: bytes):
             showqr(png)
 
@@ -110,6 +109,7 @@ class TestRaw:
         f: Optional[tuple[dict, HtmlInfo]] = first(((i, HtmlInfo.from_html(i['html'])[1])
                                                     for i in storage), lambda t: t[1].unikey)
         if f is None: pytest.skip('No feed with unikey.')
+        assert f
         fd, info = f
         assert info.unikey
         ld = LikeData(

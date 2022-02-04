@@ -7,7 +7,6 @@ import pytest_asyncio
 
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
-from aioqzone.interface.hook import LoginEvent
 from aioqzone.interface.hook import QREvent
 from aioqzone.type import FeedRep
 from aioqzone.utils.html import HtmlContent
@@ -44,7 +43,7 @@ async def man(sess: Session):
         pwd=env.get('TEST_PASSWORD', None)
     )
 
-    class inner_qrevent(QREvent, LoginEvent):
+    class inner_qrevent(QREvent):
         async def QrFetched(self, png: bytes):
             showqr(png)
 
