@@ -8,6 +8,7 @@ import pytest_asyncio
 from aioqzone.api.loginman import ConstLoginMan
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
+from aioqzone.exception import LoginError
 from aioqzone.interface.hook import QREvent
 from aioqzone.type import LikeData
 from aioqzone.utils.html import HtmlContent
@@ -75,7 +76,10 @@ class TestRaw:
 
     async def test_more(self, api: QzoneApi, storage: list):
         future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
-        r = await future
+        try:
+            r = await future
+        except LoginError:
+            pytest.skip('Login failed')
         for i in r:
             assert isinstance(i['data'], list)
             storage.extend(i['data'])

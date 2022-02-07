@@ -67,7 +67,7 @@ class TestCaptcha:
         )
         assert j.width > 0
 
-    async def test_verify(self, captcha):
+    async def test_verify(self, captcha: Captcha):
         r = await captcha.verify()
         assert r['randstr']
 
@@ -77,7 +77,7 @@ async def vm(captcha, iframe):
     yield await captcha.getTdx(iframe)
 
 
-@pytest.mark.skip
+# @pytest.mark.skip
 class TestVM:
     # TODO: stucked?
     def testGetInfo(self, vm: VM):

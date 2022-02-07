@@ -1,6 +1,5 @@
 from math import floor
 import os
-from os import environ as env
 
 import cv2 as cv
 import pytest
@@ -8,12 +7,9 @@ import pytest
 from qqqr.up.captcha.jigsaw import Jigsaw
 from qqqr.up.captcha.jigsaw import Piece
 
-desktoponly = pytest.mark.skipif(
-    not env.get('QR_OK', 0), reason='cv.show not available'
-)
+pytestmark = pytest.mark.needuser
 
 
-@desktoponly
 class TestJigsaw:
     @classmethod
     def setUp(cls) -> None:
@@ -44,7 +40,6 @@ class TestJigsaw:
         assert self.j.rate > 0
 
 
-@desktoponly
 class TestPiece:
     @classmethod
     def setup_class(cls) -> None:

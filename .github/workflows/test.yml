@@ -52,4 +52,4 @@ jobs:
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
           export PYTHONPATH=$(pwd)/src
-          python -m pytest ${{ inputs.pytest_arg }}
+          python -m pytest -m "not needuser and not upstream" ${{ inputs.pytest_arg }}

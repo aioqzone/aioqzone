@@ -43,11 +43,11 @@ class ExecJS:
             js += self.callstr(*i, asis=asis)
             js += ';'
         self.que.clear()
-        js += f'\nconsole.log({self.callstr(func, *args, asis=asis)});'
+        js += f'\nconsole.log({self.callstr(func, *args, asis=asis)});process.exit();'
         return self._exec(js)
 
     def get(self, prop: str):
-        js = self.js + f'\nconsole.log({prop});'
+        js = self.js + f'\nconsole.log({prop});process.exit();'
         return self._exec(js)
 
     def bind(self, func: str, new: bool = True):

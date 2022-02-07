@@ -7,6 +7,7 @@ import pytest_asyncio
 
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
+from aioqzone.exception import LoginError
 from aioqzone.interface.hook import QREvent
 from aioqzone.type import FeedRep
 from aioqzone.utils.html import HtmlContent
@@ -73,8 +74,11 @@ class TestDummy:
 
     async def test_more(self, api: DummyQapi, storage: list):
         future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
-        r = await future
-        for ls, aux in r:
+        try:
+            r = await future
+        except LoginError:
+            pytest.skip('Login failed')
+        for ls, aux in r:    # type: ignore
             assert isinstance(ls, list)
             assert aux.dayspac >= 0
             storage.extend(ls)

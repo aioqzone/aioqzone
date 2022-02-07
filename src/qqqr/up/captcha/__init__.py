@@ -6,7 +6,7 @@ from random import randint
 from random import random
 import re
 from time import time
-from typing import Iterable
+from typing import Any, Iterable, Union
 from urllib.parse import unquote
 from urllib.parse import urlencode
 
@@ -41,7 +41,7 @@ class ScriptHelper:
         m = re.search(r"window\.captchaConfig=(\{.*\});", iframe)
         assert m
         ijson = m.group(1)
-        self.conf = json_loads(ijson)
+        self.conf: dict[str, Any] = json_loads(ijson)    # type: ignore
 
     def cdn(self, cdn: int) -> str:
         assert cdn in (0, 1, 2)
@@ -102,8 +102,8 @@ class VM:
         return self.tdx.get('window.document.cookie').strip()
 
     @property
-    def info(self):
-        return self._info
+    def info(self) -> dict[str, Union[int, str]]:
+        return self._info    # type: ignore
 
 
 class Captcha:
@@ -176,8 +176,7 @@ class Captcha:
             'sess': '',
         }
         self.createIframeStart = time_s()
-        async with self.session.get(PREHANDLE_URL, params=data,
-                                    ssl=self.ssl) as r:
+        async with self.session.get(PREHANDLE_URL, params=data, ssl=self.ssl) as r:
             r.raise_for_status()
             r = re.search(CALLBACK + r"\((\{.*\})\)", await r.text()).group(1)
 
@@ -212,8 +211,7 @@ class Captcha:
             'prehandleLoadTime': time_s() - self.createIframeStart,
             'createIframeStart': self.createIframeStart,
         }
-        async with self.session.get(SHOW_NEW_URL, params=data,
-                                    ssl=self.ssl) as r:
+        async with self.session.get(SHOW_NEW_URL, params=data, ssl=self.ssl) as r:
             self.session.headers.update({istr('referer'): str(r.url)})
             self.prehandleLoadTime = data['prehandleLoadTime']
             return await r.text()
@@ -298,10 +296,8 @@ class Captcha:
         ~~~
         """
         s = ScriptHelper(self.appid, self.sid, self.subsid)
-        wconf = s.conf
-        assert isinstance(wconf, dict)
         s.parseCaptchaConf(iframe := await self.iframe())
-        Ians, duration = await self.matchMd5(iframe, wconf['powCfg'])
+        Ians, duration = await self.matchMd5(iframe, s.conf['powCfg'])
         await self.getTdx(iframe)
 
         waitEnd = time() + 0.6 * random() + 0.9
@@ -322,43 +318,42 @@ class Captcha:
             'aid': self.appid,
             'protocol': 'https',
             'accver': 1,
-            'showtype': wconf['showtype'],
+            'showtype': s.conf['showtype'],
             'ua': self.base64_ua,
-            'noheader': wconf['noheader'],
+            'noheader': s.conf['noheader'],
             'fb': 1,
             'enableDarkMode': 0,
             'sid': self.sid,
             'grayscale': 1,
             'clientype': 2,
-            'sess': wconf['sess'],
+            'sess': s.conf['sess'],
             'fwidth': 0,
             'wxLang': "",
             'tcScale': 1,
-            'uid': wconf['uid'],
+            'uid': s.conf['uid'],
             'cap_cd': "",
             'rnd': rnd6(),
             'prehandleLoadTime': self.prehandleLoadTime,
             'createIframeStart': self.createIframeStart,
             'subsid': self.subsid,
             'cdata': 0,
-            'vsig': wconf['vsig'],
-            'websig': wconf['websig'],
-            'subcapclass': wconf['subcapclass'],
+            'vsig': s.conf['vsig'],
+            'websig': s.conf['websig'],
+            'subcapclass': s.conf['subcapclass'],
             'fpinfo': '',
             'ans': f'{j.left},{j.top};',
-            'nonce': wconf['nonce'],
+            'nonce': s.conf['nonce'],
             'vlg': f'{self.vm.vmAvailable}_{self.vm.vmByteCode}_1',
-            'pow_answer': hex_add(wconf['powCfg']['prefix'], Ians) if Ians else Ians,
+            'pow_answer': hex_add(s.conf['powCfg']['prefix'], Ians) if Ians else Ians,
             'pow_calc_time': duration,
             'eks': self.vm.info['info'],
             'tlg': len(collect := self.vm.getData()),
-            wconf['collectdata']: collect,
+            s.conf['collectdata']: collect,
         # TODO: unknown
         # 'vData': 'gC*KM-*rjuHBcUjIt9kL6SV6JGdgfzMmP0BiFcaDg_7ctHwCjeoz4quIjb2FTgdJLBeCcKCZB_Mv7suXumolfmpSKZVIp7Un2N3b*fbwHX9aqRgjp5fmsgkf6aOgnhU_ttr_4xJZKVjStGX*hMwgBeHE_zuz-iDKy1coGdurLh559T6MoBdJdMAxtIlGJxAexbt6eDz3Aw5pD_tR01ElO7YY',
         }
         await asyncio.sleep(max(0, waitEnd - time()))
-        async with self.session.post(VERIFY_URL, data=data,
-                                     ssl=self.ssl) as r:
+        async with self.session.post(VERIFY_URL, data=data, ssl=self.ssl) as r:
             self.sess = None
             self.createIframeStart = 0
             self.prehandleLoadTime = 0
