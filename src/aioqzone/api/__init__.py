@@ -1,6 +1,7 @@
 """
 Make some easy-to-use api from basic wrappers.
 """
+from ..type import AlbumData
 from ..type import FeedDetailRep
 from ..type import FeedMoreAux
 from ..type import FeedRep
@@ -30,6 +31,6 @@ class DummyQapi(QzoneApi):
         r = await super().get_feeds_count()
         return FeedsCount.parse_obj(r)
 
-    async def floatview_photo_list(self, album: QzoneApi.AlbumData, num: int):
+    async def floatview_photo_list(self, album: AlbumData, num: int):
         r = await super().floatview_photo_list(album, num)
         return [FloatViewPhoto.parse_obj(i) for i in r['photos']]

@@ -109,6 +109,7 @@ class TestQR:
 
     @pytest.mark.asyncio
     async def test_cancel(self, qr: api.QRLoginMan):
+        pytest.skip('NotImplemented')
         await qr.new_cookie()
         await qr.hook.cancel()    # type: ignore
 

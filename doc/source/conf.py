@@ -33,6 +33,8 @@ release = '0.2.3.dev0'
 extensions = [
     'sphinxcontrib.autodoc_pydantic',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.autodoc',
+    'sphinx_autodoc_typehints',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -59,3 +61,6 @@ html_static_path = ['_static']
 # autodoc_pydantic settings
 autodoc_pydantic_model_show_json = False
 autodoc_pydantic_model_undoc_members = False
+
+# external inventory
+intersphinx_mapping = {'aiohttp': ('https://docs.aiohttp.org/en/stable/', None)}

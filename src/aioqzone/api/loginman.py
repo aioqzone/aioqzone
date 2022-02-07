@@ -5,7 +5,7 @@ Users can inherit these managers and implement their own caching logic.
 
 import asyncio
 import logging
-from typing import Type, Union
+from typing import Type
 
 from aiohttp import ClientSession
 
@@ -18,7 +18,6 @@ from qqqr.up import UPLogin
 from qqqr.up import User
 
 from ..exception import LoginError
-from ..interface.hook import LoginEvent
 from ..interface.hook import QREvent
 from ..interface.login import Loginable
 
@@ -52,6 +51,7 @@ class UPLoginMan(Loginable):
             self.add_hook_ref('hook', self.hook.LoginSuccess())
             return cookie
         except TencentLoginError as e:
+            self.add_hook_ref('hook', self.hook.LoginFailed())
             logger.warning(str(e))
             raise e
 
@@ -85,11 +85,13 @@ class QRLoginMan(Loginable):
 
         try:
             cookie = await task
-            asyncio.create_task(self.hook.LoginSuccess())
+            self.add_hook_ref('hook', self.hook.QrSucceess())
+            self.add_hook_ref('hook', self.hook.LoginSuccess())
             return cookie
         except TimeoutError as e:
             await self.hook.QrFailed()
             logger.warning(str(e))
+            self.add_hook_ref('hook', self.hook.QrFailed(str(e)))
             self.add_hook_ref('hook', self.hook.LoginFailed(str(e)))
             raise e
         except KeyboardInterrupt as e:

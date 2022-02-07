@@ -4,6 +4,34 @@ from pydantic import BaseModel
 from pydantic.networks import HttpUrl
 
 
+class PersudoCurkey(str):
+    def __new__(cls, uin: int, abstime: int):
+        return str.__new__(cls, cls.build(uin, abstime))
+
+    def __init__(self, uin: int, abstime: int) -> None:
+        super().__init__()
+        self.uin = uin
+        self.abstime = abstime
+
+    @classmethod
+    def build(cls, uin: int, abstime: int):
+        return str(uin).ljust(12, '0') + str(abstime).ljust(12, '0')
+
+    @classmethod
+    def from_str(cls, curkey: str):
+        uin = curkey[:12]
+        abstime = curkey[12:]
+        uin = int(uin.lstrip('0'))
+        abstime = int(abstime.lstrip('0'))
+        return cls(uin=uin, abstime=abstime)
+
+
+class AlbumData(BaseModel):
+    topicid: str
+    pickey: str
+    hostuin: int
+
+
 # LikeData is not a response of any API. It's just a type def.
 class LikeData(BaseModel):
     unikey: str
@@ -15,7 +43,7 @@ class LikeData(BaseModel):
 
     @staticmethod
     def persudo_curkey(uin: int, abstime: int):
-        return str(uin).ljust(12, '0') + str(abstime).ljust(12, '0')
+        return str(PersudoCurkey(uin, abstime))
 
     @staticmethod
     def persudo_unikey(appid: int, uin: int, **kwds):

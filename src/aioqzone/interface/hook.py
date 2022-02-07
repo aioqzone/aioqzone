@@ -48,7 +48,11 @@ class Emittable(Generic[Evt]):
         for i in hook_cls:
             s |= self._tasks[i]
         if not s: return set(), set()
-        return await asyncio.wait(s, timeout=timeout)
+        r = await asyncio.wait(s, timeout=timeout)
+        if timeout is None and any(self._tasks[i] for i in hook_cls):
+            # await potential new tasks in these sets, only if no timeout.
+            return self.wait(*hook_cls)
+        return r
 
     def clear(self, *hook_cls: str, cancel: bool = True):
         """Clear the given task sets

@@ -2,6 +2,7 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 import time
+from typing import Union
 
 from pytz import timezone
 
@@ -34,8 +35,12 @@ def dayspac(ts1: float, ts2: float = None):
     return d.seconds / 86400
 
 
-def approx_ts(timedesc: str):
-    """Given a time description, returns an approximate timestamp."""
+def approx_ts(timedesc: str) -> int:
+    """Given a time description, returns an approximate timestamp.
+
+    :param timedesc: time description (zh-CN)
+    :return: timestamp (approximate)
+    """
     timedesc = timedesc.strip()
     assert timedesc
     hashm = ':' in timedesc
@@ -63,3 +68,18 @@ def approx_ts(timedesc: str):
     # today
     dt = time.strptime(timedesc.strip(), hmfmt)
     return int(time.mktime(dt))
+
+def sementic_time(timestamp: Union[float, int]) -> str:
+    """reverse of :meth:`.approx_ts`
+
+    :param timestamp: timestamp in second
+    :return: a sementic time description in Chinese
+    """
+    feedtime = datetime.fromtimestamp(timestamp, TIME_ZONE)
+    d = datetime.now(TIME_ZONE) - feedtime
+    ch = ['', '昨天 ', '前天 ']
+    s = ''
+    if d.days <= 2: s += ch[d.days]
+    else: s += feedtime.strftime('%m月%d日 ')
+    s += feedtime.strftime('%H:%M')
+    return s

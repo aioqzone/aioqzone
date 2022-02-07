@@ -10,6 +10,7 @@ from ..interface.hook import LoginEvent
 
 class Loginable(ABC, Emittable[LoginEvent]):
     def __init__(self, uin: int) -> None:
+        super().__init__()
         self.uin = uin
         self._cookie = {}
         self.lock = asyncio.Lock()

@@ -8,6 +8,8 @@ markers = [
     "needuser: Need user interaction, DO NOT use in ci",
     "incremental: xfail succ cases if pred case failed or skipped.",
 ]
+timeout = 60
+
 
 [tool.isort]
 profile = "google"

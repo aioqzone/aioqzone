@@ -10,8 +10,8 @@ from lxml.html import HtmlElement
 from pydantic import BaseModel
 from pydantic import HttpUrl
 
-from aioqzone.api.raw import QzoneApi
-from aioqzone.type import PicRep
+from ..type import AlbumData
+from ..type import PicRep
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class HtmlInfo(BaseModel):
 class HtmlContent(BaseModel):
     content: str = ''
     pic: Optional[list[PicRep]] = None
-    album: Optional[QzoneApi.AlbumData] = None
+    album: Optional[AlbumData] = None
 
     @classmethod
     def from_html(cls, html: Union[HtmlElement, str], hostuin: int = 0):
@@ -80,7 +80,7 @@ class HtmlContent(BaseModel):
         lia: list[HtmlElement] = root.cssselect('div.f-ct a.img-item')
 
         try:
-            album = QzoneApi.AlbumData.parse_obj(img_data(lia[0]) | {'hostuin': hostuin})
+            album = AlbumData.parse_obj(img_data(lia[0]) | {'hostuin': hostuin})
         except:
             album = None
 

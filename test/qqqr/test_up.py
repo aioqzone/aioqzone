@@ -1,6 +1,7 @@
 import asyncio
 from os import environ as env
 
+from aiohttp import ClientSession
 import pytest
 
 from qqqr.constants import QzoneAppid
@@ -20,12 +21,13 @@ def event_loop():
 
 @pytest.fixture(scope='module')
 async def login():
-    async with UPLogin(QzoneAppid, QzoneProxy, User(
-            env.get('TEST_UIN'),
-            env.get('TEST_PASSWORD'),
-    )) as login:
-        await login.request()
-        yield login
+    async with ClientSession() as sess:
+        async with UPLogin(sess, QzoneAppid, QzoneProxy, User(
+                int(env['TEST_UIN']),
+                env['TEST_PASSWORD'],
+        )) as login:
+            await login.request()
+            yield login
 
 
 class TestRequest:
