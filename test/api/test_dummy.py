@@ -1,12 +1,14 @@
 import asyncio
 from typing import Optional
 
-import pytest
 from aiohttp import ClientSession as Session
+import pytest
 import pytest_asyncio
+
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
-from aioqzone.interface.hook import LoginEvent, QREvent
+from aioqzone.exception import LoginError
+from aioqzone.interface.hook import QREvent
 from aioqzone.type import FeedRep
 from aioqzone.utils.html import HtmlContent
 
@@ -42,7 +44,7 @@ async def man(sess: Session):
         pwd=env.get('TEST_PASSWORD', None)
     )
 
-    class inner_qrevent(QREvent, LoginEvent):
+    class inner_qrevent(QREvent):
         async def QrFetched(self, png: bytes):
             showqr(png)
 
@@ -72,15 +74,18 @@ class TestDummy:
 
     async def test_more(self, api: DummyQapi, storage: list):
         future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
-        r = await future
-        for ls, aux in r:
+        try:
+            r = await future
+        except LoginError:
+            pytest.xfail('Login failed')
+        for ls, aux in r:    # type: ignore
             assert isinstance(ls, list)
             assert aux.dayspac >= 0
             storage.extend(ls)
         assert storage
 
     async def test_complete(self, api: DummyQapi, storage: list[FeedRep]):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[FeedRep] = first(storage, None)
         assert f
         from aioqzone.utils.html import HtmlInfo
@@ -88,17 +93,20 @@ class TestDummy:
         assert (await api.emotion_getcomments(f.uin, f.key, info.feedstype))
 
     async def test_detail(self, api: DummyQapi, storage: list[FeedRep]):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[FeedRep] = first(storage, lambda f: f.appid == 311)
         if f is None: pytest.skip('No 311 feed in storage.')
         assert f
         assert await api.emotion_msgdetail(f.uin, f.key)
 
     async def test_heartbeat(self, api: DummyQapi):
-        assert await api.get_feeds_count()
+        try:
+            assert await api.get_feeds_count()
+        except LoginError:
+            pytest.xfail('Login failed')
 
     async def test_photo_list(self, api: DummyQapi, storage: list[FeedRep]):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[HtmlContent] = first((HtmlContent.from_html(i.html) for i in storage),
                                          lambda t: t.pic)
         if f is None: pytest.skip('No feed with pic in storage')

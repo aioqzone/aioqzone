@@ -1,14 +1,14 @@
 import asyncio
-import re
-from http.cookies import SimpleCookie
 from random import random
+import re
 from typing import Awaitable, Callable
 
 from ..base import LoginBase
 from ..constants import StatusCode
 from ..encrypt import hash33
 from ..exception import UserBreak
-from ..utils import get_all_cookie, raise_for_status
+from ..utils import get_all_cookie
+from ..utils import raise_for_status
 
 SHOW_QR = 'https://ssl.ptlogin2.qq.com/ptqrshow'
 XLOGIN_URL = 'https://xui.ptlogin2.qq.com/cgi-bin/xlogin'
@@ -75,13 +75,13 @@ class QRLogin(LoginBase):
             raise_for_status(r, 302)
             return get_all_cookie(r)
 
-    async def loop(
+    def loop(
         self,
         send_callback: Callable[[bytes], Awaitable[None]],
         expire_callback: Callable[[bytes], Awaitable[None]] = None,
         refresh_time: int = 6,
         polling_freq: float = 3,
-    ) -> asyncio.Future[dict[str, str]]:
+    ) -> asyncio.Task[dict[str, str]]:
         expire_callback = expire_callback or send_callback
 
         async def innerloop():

@@ -1,16 +1,20 @@
-import re
 from dataclasses import dataclass
-from random import choice, random
+from random import choice
+from random import random
+import re
 from time import time_ns
 
 from aiohttp import ClientSession
 from multidict import istr
+
 from jssupport.execjs import ExecJS
 
 from ..base import LoginBase
 from ..constants import StatusCode
 from ..exception import TencentLoginError
-from ..type import APPID, PT_QR_APP, Proxy
+from ..type import APPID
+from ..type import Proxy
+from ..type import PT_QR_APP
 from ..utils import get_all_cookie
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"

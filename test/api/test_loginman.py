@@ -1,11 +1,13 @@
 import asyncio
 from os import environ as env
 
-import aioqzone.api.loginman as api
+from aiohttp import ClientSession
 import pytest
 import pytest_asyncio
-from aiohttp import ClientSession
-from aioqzone.interface.hook import LoginEvent, QREvent
+
+import aioqzone.api.loginman as api
+from aioqzone.interface.hook import LoginEvent
+from aioqzone.interface.hook import QREvent
 from qqqr.exception import TencentLoginError
 
 
@@ -107,6 +109,7 @@ class TestQR:
 
     @pytest.mark.asyncio
     async def test_cancel(self, qr: api.QRLoginMan):
+        pytest.skip('NotImplemented')
         await qr.new_cookie()
         await qr.hook.cancel()    # type: ignore
 

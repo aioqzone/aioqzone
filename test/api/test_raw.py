@@ -1,14 +1,18 @@
 import asyncio
 from typing import Optional
 
+from aiohttp import ClientSession as Session
 import pytest
 import pytest_asyncio
-from aiohttp import ClientSession as Session
-from aioqzone.api.loginman import ConstLoginMan, MixedLoginMan
+
+from aioqzone.api.loginman import ConstLoginMan
+from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
-from aioqzone.interface.hook import LoginEvent, QREvent
+from aioqzone.exception import LoginError
+from aioqzone.interface.hook import QREvent
 from aioqzone.type import LikeData
-from aioqzone.utils.html import HtmlContent, HtmlInfo
+from aioqzone.utils.html import HtmlContent
+from aioqzone.utils.html import HtmlInfo
 
 first = lambda it, pred: next(filter(pred, it), None)
 
@@ -42,7 +46,7 @@ async def man(sess: Session):
         pwd=env.get('TEST_PASSWORD', None)
     )
 
-    class inner_qrevent(QREvent, LoginEvent):
+    class inner_qrevent(QREvent):
         async def QrFetched(self, png: bytes):
             showqr(png)
 
@@ -72,14 +76,17 @@ class TestRaw:
 
     async def test_more(self, api: QzoneApi, storage: list):
         future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
-        r = await future
-        for i in r:
+        try:
+            r = await future
+        except LoginError:
+            pytest.xfail('Login failed')
+        for i in r:    # type: ignore
             assert isinstance(i['data'], list)
             storage.extend(i['data'])
         assert storage
 
     async def test_complete(self, api: QzoneApi, storage: list):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[dict] = first(storage, None)
         assert f
         from aioqzone.utils.html import HtmlInfo
@@ -88,24 +95,29 @@ class TestRaw:
         assert 'newFeedXML' in d
 
     async def test_detail(self, api: QzoneApi, storage: list):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[dict] = first(storage, lambda f: int(f['appid']) == 311)
         if f is None: pytest.skip('No 311 feed in storage.')
         assert f
         await api.emotion_msgdetail(f['uin'], f['key'])
 
     async def test_heartbeat(self, api: QzoneApi):
-        d = await api.get_feeds_count()
+        try:
+            d = await api.get_feeds_count()
+        except LoginError:
+            pytest.xfail('Login failed')
+        assert d    # type: ignore
         assert isinstance(d.pop('newfeeds_uinlist', []), list)
         for k, v in d.items():
             assert isinstance(k, str)
             assert isinstance(v, int)
 
     async def test_like(self, api: QzoneApi, storage: list):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[tuple[dict, HtmlInfo]] = first(((i, HtmlInfo.from_html(i['html'])[1])
                                                     for i in storage), lambda t: t[1].unikey)
-        if f is None: pytest.skip('No feed with unikey.')
+        if f is None: pytest.xfail('No feed with unikey.')
+        assert f
         fd, info = f
         assert info.unikey
         ld = LikeData(
@@ -121,7 +133,7 @@ class TestRaw:
         assert await api.like_app(ld, bool(info.islike))
 
     async def test_photo_list(self, api: QzoneApi, storage: list):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[HtmlContent] = first(
             (HtmlContent.from_html(i['html'], i['uin']) for i in storage), lambda t: t.pic
         )

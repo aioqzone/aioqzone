@@ -1,0 +1,1 @@
+"aioqzone interface defination"

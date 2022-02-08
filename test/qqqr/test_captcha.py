@@ -2,10 +2,17 @@ import asyncio
 from math import floor
 from os import environ as env
 
+from aiohttp import ClientSession
 import pytest
-from qqqr.constants import QzoneAppid, QzoneProxy
-from qqqr.up import UPLogin, User
-from qqqr.up.captcha import Captcha, ScriptHelper
+import pytest_asyncio
+
+from qqqr.constants import QzoneAppid
+from qqqr.constants import QzoneProxy
+from qqqr.up import UPLogin
+from qqqr.up import User
+from qqqr.up.captcha import Captcha
+from qqqr.up.captcha import ScriptHelper
+from qqqr.up.captcha import VM
 from qqqr.up.captcha.jigsaw import Jigsaw
 
 
@@ -16,23 +23,24 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope='module')
-async def captcha() -> None:
-    async with UPLogin(QzoneAppid, QzoneProxy, User(env['TEST_UIN'],
-                                                    env['TEST_PASSWORD'])) as login:
-        captcha = login.captcha((await login.check()).session)
-        await captcha.prehandle(login.xlogin_url)
-        yield captcha
+@pytest_asyncio.fixture(scope='module')
+async def captcha():
+    async with ClientSession() as sess:
+        async with UPLogin(sess, QzoneAppid, QzoneProxy, User(int(env['TEST_UIN']),
+                                                              env['TEST_PASSWORD'])) as login:
+            captcha = login.captcha((await login.check()).session)
+            await captcha.prehandle(login.xlogin_url)
+            yield captcha
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def shelper(captcha, iframe):
     shelper = ScriptHelper(captcha.appid, captcha.sid, 2)
     shelper.parseCaptchaConf(iframe)
     yield shelper
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def iframe(captcha):
     yield await captcha.iframe()
 
@@ -60,18 +68,19 @@ class TestCaptcha:
         )
         assert j.width > 0
 
-    async def test_verify(self, captcha):
+    async def test_verify(self, captcha: Captcha):
         r = await captcha.verify()
         assert r['randstr']
 
 
-@pytest.fixture(scope='class')
+@pytest_asyncio.fixture(scope='class')
 async def vm(captcha, iframe):
     yield await captcha.getTdx(iframe)
 
 
 class TestVM:
-    def testGetInfo(self, vm):
+    # TODO: stucked?
+    def testGetInfo(self, vm: VM):
         assert (d := vm.getInfo())
         assert d['info']
 

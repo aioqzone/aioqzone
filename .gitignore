@@ -5,3 +5,7 @@
 *.egg-info
 tmp
 archive
+
+/dist
+/doc/*
+!/doc/source

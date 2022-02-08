@@ -1,13 +1,16 @@
+from abc import ABC
+from abc import abstractmethod
 import asyncio
-from abc import ABC, abstractmethod, abstractproperty
 
 from qqqr.encrypt import gtk
 
 from ..interface.hook import Emittable
+from ..interface.hook import LoginEvent
 
 
-class Loginable(ABC, Emittable):
+class Loginable(ABC, Emittable[LoginEvent]):
     def __init__(self, uin: int) -> None:
+        super().__init__()
         self.uin = uin
         self._cookie = {}
         self.lock = asyncio.Lock()

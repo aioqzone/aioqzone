@@ -1,11 +1,14 @@
+from abc import ABC
+from abc import abstractmethod
 import ssl
-from abc import ABC, abstractmethod
 from urllib.parse import urlencode
 
 from aiohttp import ClientSession as Session
 from multidict import istr
 
-from .type import APPID, PT_QR_APP, Proxy
+from .type import APPID
+from .type import Proxy
+from .type import PT_QR_APP
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.69"
 CIPHERS = [

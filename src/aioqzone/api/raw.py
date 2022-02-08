@@ -2,22 +2,27 @@
 Basic wrapper of Qzone HTTP interface.
 """
 
-import logging
 from functools import wraps
-from random import randint, random
-from typing import Any, Callable
-from urllib.parse import parse_qs, quote, unquote
+import logging
+from random import randint
+from random import random
+from typing import Any, Callable, Union
+from urllib.parse import parse_qs
+from urllib.parse import quote
+from urllib.parse import unquote
 
-import aioqzone.api.constant as const
 from aiohttp import ClientSession as Session
 from aiohttp.client_exceptions import ClientResponseError
-from jssupport.jsjson import json_loads
 from multidict import istr
 from pydantic import BaseModel
+
+import aioqzone.api.constant as const
+from jssupport.jsjson import json_loads
 from qqqr.base import UA
 
 from ..exception import QzoneError
 from ..interface.login import Loginable
+from ..type import AlbumData
 from ..type import LikeData
 from ..utils.regex import response_callback
 from ..utils.time import time_ms
@@ -31,19 +36,16 @@ class QzoneApi:
     encoding = 'utf-8'
     host = "https://user.qzone.qq.com"
 
-    def __init__(self, session: Session, loginman: Loginable, ua: str=UA) -> None:
+    def __init__(self, session: Session, loginman: Loginable, ua: str = UA) -> None:
         session.headers.update({istr('User-Agent'): ua})
         self.sess = session
         self.login = loginman
 
-    async def _get_gtk(self):
-        """Get gtk with async-lock.
+    async def _get_gtk(self) -> int:
+        """Get gtk with async-lock
 
-        Raises:
-            QzoneError: if gtk is 0
-
-        Returns:
-            int: gtk != 0
+        :raises `aioqzone.exception.QzoneError`: if gtk is 0
+        :return: gtk
         """
         async with self.login.lock:
             gtk = self.login.gtk
@@ -70,10 +72,11 @@ class QzoneApi:
         """A decorator which will relogin and retry given func if cookie expired.
 
         'cookie expired' is indicated by:
-        1. QzoneError code -3000 or -4002
+        1. `aioqzone.exception.QzoneError` code -3000 or -4002
         2. HTTP response code 403
 
-        NOTE: Decorate code as less as possible; Do NOT modify args in the wrapped code.
+        .. note:: Decorate code as less as possible
+        .. warning:: Do NOT modify args in the wrapped code.
         """
         @wraps(func)
         async def relogin_wrapper(*args, **kwds):
@@ -101,17 +104,13 @@ class QzoneApi:
         """Deal with rtext from Qzone api response, returns parsed json dict.
         Inner used only.
 
-        Args:
-            rtext (str): response.text()
-            cb (bool, optional): The text is to be parsed by callback_regex. Defaults to True.
-            errno (callable[[dict], int], optional): Error # getter. Defaults to get `code` field of the dict.
-            msg (callable[[dict], str], optional): Error message getter. Defaults to None.
+        :param rtext: result from :external:meth:`asyncio.ClientResponse.text`
+        :param cb: The text is to be parsed by callback_regex, defaults to True.
+        :param errno: Error # getter, defaults to get `code` field of the dict.
+        :param msg: Error message getter, defaults to None.
 
-        Raises:
-            QzoneError: if errno != 0
-
-        Returns:
-            dict: json response
+        :raises `aioqzone.exception.QzoneError`: if errno != 0
+        :return: json response
         """
         if cb:
             match = response_callback.search(rtext)
@@ -127,6 +126,7 @@ class QzoneApi:
         return r    # type: ignore
 
     class FeedsMoreTransaction:
+        """Represents a feeds3_html_more transaction."""
         def __init__(self, default: dict[int, str] = None) -> None:
             self.extern = default or {}
 
@@ -137,18 +137,18 @@ class QzoneApi:
 
     async def feeds3_html_more(
         self, pagenum: int, trans: FeedsMoreTransaction = None, count: int = 10
-    ):
+    ) -> dict[str, Any]:
         """return a list of dict, each dict reps a page of feeds.
 
-        Args:
-            pagenum (int): #page >= 0
-            trans: reps a skim transaction. Mutable.
-            count: feed count
+        :param pagenum: #page >= 0
+        :param trans: reps a skim transaction. Mutable.
+        :param count: feed count, defaults to 10.
 
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
+        :return: response dict
         """
+
         default = {
             'scope': 0,
             'view': 1,
@@ -196,20 +196,16 @@ class QzoneApi:
         trans.extern[pagenum + 1] = unquote(data['main']["externparam"])
         return data
 
-    async def emotion_getcomments(self, uin: int, tid: str, feedstype: int):
+    async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> dict[str, Any]:
         """Get complete html of a given feed
 
-        Args:
-            uin (int):
-            tid (str):
-            feedstype (int):
+        :param uin: uin
+        :param tid: feed id
+        :param feedstype: feedstype in html
 
-        Returns:
-            str: complete feed html
-
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
+        :return: response dict
         """
         default = {
             "pos": 0,
@@ -241,20 +237,17 @@ class QzoneApi:
 
         return await retry_closure()
 
-    async def emotion_msgdetail(self, owner: int, fid: str):
+    async def emotion_msgdetail(self, owner: int, fid: str) -> dict[str, Any]:
         """Get detail of a given msg.
-        NOTE: share msg is not support, i.e. `appid=311`
 
-        Args:
-            owner (int): owner uin
-            fid (str): feed id, named fid, tid or feedkey
+        :param owner: owner uin
+        :param fid: feed id, named fid, tid or feedkey
 
-        Returns:
-            dict: a dict reps the feed in detail
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
+        :return: a dict reps the feed in detail
 
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
+        .. note:: share msg is not support, i.e. `appid=311`
         """
         default = {
             't1_source': 1,
@@ -279,17 +272,17 @@ class QzoneApi:
 
         return await retry_closure()
 
-    async def get_feeds_count(self) -> dict[str, int]:
+    async def get_feeds_count(self) -> dict[str, Union[int, list]]:
         """Get feeds update count (new feeds, new photos, new comments, etc)
-        NOTE: This api is also the 'keep-alive' signal to avoid cookie from expiring.
-        Call this api every 300s can help keep cookie alive.
 
-        Returns:
-            dict[str, int]: dict of all kinds of updates
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
 
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
+        :return: dict of all kinds of updates
+
+        .. note::
+            This api is also the 'keep-alive' signal to avoid cookie from expiring.
+            Call this api every 300s can help keep cookie alive.
         """
         query = {'uin': self.login.uin, 'rd': random()}
 
@@ -304,17 +297,15 @@ class QzoneApi:
         r = await retry_closure()
         return r['data']
 
-    async def like_app(self, likedata: LikeData, like: bool = True):
+    async def like_app(self, likedata: LikeData, like: bool = True) -> bool:
         """Like or unlike a feed.
 
-        Args:
-            likedata (LikeData): Necessary data for like/unlike
-            like (bool, optional): True as like, False as unlike. Defaults to True.
+        :param likedata: Necessary data for like/unlike
+        :param like: True as like, False as unlike, defaults to True.
 
-        Returns:
-            bool: if success
+        :return: success flag
 
-        @noexcept
+        .. note:: @noexcept
         """
         default = {
             'from': 1,
@@ -346,26 +337,23 @@ class QzoneApi:
             logger.error('Error in dolike/unlike.', exc_info=True)
             return False
 
-    class AlbumData(BaseModel):
-        topicid: str
-        pickey: str
-        hostuin: int
-
-    async def floatview_photo_list(self, album: AlbumData, num: int):
+    async def floatview_photo_list(self, album: AlbumData, num: int) -> dict[str, Any]:
         """Get detail of an album, including raw image url.
 
-        Args:
-            album (AlbumData): Necessary album data
-            num (int): pic num
+        :param album: Necessary album data
+        :param num: pic num
 
-        Returns:
-            dict: album details
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
+        :raises `RuntimeError`: transport error (maybe data corruptted)
+        :return: album details
 
-        Raises:
-            `ClientResponseError`
-            `QzoneError`
-            `RuntimeError`: transport error (maybe data is hooked)
+        .. warning::
+            This api is a 'slow' api, means it always returns an error code,
+            requesting a retry a moment later. Use :meth:`.emotion_msgdetail` to get raw photo/video in
+            a feed.
         """
+
         default = {
             'callback': 'viewer_Callback',
             'cmtOrder': 1,

@@ -1,10 +1,16 @@
 import asyncio
 from os import environ as env
 
+from aiohttp import ClientSession
 import pytest
-from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
+import pytest_asyncio
+
+from qqqr.constants import QzoneAppid
+from qqqr.constants import QzoneProxy
+from qqqr.constants import StatusCode
 from qqqr.exception import TencentLoginError
-from qqqr.up import UPLogin, User
+from qqqr.up import UPLogin
+from qqqr.up import User
 
 
 @pytest.fixture(scope='module')
@@ -14,14 +20,15 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def login():
-    async with UPLogin(QzoneAppid, QzoneProxy, User(
-            env.get('TEST_UIN'),
-            env.get('TEST_PASSWORD'),
-    )) as login:
-        await login.request()
-        yield login
+    async with ClientSession() as sess:
+        async with UPLogin(sess, QzoneAppid, QzoneProxy, User(
+                int(env['TEST_UIN']),
+                env['TEST_PASSWORD'],
+        )) as login:
+            await login.request()
+            yield login
 
 
 class TestRequest:

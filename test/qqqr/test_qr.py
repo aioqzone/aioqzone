@@ -1,13 +1,13 @@
 import asyncio
-from os import environ as env
 
+from aiohttp import ClientSession
 import pytest
-from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
-from qqqr.qr import QRLogin
+import pytest_asyncio
 
-need_interact = pytest.mark.skipif(
-    not env.get('QR_OK', 0), reason='need user interaction'
-)
+from qqqr.constants import QzoneAppid
+from qqqr.constants import QzoneProxy
+from qqqr.constants import StatusCode
+from qqqr.qr import QRLogin
 
 
 @pytest.fixture(scope='module')
@@ -17,11 +17,12 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def login():
-    async with QRLogin(QzoneAppid, QzoneProxy) as login:
-        await login.request()
-        yield login
+    async with ClientSession() as sess:
+        async with QRLogin(sess, QzoneAppid, QzoneProxy) as login:
+            await login.request()
+            yield login
 
 
 class TestProcedure:
@@ -36,7 +37,7 @@ class TestProcedure:
         assert r[0] == StatusCode.Waiting
 
 
-@need_interact
+@pytest.mark.needuser
 class TestLoop:
     pytestmark = pytest.mark.asyncio
 

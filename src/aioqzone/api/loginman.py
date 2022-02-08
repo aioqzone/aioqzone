@@ -5,16 +5,20 @@ Users can inherit these managers and implement their own caching logic.
 
 import asyncio
 import logging
-from typing import Type, Union
+from typing import Type
 
 from aiohttp import ClientSession
-from qqqr.constants import QzoneAppid, QzoneProxy
-from qqqr.exception import TencentLoginError, UserBreak
+
+from qqqr.constants import QzoneAppid
+from qqqr.constants import QzoneProxy
+from qqqr.exception import TencentLoginError
+from qqqr.exception import UserBreak
 from qqqr.qr import QRLogin
-from qqqr.up import UPLogin, User
+from qqqr.up import UPLogin
+from qqqr.up import User
 
 from ..exception import LoginError
-from ..interface.hook import LoginEvent, QREvent
+from ..interface.hook import QREvent
 from ..interface.login import Loginable
 
 logger = logging.getLogger(__name__)
@@ -31,8 +35,6 @@ class ConstLoginMan(Loginable):
 
 
 class UPLoginMan(Loginable):
-    hook: LoginEvent
-
     def __init__(self, sess: ClientSession, uin: int, pwd: str) -> None:
         Loginable.__init__(self, uin)
         self.sess = sess
@@ -46,15 +48,16 @@ class UPLoginMan(Loginable):
         try:
             login = UPLogin(self.sess, QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
             cookie = await login.login(await login.check())
-            asyncio.create_task(self.hook.LoginSuccess())    # schedule in future
+            self.add_hook_ref('hook', self.hook.LoginSuccess())
             return cookie
         except TencentLoginError as e:
+            self.add_hook_ref('hook', self.hook.LoginFailed())
             logger.warning(str(e))
             raise e
 
 
 class QRLoginMan(Loginable):
-    hook: Union[LoginEvent, QREvent]
+    hook: QREvent
 
     def __init__(self, sess: ClientSession, uin: int, refresh_time: int = 6) -> None:
         Loginable.__init__(self, uin)
@@ -67,35 +70,35 @@ class QRLoginMan(Loginable):
             UserBreak: [description]
         """
         assert isinstance(self.hook, QREvent)
-        assert isinstance(self.hook, LoginEvent)
 
         man = QRLogin(self.sess, QzoneAppid, QzoneProxy)
-        thread = await man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
+        task = man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
 
         async def tmp_cancel():
-            thread.cancel()
+            task.cancel()
 
         async def tmp_resend():
-            assert isinstance(self.hook, QREvent)
-            await self.hook.QrFetched(await man.show())
+            await self.hook.QrFetched(await man.show())    # must be sent at once
 
         self.hook.cancel = tmp_cancel
         self.hook.resend = tmp_resend
 
         try:
-            cookie = await thread
-            asyncio.create_task(self.hook.LoginSuccess())
+            cookie = await task
+            self.add_hook_ref('hook', self.hook.QrSucceess())
+            self.add_hook_ref('hook', self.hook.LoginSuccess())
             return cookie
         except TimeoutError as e:
             await self.hook.QrFailed()
             logger.warning(str(e))
-            await self.hook.LoginFailed(str(e))
+            self.add_hook_ref('hook', self.hook.QrFailed(str(e)))
+            self.add_hook_ref('hook', self.hook.LoginFailed(str(e)))
             raise e
         except KeyboardInterrupt as e:
             raise UserBreak from e
         except:
             logger.fatal('Unexpected error in QR login.', exc_info=True)
-            await self.hook.LoginFailed(str("二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."))
+            self.add_hook_ref('hook', self.hook.LoginFailed(str("二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")))
             exit(1)
         finally:
             self.hook.cancel = self.hook.resend = None
@@ -144,5 +147,5 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         else:
             msg = "您可能已被限制登陆."
 
-        await self.hook.LoginFailed(msg)
+        self.add_hook_ref('hook', self.hook.LoginFailed(msg))
         raise LoginError(msg, self.strategy)
