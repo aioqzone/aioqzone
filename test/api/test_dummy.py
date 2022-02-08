@@ -77,7 +77,7 @@ class TestDummy:
         try:
             r = await future
         except LoginError:
-            pytest.skip('Login failed')
+            pytest.xfail('Login failed')
         for ls, aux in r:    # type: ignore
             assert isinstance(ls, list)
             assert aux.dayspac >= 0
@@ -85,7 +85,7 @@ class TestDummy:
         assert storage
 
     async def test_complete(self, api: DummyQapi, storage: list[FeedRep]):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[FeedRep] = first(storage, None)
         assert f
         from aioqzone.utils.html import HtmlInfo
@@ -93,17 +93,20 @@ class TestDummy:
         assert (await api.emotion_getcomments(f.uin, f.key, info.feedstype))
 
     async def test_detail(self, api: DummyQapi, storage: list[FeedRep]):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[FeedRep] = first(storage, lambda f: f.appid == 311)
         if f is None: pytest.skip('No 311 feed in storage.')
         assert f
         assert await api.emotion_msgdetail(f.uin, f.key)
 
     async def test_heartbeat(self, api: DummyQapi):
-        assert await api.get_feeds_count()
+        try:
+            assert await api.get_feeds_count()
+        except LoginError:
+            pytest.xfail('Login failed')
 
     async def test_photo_list(self, api: DummyQapi, storage: list[FeedRep]):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[HtmlContent] = first((HtmlContent.from_html(i.html) for i in storage),
                                          lambda t: t.pic)
         if f is None: pytest.skip('No feed with pic in storage')

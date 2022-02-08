@@ -79,14 +79,14 @@ class TestRaw:
         try:
             r = await future
         except LoginError:
-            pytest.skip('Login failed')
-        for i in r:
+            pytest.xfail('Login failed')
+        for i in r:    # type: ignore
             assert isinstance(i['data'], list)
             storage.extend(i['data'])
         assert storage
 
     async def test_complete(self, api: QzoneApi, storage: list):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[dict] = first(storage, None)
         assert f
         from aioqzone.utils.html import HtmlInfo
@@ -95,24 +95,28 @@ class TestRaw:
         assert 'newFeedXML' in d
 
     async def test_detail(self, api: QzoneApi, storage: list):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[dict] = first(storage, lambda f: int(f['appid']) == 311)
         if f is None: pytest.skip('No 311 feed in storage.')
         assert f
         await api.emotion_msgdetail(f['uin'], f['key'])
 
     async def test_heartbeat(self, api: QzoneApi):
-        d = await api.get_feeds_count()
+        try:
+            d = await api.get_feeds_count()
+        except LoginError:
+            pytest.xfail('Login failed')
+        assert d    # type: ignore
         assert isinstance(d.pop('newfeeds_uinlist', []), list)
         for k, v in d.items():
             assert isinstance(k, str)
             assert isinstance(v, int)
 
     async def test_like(self, api: QzoneApi, storage: list):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[tuple[dict, HtmlInfo]] = first(((i, HtmlInfo.from_html(i['html'])[1])
                                                     for i in storage), lambda t: t[1].unikey)
-        if f is None: pytest.skip('No feed with unikey.')
+        if f is None: pytest.xfail('No feed with unikey.')
         assert f
         fd, info = f
         assert info.unikey
@@ -129,7 +133,7 @@ class TestRaw:
         assert await api.like_app(ld, bool(info.islike))
 
     async def test_photo_list(self, api: QzoneApi, storage: list):
-        if not storage: pytest.skip('storage is empty')
+        if not storage: pytest.xfail('storage is empty')
         f: Optional[HtmlContent] = first(
             (HtmlContent.from_html(i['html'], i['uin']) for i in storage), lambda t: t.pic
         )

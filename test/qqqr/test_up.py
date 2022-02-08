@@ -3,6 +3,7 @@ from os import environ as env
 
 from aiohttp import ClientSession
 import pytest
+import pytest_asyncio
 
 from qqqr.constants import QzoneAppid
 from qqqr.constants import QzoneProxy
@@ -19,7 +20,7 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture.fixture(scope='module')
 async def login():
     async with ClientSession() as sess:
         async with UPLogin(sess, QzoneAppid, QzoneProxy, User(

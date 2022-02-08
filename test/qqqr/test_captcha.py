@@ -4,6 +4,7 @@ from os import environ as env
 
 from aiohttp import ClientSession
 import pytest
+import pytest_asyncio
 
 from qqqr.constants import QzoneAppid
 from qqqr.constants import QzoneProxy
@@ -22,7 +23,7 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def captcha():
     async with ClientSession() as sess:
         async with UPLogin(sess, QzoneAppid, QzoneProxy, User(int(env['TEST_UIN']),
@@ -32,14 +33,14 @@ async def captcha():
             yield captcha
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def shelper(captcha, iframe):
     shelper = ScriptHelper(captcha.appid, captcha.sid, 2)
     shelper.parseCaptchaConf(iframe)
     yield shelper
 
 
-@pytest.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def iframe(captcha):
     yield await captcha.iframe()
 
@@ -72,12 +73,11 @@ class TestCaptcha:
         assert r['randstr']
 
 
-@pytest.fixture(scope='class')
+@pytest_asyncio.fixture(scope='class')
 async def vm(captcha, iframe):
     yield await captcha.getTdx(iframe)
 
 
-# @pytest.mark.skip
 class TestVM:
     # TODO: stucked?
     def testGetInfo(self, vm: VM):
