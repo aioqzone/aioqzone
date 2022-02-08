@@ -17,7 +17,7 @@ def event_loop():
     loop.close()
 
 
-@pytest_asyncio.fixture.fixture(scope='module')
+@pytest_asyncio.fixture(scope='module')
 async def login():
     async with ClientSession() as sess:
         async with QRLogin(sess, QzoneAppid, QzoneProxy) as login:
