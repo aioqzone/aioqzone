@@ -6,7 +6,7 @@ from functools import wraps
 import logging
 from random import randint
 from random import random
-from typing import Any, Callable, Union
+from typing import Callable, Union
 from urllib.parse import parse_qs
 from urllib.parse import quote
 from urllib.parse import unquote
@@ -14,10 +14,10 @@ from urllib.parse import unquote
 from aiohttp import ClientSession as Session
 from aiohttp.client_exceptions import ClientResponseError
 from multidict import istr
-from pydantic import BaseModel
 
 import aioqzone.api.constant as const
 from jssupport.jsjson import json_loads
+from jssupport.jsjson import JsonValue
 from qqqr.base import UA
 
 from ..exception import QzoneError
@@ -28,6 +28,8 @@ from ..utils.regex import response_callback
 from ..utils.time import time_ms
 
 logger = logging.getLogger(__name__)
+
+StrDict = dict[str, JsonValue]
 
 
 class QzoneApi:
@@ -66,7 +68,7 @@ class QzoneApi:
         self.sess.headers.update({
             istr('referer'): f'https://user.qzone.qq.com/{self.login.uin}/infocenter'
         })
-        return self.sess.get(self.host + url, params=params, data=data)
+        return self.sess.post(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
         """A decorator which will relogin and retry given func if cookie expired.
@@ -98,16 +100,16 @@ class QzoneApi:
         self,
         rtext: str,
         cb: bool = True,
-        errno: Callable[[dict], int] = None,
-        msg: Callable[[dict], str] = None
-    ) -> dict[str, Any]:
+        errno_key: tuple[str, ...] = ('code', 'err'),
+        msg_key: tuple[str, ...] = ('msg', 'message')
+    ) -> StrDict:
         """Deal with rtext from Qzone api response, returns parsed json dict.
         Inner used only.
 
         :param rtext: result from :external:meth:`asyncio.ClientResponse.text`
         :param cb: The text is to be parsed by callback_regex, defaults to True.
-        :param errno: Error # getter, defaults to get `code` field of the dict.
-        :param msg: Error message getter, defaults to None.
+        :param errno_key: Error # key, defaults to ('code', 'err').
+        :param msg_key: Error message key, defaults to ('msg', 'message').
 
         :raises `aioqzone.exception.QzoneError`: if errno != 0
         :return: json response
@@ -118,10 +120,15 @@ class QzoneApi:
             rtext = match.group(1)
         r = json_loads(rtext)
         assert isinstance(r, dict)
-        errno = errno or (lambda d: int(d['code']))
 
-        if (err := errno(r)) != 0:
-            if msg: raise QzoneError(err, msg(r), rdict=r)
+        err = next(filter(lambda i: i is not None, (r.get(i) for i in errno_key)), None)
+        assert err is not None
+        assert isinstance(err, (int, str))
+        err = int(err)
+
+        if err != 0:
+            msg = next(filter(None, (r.get(i) for i in msg_key)), None)
+            if msg: raise QzoneError(err, msg, rdict=r)
             else: raise QzoneError(err, rdict=r)
         return r    # type: ignore
 
@@ -137,7 +144,7 @@ class QzoneApi:
 
     async def feeds3_html_more(
         self, pagenum: int, trans: FeedsMoreTransaction = None, count: int = 10
-    ) -> dict[str, Any]:
+    ) -> StrDict:
         """return a list of dict, each dict reps a page of feeds.
 
         :param pagenum: #page >= 0
@@ -189,14 +196,14 @@ class QzoneApi:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+            return self._rtext_handler(rtext)
 
         r = await retry_closure()
-        data: dict[str, Any] = r['data']
-        trans.extern[pagenum + 1] = unquote(data['main']["externparam"])
-        return data
+        data = r['data']
+        trans.extern[pagenum + 1] = unquote(data['main']["externparam"])    # type: ignore
+        return data    # type: ignore
 
-    async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> dict[str, Any]:
+    async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> StrDict:
         """Get complete html of a given feed
 
         :param uin: uin
@@ -229,15 +236,14 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_getcomments, default | body) as r:
+            async with await self.apost(const.emotion_getcomments, data=default | body) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
-
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+            return self._rtext_handler(rtext)
 
         return await retry_closure()
 
-    async def emotion_msgdetail(self, owner: int, fid: str) -> dict[str, Any]:
+    async def emotion_msgdetail(self, owner: int, fid: str) -> StrDict:
         """Get detail of a given msg.
 
         :param owner: owner uin
@@ -268,7 +274,7 @@ class QzoneApi:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+            return self._rtext_handler(rtext)
 
         return await retry_closure()
 
@@ -292,10 +298,10 @@ class QzoneApi:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+            return self._rtext_handler(rtext)
 
         r = await retry_closure()
-        return r['data']
+        return r['data']    # type: ignore
 
     async def like_app(self, likedata: LikeData, like: bool = True) -> bool:
         """Like or unlike a feed.
@@ -329,7 +335,7 @@ class QzoneApi:
             async with await self.apost(url, data=default | body) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
-            return self._rtext_handler(rtext, errno=lambda d: d['ret'], msg=lambda d: d['msg'])
+            return self._rtext_handler(rtext, errno_key=('code', 'ret'))
 
         try:
             return bool(await retry_closure())
@@ -337,7 +343,7 @@ class QzoneApi:
             logger.error('Error in dolike/unlike.', exc_info=True)
             return False
 
-    async def floatview_photo_list(self, album: AlbumData, num: int) -> dict[str, Any]:
+    async def floatview_photo_list(self, album: AlbumData, num: int) -> StrDict:
         """Get detail of an album, including raw image url.
 
         :param album: Necessary album data
@@ -386,9 +392,192 @@ class QzoneApi:
             async with await self.aget(const.floatview_photo_list, params=default | query) as r:
                 r.raise_for_status()
                 rtext = await r.text()
-            return self._rtext_handler(rtext, msg=lambda d: d['message'])
+            return self._rtext_handler(rtext)
 
-        rjson: dict = (await retry_closure())['data']
-        if query['t'] != int(rjson.pop('t')):
+        rjson = (await retry_closure())['data']
+        if query['t'] != int(rjson.pop('t')):    # type: ignore
             raise RuntimeError('Something unexpected occured in transport.')
-        return rjson
+        return rjson    # type: ignore
+
+    async def emotion_msglist(
+        self,
+        uin: int,
+        num: int = 20,
+        pos: int = 0,
+    ) -> list[StrDict]:
+        """Get msg(feed?) list of a user.
+
+        :param uin: uin
+        :param num: number, defaults to 20
+        :param pos: start position, defaults to 0
+
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
+
+        :return: a list of messages
+
+        .. versionadded:: 0.2.6
+        """
+        add = {
+            'hostUin': uin,
+            'notice': 0,
+            'inCharset': 'utf-8',
+            'outCharset': 'utf-8',
+            'cgi_host': 'https://user.qzone.qq.com' + const.emotion_msglist
+        }
+        param = {
+            'uin': uin,
+            'ftype': 0,
+            'sort': 0,
+            'pos': pos,
+            'num': num,
+            'replynum': 0,
+            'callback': 'callback',
+            'code_version': 1,
+            'format': 'jsonp',
+            'need_private_comment': 1
+        }
+
+        @self._relogin_retry
+        async def retry_closure():
+            async with await self.aget(const.emotion_msglist, param | add if pos else param) as r:
+                r.raise_for_status()
+                rtext = await r.text()
+            return self._rtext_handler(rtext)
+
+        data = await retry_closure()
+        return data['msglist']    # type: ignore
+
+    async def emotion_publish(self, content: str, right: int = 0) -> StrDict:
+        """Publish a feed. appid=311.
+
+        :param content: text content.
+        :param right: feed access right, defaults to 0 (Not used till now)
+
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
+
+        :return: response dict, containing feed html and fid.
+        """
+        default = {
+            'syn_tweet_verson': 1,
+            'paramstr': 1,
+            'pic_template': '',
+            'richtype': '',
+            'richval': '',
+            'special_url': '',
+            'subrichtype': '',
+            'who': 1,
+            'ver': 1,
+            'to_sign': 0,
+            'code_version': 1,
+            'format': 'fs',
+        }
+        body = {
+            'ugc_right': 64,
+            'con': content,
+            'feedversion': 1,
+            'hostuin': self.login.uin,
+            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
+        }
+
+        @self._relogin_retry
+        async def retry_closure():
+            async with await self.apost(const.emotion_publish, data=default | body) as r:
+                r.raise_for_status()
+                rtext = await r.text()
+            return self._rtext_handler(rtext)
+
+        return await retry_closure()
+
+    async def emotion_delete(
+        self,
+        fid: str,
+        abstime: int,
+        appid: int,
+        typeid: int,
+        topicId: str,
+        uin: int = None
+    ) -> StrDict:
+        """Delete a feed.
+
+        :param fid: feed id, named tid, feedkey, etc.
+        :param abstime: feed create time. `now` in :meth:`.emotion_publish` result dict.
+        :param appid: appid
+        :param typeid: typeid
+        :param topicId: topic id, got from html
+        :param uin: host uin, defaults to None, means current logined user.
+
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
+
+        :return: response dict, usually nothing meaningful.
+
+        .. versionadded:: 0.2.6
+        """
+        body = {
+            'uin': uin or self.login.uin,
+            'topicId': topicId,
+            'feedsType': typeid,
+            'feedsFlag': 0,
+            'feedsKey': fid,
+            'feedsAppid': appid,
+            'feedsTime': abstime,
+            'fupdate': 1,
+            'ref': 'feeds',
+            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
+        }
+
+        @self._relogin_retry
+        async def retry_closure():
+            async with await self.apost(const.emotion_delete, data=body) as r:
+                r.raise_for_status()
+                rtext = await r.text()
+            return self._rtext_handler(rtext)
+
+        return await retry_closure()
+
+    async def emotion_update(self, fid: str, content: str, uin: int = None) -> StrDict:
+        """Update content of a feed.
+
+        :param fid: feed id, named feedkey, tid, etc.
+        :param content: new content in text.
+        :param uin: host uin, defaults to None, means current logined user.
+
+        :raises `aiohttp.ClientResponseError`:
+        :raises `aioqzone.exception.QzoneError`:
+
+        :return: response dict
+        """
+        default = {
+            'syn_tweet_verson': 1,
+            'paramstr': 1,
+            'pic_template': '',
+            'richtype': '',
+            'richval': '',    # album attribute comma list
+            'special_url': '',
+            'subrichtype': '',
+            'feedversion': 1,
+            'ver': 1,
+            'code_version': '1',
+            'format': 'fs',
+        }
+        body = {
+            'tid': fid,
+            'con': content,
+            'ugc_right': 64,
+            'to_sign': 0,
+            'ugcright_id': 'TODO',  # TODO
+            'hostuin': uin or self.login.uin,
+            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
+        # 'pic_bo': ''
+        }
+
+        @self._relogin_retry
+        async def retry_closure():
+            async with await self.apost(const.emotion_update, data=default | body) as r:
+                r.raise_for_status()
+                rtext = await r.text()
+            return self._rtext_handler(rtext)
+
+        return await retry_closure()

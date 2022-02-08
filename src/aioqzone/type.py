@@ -240,3 +240,16 @@ class FloatViewPhoto(BaseModel):
     isMultiPic: Optional[bool] = False
     is_weixin_mode: Optional[bool] = False
     is_video: Optional[bool] = False
+
+class MsgListElm(BaseModel):
+    cmtnum: int
+    fwdnum: int
+
+    content: str
+    createTime: str
+    created_time: int
+    commentlist: list
+
+    tid: str
+    uin: int
+    name: str

@@ -89,7 +89,6 @@ class TestRaw:
         if not storage: pytest.xfail('storage is empty')
         f: Optional[dict] = first(storage, None)
         assert f
-        from aioqzone.utils.html import HtmlInfo
         _, info = HtmlInfo.from_html(f['html'])
         d = await api.emotion_getcomments(f['uin'], f['key'], info.feedstype)
         assert 'newFeedXML' in d
@@ -141,3 +140,15 @@ class TestRaw:
         assert f
         assert f.album
         await api.floatview_photo_list(f.album, 10)
+
+    async def test_publish(self, api: QzoneApi, storage: list):
+        r = await api.emotion_publish('Test')
+        assert isinstance(r, dict)
+        assert r['tid']
+        storage.append(r)
+
+    async def test_delete(self, api: QzoneApi, storage: list):
+        if not storage: pytest.xfail('storage is empty')
+        r = storage[-1]
+        _, info = HtmlInfo.from_html(r['feedinfo'])
+        r = await api.emotion_delete(r['tid'], r['now'], 311, 0, info.topicid)

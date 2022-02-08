@@ -43,7 +43,7 @@ class Emittable(Generic[Evt]):
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
         return task
 
-    async def wait(self, *hook_cls: str, timeout: float = None):
+    async def wait(self, *hook_cls: str, timeout: float = None) -> tuple[set[asyncio.Task], set[asyncio.Task]]:
         s = set()
         for i in hook_cls:
             s |= self._tasks[i]
@@ -51,7 +51,8 @@ class Emittable(Generic[Evt]):
         r = await asyncio.wait(s, timeout=timeout)
         if timeout is None and any(self._tasks[i] for i in hook_cls):
             # await potential new tasks in these sets, only if no timeout.
-            return self.wait(*hook_cls)
+            r2 = await Emittable.wait(self, *hook_cls)
+            return r[0] | r2[0], set()
         return r
 
     def clear(self, *hook_cls: str, cancel: bool = True):
