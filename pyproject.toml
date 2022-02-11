@@ -9,7 +9,8 @@ markers = [
     "incremental: xfail succ cases if pred case failed or skipped",
     "upstream: Test cannot run normally due to upstream problems",
 ]
-timeout = 60
+asyncio_mode = 'strict'
+# timeout = 60
 
 
 [tool.isort]

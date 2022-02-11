@@ -38,12 +38,28 @@ class Emittable(Generic[Evt]):
         self.hook = hook
 
     def add_hook_ref(self, hook_cls: str, coro: Awaitable[T]) -> asyncio.Task[T]:
-        task = asyncio.create_task(coro)
+        task = asyncio.create_task(coro)    # type: ignore
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
-        return task
+        return task    # type: ignore
 
-    async def wait(self, *hook_cls: str, timeout: float = None):
+    async def wait(
+        self,
+        *hook_cls: str,
+        timeout: float = None,
+    ) -> tuple[set[asyncio.Task], set[asyncio.Task]]:
+        """Wait for all task in the specific task set(s).
+
+        :param timeout: timeout, defaults to None
+        :type timeout: float, optional
+        :return: done, pending
+
+        .. note::
+            If `timeout` is None, this method will loop until all tasks in the set(s) are done.
+            That means if other tasks are added during awaiting, the added task will be waited as well.
+
+        .. seealso:: :meth:`asyncio.wait`
+        """
         s = set()
         for i in hook_cls:
             s |= self._tasks[i]
@@ -51,7 +67,8 @@ class Emittable(Generic[Evt]):
         r = await asyncio.wait(s, timeout=timeout)
         if timeout is None and any(self._tasks[i] for i in hook_cls):
             # await potential new tasks in these sets, only if no timeout.
-            return self.wait(*hook_cls)
+            r2 = await Emittable.wait(self, *hook_cls)
+            return r[0] | r2[0], set()
         return r
 
     def clear(self, *hook_cls: str, cancel: bool = True):

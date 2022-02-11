@@ -15,8 +15,15 @@ class QzoneError(RuntimeError):
 
 
 class LoginError(RuntimeError):
+    """Login failed for some reasons."""
     def __init__(self, msg: str, strategy: str = None) -> None:
         msg = "登陆失败: " + msg
         super().__init__(msg, strategy)
         self.msg = msg
         self.strategy = strategy
+
+
+class CorruptError(ValueError):
+    """Data corrupted in transfer."""
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)

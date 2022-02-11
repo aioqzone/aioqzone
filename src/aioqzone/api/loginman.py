@@ -42,18 +42,26 @@ class UPLoginMan(Loginable):
 
     async def _new_cookie(self) -> dict[str, str]:
         """
-        Raises:
-            TencentLoginError
+        :raises `qqqr.exception.TencentLoginError`: login error when up login.
+        :raises `SystemExit`: if unexpected error raised
         """
         try:
             login = UPLogin(self.sess, QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
             cookie = await login.login(await login.check())
             self.add_hook_ref('hook', self.hook.LoginSuccess())
+            self.sess.cookie_jar.update_cookies(cookie)
             return cookie
         except TencentLoginError as e:
             self.add_hook_ref('hook', self.hook.LoginFailed())
             logger.warning(str(e))
             raise e
+        except:
+            logger.fatal('Unexpected error in QR login.', exc_info=True)
+            try:
+                await self.hook.LoginFailed("密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
+            finally:
+                from sys import exit
+                exit(1)
 
 
 class QRLoginMan(Loginable):
@@ -66,8 +74,9 @@ class QRLoginMan(Loginable):
 
     async def _new_cookie(self) -> dict[str, str]:
         """
-        Raises:
-            UserBreak: [description]
+        :raises `qqqr.exception.UserBreak`: qr polling task is canceled
+        :raises `TimeoutError`: qr polling task timeout
+        :raises `SystemExit`: if unexpected error raised when polling
         """
         assert isinstance(self.hook, QREvent)
 
@@ -87,6 +96,7 @@ class QRLoginMan(Loginable):
             cookie = await task
             self.add_hook_ref('hook', self.hook.QrSucceess())
             self.add_hook_ref('hook', self.hook.LoginSuccess())
+            self.sess.cookie_jar.update_cookies(cookie)
             return cookie
         except TimeoutError as e:
             await self.hook.QrFailed()
@@ -98,8 +108,13 @@ class QRLoginMan(Loginable):
             raise UserBreak from e
         except:
             logger.fatal('Unexpected error in QR login.', exc_info=True)
-            self.add_hook_ref('hook', self.hook.LoginFailed(str("二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")))
-            exit(1)
+            msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
+            try:
+                await self.hook.QrFailed(msg)
+                await self.hook.LoginFailed(msg)
+            finally:
+                from sys import exit
+                exit(1)
         finally:
             self.hook.cancel = self.hook.resend = None
 
@@ -121,14 +136,13 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
             QRLoginMan.__init__(self, sess, uin, refresh_time)
 
     async def _new_cookie(self) -> dict[str, str]:
-        """[summary]
+        """
 
-        Raises:
-            UserBreak
-            LoginError: [description]
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
 
-        Returns:
-            dict[str, str]: [description]
+        :return: cookie
         """
         order: list[Type[Loginable]] = {
             'force': [QRLoginMan],
@@ -141,11 +155,15 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
                 return await c._new_cookie(self)
             except (TencentLoginError, TimeoutError) as e:
                 continue
+            # UserBreak, SystemExit: raise as is
+
 
         if self.strategy == 'forbid':
             msg = "您可能被限制账密登陆. 扫码登陆仍然可行."
-        else:
+        elif self.strategy != 'force':
             msg = "您可能已被限制登陆."
+        else:
+            msg = '你在睡觉！'
 
         self.add_hook_ref('hook', self.hook.LoginFailed(msg))
         raise LoginError(msg, self.strategy)

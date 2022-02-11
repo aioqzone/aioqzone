@@ -2,6 +2,8 @@
 
 aioqzone is a python package handling Qzone web login and wrapping some common Qzone Http apis.
 
+[![QQQR](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml)
+
 [简体中文](README_zh-cn.md)
 
 ## Features
@@ -15,7 +17,7 @@ aioqzone is a python package handling Qzone web login and wrapping some common Q
 - [x] get feed details
 - [x] get Qzone album
 - [x] like/unlike app
-- [ ] post feeds
+- [x] publish/update/delete text feeds
 - [ ] comment
 
 ### Why using this package?
@@ -32,7 +34,7 @@ __Working On:__
 
 ## Dependency out of `setup.cfg`
 
-- nodejs (jssupport)
+- NodeJs (jssupport)
 
 ## Description
 

@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 class HtmlInfo(BaseModel):
     """Some info that must be extract from html response"""
     feedstype: int
+    topicid: str
     complete: bool
     unikey: Optional[Union[HttpUrl, str]] = None
     curkey: Optional[Union[HttpUrl, str]] = None
@@ -41,6 +42,7 @@ class HtmlInfo(BaseModel):
 
         return root, cls(
             feedstype=elm_fd.get("data-feedstype"),
+            topicid=elm_fd.get("data-topicid"),
             complete=not len(toggle),
             unikey=likebtn.get('data-unikey'),
             curkey=likebtn.get('data-curkey'),
