@@ -142,9 +142,13 @@ class TestRaw:
         await api.floatview_photo_list(f.album, 10)
 
     async def test_publish(self, api: QzoneApi, storage: list):
-        r = await api.emotion_publish('Test')
-        assert isinstance(r, dict)
+        try:
+            r = await api.emotion_publish('Test')
+        except LoginError:
+            pytest.xfail('login failed')
+        assert isinstance(r, dict)  # type: ignore
         assert r['tid']
+        storage.clear()
         storage.append(r)
 
     async def test_delete(self, api: QzoneApi, storage: list):

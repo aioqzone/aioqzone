@@ -13,6 +13,7 @@ Welcome to aioqzone's documentation!
    aioqzone/api/raw
    aioqzone/api/dummy
    aioqzone/exception
+   aioqzone/type
 
 
 Indices and tables

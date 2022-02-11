@@ -1,6 +1,6 @@
 Exceptions
 =============
 
-.. automodule:: aioqzone.exception
+.. automodule:: qqqr.exception
     :members:
     :undoc-members:

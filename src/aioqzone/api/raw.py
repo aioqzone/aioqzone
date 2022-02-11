@@ -6,7 +6,7 @@ from functools import wraps
 import logging
 from random import randint
 from random import random
-from typing import Callable, Union
+from typing import Callable, cast, Union
 from urllib.parse import parse_qs
 from urllib.parse import quote
 from urllib.parse import unquote
@@ -20,6 +20,7 @@ from jssupport.jsjson import json_loads
 from jssupport.jsjson import JsonValue
 from qqqr.base import UA
 
+from ..exception import CorruptError
 from ..exception import QzoneError
 from ..interface.login import Loginable
 from ..type import AlbumData
@@ -77,6 +78,10 @@ class QzoneApi:
         1. `aioqzone.exception.QzoneError` code -3000 or -4002
         2. HTTP response code 403
 
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
+
         .. note:: Decorate code as less as possible
         .. warning:: Do NOT modify args in the wrapped code.
         """
@@ -89,9 +94,8 @@ class QzoneApi:
             except ClientResponseError as e:
                 if e.status != 403: raise e
 
-            logger.info(f'Cookie expire in {func.__name__}. Relogin...')
+            logger.info(f'Cookie expire in {func.__qualname__}. Relogin...')
             cookie = await self.login.new_cookie()
-            self.sess.cookie_jar.update_cookies(cookie)
             return await func(*args, **kwds)
 
         return relogin_wrapper
@@ -112,6 +116,10 @@ class QzoneApi:
         :param msg_key: Error message key, defaults to ('msg', 'message').
 
         :raises `aioqzone.exception.QzoneError`: if errno != 0
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
+
         :return: json response
         """
         if cb:
@@ -151,9 +159,13 @@ class QzoneApi:
         :param trans: reps a skim transaction. Mutable.
         :param count: feed count, defaults to 10.
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
-        :return: response dict
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
+
+        :return: feed attributes and html feed
         """
 
         default = {
@@ -201,7 +213,7 @@ class QzoneApi:
         r = await retry_closure()
         data = r['data']
         trans.extern[pagenum + 1] = unquote(data['main']["externparam"])    # type: ignore
-        return data    # type: ignore
+        return cast(StrDict, data)
 
     async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> StrDict:
         """Get complete html of a given feed
@@ -210,8 +222,12 @@ class QzoneApi:
         :param tid: feed id
         :param feedstype: feedstype in html
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
+
         :return: response dict
         """
         default = {
@@ -249,8 +265,12 @@ class QzoneApi:
         :param owner: owner uin
         :param fid: feed id, named fid, tid or feedkey
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
+
         :return: a dict reps the feed in detail
 
         .. note:: share msg is not support, i.e. `appid=311`
@@ -281,10 +301,13 @@ class QzoneApi:
     async def get_feeds_count(self) -> dict[str, Union[int, list]]:
         """Get feeds update count (new feeds, new photos, new comments, etc)
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
 
-        :return: dict of all kinds of updates
+        :return: update counts
 
         .. note::
             This api is also the 'keep-alive' signal to avoid cookie from expiring.
@@ -309,9 +332,15 @@ class QzoneApi:
         :param likedata: Necessary data for like/unlike
         :param like: True as like, False as unlike, defaults to True.
 
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
+
         :return: success flag
 
-        .. note:: @noexcept
+        .. versionchanged:: 0.2.7
+            not a @noexcept method.
         """
         default = {
             'from': 1,
@@ -338,10 +367,20 @@ class QzoneApi:
             return self._rtext_handler(rtext, errno_key=('code', 'ret'))
 
         try:
-            return bool(await retry_closure())
-        except:
-            logger.error('Error in dolike/unlike.', exc_info=True)
+            await retry_closure()
+            return True
+        except QzoneError as e:
+            logger.warning(f'Error in dolike/unlike. {e}')
             return False
+        except ClientResponseError as e:
+            logger.error('Error in dolike/unlike.', exc_info=True)
+            raise e
+        except SystemExit as e:
+            raise e    # pass through SystemExit
+        except BaseException as e:
+            logger.fatal('Uncaught Exception in dolike/unlike!', exc_info=True)
+            from sys import exit
+            exit(1)
 
     async def floatview_photo_list(self, album: AlbumData, num: int) -> StrDict:
         """Get detail of an album, including raw image url.
@@ -349,9 +388,13 @@ class QzoneApi:
         :param album: Necessary album data
         :param num: pic num
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
-        :raises `RuntimeError`: transport error (maybe data corruptted)
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
+        :raises `aioqzone.exception.CorruptError`: maybe data is corruptted
+
         :return: album details
 
         .. warning::
@@ -396,7 +439,7 @@ class QzoneApi:
 
         rjson = (await retry_closure())['data']
         if query['t'] != int(rjson.pop('t')):    # type: ignore
-            raise RuntimeError('Something unexpected occured in transport.')
+            raise CorruptError('Something unexpected occured in transport.')
         return rjson    # type: ignore
 
     async def emotion_msglist(
@@ -411,8 +454,11 @@ class QzoneApi:
         :param num: number, defaults to 20
         :param pos: start position, defaults to 0
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
 
         :return: a list of messages
 
@@ -454,10 +500,16 @@ class QzoneApi:
         :param content: text content.
         :param right: feed access right, defaults to 0 (Not used till now)
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
 
-        :return: response dict, containing feed html and fid.
+        :return: qzone response as is, containing feed html and fid.
+
+        .. versionadded:: 0.2.6
+        .. warning:: This api is under development. It has basic functions only.
         """
         default = {
             'syn_tweet_verson': 1,
@@ -508,10 +560,13 @@ class QzoneApi:
         :param topicId: topic id, got from html
         :param uin: host uin, defaults to None, means current logined user.
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
 
-        :return: response dict, usually nothing meaningful.
+        :return: qzone response as is, usually nothing meaningful.
 
         .. versionadded:: 0.2.6
         """
@@ -544,10 +599,16 @@ class QzoneApi:
         :param content: new content in text.
         :param uin: host uin, defaults to None, means current logined user.
 
-        :raises `aiohttp.ClientResponseError`:
-        :raises `aioqzone.exception.QzoneError`:
+        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
 
-        :return: response dict
+        :return: qzone response as is.
+
+        .. versionadded:: 0.2.6
+        .. warning:: This api is under development. It has basic functions only.
         """
         default = {
             'syn_tweet_verson': 1,
@@ -567,7 +628,7 @@ class QzoneApi:
             'con': content,
             'ugc_right': 64,
             'to_sign': 0,
-            'ugcright_id': 'TODO',  # TODO
+            'ugcright_id': 'TODO',    # TODO
             'hostuin': uin or self.login.uin,
             'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
         # 'pic_bo': ''

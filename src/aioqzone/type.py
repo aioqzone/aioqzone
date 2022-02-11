@@ -1,6 +1,7 @@
 from typing import Optional, Union
 
 from pydantic import BaseModel
+from pydantic import Field
 from pydantic.networks import HttpUrl
 
 
@@ -59,7 +60,7 @@ class FeedRep(BaseModel):
     ver: int
     appid: int
     typeid: int
-    key: str
+    fid: str = Field(alias='key')
     abstime: int
     uin: int
     nickname: str
@@ -240,6 +241,7 @@ class FloatViewPhoto(BaseModel):
     isMultiPic: Optional[bool] = False
     is_weixin_mode: Optional[bool] = False
     is_video: Optional[bool] = False
+
 
 class MsgListElm(BaseModel):
     cmtnum: int
