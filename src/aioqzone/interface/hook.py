@@ -29,16 +29,18 @@ class Emittable(Generic[Evt]):
     """
     hook: Evt = NullEvent()    # type: ignore
     _tasks: dict[str, set[asyncio.Task]]
+    _loop: asyncio.AbstractEventLoop
 
     def __init__(self) -> None:
         self._tasks = defaultdict(set)
+        self._loop = asyncio.get_event_loop()
 
     def register_hook(self, hook: Evt):
         assert not isinstance(hook, NullEvent)
         self.hook = hook
 
     def add_hook_ref(self, hook_cls: str, coro: Awaitable[T]) -> asyncio.Task[T]:
-        task = asyncio.create_task(coro)    # type: ignore
+        task = self._loop.create_task(coro)    # type: ignore
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
         return task    # type: ignore
