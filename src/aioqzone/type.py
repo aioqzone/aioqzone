@@ -16,7 +16,7 @@ class PersudoCurkey(str):
 
     @classmethod
     def build(cls, uin: int, abstime: int):
-        return str(uin).ljust(12, '0') + str(abstime).ljust(12, '0')
+        return str(uin).rjust(12, '0') + str(abstime).rjust(12, '0')
 
     @classmethod
     def from_str(cls, curkey: str):
