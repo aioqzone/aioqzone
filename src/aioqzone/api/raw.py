@@ -418,6 +418,7 @@ class QzoneApi:
             'appid': 311,
             'isFirst': 1,
             'need_private_comment': 1,
+            "shootTime": '',
         }
         query = {
             'topicId': album.topicid,
@@ -432,7 +433,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.floatview_photo_list, params=default | query) as r:
+            async with await self.aget(const.floatview_photo_list, default | query) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext)
