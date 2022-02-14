@@ -90,14 +90,14 @@ class TestDummy:
         assert f
         from aioqzone.utils.html import HtmlInfo
         _, info = HtmlInfo.from_html(f.html)
-        assert (await api.emotion_getcomments(f.uin, f.key, info.feedstype))
+        assert (await api.emotion_getcomments(f.uin, f.fid, info.feedstype))
 
     async def test_detail(self, api: DummyQapi, storage: list[FeedRep]):
         if not storage: pytest.xfail('storage is empty')
         f: Optional[FeedRep] = first(storage, lambda f: f.appid == 311)
         if f is None: pytest.skip('No 311 feed in storage.')
         assert f
-        assert await api.emotion_msgdetail(f.uin, f.key)
+        assert await api.emotion_msgdetail(f.uin, f.fid)
 
     async def test_heartbeat(self, api: DummyQapi):
         try:
@@ -107,7 +107,7 @@ class TestDummy:
 
     async def test_photo_list(self, api: DummyQapi, storage: list[FeedRep]):
         if not storage: pytest.xfail('storage is empty')
-        f: Optional[HtmlContent] = first((HtmlContent.from_html(i.html) for i in storage),
+        f: Optional[HtmlContent] = first((HtmlContent.from_html(i.html, i.uin) for i in storage),
                                          lambda t: t.pic)
         if f is None: pytest.skip('No feed with pic in storage')
         assert f

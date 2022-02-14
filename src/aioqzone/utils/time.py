@@ -54,6 +54,7 @@ def approx_ts(timedesc: str) -> int:
         return int(dt.replace(tzinfo=TIME_ZONE).timestamp())
 
     today = datetime.today().astimezone(TIME_ZONE)    # based on today
+    today = today.replace(second=0, microsecond=0)
     if hashm:
         tm = datetime.strptime(timedesc[-5:], hmfmt).time()
         dt = today.replace(hour=tm.hour, minute=tm.minute)
