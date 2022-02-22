@@ -1,8 +1,10 @@
 import json
+import logging
 from typing import Callable, Union
 
 from .execjs import ExecJS
 
+logger = logging.getLogger(__name__)
 JsonDict = dict[Union[str, int], 'JsonValue']
 JsonList = list['JsonValue']
 JsonValue = Union[bool, int, str, JsonDict, JsonList]
@@ -32,4 +34,9 @@ def json_loads(
             pass
 
     json_str = jsonStringify(js, asis=True)
-    return parser(json_str)
+    try:
+        return parser(json_str)
+    except json.JSONDecodeError as e:
+        logger.exception('Failed to decode json input!')
+        logger.debug('json_str=%s', json_str)
+        raise e
