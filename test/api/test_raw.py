@@ -85,6 +85,7 @@ class TestRaw:
             storage.extend(i['data'])
         assert storage
 
+    @pytest.mark.upstream
     async def test_complete(self, api: QzoneApi, storage: list):
         if not storage: pytest.xfail('storage is empty')
         f: Optional[dict] = first(storage, None)

@@ -84,6 +84,7 @@ class TestDummy:
             storage.extend(ls)
         assert storage
 
+    @pytest.mark.upstream
     async def test_complete(self, api: DummyQapi, storage: list[FeedRep]):
         if not storage: pytest.xfail('storage is empty')
         f: Optional[FeedRep] = first(storage, None)

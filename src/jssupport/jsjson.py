@@ -1,5 +1,7 @@
+import ast
 import json
 import logging
+from textwrap import dedent
 from typing import Callable, Union
 
 from .execjs import ExecJS
@@ -9,34 +11,76 @@ JsonDict = dict[Union[str, int], 'JsonValue']
 JsonList = list['JsonValue']
 JsonValue = Union[bool, int, str, JsonDict, JsonList]
 
-jsonStringify = ExecJS(js='').bind('JSON.stringify', new=False)
 
+class NodeLoader:
+    jsonStringify = ExecJS(js='').bind('JSON.stringify', new=False)
 
-def json_loads(
-    js: str,
-    try_load_first: bool = True,
-    parser: Callable[[str], JsonValue] = json.loads
-) -> JsonValue:
-    """Convert js obj (str rep) to python obj (instance)
+    @classmethod
+    def json_loads(
+        cls,
+        js: str,
+        try_load_first: bool = True,
+        parser: Callable[[str], JsonValue] = json.loads
+    ) -> JsonValue:
+        """
+        The json_loads function converts a string representation of JS/JSON data into a Python object.
+        It may use :node:meth:`JSON.stringify` to convert js to json.
 
-    Args:
-        js (str): js object. in the format of js code string.
-        try_load_first (bool, optional): try to parse string with `parser` firstly. Defaults to True.
-        parser: json parser. Defaults to `json.loads`.
+        :param js: Used to Pass in the json string.
+        :param try_load_first: Used to Specify whether to try loading the json string with the `parser` first.
+        :param parser: Used to Specify the function that will be used to parse the string.
+        :return: A python object that represents the same content as the js/json string.
+        """
+        if try_load_first:
+            try:
+                return parser(js)
+            except json.JSONDecodeError:
+                pass
 
-    Returns:
-        JsonValue: python object reps the same content as that given in js code.
-    """
-    if try_load_first:
+        json_str = cls.jsonStringify(js, asis=True)
         try:
-            return parser(js)
-        except json.JSONDecodeError:
-            pass
+            return parser(json_str)
+        except json.JSONDecodeError as e:
+            logger.exception('Failed to decode json input!')
+            logger.debug('json_str=%s', json_str)
+            raise e
 
-    json_str = jsonStringify(js, asis=True)
-    try:
-        return parser(json_str)
-    except json.JSONDecodeError as e:
-        logger.exception('Failed to decode json input!')
-        logger.debug('json_str=%s', json_str)
-        raise e
+
+class AstLoader:
+    class RewriteUndef(ast.NodeTransformer):
+        def visit_Name(self, node: ast.Name):
+            if node.id in ('undefined', 'null'):
+                return ast.Constant(value=None)
+            return ast.Str(s=node.id)
+
+        def visit_Str(self, node: ast.Str) -> ast.Str:
+            return ast.Str(s=node.s.replace('\\/', '/'))
+
+    @classmethod
+    def json_loads(cls, js: str, filename: str = 'stdin') -> JsonValue:
+        """
+        The json_loads function loads a JSON object from a js/json string. It uses standard
+        :mod:`ast` module to parse the js/json.
+
+        :param js: Used to Pass the js/json string to be parsed.
+        :param filename: Used to Specify the name of the file that is being read. This is only for debug use.
+        :return: A jsonvalue object.
+        """
+
+        node = ast.parse(dedent(js), mode='eval')
+        node = ast.fix_missing_locations(cls.RewriteUndef().visit(node))
+        code = compile(node, filename, mode='eval')
+        return eval(code)
+
+
+def json_loads(js: str) -> JsonValue:
+    """The json_loads function converts a string representation of JS/JSON data into a Python object.
+    Current implementation is using :mod:`ast`.
+
+    If you need more parameters or another implementation, call `xxxLoader.json_loads` instead.
+
+    .. seealso: :meth:`.AstLoader.json_loads`
+
+    :param js: Used to Pass the JS/JSON string.
+    """
+    return AstLoader.json_loads(js)
