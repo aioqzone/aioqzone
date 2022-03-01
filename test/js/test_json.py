@@ -19,9 +19,17 @@ class TestJsJson:
     def test_null(self):
         s = """
         {
-            extra: null
+            extra: null,
+            merge: [undefined],
         }
         """
         d = json_loads(s)
         assert isinstance(d, dict)
         assert d['extra'] is None
+        assert d['merge'] == [None]
+
+    def test_escape(self):
+        s = "{html:'http:\\/\\/qq.com'}"
+        d = json_loads(s)
+        assert isinstance(d, dict)
+        assert d['html'] == 'http://qq.com'
