@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 
 class ConstLoginMan(Loginable):
     """Only for test"""
+
     def __init__(self, uin: int, cookie: dict) -> None:
         super().__init__(uin)
         self._cookie = cookie
@@ -48,19 +49,18 @@ class UPLoginMan(Loginable):
         try:
             login = UPLogin(self.sess, QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
             cookie = await login.login(await login.check())
-            self.add_hook_ref('hook', self.hook.LoginSuccess())
+            self.add_hook_ref("hook", self.hook.LoginSuccess())
             self.sess.cookie_jar.update_cookies(cookie)
             return cookie
         except TencentLoginError as e:
-            self.add_hook_ref('hook', self.hook.LoginFailed())
+            self.add_hook_ref("hook", self.hook.LoginFailed())
             logger.warning(str(e))
             raise e
         except:
-            logger.fatal('Unexpected error in QR login.', exc_info=True)
+            logger.fatal("Unexpected error in QR login.", exc_info=True)
             try:
                 await self.hook.LoginFailed("密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
             finally:
-                from sys import exit
                 exit(1)
 
 
@@ -87,33 +87,32 @@ class QRLoginMan(Loginable):
             task.cancel()
 
         async def tmp_resend():
-            await self.hook.QrFetched(await man.show())    # must be sent at once
+            await self.hook.QrFetched(await man.show())  # must be sent at once
 
         self.hook.cancel = tmp_cancel
         self.hook.resend = tmp_resend
 
         try:
             cookie = await task
-            self.add_hook_ref('hook', self.hook.QrSucceess())
-            self.add_hook_ref('hook', self.hook.LoginSuccess())
+            self.add_hook_ref("hook", self.hook.QrSucceess())
+            self.add_hook_ref("hook", self.hook.LoginSuccess())
             self.sess.cookie_jar.update_cookies(cookie)
             return cookie
         except TimeoutError as e:
             await self.hook.QrFailed()
             logger.warning(str(e))
-            self.add_hook_ref('hook', self.hook.QrFailed(str(e)))
-            self.add_hook_ref('hook', self.hook.LoginFailed(str(e)))
+            self.add_hook_ref("hook", self.hook.QrFailed(str(e)))
+            self.add_hook_ref("hook", self.hook.LoginFailed(str(e)))
             raise e
         except KeyboardInterrupt as e:
             raise UserBreak from e
         except:
-            logger.fatal('Unexpected error in QR login.', exc_info=True)
+            logger.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
             try:
                 await self.hook.QrFailed(msg)
                 await self.hook.LoginFailed(msg)
             finally:
-                from sys import exit
                 exit(1)
         finally:
             self.hook.cancel = self.hook.resend = None
@@ -125,14 +124,14 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         sess: ClientSession,
         uin: int,
         strategy: str,
-        pwd: str = None,
-        refresh_time: int = 6
+        pwd: str | None = None,
+        refresh_time: int = 6,
     ) -> None:
         self.strategy = strategy
-        if strategy != 'force':
+        if strategy != "force":
             assert pwd
             UPLoginMan.__init__(self, sess, uin, pwd)
-        if strategy != 'forbid':
+        if strategy != "forbid":
             QRLoginMan.__init__(self, sess, uin, refresh_time)
 
     async def _new_cookie(self) -> dict[str, str]:
@@ -145,10 +144,10 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         :return: cookie
         """
         order: list[Type[Loginable]] = {
-            'force': [QRLoginMan],
-            'prefer': [QRLoginMan, UPLoginMan],
-            'allow': [UPLoginMan, QRLoginMan],
-            'forbid': [UPLoginMan],
+            "force": [QRLoginMan],
+            "prefer": [QRLoginMan, UPLoginMan],
+            "allow": [UPLoginMan, QRLoginMan],
+            "forbid": [UPLoginMan],
         }[self.strategy]
         for c in order:
             try:
@@ -157,13 +156,12 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
                 continue
             # UserBreak, SystemExit: raise as is
 
-
-        if self.strategy == 'forbid':
+        if self.strategy == "forbid":
             msg = "您可能被限制账密登陆. 扫码登陆仍然可行."
-        elif self.strategy != 'force':
+        elif self.strategy != "force":
             msg = "您可能已被限制登陆."
         else:
-            msg = '你在睡觉！'
+            msg = "你在睡觉！"
 
-        self.add_hook_ref('hook', self.hook.LoginFailed(msg))
+        self.add_hook_ref("hook", self.hook.LoginFailed(msg))
         raise LoginError(msg, self.strategy)

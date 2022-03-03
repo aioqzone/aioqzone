@@ -1,7 +1,7 @@
 class QzoneError(RuntimeError):
-    """HTTP OK, but Qzone returns an error code.
-    """
-    msg = 'unknown'
+    """HTTP OK, but Qzone returns an error code."""
+
+    msg = "unknown"
 
     def __init__(self, code: int, *args, rdict=None):
         self.code = int(code)
@@ -16,6 +16,7 @@ class QzoneError(RuntimeError):
 
 class LoginError(RuntimeError):
     """Login failed for some reasons."""
+
     def __init__(self, msg: str, strategy: str = None) -> None:
         msg = "登陆失败: " + msg
         super().__init__(msg, strategy)
@@ -25,5 +26,6 @@ class LoginError(RuntimeError):
 
 class CorruptError(ValueError):
     """Data corrupted in transfer."""
+
     def __init__(self, *args: object) -> None:
         super().__init__(*args)

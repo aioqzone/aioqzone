@@ -24,56 +24,60 @@ CIPHERS = [
     "!MD5",
     "!DSS",
 ]
-XLOGIN_URL = 'https://xui.ptlogin2.qq.com/cgi-bin/xlogin'
+XLOGIN_URL = "https://xui.ptlogin2.qq.com/cgi-bin/xlogin"
 
 
 def ssl_context():
     c = ssl.create_default_context()
-    c.set_ciphers(':'.join(CIPHERS))
+    c.set_ciphers(":".join(CIPHERS))
     return c
 
 
 class LoginBase(ABC):
-    login_sig: str = ''
+    login_sig: str = ""
 
     def __init__(self, sess: Session, app: APPID, proxy: Proxy, info: PT_QR_APP = None) -> None:
         self.app = app
         self.proxy = proxy
         self.info = info if info else PT_QR_APP()
-        sess.headers.update({
-            istr('DNT'): '1',
-            istr('Referer'): 'https://i.qq.com/',
-            istr('User-Agent'): UA
-        })
+        sess.headers.update(
+            {istr("DNT"): "1", istr("Referer"): "https://i.qq.com/", istr("User-Agent"): UA}
+        )
         self.session = sess
         self.ssl = ssl_context()
 
     @property
     def xlogin_url(self):
-        return XLOGIN_URL + '?' + urlencode({
-            'hide_title_bar': 1,
-            'style': 22,
-            "daid": self.app.daid,
-            "low_login": 0,
-            "qlogin_auto_login": 1,
-            'no_verifyimg': 1,
-            'link_target': 'blank',
-            'appid': self.app.appid,
-            'target': 'self',
-            's_url': self.proxy.s_url,
-            'proxy_url': self.proxy.proxy_url,
-            'pt_qr_app': self.info.app,
-            'pt_qr_link': self.info.link,
-            'self_regurl': self.info.register,
-            'pt_qr_help_link': self.info.help,
-            'pt_no_auth': 1,
-        })
+        return (
+            XLOGIN_URL
+            + "?"
+            + urlencode(
+                {
+                    "hide_title_bar": 1,
+                    "style": 22,
+                    "daid": self.app.daid,
+                    "low_login": 0,
+                    "qlogin_auto_login": 1,
+                    "no_verifyimg": 1,
+                    "link_target": "blank",
+                    "appid": self.app.appid,
+                    "target": "self",
+                    "s_url": self.proxy.s_url,
+                    "proxy_url": self.proxy.proxy_url,
+                    "pt_qr_app": self.info.app,
+                    "pt_qr_link": self.info.link,
+                    "self_regurl": self.info.register,
+                    "pt_qr_help_link": self.info.help,
+                    "pt_no_auth": 1,
+                }
+            )
+        )
 
     async def request(self):
         async with self.session.get(self.xlogin_url, ssl=self.ssl) as r:
             r.raise_for_status()
-            self.local_token = int(r.cookies['pt_local_token'].value)
-            self.login_sig = r.cookies['pt_login_sig'].value
+            self.local_token = int(r.cookies["pt_local_token"].value)
+            self.login_sig = r.cookies["pt_login_sig"].value
         return self
 
     @abstractmethod
@@ -82,7 +86,7 @@ class LoginBase(ABC):
 
     async def ja3Detect(self) -> dict:
         # for debuging
-        async with self.session.get('https://ja3er.com/json', ssl=self.ssl) as r:
+        async with self.session.get("https://ja3er.com/json", ssl=self.ssl) as r:
             return await r.json()
 
     async def __aenter__(self):

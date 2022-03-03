@@ -2,7 +2,9 @@
 
 aioqzone is a python package handling Qzone web login and wrapping some common Qzone Http apis.
 
+[![black](https://img.shields.io/badge/python-3.10-blue.svg)][home]
 [![QQQR](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml)
+[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [简体中文](README_zh-cn.md)
 
@@ -64,3 +66,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
 
 - [AGPL-3.0](LICENSE)
+
+
+[home]: https://github.com/JamzumSum/aioqzone "Python wrapper for Qzone web login and Qzone http api"
