@@ -13,20 +13,17 @@ from .raw import QzoneApi
 
 class DummyQapi(QzoneApi):
     async def feeds3_html_more(
-        self,
-        pagenum: int,
-        trans: QzoneApi.FeedsMoreTransaction = None,
-        count: int = 10
+        self, pagenum: int, trans: QzoneApi.FeedsMoreTransaction | None = None, count: int = 10
     ) -> tuple[list[FeedRep], FeedMoreAux]:
         r = await super().feeds3_html_more(pagenum, trans=trans, count=count)
-        data = r['data']
-        main = r['main']
+        data = r["data"]
+        main = r["main"]
         assert isinstance(data, list)
         return [FeedRep.parse_obj(i) for i in data if i], FeedMoreAux.parse_obj(main)
 
     async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> str:
         r = await super().emotion_getcomments(uin, tid, feedstype)
-        return str.strip(r['newFeedXML'])    # type: ignore
+        return str.strip(r["newFeedXML"])  # type: ignore
 
     async def emotion_msgdetail(self, owner: int, fid: str) -> FeedDetailRep:
         r = await super().emotion_msgdetail(owner, fid)
@@ -38,7 +35,7 @@ class DummyQapi(QzoneApi):
 
     async def floatview_photo_list(self, album: AlbumData, num: int) -> list[FloatViewPhoto]:
         r = await super().floatview_photo_list(album, num)
-        return [FloatViewPhoto.parse_obj(i) for i in r['photos']]    # type: ignore
+        return [FloatViewPhoto.parse_obj(i) for i in r["photos"]]  # type: ignore
 
     async def emotion_msglist(self, uin: int, num: int = 20, pos: int = 0) -> list[MsgListElm]:
         r = await super().emotion_msglist(uin, num, pos)

@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'aioqzone'
-copyright = '2022, JamzumSum'
-author = 'JamzumSum'
+project = "aioqzone"
+copyright = "2022, JamzumSum"
+author = "JamzumSum"
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.3.dev0'
+release = "0.2.3.dev0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,14 +31,14 @@ release = '0.2.3.dev0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinxcontrib.autodoc_pydantic',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.autodoc',
-    'sphinx_autodoc_typehints',
+    "sphinxcontrib.autodoc_pydantic",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.autodoc",
+    "sphinx_autodoc_typehints",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -51,16 +51,16 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # autodoc_pydantic settings
 autodoc_pydantic_model_show_json = False
 autodoc_pydantic_model_undoc_members = False
 
 # external inventory
-intersphinx_mapping = {'aiohttp': ('https://docs.aiohttp.org/en/stable/', None)}
+intersphinx_mapping = {"aiohttp": ("https://docs.aiohttp.org/en/stable/", None)}

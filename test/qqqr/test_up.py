@@ -13,20 +13,25 @@ from qqqr.up import UPLogin
 from qqqr.up import User
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def event_loop():
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
 
 
-@pytest_asyncio.fixture(scope='module')
+@pytest_asyncio.fixture(scope="module")
 async def login():
     async with ClientSession() as sess:
-        async with UPLogin(sess, QzoneAppid, QzoneProxy, User(
-                int(env['TEST_UIN']),
-                env['TEST_PASSWORD'],
-        )) as login:
+        async with UPLogin(
+            sess,
+            QzoneAppid,
+            QzoneProxy,
+            User(
+                int(env["TEST_UIN"]),
+                env["TEST_PASSWORD"],
+            ),
+        ) as login:
             await login.request()
             yield login
 
@@ -34,7 +39,7 @@ async def login():
 class TestRequest:
     pytestmark = pytest.mark.asyncio
 
-    async def testEncodePwd(self, login):
+    async def testEncodePwd(self, login: UPLogin):
         r = await login.check()
         if r.code == 1:
             r = await login.passVC(r)

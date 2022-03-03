@@ -4,20 +4,22 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
-from typing import Awaitable, Callable, Generic, Optional, TypeVar
+from typing import Awaitable, Callable, Generic, TypeVar
 
 
 class Event:
     """Base class for event system."""
+
     pass
 
 
-Evt = TypeVar('Evt', bound=Event)
-T = TypeVar('T')
+Evt = TypeVar("Evt", bound=Event)
+T = TypeVar("T")
 
 
 class NullEvent(Event):
     """For debugging"""
+
     __slots__ = ()
 
     def __getattribute__(self, __name: str):
@@ -25,9 +27,9 @@ class NullEvent(Event):
 
 
 class Emittable(Generic[Evt]):
-    """An object has some event to trigger.
-    """
-    hook: Evt = NullEvent()    # type: ignore
+    """An object has some event to trigger."""
+
+    hook: Evt = NullEvent()  # type: ignore
     _tasks: dict[str, set[asyncio.Task]]
     _loop: asyncio.AbstractEventLoop
 
@@ -40,15 +42,15 @@ class Emittable(Generic[Evt]):
         self.hook = hook
 
     def add_hook_ref(self, hook_cls: str, coro: Awaitable[T]) -> asyncio.Task[T]:
-        task = self._loop.create_task(coro)    # type: ignore
+        task = self._loop.create_task(coro)  # type: ignore
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
-        return task    # type: ignore
+        return task  # type: ignore
 
     async def wait(
         self,
         *hook_cls: str,
-        timeout: float = None,
+        timeout: float | None = None,
     ) -> tuple[set[asyncio.Task], set[asyncio.Task]]:
         """Wait for all task in the specific task set(s).
 
@@ -65,7 +67,8 @@ class Emittable(Generic[Evt]):
         s = set()
         for i in hook_cls:
             s |= self._tasks[i]
-        if not s: return set(), set()
+        if not s:
+            return set(), set()
         r = await asyncio.wait(s, timeout=timeout)
         if timeout is None and any(self._tasks[i] for i in hook_cls):
             # await potential new tasks in these sets, only if no timeout.
@@ -90,7 +93,8 @@ class Emittable(Generic[Evt]):
 
 class LoginEvent(Event):
     """Defines usual events happens during login."""
-    async def LoginFailed(self, msg: str = None):
+
+    async def LoginFailed(self, msg: str | None = None):
         """Will be emitted on login failed.
 
         .. note::
@@ -102,16 +106,15 @@ class LoginEvent(Event):
         pass
 
     async def LoginSuccess(self):
-        """Will be emitted after login success. Low prior, scheduled by loop instead of awaiting.
-        """
+        """Will be emitted after login success. Low prior, scheduled by loop instead of awaiting."""
         pass
 
 
 class QREvent(LoginEvent):
     """Defines usual events happens during QR login."""
 
-    cancel: Optional[Callable[[], Awaitable[None]]]
-    resend: Optional[Callable[[], Awaitable[None]]]
+    cancel: Callable[[], Awaitable[None]] | None
+    resend: Callable[[], Awaitable[None]] | None
 
     async def QrFetched(self, png: bytes, renew: bool = False):
         """Will be called on new QR code bytes are fetched. Means this will be triggered on:
@@ -128,7 +131,7 @@ class QREvent(LoginEvent):
         """
         pass
 
-    async def QrFailed(self, msg: str = None):
+    async def QrFailed(self, msg: str | None = None):
         """QR login failed.
 
         .. note: This event should always be called before :meth:`.LoginEvent.LoginFailed`.
@@ -138,6 +141,5 @@ class QREvent(LoginEvent):
         pass
 
     async def QrSucceess(self):
-        """QR login success.
-        """
+        """QR login success."""
         pass

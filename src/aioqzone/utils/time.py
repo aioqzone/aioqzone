@@ -2,14 +2,13 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 import time
-from typing import Union
 
 from pytz import timezone
 
-TIME_ZONE = timezone('Asia/Shanghai')
+TIME_ZONE = timezone("Asia/Shanghai")
 
 
-def time_ms(ts: float = None):
+def time_ms(ts: float | None = None):
     """int timestamp in ms.
 
     Args:
@@ -21,7 +20,7 @@ def time_ms(ts: float = None):
     return round((ts or time.time()) * 1000)
 
 
-def dayspac(ts1: float, ts2: float = None):
+def dayspac(ts1: float, ts2: float | None = None):
     """return ts2 - ts1
 
     Args:
@@ -43,26 +42,27 @@ def approx_ts(timedesc: str) -> int:
     """
     timedesc = timedesc.strip()
     assert timedesc
-    hashm = ':' in timedesc
-    didx = timedesc.find('天')
-    hmfmt = '%H:%M'
+    hashm = ":" in timedesc
+    didx = timedesc.find("天")
+    hmfmt = "%H:%M"
 
-    if '日' in timedesc:
+    if "日" in timedesc:
         # specific day
-        fmt = '%Y年%m月%d日'
+        fmt = "%Y年%m月%d日"
         dt = datetime.strptime(timedesc, fmt + hmfmt if hashm else fmt)
         return int(dt.replace(tzinfo=TIME_ZONE).timestamp())
 
-    today = datetime.today().astimezone(TIME_ZONE)    # based on today
+    today = datetime.today().astimezone(TIME_ZONE)  # based on today
     today = today.replace(second=0, microsecond=0)
     if hashm:
         tm = datetime.strptime(timedesc[-5:], hmfmt).time()
         dt = today.replace(hour=tm.hour, minute=tm.minute)
-        if didx == -1: return int(dt.timestamp())
+        if didx == -1:
+            return int(dt.timestamp())
 
         # day in delta
         assert didx > 0
-        delta = timedelta(days={'昨': 1, '前': 2}[timedesc[didx - 1]])
+        delta = timedelta(days={"昨": 1, "前": 2}[timedesc[didx - 1]])
         dt -= delta
         return int(dt.timestamp())
 
@@ -71,7 +71,7 @@ def approx_ts(timedesc: str) -> int:
     return int(time.mktime(dt))
 
 
-def sementic_time(timestamp: Union[float, int]) -> str:
+def sementic_time(timestamp: float | int) -> str:
     """reverse of :meth:`.approx_ts`
 
     :param timestamp: timestamp in second
@@ -82,14 +82,14 @@ def sementic_time(timestamp: Union[float, int]) -> str:
     byday = ytday - timedelta(days=1)
 
     feedtime = datetime.fromtimestamp(timestamp, TIME_ZONE)
-    s = ''
+    s = ""
     if today <= feedtime:
         pass
     elif ytday <= feedtime < today:
-        s += '昨天'
+        s += "昨天"
     elif byday <= feedtime < ytday:
-        s += '前天'
+        s += "前天"
     else:
-        s += feedtime.strftime('%m月%d日 ')
-    s += feedtime.strftime('%H:%M')
+        s += feedtime.strftime("%m月%d日 ")
+    s += feedtime.strftime("%H:%M")
     return s

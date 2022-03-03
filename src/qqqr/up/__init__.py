@@ -18,8 +18,8 @@ from ..type import PT_QR_APP
 from ..utils import get_all_cookie
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
-LOGIN_URL = 'https://ssl.ptlogin2.qq.com/login'
-LOGIN_JS = 'https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_login_2.js'
+LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
+LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_login_2.js"
 
 
 @dataclass
@@ -41,13 +41,13 @@ class CheckResult:
     def __post_init__(self):
         self.code = int(self.code)
         self.isRandSalt = int(self.isRandSalt)
-        salt = self.salt.split('\\x')[1:]
+        salt = self.salt.split("\\x")[1:]
         salt = [chr(int(i, 16)) for i in salt]
-        self.salt = ''.join(salt)
+        self.salt = "".join(salt)
 
 
 class UPLogin(LoginBase):
-    node = 'node'
+    node = "node"
     _captcha = None
 
     def __init__(
@@ -59,9 +59,9 @@ class UPLogin(LoginBase):
         self.user = user
 
     async def encodePwd(self, r: CheckResult) -> str:
-        assert self.user.pwd, 'password should not be empty'
+        assert self.user.pwd, "password should not be empty"
 
-        if not hasattr(self, 'getEncryption'):
+        if not hasattr(self, "getEncryption"):
             async with self.session.get(LOGIN_JS, ssl=self.ssl) as response:
                 response.raise_for_status()
                 js = await response.text()
@@ -75,9 +75,10 @@ class UPLogin(LoginBase):
             js += "function getEncryption(p, s, v) { var t, e = new Object; return a[9](t, e, n), e['default'].getEncryption(p, s, v, undefined) }"
 
             js = ExecJS(self.node, js=js)
-            self.getEncryption = js.bind('getEncryption')
+            self.getEncryption = js.bind("getEncryption")
 
-        return self.getEncryption(self.user.pwd, r.salt, r.verifycode).strip()
+        enc = await self.getEncryption(self.user.pwd, r.salt, r.verifycode)
+        return enc.strip()
 
     async def check(self):
         """[summary]
@@ -91,17 +92,17 @@ class UPLogin(LoginBase):
                 code = 1 showVC
         """
         data = {
-            'regmaster': '',
-            'pt_tea': 2,
-            'pt_vcode': 1,
-            'uin': self.user.uin,
-            'appid': self.app.appid,
-        # 'js_ver': 21072114,
-            'js_type': 1,
-            'login_sig': self.login_sig,
-            'u1': self.proxy.s_url,
-            'r': random(),
-            'pt_uistyle': 40,
+            "regmaster": "",
+            "pt_tea": 2,
+            "pt_vcode": 1,
+            "uin": self.user.uin,
+            "appid": self.app.appid,
+            # 'js_ver': 21072114,
+            "js_type": 1,
+            "login_sig": self.login_sig,
+            "u1": self.proxy.s_url,
+            "r": random(),
+            "pt_uistyle": 40,
         }
         async with self.session.get(CHECK_URL, params=data, ssl=self.ssl) as r:
             r.raise_for_status()
@@ -119,35 +120,35 @@ class UPLogin(LoginBase):
             return cookie
         elif r.code == StatusCode.NeedVerify and pastcode != StatusCode.NeedVerify:
             # !10009 -> 10009: OK; 10009 -> 10009: Error
-            raise NotImplementedError('wait for next version :D')
+            raise NotImplementedError("wait for next version :D")
         else:
             raise TencentLoginError(r.code, str(r))
 
         data = {
-            'u': self.user.uin,
-            'p': await self.encodePwd(r),
-            'verifycode': r.verifycode,
-            'pt_vcode_v1': 1 if pastcode == StatusCode.NeedCaptcha else 0,
-            'pt_verifysession_v1': r.verifysession,
-            'pt_randsalt': r.isRandSalt,
-            'u1': self.proxy.s_url,
-            'ptredirect': 0,
-            'h': 1,
-            't': 1,
-            'g': 1,
-            'from_ui': 1,
-            'ptlang': 2052,
-            'action': f"{3 if pastcode == StatusCode.NeedCaptcha else 2}-{choice([1, 2])}-{int(time_ns() / 1e6)}",
-        # 'js_ver': 21072114,
-            'js_type': 1,
-            'login_sig': self.login_sig,
-            'pt_uistyle': 40,
-            'aid': self.app.appid,
-            'daid': self.app.daid,
-            'ptdrvs': r.ptdrvs,
-            'sid': r.session,
+            "u": self.user.uin,
+            "p": await self.encodePwd(r),
+            "verifycode": r.verifycode,
+            "pt_vcode_v1": 1 if pastcode == StatusCode.NeedCaptcha else 0,
+            "pt_verifysession_v1": r.verifysession,
+            "pt_randsalt": r.isRandSalt,
+            "u1": self.proxy.s_url,
+            "ptredirect": 0,
+            "h": 1,
+            "t": 1,
+            "g": 1,
+            "from_ui": 1,
+            "ptlang": 2052,
+            "action": f"{3 if pastcode == StatusCode.NeedCaptcha else 2}-{choice([1, 2])}-{int(time_ns() / 1e6)}",
+            # 'js_ver': 21072114,
+            "js_type": 1,
+            "login_sig": self.login_sig,
+            "pt_uistyle": 40,
+            "aid": self.app.appid,
+            "daid": self.app.daid,
+            "ptdrvs": r.ptdrvs,
+            "sid": r.session,
         }
-        self.session.headers.update({istr('referer'): 'https://xui.ptlogin2.qq.com/'})
+        self.session.headers.update({istr("referer"): "https://xui.ptlogin2.qq.com/"})
         async with self.session.get(LOGIN_URL, params=data, ssl=self.ssl) as response:
             response.raise_for_status()
             rl = re.findall(r"'(.*?)'[,\)]", await response.text())
@@ -162,6 +163,7 @@ class UPLogin(LoginBase):
     def captcha(self, sid: str):
         if not self._captcha:
             from .captcha import Captcha
+
             self._captcha = Captcha(self.session, self.ssl, self.app.appid, sid)
         return self._captcha
 
@@ -169,7 +171,7 @@ class UPLogin(LoginBase):
         c = self.captcha(r.session)
         await c.prehandle(self.xlogin_url)
         d = await c.verify()
-        r.code = int(d['errorCode'])
-        r.verifycode = d['randstr']
-        r.verifysession = d['ticket']
+        r.code = int(d["errorCode"])
+        r.verifycode = d["randstr"]
+        r.verifysession = d["ticket"]
         return r

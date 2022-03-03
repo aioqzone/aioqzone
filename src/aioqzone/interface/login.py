@@ -16,7 +16,7 @@ class Loginable(ABC, Emittable[LoginEvent]):
         self.lock = asyncio.Lock()
 
     @property
-    def cookie(self) -> dict[str, str]:    # type: ignore
+    def cookie(self) -> dict[str, str]:  # type: ignore
         """Get cookie in any way. Allow cached result.
 
         Returns:
@@ -51,5 +51,6 @@ class Loginable(ABC, Emittable[LoginEvent]):
         Returns:
             int: gtk. NOTE: 0 denotes no-login.
         """
-        if (pskey := self.cookie.get('p_skey')) is None: return 0
+        if (pskey := self.cookie.get("p_skey")) is None:
+            return 0
         return gtk(pskey)

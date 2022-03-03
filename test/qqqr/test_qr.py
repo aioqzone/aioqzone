@@ -10,14 +10,14 @@ from qqqr.constants import StatusCode
 from qqqr.qr import QRLogin
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def event_loop():
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
 
 
-@pytest_asyncio.fixture(scope='module')
+@pytest_asyncio.fixture(scope="module")
 async def login():
     async with ClientSession() as sess:
         async with QRLogin(sess, QzoneAppid, QzoneProxy) as login:
@@ -43,10 +43,9 @@ class TestLoop:
 
     @staticmethod
     async def writeqr(b: bytes):
-        with open('tmp/r.png', 'wb') as f:
+        with open("tmp/r.png", "wb") as f:
             f.write(b)
 
-    async def test_Loop(self, login):
-        future = await login.loop(self.writeqr)
-        cookie = await future
-        assert cookie['p_skey']
+    async def test_Loop(self, login: QRLogin):
+        cookie = await login.loop(self.writeqr)
+        assert cookie["p_skey"]

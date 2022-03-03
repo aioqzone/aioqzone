@@ -1,6 +1,6 @@
-'''
+"""
 date: 2021-07-20
-'''
+"""
 
 from enum import IntEnum
 
@@ -8,8 +8,8 @@ from .type import APPID
 from .type import Proxy
 
 QzoneProxy = Proxy(
-    'https://qzs.qq.com/qzone/v6/portal/proxy.html',
-    'https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone'
+    "https://qzs.qq.com/qzone/v6/portal/proxy.html",
+    "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone",
 )
 
 QzoneAppid = APPID(549000912, 5)

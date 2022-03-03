@@ -12,9 +12,9 @@ class TestJsJson:
         """
         d = json_loads(s)
         assert isinstance(d, dict)
-        assert d['usr'] == 'admin'
-        assert d['pwd'] == 2333
-        assert d['admin']
+        assert d["usr"] == "admin"
+        assert d["pwd"] == 2333
+        assert d["admin"] == True
 
     def test_null(self):
         s = """
@@ -25,11 +25,11 @@ class TestJsJson:
         """
         d = json_loads(s)
         assert isinstance(d, dict)
-        assert d['extra'] is None
-        assert d['merge'] == [None]
+        assert d["extra"] is None
+        assert d["merge"] == [None]
 
     def test_escape(self):
         s = "{html:'http:\\/\\/qq.com'}"
         d = json_loads(s)
         assert isinstance(d, dict)
-        assert d['html'] == 'http://qq.com'
+        assert d["html"] == "http://qq.com"

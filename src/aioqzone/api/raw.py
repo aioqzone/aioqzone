@@ -6,7 +6,7 @@ from functools import wraps
 import logging
 from random import randint
 from random import random
-from typing import Callable, cast, Union
+from typing import Callable, cast
 from urllib.parse import parse_qs
 from urllib.parse import quote
 from urllib.parse import unquote
@@ -34,13 +34,13 @@ StrDict = dict[str, JsonValue]
 
 
 class QzoneApi:
-    """A wrapper for Qzone http interface.
-    """
-    encoding = 'utf-8'
+    """A wrapper for Qzone http interface."""
+
+    encoding = "utf-8"
     host = "https://user.qzone.qq.com"
 
     def __init__(self, session: Session, loginman: Loginable, ua: str = UA) -> None:
-        session.headers.update({istr('User-Agent'): ua})
+        session.headers.update({istr("User-Agent"): ua})
         self.sess = session
         self.login = loginman
 
@@ -52,23 +52,26 @@ class QzoneApi:
         """
         async with self.login.lock:
             gtk = self.login.gtk
-        if gtk == 0: raise QzoneError(-3000)
+        if gtk == 0:
+            raise QzoneError(-3000)
         return gtk
 
-    async def aget(self, url: str, params: dict[str, str] = None):
+    async def aget(self, url: str, params: dict[str, str] | None = None):
         params = params or {}
-        params = params | {'g_tk': str(await self._get_gtk())}
-        self.sess.headers.update({
-            istr('referer'): f'https://user.qzone.qq.com/{self.login.uin}/infocenter'
-        })
+        params = params | {"g_tk": str(await self._get_gtk())}
+        self.sess.headers.update(
+            {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
+        )
         return self.sess.get(self.host + url, params=params)
 
-    async def apost(self, url: str, params: dict[str, str] = None, data: dict = None):
+    async def apost(
+        self, url: str, params: dict[str, str] | None = None, data: dict | None = None
+    ):
         params = params or {}
-        params = params | {'g_tk': str(await self._get_gtk())}
-        self.sess.headers.update({
-            istr('referer'): f'https://user.qzone.qq.com/{self.login.uin}/infocenter'
-        })
+        params = params | {"g_tk": str(await self._get_gtk())}
+        self.sess.headers.update(
+            {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
+        )
         return self.sess.post(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
@@ -85,16 +88,19 @@ class QzoneApi:
         .. note:: Decorate code as less as possible
         .. warning:: Do NOT modify args in the wrapped code.
         """
+
         @wraps(func)
         async def relogin_wrapper(*args, **kwds):
             try:
                 return await func(*args, **kwds)
             except QzoneError as e:
-                if e.code not in [-3000, -4002]: raise e
+                if e.code not in [-3000, -4002]:
+                    raise e
             except ClientResponseError as e:
-                if e.status != 403: raise e
+                if e.status != 403:
+                    raise e
 
-            logger.info(f'Cookie expire in {func.__qualname__}. Relogin...')
+            logger.info(f"Cookie expire in {func.__qualname__}. Relogin...")
             cookie = await self.login.new_cookie()
             return await func(*args, **kwds)
 
@@ -104,8 +110,8 @@ class QzoneApi:
         self,
         rtext: str,
         cb: bool = True,
-        errno_key: tuple[str, ...] = ('code', 'err'),
-        msg_key: tuple[str, ...] = ('msg', 'message')
+        errno_key: tuple[str, ...] = ("code", "err"),
+        msg_key: tuple[str, ...] = ("msg", "message"),
     ) -> StrDict:
         """Deal with rtext from Qzone api response, returns parsed json dict.
         Inner used only.
@@ -136,22 +142,26 @@ class QzoneApi:
 
         if err != 0:
             msg = next(filter(None, (r.get(i) for i in msg_key)), None)
-            if msg: raise QzoneError(err, msg, rdict=r)
-            else: raise QzoneError(err, rdict=r)
-        return r    # type: ignore
+            if msg:
+                raise QzoneError(err, msg, rdict=r)
+            else:
+                raise QzoneError(err, rdict=r)
+        return r  # type: ignore
 
     class FeedsMoreTransaction:
         """Represents a feeds3_html_more transaction."""
-        def __init__(self, default: dict[int, str] = None) -> None:
+
+        def __init__(self, default: dict[int, str] | None = None) -> None:
             self.extern = default or {}
 
         def parse(self, page: int):
-            unquoted = self.extern.get(page, 'undefined')
-            if unquoted == "undefined": return {}
+            unquoted = self.extern.get(page, "undefined")
+            if unquoted == "undefined":
+                return {}
             return {k: v[-1] for k, v in parse_qs(unquoted, keep_blank_values=True).items()}
 
     async def feeds3_html_more(
-        self, pagenum: int, trans: FeedsMoreTransaction = None, count: int = 10
+        self, pagenum: int, trans: FeedsMoreTransaction | None = None, count: int = 10
     ) -> StrDict:
         """return a list of dict, each dict reps a page of feeds.
 
@@ -169,37 +179,37 @@ class QzoneApi:
         """
 
         default = {
-            'scope': 0,
-            'view': 1,
-            'daylist': '',
-            'uinlist': '',
-            'gid': '',
-            'flag': 1,
-            'filter': 'all',
-            'applist': 'all',
-            'refresh': 0,
-            'aisortEndTime': 0,
-            'aisortOffset': 0,
-            'getAisort': 0,
-            'aisortBeginTime': 0,
-            'firstGetGroup': 0,
-            'icServerTime': 0,
-            'mixnocache': 0,
-            'scene': 0,
-            'dayspac': 'undefined',
-            'sidomain': 'qzonestyle.gtimg.cn',
-            'useutf8': 1,
-            'outputhtmlfeed': 1,
+            "scope": 0,
+            "view": 1,
+            "daylist": "",
+            "uinlist": "",
+            "gid": "",
+            "flag": 1,
+            "filter": "all",
+            "applist": "all",
+            "refresh": 0,
+            "aisortEndTime": 0,
+            "aisortOffset": 0,
+            "getAisort": 0,
+            "aisortBeginTime": 0,
+            "firstGetGroup": 0,
+            "icServerTime": 0,
+            "mixnocache": 0,
+            "scene": 0,
+            "dayspac": "undefined",
+            "sidomain": "qzonestyle.gtimg.cn",
+            "useutf8": 1,
+            "outputhtmlfeed": 1,
         }
         trans = trans or self.FeedsMoreTransaction()
         query = {
-            'rd': random(),
-            'uin': self.login.uin,
-            'pagenum': pagenum + 1,
-            'begintime': trans.parse(pagenum).get("basetime", "undefined"),
-            'count': count,
-            'usertime': time_ms(),
-            'externparam': quote(trans.extern.get(pagenum, 'undefined'))
+            "rd": random(),
+            "uin": self.login.uin,
+            "pagenum": pagenum + 1,
+            "begintime": trans.parse(pagenum).get("basetime", "undefined"),
+            "count": count,
+            "usertime": time_ms(),
+            "externparam": quote(trans.extern.get(pagenum, "undefined")),
         }
 
         @self._relogin_retry
@@ -211,8 +221,8 @@ class QzoneApi:
             return self._rtext_handler(rtext)
 
         r = await retry_closure()
-        data = r['data']
-        trans.extern[pagenum + 1] = unquote(data['main']["externparam"])    # type: ignore
+        data = r["data"]
+        trans.extern[pagenum + 1] = unquote(data["main"]["externparam"])  # type: ignore
         return cast(StrDict, data)
 
     async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> StrDict:
@@ -276,17 +286,17 @@ class QzoneApi:
         .. note:: share msg is not support, i.e. `appid=311`
         """
         default = {
-            't1_source': 1,
-            'ftype': 0,
-            'sort': 0,
-            'pos': 0,
-            'num': 20,
-            'callback': 'callback',
-            'code_version': 1,
-            'format': 'jsonp',
-            'need_private_comment': 1,
+            "t1_source": 1,
+            "ftype": 0,
+            "sort": 0,
+            "pos": 0,
+            "num": 20,
+            "callback": "callback",
+            "code_version": 1,
+            "format": "jsonp",
+            "need_private_comment": 1,
         }
-        query = {'uin': owner, 'tid': fid}
+        query = {"uin": owner, "tid": fid}
 
         @self._relogin_retry
         async def retry_closure():
@@ -298,7 +308,7 @@ class QzoneApi:
 
         return await retry_closure()
 
-    async def get_feeds_count(self) -> dict[str, Union[int, list]]:
+    async def get_feeds_count(self) -> dict[str, int | list]:
         """Get feeds update count (new feeds, new photos, new comments, etc)
 
         :raises `aiohttp.ClientResponseError`: error http response code
@@ -313,7 +323,7 @@ class QzoneApi:
             This api is also the 'keep-alive' signal to avoid cookie from expiring.
             Call this api every 300s can help keep cookie alive.
         """
-        query = {'uin': self.login.uin, 'rd': random()}
+        query = {"uin": self.login.uin, "rd": random()}
 
         @self._relogin_retry
         async def retry_closure():
@@ -324,7 +334,7 @@ class QzoneApi:
             return self._rtext_handler(rtext)
 
         r = await retry_closure()
-        return r['data']    # type: ignore
+        return r["data"]  # type: ignore
 
     async def like_app(self, likedata: LikeData, like: bool = True) -> bool:
         """Like or unlike a feed.
@@ -343,19 +353,19 @@ class QzoneApi:
             not a @noexcept method.
         """
         default = {
-            'from': 1,
-            'active': 0,
-            'fupdate': 1,
+            "from": 1,
+            "active": 0,
+            "fupdate": 1,
         }
         body = {
-            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
-            'opuin': self.login.uin,
-            'unikey': likedata.unikey,
-            'curkey': likedata.curkey,
-            'appid': likedata.appid,
-            'typeid': likedata.typeid,
-            'abstime': likedata.abstime,
-            'fid': likedata.fid
+            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
+            "opuin": self.login.uin,
+            "unikey": likedata.unikey,
+            "curkey": likedata.curkey,
+            "appid": likedata.appid,
+            "typeid": likedata.typeid,
+            "abstime": likedata.abstime,
+            "fid": likedata.fid,
         }
         url = const.internal_dolike_app if like else const.internal_unlike_app
 
@@ -364,22 +374,21 @@ class QzoneApi:
             async with await self.apost(url, data=default | body) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
-            return self._rtext_handler(rtext, errno_key=('code', 'ret'))
+            return self._rtext_handler(rtext, errno_key=("code", "ret"))
 
         try:
             await retry_closure()
             return True
         except QzoneError as e:
-            logger.warning(f'Error in dolike/unlike. {e}')
+            logger.warning(f"Error in dolike/unlike. {e}")
             return False
         except ClientResponseError as e:
-            logger.error('Error in dolike/unlike.', exc_info=True)
+            logger.error("Error in dolike/unlike.", exc_info=True)
             raise e
         except SystemExit as e:
-            raise e    # pass through SystemExit
+            raise e  # pass through SystemExit
         except BaseException as e:
-            logger.fatal('Uncaught Exception in dolike/unlike!', exc_info=True)
-            from sys import exit
+            logger.fatal("Uncaught Exception in dolike/unlike!", exc_info=True)
             exit(1)
 
     async def floatview_photo_list(self, album: AlbumData, num: int) -> StrDict:
@@ -404,31 +413,31 @@ class QzoneApi:
         """
 
         default = {
-            'callback': 'viewer_Callback',
-            'cmtOrder': 1,
-            'fupdate': 1,
-            'plat': 'qzone',
-            'source': 'qzone',
-            'cmtNum': 0,
-            'likeNum': 0,
-            'inCharset': 'utf-8',
-            'outCharset': 'utf-8',
-            'callbackFun': 'viewer',
-            'offset': 0,
-            'appid': 311,
-            'isFirst': 1,
-            'need_private_comment': 1,
-            "shootTime": '',
+            "callback": "viewer_Callback",
+            "cmtOrder": 1,
+            "fupdate": 1,
+            "plat": "qzone",
+            "source": "qzone",
+            "cmtNum": 0,
+            "likeNum": 0,
+            "inCharset": "utf-8",
+            "outCharset": "utf-8",
+            "callbackFun": "viewer",
+            "offset": 0,
+            "appid": 311,
+            "isFirst": 1,
+            "need_private_comment": 1,
+            "shootTime": "",
         }
         query = {
-            'topicId': album.topicid,
-            'picKey': album.pickey,
-            'hostUin': album.hostuin,
-            'number': num,
-            'uin': self.login.uin,
-            '_': time_ms(),
-            't': randint(1e8, 1e9 - 1)    # type: ignore
-        # The distribution is not consistent with photo.js; but the format is.
+            "topicId": album.topicid,
+            "picKey": album.pickey,
+            "hostUin": album.hostuin,
+            "number": num,
+            "uin": self.login.uin,
+            "_": time_ms(),
+            "t": randint(1e8, 1e9 - 1)  # type: ignore
+            # The distribution is not consistent with photo.js; but the format is.
         }
 
         @self._relogin_retry
@@ -438,10 +447,10 @@ class QzoneApi:
                 rtext = await r.text()
             return self._rtext_handler(rtext)
 
-        rjson = (await retry_closure())['data']
-        if query['t'] != int(rjson.pop('t')):    # type: ignore
-            raise CorruptError('Something unexpected occured in transport.')
-        return rjson    # type: ignore
+        rjson = (await retry_closure())["data"]
+        if query["t"] != int(rjson.pop("t")):  # type: ignore
+            raise CorruptError("Something unexpected occured in transport.")
+        return rjson  # type: ignore
 
     async def emotion_msglist(
         self,
@@ -466,23 +475,23 @@ class QzoneApi:
         .. versionadded:: 0.2.6
         """
         add = {
-            'hostUin': uin,
-            'notice': 0,
-            'inCharset': 'utf-8',
-            'outCharset': 'utf-8',
-            'cgi_host': 'https://user.qzone.qq.com' + const.emotion_msglist
+            "hostUin": uin,
+            "notice": 0,
+            "inCharset": "utf-8",
+            "outCharset": "utf-8",
+            "cgi_host": "https://user.qzone.qq.com" + const.emotion_msglist,
         }
         param = {
-            'uin': uin,
-            'ftype': 0,
-            'sort': 0,
-            'pos': pos,
-            'num': num,
-            'replynum': 0,
-            'callback': 'callback',
-            'code_version': 1,
-            'format': 'jsonp',
-            'need_private_comment': 1
+            "uin": uin,
+            "ftype": 0,
+            "sort": 0,
+            "pos": pos,
+            "num": num,
+            "replynum": 0,
+            "callback": "callback",
+            "code_version": 1,
+            "format": "jsonp",
+            "need_private_comment": 1,
         }
 
         @self._relogin_retry
@@ -493,7 +502,7 @@ class QzoneApi:
             return self._rtext_handler(rtext)
 
         data = await retry_closure()
-        return data['msglist']    # type: ignore
+        return data["msglist"]  # type: ignore
 
     async def emotion_publish(self, content: str, right: int = 0) -> StrDict:
         """Publish a feed. appid=311.
@@ -513,25 +522,25 @@ class QzoneApi:
         .. warning:: This api is under development. It has basic functions only.
         """
         default = {
-            'syn_tweet_verson': 1,
-            'paramstr': 1,
-            'pic_template': '',
-            'richtype': '',
-            'richval': '',
-            'special_url': '',
-            'subrichtype': '',
-            'who': 1,
-            'ver': 1,
-            'to_sign': 0,
-            'code_version': 1,
-            'format': 'fs',
+            "syn_tweet_verson": 1,
+            "paramstr": 1,
+            "pic_template": "",
+            "richtype": "",
+            "richval": "",
+            "special_url": "",
+            "subrichtype": "",
+            "who": 1,
+            "ver": 1,
+            "to_sign": 0,
+            "code_version": 1,
+            "format": "fs",
         }
         body = {
-            'ugc_right': 64,
-            'con': content,
-            'feedversion': 1,
-            'hostuin': self.login.uin,
-            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
+            "ugc_right": 64,
+            "con": content,
+            "feedversion": 1,
+            "hostuin": self.login.uin,
+            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
         }
 
         @self._relogin_retry
@@ -544,13 +553,7 @@ class QzoneApi:
         return await retry_closure()
 
     async def emotion_delete(
-        self,
-        fid: str,
-        abstime: int,
-        appid: int,
-        typeid: int,
-        topicId: str,
-        uin: int = None
+        self, fid: str, abstime: int, appid: int, typeid: int, topicId: str, uin: int | None = None
     ) -> StrDict:
         """Delete a feed.
 
@@ -572,16 +575,16 @@ class QzoneApi:
         .. versionadded:: 0.2.6
         """
         body = {
-            'uin': uin or self.login.uin,
-            'topicId': topicId,
-            'feedsType': typeid,
-            'feedsFlag': 0,
-            'feedsKey': fid,
-            'feedsAppid': appid,
-            'feedsTime': abstime,
-            'fupdate': 1,
-            'ref': 'feeds',
-            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
+            "uin": uin or self.login.uin,
+            "topicId": topicId,
+            "feedsType": typeid,
+            "feedsFlag": 0,
+            "feedsKey": fid,
+            "feedsAppid": appid,
+            "feedsTime": abstime,
+            "fupdate": 1,
+            "ref": "feeds",
+            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
         }
 
         @self._relogin_retry
@@ -593,7 +596,7 @@ class QzoneApi:
 
         return await retry_closure()
 
-    async def emotion_update(self, fid: str, content: str, uin: int = None) -> StrDict:
+    async def emotion_update(self, fid: str, content: str, uin: int | None = None) -> StrDict:
         """Update content of a feed.
 
         :param fid: feed id, named feedkey, tid, etc.
@@ -612,27 +615,27 @@ class QzoneApi:
         .. warning:: This api is under development. It has basic functions only.
         """
         default = {
-            'syn_tweet_verson': 1,
-            'paramstr': 1,
-            'pic_template': '',
-            'richtype': '',
-            'richval': '',    # album attribute comma list
-            'special_url': '',
-            'subrichtype': '',
-            'feedversion': 1,
-            'ver': 1,
-            'code_version': '1',
-            'format': 'fs',
+            "syn_tweet_verson": 1,
+            "paramstr": 1,
+            "pic_template": "",
+            "richtype": "",
+            "richval": "",  # album attribute comma list
+            "special_url": "",
+            "subrichtype": "",
+            "feedversion": 1,
+            "ver": 1,
+            "code_version": "1",
+            "format": "fs",
         }
         body = {
-            'tid': fid,
-            'con': content,
-            'ugc_right': 64,
-            'to_sign': 0,
-            'ugcright_id': 'TODO',    # TODO
-            'hostuin': uin or self.login.uin,
-            'qzreferrer': f'https://user.qzone.qq.com/{self.login.uin}',
-        # 'pic_bo': ''
+            "tid": fid,
+            "con": content,
+            "ugc_right": 64,
+            "to_sign": 0,
+            "ugcright_id": "TODO",  # TODO
+            "hostuin": uin or self.login.uin,
+            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
+            # 'pic_bo': ''
         }
 
         @self._relogin_retry

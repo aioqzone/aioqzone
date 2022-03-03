@@ -2,25 +2,22 @@ import ast
 import json
 import logging
 from textwrap import dedent
-from typing import Callable, Union
+from typing import Callable
 
 from .execjs import ExecJS
 
 logger = logging.getLogger(__name__)
-JsonDict = dict[Union[str, int], 'JsonValue']
-JsonList = list['JsonValue']
-JsonValue = Union[bool, int, str, JsonDict, JsonList]
+JsonDict = dict[str | int, "JsonValue"]
+JsonList = list["JsonValue"]
+JsonValue = bool | int | str | JsonDict | JsonList
 
 
 class NodeLoader:
-    jsonStringify = ExecJS(js='').bind('JSON.stringify', new=False)
+    jsonStringify = ExecJS(js="").bind("JSON.stringify", new=False)
 
     @classmethod
-    def json_loads(
-        cls,
-        js: str,
-        try_load_first: bool = True,
-        parser: Callable[[str], JsonValue] = json.loads
+    async def json_loads(
+        cls, js: str, try_load_first: bool = True, parser: Callable[[str], JsonValue] = json.loads
     ) -> JsonValue:
         """
         The json_loads function converts a string representation of JS/JSON data into a Python object.
@@ -37,27 +34,35 @@ class NodeLoader:
             except json.JSONDecodeError:
                 pass
 
-        json_str = cls.jsonStringify(js, asis=True)
+        json_str = await cls.jsonStringify(js, asis=True)
         try:
             return parser(json_str)
         except json.JSONDecodeError as e:
-            logger.exception('Failed to decode json input!')
-            logger.debug('json_str=%s', json_str)
+            logger.exception("Failed to decode json input!")
+            logger.debug("json_str=%s", json_str)
             raise e
 
 
 class AstLoader:
     class RewriteUndef(ast.NodeTransformer):
         def visit_Name(self, node: ast.Name):
-            if node.id in ('undefined', 'null'):
-                return ast.Constant(value=None)
-            return ast.Str(s=node.id)
+            match node.id:
+                case "undefined" | "null":
+                    return ast.Constant(value=None)
+                case "true":
+                    return ast.Constant(value=True)
+                case "false":
+                    return ast.Constant(value=False)
+                case _:
+                    return ast.Str(s=node.id)
 
-        def visit_Str(self, node: ast.Str) -> ast.Str:
-            return ast.Str(s=node.s.replace('\\/', '/'))
+        def visit_Constant(self, node: ast.Constant) -> ast.Constant:
+            if not isinstance(node.value, str):
+                return node
+            return ast.Str(s=node.value.replace("\\/", "/"))
 
     @classmethod
-    def json_loads(cls, js: str, filename: str = 'stdin') -> JsonValue:
+    def json_loads(cls, js: str, filename: str = "stdin") -> JsonValue:
         """
         The json_loads function loads a JSON object from a js/json string. It uses standard
         :mod:`ast` module to parse the js/json.
@@ -67,9 +72,9 @@ class AstLoader:
         :return: A jsonvalue object.
         """
 
-        node = ast.parse(dedent(js), mode='eval')
+        node = ast.parse(dedent(js), mode="eval")
         node = ast.fix_missing_locations(cls.RewriteUndef().visit(node))
-        code = compile(node, filename, mode='eval')
+        code = compile(node, filename, mode="eval")
         return eval(code)
 
 

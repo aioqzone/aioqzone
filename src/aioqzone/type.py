@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 from pydantic import BaseModel
 from pydantic import Field
 from pydantic.networks import HttpUrl
@@ -16,14 +14,14 @@ class PersudoCurkey(str):
 
     @classmethod
     def build(cls, uin: int, abstime: int):
-        return str(uin).rjust(12, '0') + str(abstime).rjust(12, '0')
+        return str(uin).rjust(12, "0") + str(abstime).rjust(12, "0")
 
     @classmethod
     def from_str(cls, curkey: str):
         uin = curkey[:12]
         abstime = curkey[12:]
-        uin = int(uin.lstrip('0'))
-        abstime = int(abstime.lstrip('0'))
+        uin = int(uin.lstrip("0"))
+        abstime = int(abstime.lstrip("0"))
         return cls(uin=uin, abstime=abstime)
 
 
@@ -49,7 +47,7 @@ class LikeData(BaseModel):
     @staticmethod
     def persudo_unikey(appid: int, uin: int, **kwds):
         if appid == 311:
-            fid = kwds.get('fid', None) or kwds.get('key')
+            fid = kwds.get("fid", None) or kwds.get("key")
             return f"https://user.qzone.qq.com/{uin}/mood/{fid}"
 
         raise ValueError(appid)
@@ -60,14 +58,14 @@ class FeedRep(BaseModel):
     ver: int
     appid: int
     typeid: int
-    fid: str = Field(alias='key')
+    fid: str = Field(alias="key")
     abstime: int
     uin: int
     nickname: str
     html: str
-    # likecnt: Optional[int] = None
-    # relycnt: Optional[int] = None
-    # commentcnt: Optional[int] = None
+    # likecnt: int | None = None
+    # relycnt: int | None = None
+    # commentcnt: int | None = None
 
 
 class FeedMoreAux(BaseModel):
@@ -101,11 +99,11 @@ class FeedMoreAux(BaseModel):
 
 
 class HasContent(BaseModel):
-    content: str = ''
+    content: str = ""
 
 
 class CommentRep(HasContent):
-    abstime: int = Field(alias='create_time')
+    abstime: int = Field(alias="create_time")
     owner: dict
     replyNum: int
     tid: int
@@ -117,13 +115,13 @@ class PicRep(BaseModel):
     url1: HttpUrl
     url2: HttpUrl
     url3: HttpUrl
-    is_video: Optional[int] = False
+    is_video: int = False
 
     def from_url(self, url: HttpUrl):
         self.url1 = self.url2 = self.url3 = url
 
     @classmethod
-    def from_floatview(cls, fv: 'FloatViewPhoto'):
+    def from_floatview(cls, fv: "FloatViewPhoto"):
         if fv.is_video and fv.video_info:
             return VideoRep.from_floatview(fv)
         else:
@@ -138,25 +136,25 @@ class PicRep(BaseModel):
 
 
 class VideoInfo(BaseModel):
-    cover_height: int = 0    # same as VideoRep.height
+    cover_height: int = 0  # same as VideoRep.height
     cover_width: int = 0
-    thumb: HttpUrl = Field(alias='url1')
-    raw: HttpUrl = Field(alias='url3')
-    vid: str = Field(alias='video_id')
+    thumb: HttpUrl = Field(alias="url1")
+    raw: HttpUrl = Field(alias="url3")
+    vid: str = Field(alias="video_id")
 
 
 class VideoInfo2(BaseModel):
-    cover_height: int = 0    # same as VideoRep.height
+    cover_height: int = 0  # same as VideoRep.height
     cover_width: int = 0
     vid: str
-    raw: HttpUrl = Field(alias='video_url')
+    raw: HttpUrl = Field(alias="video_url")
 
 
 class VideoRep(PicRep):
     video_info: VideoInfo
 
     @classmethod
-    def from_floatview(cls, fv: 'FloatViewPhoto'):
+    def from_floatview(cls, fv: "FloatViewPhoto"):
         assert fv.is_video
         assert fv.video_info
         return cls(
@@ -171,8 +169,8 @@ class VideoRep(PicRep):
                 cover_width=fv.width,
                 url1=fv.url1,
                 url3=fv.video_info.raw,
-                video_id=fv.video_info.vid
-            )
+                video_id=fv.video_info.vid,
+            ),
         )
 
 
@@ -180,19 +178,19 @@ class FeedDetailRep(HasContent):
     uin: int
     name: str
     tid: str
-    abstime: int = Field(alias='created_time')
+    abstime: int = Field(alias="created_time")
 
     # forward from
-    rt_con: Optional[HasContent] = None
+    rt_con: HasContent | None = None
     rt_uin: int = 0
     rt_uinname: str = ""
     rt_tid: str = ""
     rt_createTime: str = ""
-    rt_abstime: int = Field(default=0, alias='rt_created_time')
-    pic: Optional[list[Union[VideoRep, PicRep]]] = None
+    rt_abstime: int = Field(default=0, alias="rt_created_time")
+    pic: list[VideoRep | PicRep] | None = None
 
     cmtnum: int
-    commentlist: Optional[list[CommentRep]] = None
+    commentlist: list[CommentRep] | None = None
     fwdnum: int
 
 
@@ -221,26 +219,26 @@ class FloatViewPhoto(BaseModel):
     height: int
     width: int
 
-    url1: HttpUrl = Field(alias='pre')
-    url2: HttpUrl = Field(alias='picId')
-    url3: HttpUrl = Field(alias='url')
-    video_info: Optional[VideoInfo2] = None
+    url1: HttpUrl = Field(alias="pre")
+    url2: HttpUrl = Field(alias="picId")
+    url3: HttpUrl = Field(alias="url")
+    video_info: VideoInfo2 | None = None
 
     cmtTotal: int
     fwdnum: int
 
     likeTotal: int
     likeKey: str
-    likeList: Optional[list[dict]] = None
+    likeList: list[dict] | None = None
 
     lloc: str
     original_tid: str
     photocubage: int
     phototype: int
 
-    isMultiPic: Optional[bool] = False
-    is_weixin_mode: Optional[bool] = False
-    is_video: Optional[bool] = False
+    isMultiPic: bool | None = False
+    is_weixin_mode: bool | None = False
+    is_video: bool | None = False
 
     @property
     def picKey(self):
@@ -252,9 +250,9 @@ class MsgListElm(HasContent):
     fwdnum: int
 
     createTime: str
-    abstime: int = Field(alias='created_time')
+    abstime: int = Field(alias="created_time")
     commentlist: list
 
-    fid: str = Field(alias='tid')
+    fid: str = Field(alias="tid")
     uin: int
     name: str

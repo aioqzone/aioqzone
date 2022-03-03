@@ -10,8 +10,13 @@ markers = [
     "upstream: Test cannot run normally due to upstream problems",
 ]
 asyncio_mode = 'strict'
-# timeout = 60
+log_cli = 1
+log_cli_level = 'WARNING'
 
 
 [tool.isort]
 profile = "google"
+
+[tool.black]
+line-length = 99
+target-version = ['py310']
