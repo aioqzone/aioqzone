@@ -21,24 +21,49 @@ jobs:
         python-version: ['3.10']
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
+      #----------------------------------------------
+      #       check-out repo and set-up python
+      #----------------------------------------------
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: setup.cfg
-
-      - uses: actions/setup-node@v2.5.1
+      #----------------------------------------------
+      #  -----  install & configure poetry  -----
+      #----------------------------------------------
+      - name: Install Poetry Action
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
+      #----------------------------------------------
+      # install dependencies if cache does not exist
+      #----------------------------------------------
       - name: Install dependencies
-        run: |
-          python -m pip install -U pip pytest pytest-asyncio pytest-timeout
-          pip install .
-
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      #----------------------------------------------
+      # install your root project, if required
+      #----------------------------------------------
+      - name: Install library
+        run: poetry install --no-interaction
+      #----------------------------------------------
+      #    add matrix specifics and run test suite
+      #----------------------------------------------
       - name: Test with pytest
         env:
           TEST_UIN: ${{ secrets.TEST_UIN }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
-          export PYTHONPATH=$(pwd)/src
-          python -m pytest -m "not needuser and not upstream" ${{ inputs.pytest_arg }}
+          poetry run python -m pytest -m "not needuser and not upstream" ${{ inputs.pytest_arg }}

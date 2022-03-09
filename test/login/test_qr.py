@@ -9,6 +9,8 @@ from qqqr.constants import QzoneProxy
 from qqqr.constants import StatusCode
 from qqqr.qr import QRLogin
 
+from . import showqr as _showqr
+
 
 @pytest.fixture(scope="module")
 def event_loop():
@@ -33,7 +35,8 @@ class TestProcedure:
         assert isinstance(login.qrsig, str)
 
     async def test_poll(self, login):
-        assert (r := await login.pollStat())
+        r = await login.pollStat()
+        assert r
         assert r[0] == StatusCode.Waiting
 
 
@@ -41,11 +44,9 @@ class TestProcedure:
 class TestLoop:
     pytestmark = pytest.mark.asyncio
 
-    @staticmethod
-    async def writeqr(b: bytes):
-        with open("tmp/r.png", "wb") as f:
-            f.write(b)
-
     async def test_Loop(self, login: QRLogin):
-        cookie = await login.loop(self.writeqr)
+        async def showqr(b):
+            return _showqr(b)
+
+        cookie = await login.loop(showqr)
         assert cookie["p_skey"]

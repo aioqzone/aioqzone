@@ -7,7 +7,7 @@ import pytest_asyncio
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.exception import LoginError
-from aioqzone.interface.hook import QREvent
+from aioqzone.exception import QzoneError
 from aioqzone.type import FeedRep
 from aioqzone.utils.html import HtmlContent
 
@@ -19,53 +19,9 @@ def storage():
     return []
 
 
-@pytest.fixture(scope="module")
-def event_loop():
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
-
-
-@pytest_asyncio.fixture(scope="module")
-async def sess():
-    async with Session() as sess:
-        yield sess
-
-
-@pytest_asyncio.fixture(scope="module")
-async def man(sess: Session):
-    from os import environ as env
-
-    man = MixedLoginMan(
-        sess,
-        int(env["TEST_UIN"]),
-        env.get("TEST_QRSTRATEGY", "forbid"),  # forbid QR by default.
-        pwd=env.get("TEST_PASSWORD", None),
-    )
-
-    class inner_qrevent(QREvent):
-        async def QrFetched(self, png: bytes):
-            showqr(png)
-
-    man.register_hook(inner_qrevent())
-    yield man
-
-
 @pytest_asyncio.fixture(scope="module")
 async def api(sess: Session, man: MixedLoginMan):
     yield DummyQapi(sess, man)
-
-
-def showqr(png: bytes):
-    import cv2 as cv
-    import numpy as np
-
-    def frombytes(b: bytes, dtype="uint8", flags=cv.IMREAD_COLOR) -> np.ndarray:
-        return cv.imdecode(np.frombuffer(b, dtype=dtype), flags=flags)
-
-    cv.destroyAllWindows()
-    cv.imshow("Scan and login", frombytes(png))
-    cv.waitKey()
 
 
 class TestDummy:
@@ -97,11 +53,11 @@ class TestDummy:
     async def test_detail(self, api: DummyQapi, storage: list[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
-        f: FeedRep | None = first(storage, lambda f: f.appid == 311)
-        if f is None:
-            pytest.skip("No 311 feed in storage.")
-        assert f
-        assert await api.emotion_msgdetail(f.uin, f.fid)
+        for f in storage:
+            try:
+                assert await api.emotion_msgdetail(f.uin, f.fid)
+            except QzoneError as e:
+                continue
 
     async def test_heartbeat(self, api: DummyQapi):
         try:

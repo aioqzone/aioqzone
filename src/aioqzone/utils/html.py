@@ -42,11 +42,11 @@ class HtmlInfo(BaseModel):
         toggle = safe(root.cssselect('div.f-info a[data-cmd="qz_toggle"]'))
 
         return root, cls(
-            feedstype=elm_fd.get("data-feedstype"),
-            topicid=elm_fd.get("data-topicid"),
+            feedstype=elm_fd.get("data-feedstype", None),
+            topicid=elm_fd.get("data-topicid", None),
             complete=not len(toggle),
-            unikey=likebtn.get("data-unikey"),
-            curkey=likebtn.get("data-curkey"),
+            unikey=likebtn.get("data-unikey", None),
+            curkey=likebtn.get("data-curkey", None),
             islike=likebtn.get("data-islike", 0),
         )
 
@@ -75,9 +75,9 @@ class HtmlContent(BaseModel):
                 return cast(HttpUrl, m.group(1).replace("\\", ""))
 
             if "onload" in o.attrib:
-                logger.warning("cannot parse @onload: " + o.get("onload"))
+                logger.warning("cannot parse @onload: " + o.get("onload", ""))
             elif "src" in o.attrib:
-                logger.warning("cannot parse @src: " + o.get("src"))
+                logger.warning("cannot parse @src: " + o.get("src", ""))
             else:
                 logger.warning(f"WTF is this? {dict(o.attrib)}")
 
@@ -89,15 +89,20 @@ class HtmlContent(BaseModel):
         except:
             album = None
 
-        pic = [
-            PicRep(
-                height=(data := img_data(a)).get("height", 0),
-                width=data.get("width", 0),
-                url1=src,
-                url2=src,
-                url3=src,
+        pic = []
+        for a in lia:
+            src = load_src(a)  # type: ignore
+            if not src:
+                continue
+            data = img_data(a)
+            pic.append(
+                PicRep(
+                    height=data.get("height", 0),
+                    width=data.get("width", 0),
+                    url1=src,
+                    url2=src,
+                    url3=src,
+                )
             )
-            for a in lia
-            if (src := load_src(a))  # type: ignore
-        ]
+
         return cls(content=finfo.text_content(), pic=pic, album=album)

@@ -84,7 +84,8 @@ class TestVM:
     pytestmark = pytest.mark.asyncio
 
     async def testGetInfo(self, vm: VM):
-        assert (d := await vm.getInfo())
+        d = await vm.getInfo()
+        assert d
         assert d["info"]
 
     async def testCollectData(self, vm: VM):
@@ -94,7 +95,8 @@ class TestVM:
             {"trycnt": 1, "refreshcnt": 0, "slideValue": Captcha.imitateDrag(230), "dragobj": 1}
         )
         vm.setData({"ft": "qf_7P_n_H"})
-        assert (d := await vm.getData())
+        d = await vm.getData()
+        assert d
         assert len(d) > 200
 
     async def testGetCookie(self, vm: VM):

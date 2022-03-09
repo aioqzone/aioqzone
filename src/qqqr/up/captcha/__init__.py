@@ -2,6 +2,8 @@ import asyncio
 import base64
 import json
 from math import floor
+from random import choice
+from random import choices
 from random import randint
 from random import random
 import re
@@ -270,12 +272,13 @@ class Captcha:
         t = randint(1200, 1300)
         n = randint(50, 65)
         X = lambda i: randint(1, max(2, i // 10)) if i < n - 15 else randint(6, 12)
-        Y = lambda: -1 if (r := random()) < 0.1 else 1 if r < 0.2 else 0
-        T = lambda: randint(65, 280) if (r := random()) < 0.05 else randint(6, 10)
+        Y = lambda: choices([-1, 1, 0], cum_weights=[0.1, 0.2, 1], k=1)[0]
+        T = lambda: randint(*choices(((65, 280), (6, 10)), cum_weights=(0.05, 1), k=1)[0])
         xs = ts = 0
         drag = []
         for i in range(n):
-            drag.append([xi := X(i), Y(), ti := T()])
+            xi, ti = X(i), T()
+            drag.append([xi, Y(), ti])
             xs += xi
             ts += ti
         drag.append([max(1, x - xs), Y(), max(1, t - ts)])
@@ -304,7 +307,8 @@ class Captcha:
         ~~~
         """
         s = ScriptHelper(self.appid, self.sid, self.subsid)
-        s.parseCaptchaConf(iframe := await self.iframe())
+        iframe = await self.iframe()
+        s.parseCaptchaConf(iframe)
         Ians, duration = await self.matchMd5(iframe, s.conf["powCfg"])
         await self.getTdx(iframe)
 
@@ -323,7 +327,7 @@ class Captcha:
             }
         )
         self.vm.setData({"ft": "qf_7P_n_H"})
-
+        collect = await self.vm.getData()
         data = {
             "aid": self.appid,
             "protocol": "https",
@@ -357,7 +361,7 @@ class Captcha:
             "pow_answer": hex_add(s.conf["powCfg"]["prefix"], Ians) if Ians else Ians,
             "pow_calc_time": duration,
             "eks": (await self.vm.getInfo())["info"],
-            "tlg": len(collect := await self.vm.getData()),
+            "tlg": len(collect),
             s.conf["collectdata"]: collect,
             # TODO: unknown
             # 'vData': 'gC*KM-*rjuHBcUjIt9kL6SV6JGdgfzMmP0BiFcaDg_7ctHwCjeoz4quIjb2FTgdJLBeCcKCZB_Mv7suXumolfmpSKZVIp7Un2N3b*fbwHX9aqRgjp5fmsgkf6aOgnhU_ttr_4xJZKVjStGX*hMwgBeHE_zuz-iDKy1coGdurLh559T6MoBdJdMAxtIlGJxAexbt6eDz3Aw5pD_tR01ElO7YY',

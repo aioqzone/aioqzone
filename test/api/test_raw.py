@@ -7,7 +7,6 @@ import pytest_asyncio
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
 from aioqzone.exception import LoginError
-from aioqzone.interface.hook import QREvent
 from aioqzone.type import LikeData
 from aioqzone.utils.html import HtmlContent
 from aioqzone.utils.html import HtmlInfo
@@ -20,53 +19,9 @@ def storage():
     return []
 
 
-@pytest.fixture(scope="module")
-def event_loop():
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
-
-
-@pytest_asyncio.fixture(scope="module")
-async def sess():
-    async with Session() as sess:
-        yield sess
-
-
-@pytest_asyncio.fixture(scope="module")
-async def man(sess: Session):
-    from os import environ as env
-
-    man = MixedLoginMan(
-        sess,
-        int(env["TEST_UIN"]),
-        env.get("TEST_QRSTRATEGY", "forbid"),  # forbid QR by default.
-        pwd=env.get("TEST_PASSWORD", None),
-    )
-
-    class inner_qrevent(QREvent):
-        async def QrFetched(self, png: bytes):
-            showqr(png)
-
-    man.register_hook(inner_qrevent())
-    yield man
-
-
 @pytest_asyncio.fixture(scope="module")
 async def api(sess: Session, man: MixedLoginMan):
     yield QzoneApi(sess, man)
-
-
-def showqr(png: bytes):
-    import cv2 as cv
-    import numpy as np
-
-    def frombytes(b: bytes, dtype="uint8", flags=cv.IMREAD_COLOR) -> np.ndarray:
-        return cv.imdecode(np.frombuffer(b, dtype=dtype), flags=flags)
-
-    cv.destroyAllWindows()
-    cv.imshow("Scan and login", frombytes(png))
-    cv.waitKey()
 
 
 class TestRaw:

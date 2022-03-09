@@ -1,5 +1,6 @@
 .vscode
 .env
+.venv
 
 *.pyc
 *.egg-info
@@ -7,5 +8,6 @@ tmp
 archive
 
 /dist
+/build
 /doc/*
 !/doc/source

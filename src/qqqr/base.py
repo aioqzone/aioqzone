@@ -1,6 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 import ssl
+from typing import Optional
 from urllib.parse import urlencode
 
 from aiohttp import ClientSession as Session
@@ -36,7 +37,7 @@ def ssl_context():
 class LoginBase(ABC):
     login_sig: str = ""
 
-    def __init__(self, sess: Session, app: APPID, proxy: Proxy, info: PT_QR_APP = None) -> None:
+    def __init__(self, sess: Session, app: APPID, proxy: Proxy, info: Optional[PT_QR_APP] = None):
         self.app = app
         self.proxy = proxy
         self.info = info if info else PT_QR_APP()
