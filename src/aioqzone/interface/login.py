@@ -51,6 +51,7 @@ class Loginable(ABC, Emittable[LoginEvent]):
         Returns:
             int: gtk. NOTE: 0 denotes no-login.
         """
-        if (pskey := self.cookie.get("p_skey")) is None:
+        pskey = self.cookie.get("p_skey")
+        if pskey is None:
             return 0
         return gtk(pskey)

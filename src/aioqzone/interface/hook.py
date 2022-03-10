@@ -83,7 +83,8 @@ class Emittable(Generic[Evt]):
         :param cancel: Cancel the task if a set is not empty, defaults to True. Else will just clear the ref.
         """
         for i in hook_cls:
-            if (s := self._tasks[i]) and not cancel:
+            s = self._tasks[i]
+            if s and not cancel:
                 s.clear()
                 continue
             while s:

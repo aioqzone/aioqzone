@@ -436,7 +436,7 @@ class QzoneApi:
             "number": num,
             "uin": self.login.uin,
             "_": time_ms(),
-            "t": randint(1e8, 1e9 - 1)  # type: ignore
+            "t": randint(int(1e8), int(1e9 - 1))
             # The distribution is not consistent with photo.js; but the format is.
         }
 

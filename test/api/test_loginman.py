@@ -1,5 +1,6 @@
 import asyncio
 from os import environ as env
+from typing import Optional
 
 from aiohttp import ClientSession
 import pytest
@@ -10,20 +11,15 @@ from aioqzone.interface.hook import LoginEvent
 from aioqzone.interface.hook import QREvent
 from qqqr.exception import TencentLoginError
 
+from . import showqr
+
 
 class LoginEvent_Test(LoginEvent):
     async def LoginSuccess(self):
         self.login_succ = True
 
-    async def LoginFailed(self, msg: str = None):
+    async def LoginFailed(self, msg: Optional[str] = None):
         self.login_fail = msg
-
-
-@pytest.fixture(scope="module")
-def event_loop():
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
 
 
 @pytest_asyncio.fixture(scope="class")
@@ -55,18 +51,6 @@ class TestUP:
 
     def test_gtk(self, up: api.UPLoginMan):
         assert up.gtk >= 0
-
-
-def showqr(png: bytes):
-    import cv2 as cv
-    import numpy as np
-
-    def frombytes(b: bytes, dtype="uint8", flags=cv.IMREAD_COLOR) -> np.ndarray:
-        return cv.imdecode(np.frombuffer(b, dtype=dtype), flags=flags)
-
-    cv.destroyAllWindows()
-    cv.imshow("Scan and login", frombytes(png))
-    cv.waitKey()
 
 
 @pytest_asyncio.fixture(scope="class")
@@ -117,21 +101,3 @@ class TestQR:
     async def test_resend(self, qr: api.QRLoginMan):
         await qr.new_cookie()
         await qr.hook.resend()  # type: ignore
-
-
-@pytest_asyncio.fixture(scope="class")
-async def mixed():
-    async with ClientSession() as sess:
-        man = api.MixedLoginMan(
-            sess,
-            int(env["TEST_UIN"]),
-            env.get("TEST_QRSTRATEGY", "forbid"),
-            pwd=env.get("TEST_PASSWORD", None),
-        )
-
-        class inner_qrevent(QREvent, LoginEvent_Test):
-            async def QrFetched(self, png: bytes):
-                showqr(png)
-
-        man.register_hook(inner_qrevent())
-        yield man

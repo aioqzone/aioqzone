@@ -9,8 +9,10 @@ on:
       - "src/**"
       - "test/**"
       - ".github/workflows/*"
+      - "poetry.lock"
     branches:
       - dev
+      - dev/**
 
 jobs:
   test:

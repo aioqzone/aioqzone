@@ -2,7 +2,9 @@
 
 aioqzone封装了一些Qzone接口。
 
+[![black](https://img.shields.io/badge/python-3.10-blue.svg)][home]
 [![QQQR](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml)
+[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [English](README.md)
 
@@ -12,7 +14,7 @@ aioqzone封装了一些Qzone接口。
 
 - [x] 二维码登录
 - [x] 密码登录 (受限)
-- [x] 计算验证码答案 (答案正确但不能通过)
+- [ ] 计算验证码答案 (答案正确但不能通过)
 - [x] 爬取HTML说说
 - [x] 爬取说说详细内容
 - [x] 爬取空间相册
@@ -44,6 +46,14 @@ __在做了:__
 |jssupport  |执行JS            |
 |qqqr       |网页登录    |
 
+## 例子
+
+这些仓库提供了一些 aioqzone 的实际使用示例。
+
+### aioqzone 的插件们
+
+- [aioqzone-feed][aioqzone-feed]: 提供了操作 feed 的简单接口
+
 ## 许可证
 
 ```
@@ -64,3 +74,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
 
 - aioqzone 以 [AGPL-3.0](LICENSE) 开源.
+
+
+[home]: https://github.com/JamzumSum/aioqzone "Python wrapper for Qzone web login and Qzone http api"
+[aioqzone-feed]: https://github.com/JamzumSum/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
