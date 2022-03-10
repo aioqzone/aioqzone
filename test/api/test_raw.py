@@ -1,4 +1,5 @@
 import asyncio
+from typing import Optional
 
 from aiohttp import ClientSession as Session
 import pytest
@@ -116,5 +117,6 @@ class TestRaw:
         if not storage:
             pytest.xfail("storage is empty")
         r = storage[-1]
+        assert r
         _, info = HtmlInfo.from_html(r["feedinfo"])
         r = await api.emotion_delete(r["tid"], r["now"], 311, 0, info.topicid)

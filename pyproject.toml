@@ -16,7 +16,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<4.0"
+python = ">=3.7,<3.11"
 aiohttp = "^3.8.1"
 pydantic = "^1.9.0"
 pytz = "^2021.3"
