@@ -1,7 +1,7 @@
 """
 Make some easy-to-use api from basic wrappers.
 """
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from ..type import AlbumData
 from ..type import FeedDetailRep
@@ -16,7 +16,7 @@ from .raw import QzoneApi
 class DummyQapi(QzoneApi):
     async def feeds3_html_more(
         self, pagenum: int, trans: Optional[QzoneApi.FeedsMoreTransaction] = None, count: int = 10
-    ) -> tuple[List[FeedRep], FeedMoreAux]:
+    ) -> Tuple[List[FeedRep], FeedMoreAux]:
         r = await super().feeds3_html_more(pagenum, trans=trans, count=count)
         data = r["data"]
         main = r["main"]

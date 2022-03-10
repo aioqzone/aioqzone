@@ -6,7 +6,7 @@ from functools import wraps
 import logging
 from random import randint
 from random import random
-from typing import Callable, cast, Dict, List, Optional, Union
+from typing import Callable, cast, Dict, List, Optional, Tuple, Union
 from urllib.parse import parse_qs
 from urllib.parse import quote
 from urllib.parse import unquote
@@ -111,8 +111,8 @@ class QzoneApi:
         self,
         rtext: str,
         cb: bool = True,
-        errno_key: tuple[str, ...] = ("code", "err"),
-        msg_key: tuple[str, ...] = ("msg", "message"),
+        errno_key: Tuple[str, ...] = ("code", "err"),
+        msg_key: Tuple[str, ...] = ("msg", "message"),
     ) -> StrDict:
         """Deal with rtext from Qzone api response, returns parsed json dict.
         Inner used only.

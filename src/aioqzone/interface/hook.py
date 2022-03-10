@@ -4,7 +4,7 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
-from typing import Awaitable, Callable, Dict, Generic, Optional, TypeVar
+from typing import Awaitable, Callable, Dict, Generic, Optional, Tuple, TypeVar
 
 
 class Event:
@@ -51,7 +51,7 @@ class Emittable(Generic[Evt]):
         self,
         *hook_cls: str,
         timeout: Optional[float] = None,
-    ) -> tuple[set[asyncio.Task], set[asyncio.Task]]:
+    ) -> Tuple[set[asyncio.Task], set[asyncio.Task]]:
         """Wait for all task in the specific task set(s).
 
         :param timeout: timeout, defaults to None

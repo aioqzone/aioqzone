@@ -64,6 +64,7 @@ log_cli_level = 'WARNING'
 
 [tool.isort]
 profile = "google"
+line_length = 99
 
 [tool.black]
 line-length = 99

@@ -9,7 +9,7 @@ on:
       - "src/**"
       - "test/**"
       - ".github/workflows/*"
-      - "poetry.lock"
+      - "pyproject.toml"
     branches:
       - dev
       - dev/**

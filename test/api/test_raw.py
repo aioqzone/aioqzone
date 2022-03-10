@@ -1,5 +1,5 @@
 import asyncio
-from typing import Optional
+from typing import Optional, Tuple
 
 from aiohttp import ClientSession as Session
 import pytest
@@ -72,7 +72,7 @@ class TestRaw:
     async def test_like(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.xfail("storage is empty")
-        f: Optional[tuple[dict, HtmlInfo]] = first(
+        f: Optional[Tuple[dict, HtmlInfo]] = first(
             ((i, HtmlInfo.from_html(i["html"])[1]) for i in storage), lambda t: t[1].unikey
         )
         if f is None:

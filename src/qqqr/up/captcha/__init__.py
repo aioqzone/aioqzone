@@ -2,13 +2,12 @@ import asyncio
 import base64
 import json
 from math import floor
-from random import choice
 from random import choices
 from random import randint
 from random import random
 import re
 from time import time
-from typing import Any, cast, Dict, Iterable
+from typing import Any, cast, Dict, Iterable, Tuple
 from urllib.parse import unquote
 from urllib.parse import urlencode
 
@@ -252,7 +251,7 @@ class Captcha:
         self.session.cookie_jar.update_cookies({"TDC_itoken": c})
         return self.vm
 
-    async def matchMd5(self, iframe: str, powCfg: dict) -> tuple[int, int]:
+    async def matchMd5(self, iframe: str, powCfg: dict) -> Tuple[int, int]:
         if not hasattr(self, "_matchMd5"):
             blob = await self.getBlob(iframe)
             m = re.search(r",(function\(\w,\w,\w\).*?duration.*?),", blob)
@@ -285,7 +284,7 @@ class Captcha:
         drag.reverse()
         return drag
 
-    async def rio(self, urls: Iterable[str]) -> tuple[bytes, ...]:
+    async def rio(self, urls: Iterable[str]) -> Tuple[bytes, ...]:
         async def inner(url):
             async with self.session.get(url, ssl=self.ssl) as r:
                 r.raise_for_status()
