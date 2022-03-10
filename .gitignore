@@ -1,6 +1,7 @@
 .vscode
 .env
 .venv
+poetry.lock
 
 *.pyc
 *.egg-info
