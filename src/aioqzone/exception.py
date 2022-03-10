@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class QzoneError(RuntimeError):
     """HTTP OK, but Qzone returns an error code."""
 
@@ -17,7 +20,7 @@ class QzoneError(RuntimeError):
 class LoginError(RuntimeError):
     """Login failed for some reasons."""
 
-    def __init__(self, msg: str, strategy: str = None) -> None:
+    def __init__(self, msg: str, strategy: Optional[str] = None) -> None:
         msg = "登陆失败: " + msg
         super().__init__(msg, strategy)
         self.msg = msg

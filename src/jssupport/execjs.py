@@ -1,11 +1,11 @@
 import asyncio
 from collections import defaultdict
 from functools import partial
-from typing import Any, Coroutine
+from typing import Any, Coroutine, Optional
 
 
 class ExecJS:
-    def __init__(self, node: str = "node", *, js: str | None = None):
+    def __init__(self, node: str = "node", *, js: Optional[str] = None):
         self.js = js
         self.que = []
         self.node = node

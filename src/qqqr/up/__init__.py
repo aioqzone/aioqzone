@@ -3,6 +3,7 @@ from random import choice
 from random import random
 import re
 from time import time_ns
+from typing import Dict, Optional
 
 from aiohttp import ClientSession
 from multidict import istr
@@ -51,7 +52,12 @@ class UPLogin(LoginBase):
     _captcha = None
 
     def __init__(
-        self, sess: ClientSession, app: APPID, proxy: Proxy, user: User, info: PT_QR_APP = None
+        self,
+        sess: ClientSession,
+        app: APPID,
+        proxy: Proxy,
+        user: User,
+        info: Optional[PT_QR_APP] = None,
     ):
         super().__init__(sess, app, proxy, info=info)
         assert user.uin
@@ -110,7 +116,7 @@ class UPLogin(LoginBase):
         r[0] = int(r[0])
         return CheckResult(*r)
 
-    async def login(self, r: CheckResult, pastcode: int = 0) -> dict[str, str]:
+    async def login(self, r: CheckResult, pastcode: int = 0) -> Dict[str, str]:
         if r.code == StatusCode.Authenticated:
             # OK
             pass

@@ -4,7 +4,7 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
-from typing import Awaitable, Callable, Generic, TypeVar
+from typing import Awaitable, Callable, Dict, Generic, Optional, TypeVar
 
 
 class Event:
@@ -30,7 +30,7 @@ class Emittable(Generic[Evt]):
     """An object has some event to trigger."""
 
     hook: Evt = NullEvent()  # type: ignore
-    _tasks: dict[str, set[asyncio.Task]]
+    _tasks: Dict[str, set[asyncio.Task]]
     _loop: asyncio.AbstractEventLoop
 
     def __init__(self) -> None:
@@ -50,7 +50,7 @@ class Emittable(Generic[Evt]):
     async def wait(
         self,
         *hook_cls: str,
-        timeout: float | None = None,
+        timeout: Optional[float] = None,
     ) -> tuple[set[asyncio.Task], set[asyncio.Task]]:
         """Wait for all task in the specific task set(s).
 
@@ -66,14 +66,14 @@ class Emittable(Generic[Evt]):
         """
         s = set()
         for i in hook_cls:
-            s |= self._tasks[i]
+            s.update(self._tasks[i])
         if not s:
             return set(), set()
         r = await asyncio.wait(s, timeout=timeout)
         if timeout is None and any(self._tasks[i] for i in hook_cls):
             # await potential new tasks in these sets, only if no timeout.
             r2 = await Emittable.wait(self, *hook_cls)
-            return r[0] | r2[0], set()
+            return set(*r[0], *r2[0]), set()
         return r
 
     def clear(self, *hook_cls: str, cancel: bool = True):
@@ -95,7 +95,7 @@ class Emittable(Generic[Evt]):
 class LoginEvent(Event):
     """Defines usual events happens during login."""
 
-    async def LoginFailed(self, msg: str | None = None):
+    async def LoginFailed(self, msg: Optional[str] = None):
         """Will be emitted on login failed.
 
         .. note::
@@ -114,8 +114,8 @@ class LoginEvent(Event):
 class QREvent(LoginEvent):
     """Defines usual events happens during QR login."""
 
-    cancel: Callable[[], Awaitable[None]] | None
-    resend: Callable[[], Awaitable[None]] | None
+    cancel: Optional[Callable[[], Awaitable[None]]]
+    resend: Optional[Callable[[], Awaitable[None]]]
 
     async def QrFetched(self, png: bytes, renew: bool = False):
         """Will be called on new QR code bytes are fetched. Means this will be triggered on:
@@ -132,7 +132,7 @@ class QREvent(LoginEvent):
         """
         pass
 
-    async def QrFailed(self, msg: str | None = None):
+    async def QrFailed(self, msg: Optional[str] = None):
         """QR login failed.
 
         .. note: This event should always be called before :meth:`.LoginEvent.LoginFailed`.

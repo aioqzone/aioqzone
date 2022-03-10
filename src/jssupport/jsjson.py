@@ -2,14 +2,14 @@ import ast
 import json
 import logging
 from textwrap import dedent
-from typing import Callable
+from typing import Callable, Dict, List, Union
 
 from .execjs import ExecJS
 
 logger = logging.getLogger(__name__)
-JsonDict = dict[str | int, "JsonValue"]
-JsonList = list["JsonValue"]
-JsonValue = bool | int | str | JsonDict | JsonList
+JsonDict = Dict[Union[str, int], "JsonValue"]
+JsonList = List["JsonValue"]
+JsonValue = Union[bool, int, str, JsonDict, JsonList]
 
 
 class NodeLoader:
@@ -45,16 +45,17 @@ class NodeLoader:
 
 class AstLoader:
     class RewriteUndef(ast.NodeTransformer):
+        const = {
+            "undefined": ast.Constant(value=None),
+            "null": ast.Constant(value=None),
+            "true": ast.Constant(value=True),
+            "false": ast.Constant(value=False),
+        }
+
         def visit_Name(self, node: ast.Name):
-            match node.id:
-                case "undefined" | "null":
-                    return ast.Constant(value=None)
-                case "true":
-                    return ast.Constant(value=True)
-                case "false":
-                    return ast.Constant(value=False)
-                case _:
-                    return ast.Str(s=node.id)
+            if node.id in self.const:
+                return self.const[node.id]
+            return ast.Str(s=node.id)
 
         def visit_Constant(self, node: ast.Constant) -> ast.Constant:
             if not isinstance(node.value, str):

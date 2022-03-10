@@ -1,7 +1,7 @@
 import asyncio
 from random import random
 import re
-from typing import Awaitable, Callable
+from typing import Awaitable, Callable, Dict, Optional
 
 from ..base import LoginBase
 from ..constants import StatusCode
@@ -79,10 +79,10 @@ class QRLogin(LoginBase):
     def loop(
         self,
         send_callback: Callable[[bytes], Awaitable[None]],
-        expire_callback: Callable[[bytes], Awaitable[None]] = None,
+        expire_callback: Optional[Callable[[bytes], Awaitable[None]]] = None,
         refresh_time: int = 6,
         polling_freq: float = 3,
-    ) -> asyncio.Task[dict[str, str]]:
+    ) -> asyncio.Task[Dict[str, str]]:
         expire_callback = expire_callback or send_callback
 
         async def innerloop():

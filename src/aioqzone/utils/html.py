@@ -3,12 +3,14 @@ Use this module to get some data from Qzone html feed
 """
 import logging
 import re
-from typing import cast, Iterable
+from typing import cast, Iterable, List, Optional, Union
 
 from lxml.html import fromstring
 from lxml.html import HtmlElement
 from pydantic import BaseModel
 from pydantic import HttpUrl
+
+from aioqzone.utils.daug import di
 
 from ..type import AlbumData
 from ..type import PicRep
@@ -22,8 +24,8 @@ class HtmlInfo(BaseModel):
     feedstype: int
     topicid: str
     complete: bool
-    unikey: HttpUrl | str | None = None
-    curkey: HttpUrl | str | None = None
+    unikey: Optional[Union[HttpUrl, str]] = None
+    curkey: Optional[Union[HttpUrl, str]] = None
     islike: int = 0
 
     @classmethod
@@ -53,17 +55,17 @@ class HtmlInfo(BaseModel):
 
 class HtmlContent(BaseModel):
     content: str = ""
-    pic: list[PicRep] | None = None
-    album: AlbumData | None = None
+    pic: Optional[List[PicRep]] = None
+    album: Optional[AlbumData] = None
 
     @classmethod
-    def from_html(cls, html: HtmlElement | str, hostuin: int = 0):
+    def from_html(cls, html: Union[HtmlElement, str], hostuin: int = 0):
         root: HtmlElement = fromstring(html) if isinstance(html, str) else html
         mxsafe = lambda i: max(i, key=len) if i else HtmlElement()
         img_data = lambda a: {k[5:]: v for k, v in a.attrib.items() if k.startswith("data-")}
 
-        def load_src(a: Iterable[HtmlElement]) -> HttpUrl | None:
-            o: HtmlElement | None = next(filter(lambda i: i.tag == "img", a), None)
+        def load_src(a: Iterable[HtmlElement]) -> Optional[HttpUrl]:
+            o: Optional[HtmlElement] = next(filter(lambda i: i.tag == "img", a), None)
             if o is None:
                 return
             src: str = o.get("src", "")
@@ -82,10 +84,10 @@ class HtmlContent(BaseModel):
                 logger.warning(f"WTF is this? {dict(o.attrib)}")
 
         finfo = mxsafe(root.cssselect("div.f-info"))
-        lia: list[HtmlElement] = root.cssselect("div.f-ct a.img-item")
+        lia: List[HtmlElement] = root.cssselect("div.f-ct a.img-item")
 
         try:
-            album = AlbumData.parse_obj(img_data(lia[0]) | {"hostuin": hostuin})
+            album = AlbumData.parse_obj(di(img_data(lia[0]), hostuin=hostuin))
         except:
             album = None
 

@@ -42,7 +42,7 @@ class TestRaw:
     async def test_complete(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.xfail("storage is empty")
-        f: dict | None = first(storage, None)
+        f: Optional[dict] = first(storage, None)
         assert f
         _, info = HtmlInfo.from_html(f["html"])
         d = await api.emotion_getcomments(f["uin"], f["key"], info.feedstype)
@@ -51,7 +51,7 @@ class TestRaw:
     async def test_detail(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.xfail("storage is empty")
-        f: dict | None = first(storage, lambda f: int(f["appid"]) == 311)
+        f: Optional[dict] = first(storage, lambda f: int(f["appid"]) == 311)
         if f is None:
             pytest.skip("No 311 feed in storage.")
         assert f
@@ -71,7 +71,7 @@ class TestRaw:
     async def test_like(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.xfail("storage is empty")
-        f: tuple[dict, HtmlInfo] | None = first(
+        f: Optional[tuple[dict, HtmlInfo]] = first(
             ((i, HtmlInfo.from_html(i["html"])[1]) for i in storage), lambda t: t[1].unikey
         )
         if f is None:
@@ -93,7 +93,7 @@ class TestRaw:
     async def test_photo_list(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.xfail("storage is empty")
-        f: HtmlContent | None = first(
+        f: Optional[HtmlContent] = first(
             (HtmlContent.from_html(i["html"], i["uin"]) for i in storage), lambda t: t.pic
         )
         if f is None:

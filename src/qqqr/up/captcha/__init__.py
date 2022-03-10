@@ -8,7 +8,7 @@ from random import randint
 from random import random
 import re
 from time import time
-from typing import Any, cast, Iterable, Mapping
+from typing import Any, cast, Dict, Iterable
 from urllib.parse import unquote
 from urllib.parse import urlencode
 
@@ -46,7 +46,7 @@ class ScriptHelper:
         m = re.search(r"window\.captchaConfig=(\{.*\});", iframe)
         assert m
         ijson = m.group(1)
-        self.conf: dict[str, Any] = json_loads(ijson)  # type: ignore
+        self.conf: Dict[str, Any] = json_loads(ijson)  # type: ignore
 
     def cdn(self, cdn: int) -> str:
         assert cdn in (0, 1, 2)
@@ -262,7 +262,7 @@ class Captcha:
             blob += "function matchMd5(p, m){return n.getWorkloadResult({nonce:p,target:m})}"
             self._matchMd5 = ExecJS(js=blob).bind("matchMd5")
         d = await self._matchMd5(powCfg["prefix"], powCfg["md5"])
-        d = cast(dict[str, int], json_loads(d.strip("\n")))
+        d = cast(Dict[str, int], json_loads(d.strip("\n")))
         return int(d["ans"]), int(d["duration"])
 
     @staticmethod

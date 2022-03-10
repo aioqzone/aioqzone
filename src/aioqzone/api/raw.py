@@ -6,7 +6,7 @@ from functools import wraps
 import logging
 from random import randint
 from random import random
-from typing import Callable, cast
+from typing import Callable, cast, Dict, List, Optional, Union
 from urllib.parse import parse_qs
 from urllib.parse import quote
 from urllib.parse import unquote
@@ -16,6 +16,7 @@ from aiohttp.client_exceptions import ClientResponseError
 from multidict import istr
 
 import aioqzone.api.constant as const
+from aioqzone.utils.daug import ud
 from jssupport.jsjson import json_loads
 from jssupport.jsjson import JsonValue
 from qqqr.base import UA
@@ -30,7 +31,7 @@ from ..utils.time import time_ms
 
 logger = logging.getLogger(__name__)
 
-StrDict = dict[str, JsonValue]
+StrDict = Dict[str, JsonValue]
 
 
 class QzoneApi:
@@ -56,19 +57,19 @@ class QzoneApi:
             raise QzoneError(-3000)
         return gtk
 
-    async def aget(self, url: str, params: dict[str, str] | None = None):
+    async def aget(self, url: str, params: Optional[Dict[str, str]] = None):
         params = params or {}
-        params = params | {"g_tk": str(await self._get_gtk())}
+        params = ud(params, {"g_tk": str(await self._get_gtk())})
         self.sess.headers.update(
             {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
         )
         return self.sess.get(self.host + url, params=params)
 
     async def apost(
-        self, url: str, params: dict[str, str] | None = None, data: dict | None = None
+        self, url: str, params: Optional[Dict[str, str]] = None, data: Optional[dict] = None
     ):
         params = params or {}
-        params = params | {"g_tk": str(await self._get_gtk())}
+        params = ud(params, {"g_tk": str(await self._get_gtk())})
         self.sess.headers.update(
             {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
         )
@@ -151,7 +152,7 @@ class QzoneApi:
     class FeedsMoreTransaction:
         """Represents a feeds3_html_more transaction."""
 
-        def __init__(self, default: dict[int, str] | None = None) -> None:
+        def __init__(self, default: Optional[Dict[int, str]] = None) -> None:
             self.extern = default or {}
 
         def parse(self, page: int):
@@ -161,7 +162,7 @@ class QzoneApi:
             return {k: v[-1] for k, v in parse_qs(unquoted, keep_blank_values=True).items()}
 
     async def feeds3_html_more(
-        self, pagenum: int, trans: FeedsMoreTransaction | None = None, count: int = 10
+        self, pagenum: int, trans: Optional[FeedsMoreTransaction] = None, count: int = 10
     ) -> StrDict:
         """return a list of dict, each dict reps a page of feeds.
 
@@ -214,7 +215,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.feeds3_html_more, default | query) as r:
+            async with await self.aget(const.feeds3_html_more, ud(default, query)) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
@@ -262,7 +263,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_getcomments, data=default | body) as r:
+            async with await self.apost(const.emotion_getcomments, data=ud(default, body)) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
             return self._rtext_handler(rtext)
@@ -300,7 +301,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.emotion_msgdetail, params=default | query) as r:
+            async with await self.aget(const.emotion_msgdetail, params=ud(default, query)) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
@@ -308,7 +309,7 @@ class QzoneApi:
 
         return await retry_closure()
 
-    async def get_feeds_count(self) -> dict[str, int | list]:
+    async def get_feeds_count(self) -> Dict[str, Union[int, list]]:
         """Get feeds update count (new feeds, new photos, new comments, etc)
 
         :raises `aiohttp.ClientResponseError`: error http response code
@@ -371,7 +372,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(url, data=default | body) as r:
+            async with await self.apost(url, data=ud(default, body)) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
             return self._rtext_handler(rtext, errno_key=("code", "ret"))
@@ -442,7 +443,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.floatview_photo_list, default | query) as r:
+            async with await self.aget(const.floatview_photo_list, ud(default, query)) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext)
@@ -457,7 +458,7 @@ class QzoneApi:
         uin: int,
         num: int = 20,
         pos: int = 0,
-    ) -> list[StrDict]:
+    ) -> List[StrDict]:
         """Get msg(feed?) list of a user.
 
         :param uin: uin
@@ -496,7 +497,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.emotion_msglist, param | add if pos else param) as r:
+            async with await self.aget(
+                const.emotion_msglist, ud(param, add) if pos else param
+            ) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext)
@@ -545,7 +548,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_publish, data=default | body) as r:
+            async with await self.apost(const.emotion_publish, data=ud(default, body)) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext)
@@ -553,7 +556,13 @@ class QzoneApi:
         return await retry_closure()
 
     async def emotion_delete(
-        self, fid: str, abstime: int, appid: int, typeid: int, topicId: str, uin: int | None = None
+        self,
+        fid: str,
+        abstime: int,
+        appid: int,
+        typeid: int,
+        topicId: str,
+        uin: Optional[int] = None,
     ) -> StrDict:
         """Delete a feed.
 
@@ -596,7 +605,7 @@ class QzoneApi:
 
         return await retry_closure()
 
-    async def emotion_update(self, fid: str, content: str, uin: int | None = None) -> StrDict:
+    async def emotion_update(self, fid: str, content: str, uin: Optional[int] = None) -> StrDict:
         """Update content of a feed.
 
         :param fid: feed id, named feedkey, tid, etc.
@@ -640,7 +649,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_update, data=default | body) as r:
+            async with await self.apost(const.emotion_update, data=ud(default, body)) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext)

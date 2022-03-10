@@ -1,7 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 import ssl
-from typing import Optional
+from typing import Dict, Optional
 from urllib.parse import urlencode
 
 from aiohttp import ClientSession as Session
@@ -82,7 +82,7 @@ class LoginBase(ABC):
         return self
 
     @abstractmethod
-    async def login(self, *args, **kwds) -> dict[str, str]:
+    async def login(self, *args, **kwds) -> Dict[str, str]:
         pass
 
     async def ja3Detect(self) -> dict:

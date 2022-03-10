@@ -1,6 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 import asyncio
+from typing import Dict
 
 from qqqr.encrypt import gtk
 
@@ -16,7 +17,7 @@ class Loginable(ABC, Emittable[LoginEvent]):
         self.lock = asyncio.Lock()
 
     @property
-    def cookie(self) -> dict[str, str]:  # type: ignore
+    def cookie(self) -> Dict[str, str]:  # type: ignore
         """Get cookie in any way. Allow cached result.
 
         Returns:
@@ -25,7 +26,7 @@ class Loginable(ABC, Emittable[LoginEvent]):
         return self._cookie
 
     @abstractmethod
-    async def _new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> Dict[str, str]:
         return
 
     async def new_cookie(self):
