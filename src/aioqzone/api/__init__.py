@@ -3,13 +3,15 @@ Make some easy-to-use api from basic wrappers.
 """
 from typing import List, Optional, Tuple
 
-from ..type import AlbumData
-from ..type import FeedDetailRep
-from ..type import FeedMoreAux
-from ..type import FeedRep
-from ..type import FeedsCount
-from ..type import FloatViewPhoto
-from ..type import MsgListElm
+from ..type import (
+    AlbumData,
+    FeedDetailRep,
+    FeedMoreAux,
+    FeedRep,
+    FeedsCount,
+    FloatViewPhoto,
+    MsgListElm,
+)
 from .raw import QzoneApi
 
 

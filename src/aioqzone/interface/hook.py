@@ -4,7 +4,18 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
-from typing import Awaitable, Callable, Dict, Generic, Optional, Set, Tuple, TypeVar
+from typing import (
+    Any,
+    Awaitable,
+    Callable,
+    Coroutine,
+    Dict,
+    Generic,
+    Optional,
+    Set,
+    Tuple,
+    TypeVar,
+)
 
 
 class Event:
@@ -41,7 +52,9 @@ class Emittable(Generic[Evt]):
         assert not isinstance(hook, NullEvent)
         self.hook = hook
 
-    def add_hook_ref(self, hook_cls: str, coro: Awaitable[T]) -> asyncio.Task[T]:
+    def add_hook_ref(self, hook_cls, coro):
+        # type: (str, Coroutine[Any, Any, T]) -> asyncio.Task[T]
+        # NOTE: asyncio.Task becomes generic since py39
         task = self._loop.create_task(coro)  # type: ignore
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))

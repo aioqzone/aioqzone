@@ -2,14 +2,11 @@
 Basic wrapper of Qzone HTTP interface.
 """
 
-from functools import wraps
 import logging
-from random import randint
-from random import random
-from typing import Callable, cast, Dict, List, Optional, Tuple, Union
-from urllib.parse import parse_qs
-from urllib.parse import quote
-from urllib.parse import unquote
+from functools import wraps
+from random import randint, random
+from typing import Callable, Dict, List, Optional, Tuple, Union, cast
+from urllib.parse import parse_qs, quote, unquote
 
 from aiohttp import ClientSession as Session
 from aiohttp.client_exceptions import ClientResponseError
@@ -17,15 +14,13 @@ from multidict import istr
 
 import aioqzone.api.constant as const
 from aioqzone.utils.daug import ud
-from jssupport.jsjson import json_loads
-from jssupport.jsjson import JsonValue
+from jssupport.jsjson import JsonValue, json_loads
 from qqqr.base import UA
+from qqqr.utils import raise_for_status
 
-from ..exception import CorruptError
-from ..exception import QzoneError
+from ..exception import CorruptError, QzoneError
 from ..interface.login import Loginable
-from ..type import AlbumData
-from ..type import LikeData
+from ..type import AlbumData, LikeData
 from ..utils.regex import response_callback
 from ..utils.time import time_ms
 
@@ -563,7 +558,7 @@ class QzoneApi:
         typeid: int,
         topicId: str,
         uin: Optional[int] = None,
-    ) -> StrDict:
+    ) -> Optional[StrDict]:
         """Delete a feed.
 
         :param fid: feed id, named tid, feedkey, etc.
@@ -599,7 +594,10 @@ class QzoneApi:
         @self._relogin_retry
         async def retry_closure():
             async with await self.apost(const.emotion_delete, data=body) as r:
-                r.raise_for_status()
+                # upstream error: qzone server returns 503, but the feed operation is done.
+                raise_for_status(r, 200, 503)
+                if r.status == 503:
+                    return
                 rtext = await r.text()
             return self._rtext_handler(rtext)
 

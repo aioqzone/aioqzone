@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.3.1.dev1"
+version = "0.3.2b1"
 description = "Python wrapper for Qzone web login and Qzone http api."
 authors = ["JamzumSum <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -24,6 +24,12 @@ lxml = "^4.8.0"
 cssselect = "^1.1.0"
 opencv-python-headless = { version = "^4.5.5", markers = "sys_platform == 'linux'" }
 opencv-python = { version = "^4.5.5", markers = "sys_platform != 'linux'" }
+# extras: dev
+tox = {version = "^3.24.5", optional = true}
+pre-commit = {version = "^2.17.0", optional = true}
+black = {version = "^22.1.0", optional = true}
+isort = {version = "^5.10.1", optional = true}
+# extras: doc
 Sphinx = {version = "^4.4.0", optional = true}
 autodoc-pydantic = {version = "^1.6.1", optional = true}
 sphinx-autodoc-typehints = {version = "^1.17.0", optional = true}
@@ -32,11 +38,14 @@ sphinx-rtd-theme = {version = "^1.0.0", optional = true}
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.1"
 pytest-asyncio = "^0.18.2"
-pre-commit = "^2.17.0"
-black = "^22.1.0"
-isort = "^5.10.1"
 
 [tool.poetry.extras]
+dev = [
+    "tox",
+    "pre-commit",
+    "black",
+    "isort"
+]
 doc = [
     "Sphinx",
     "autodoc-pydantic",
@@ -63,7 +72,7 @@ log_cli_level = 'WARNING'
 
 
 [tool.isort]
-profile = "google"
+profile = "black"
 line_length = 99
 
 [tool.black]

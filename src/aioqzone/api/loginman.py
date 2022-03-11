@@ -8,13 +8,10 @@ from typing import Dict, List, Optional, Type
 
 from aiohttp import ClientSession
 
-from qqqr.constants import QzoneAppid
-from qqqr.constants import QzoneProxy
-from qqqr.exception import TencentLoginError
-from qqqr.exception import UserBreak
+from qqqr.constants import QzoneAppid, QzoneProxy
+from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QRLogin
-from qqqr.up import UPLogin
-from qqqr.up import User
+from qqqr.up import UPLogin, User
 
 from ..exception import LoginError
 from ..interface.hook import QREvent

@@ -1,7 +1,6 @@
 from typing import List, Optional, Union
 
-from pydantic import BaseModel
-from pydantic import Field
+from pydantic import BaseModel, Field
 from pydantic.networks import HttpUrl
 
 

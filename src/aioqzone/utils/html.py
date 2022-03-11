@@ -3,17 +3,14 @@ Use this module to get some data from Qzone html feed
 """
 import logging
 import re
-from typing import cast, Iterable, List, Optional, Union
+from typing import Iterable, List, Optional, Union, cast
 
-from lxml.html import fromstring
-from lxml.html import HtmlElement
-from pydantic import BaseModel
-from pydantic import HttpUrl
+from lxml.html import HtmlElement, fromstring
+from pydantic import BaseModel, HttpUrl
 
 from aioqzone.utils.daug import di
 
-from ..type import AlbumData
-from ..type import PicRep
+from ..type import AlbumData, PicRep
 
 logger = logging.getLogger(__name__)
 

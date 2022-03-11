@@ -2,13 +2,12 @@ import asyncio
 from os import environ as env
 from typing import Optional
 
-from aiohttp import ClientSession
 import pytest
 import pytest_asyncio
+from aiohttp import ClientSession
 
 import aioqzone.api.loginman as api
-from aioqzone.interface.hook import LoginEvent
-from aioqzone.interface.hook import QREvent
+from aioqzone.interface.hook import LoginEvent, QREvent
 from qqqr.exception import TencentLoginError
 
 from . import showqr

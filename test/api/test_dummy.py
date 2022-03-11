@@ -1,14 +1,13 @@
 import asyncio
 from typing import List, Optional
 
-from aiohttp import ClientSession as Session
 import pytest
 import pytest_asyncio
+from aiohttp import ClientSession as Session
 
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
-from aioqzone.exception import LoginError
-from aioqzone.exception import QzoneError
+from aioqzone.exception import LoginError, QzoneError
 from aioqzone.type import FeedRep
 from aioqzone.utils.html import HtmlContent
 

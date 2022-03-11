@@ -1,19 +1,15 @@
 import asyncio
 import base64
 import json
-from math import floor
-from random import choices
-from random import randint
-from random import random
 import re
+from math import floor
+from random import choices, randint, random
 from time import time
-from typing import Any, cast, Dict, Iterable, Tuple
-from urllib.parse import unquote
-from urllib.parse import urlencode
+from typing import Any, Dict, Iterable, Tuple, cast
+from urllib.parse import unquote, urlencode
 
 from aiohttp import ClientSession as Session
-from multidict import istr
-from multidict import MutableMultiMapping
+from multidict import MutableMultiMapping, istr
 from yarl import URL
 
 from jssupport.execjs import ExecJS

@@ -1,12 +1,10 @@
-from abc import ABC
-from abc import abstractmethod
 import asyncio
+from abc import ABC, abstractmethod
 from typing import Dict
 
 from qqqr.encrypt import gtk
 
-from ..interface.hook import Emittable
-from ..interface.hook import LoginEvent
+from ..interface.hook import Emittable, LoginEvent
 
 
 class Loginable(ABC, Emittable[LoginEvent]):

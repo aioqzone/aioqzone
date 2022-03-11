@@ -4,8 +4,7 @@ date: 2021-07-20
 
 from enum import IntEnum
 
-from .type import APPID
-from .type import Proxy
+from .type import APPID, Proxy
 
 QzoneProxy = Proxy(
     "https://qzs.qq.com/qzone/v6/portal/proxy.html",

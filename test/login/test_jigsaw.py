@@ -1,11 +1,10 @@
-from math import floor
 import os
+from math import floor
 
 import cv2 as cv
 import pytest
 
-from qqqr.up.captcha.jigsaw import Jigsaw
-from qqqr.up.captcha.jigsaw import Piece
+from qqqr.up.captcha.jigsaw import Jigsaw, Piece
 
 pytestmark = pytest.mark.needuser
 

@@ -2,17 +2,13 @@ import asyncio
 from math import floor
 from os import environ as env
 
-from aiohttp import ClientSession
 import pytest
 import pytest_asyncio
+from aiohttp import ClientSession
 
-from qqqr.constants import QzoneAppid
-from qqqr.constants import QzoneProxy
-from qqqr.up import UPLogin
-from qqqr.up import User
-from qqqr.up.captcha import Captcha
-from qqqr.up.captcha import ScriptHelper
-from qqqr.up.captcha import VM
+from qqqr.constants import QzoneAppid, QzoneProxy
+from qqqr.up import UPLogin, User
+from qqqr.up.captcha import VM, Captcha, ScriptHelper
 from qqqr.up.captcha.jigsaw import Jigsaw
 
 

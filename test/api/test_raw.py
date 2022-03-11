@@ -1,16 +1,15 @@
 import asyncio
 from typing import Optional, Tuple
 
-from aiohttp import ClientSession as Session
 import pytest
 import pytest_asyncio
+from aiohttp import ClientSession as Session
 
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
 from aioqzone.exception import LoginError
 from aioqzone.type import LikeData
-from aioqzone.utils.html import HtmlContent
-from aioqzone.utils.html import HtmlInfo
+from aioqzone.utils.html import HtmlContent, HtmlInfo
 
 first = lambda it, pred: next(filter(pred, it), None)
 
@@ -103,6 +102,7 @@ class TestRaw:
         assert f.album
         await api.floatview_photo_list(f.album, 10)
 
+    @pytest.mark.upstream
     async def test_publish(self, api: QzoneApi, storage: list):
         try:
             r = await api.emotion_publish("Test")
@@ -113,10 +113,12 @@ class TestRaw:
         storage.clear()
         storage.append(r)
 
+    @pytest.mark.upstream
     async def test_delete(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.xfail("storage is empty")
         r = storage[-1]
-        assert r
+        if not r:
+            pytest.xfail("storage is empty")
         _, info = HtmlInfo.from_html(r["feedinfo"])
         r = await api.emotion_delete(r["tid"], r["now"], 311, 0, info.topicid)
