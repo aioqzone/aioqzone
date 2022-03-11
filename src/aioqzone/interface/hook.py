@@ -148,7 +148,7 @@ class QREvent(LoginEvent):
     async def QrFailed(self, msg: Optional[str] = None):
         """QR login failed.
 
-        .. note: This event should always be called before :meth:`.LoginEvent.LoginFailed`.
+        .. note:: This event should always be called before :meth:`.LoginEvent.LoginFailed`.
 
         :param msg: Error msg, defaults to None.
         """

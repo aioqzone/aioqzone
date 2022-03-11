@@ -1,6 +1,7 @@
 import ast
 import json
 import logging
+from platform import python_version_tuple
 from textwrap import dedent
 from typing import Callable, Dict, List, Union
 
@@ -45,6 +46,11 @@ class NodeLoader:
 
 class AstLoader:
     class RewriteUndef(ast.NodeTransformer):
+        def __init__(self) -> None:
+            if int(python_version_tuple()[1]) < 8:
+                # NOTE: visit_Constant not available on py37
+                self.visit_Str = lambda node: ast.Str(s=node.s.replace("\\/", "/"))
+
         const = {
             "undefined": ast.Constant(value=None),
             "null": ast.Constant(value=None),
@@ -57,7 +63,7 @@ class AstLoader:
                 return self.const[node.id]
             return ast.Str(s=node.id)
 
-        def visit_Constant(self, node: ast.Constant) -> ast.Constant:
+        def visit_Constant(self, node: ast.Constant) -> Union[ast.Constant, ast.Str]:
             if not isinstance(node.value, str):
                 return node
             return ast.Str(s=node.value.replace("\\/", "/"))
@@ -85,7 +91,7 @@ def json_loads(js: str) -> JsonValue:
 
     If you need more parameters or another implementation, call `xxxLoader.json_loads` instead.
 
-    .. seealso: :meth:`.AstLoader.json_loads`
+    .. seealso:: :meth:`.AstLoader.json_loads`
 
     :param js: Used to Pass the JS/JSON string.
     """
