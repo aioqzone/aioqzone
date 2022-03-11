@@ -4,6 +4,7 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
+from itertools import chain
 from typing import (
     Any,
     Awaitable,
@@ -86,7 +87,7 @@ class Emittable(Generic[Evt]):
         if timeout is None and any(self._tasks[i] for i in hook_cls):
             # await potential new tasks in these sets, only if no timeout.
             r2 = await Emittable.wait(self, *hook_cls)
-            return set(*r[0], *r2[0]), set()
+            return set(chain(r[0], r2[0])), set()
         return r
 
     def clear(self, *hook_cls: str, cancel: bool = True):
