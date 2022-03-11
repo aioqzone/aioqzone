@@ -1,13 +1,23 @@
+# local config
 .vscode
 .env
+poetry.lock
+
+# venv
 .venv
+.tox
+/venv
 
+# cache and tempfiles
 *.pyc
-*.egg-info
 tmp
-archive
 
+# build, metadata and distributions
 /dist
 /build
+*.egg-info
+
+# useless documents
+archive
 /doc/*
 !/doc/source

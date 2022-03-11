@@ -111,7 +111,7 @@ class Jigsaw:
             cv.TM_CCOEFF_NORMED,
             mask=self.piece.strip_mask(),
         )
-        left = np.argmax(r)
+        left = int(np.argmax(r))
 
         if debug:
             cv.imshow("match", np.tile(r, (200, 1)))

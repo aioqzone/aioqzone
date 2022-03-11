@@ -2,7 +2,7 @@
 
 aioqzone封装了一些Qzone接口。
 
-[![black](https://img.shields.io/badge/python-3.10-blue.svg)][home]
+[![black](https://img.shields.io/badge/python-3.7%20%7C%203.10-blue)][home]
 [![QQQR](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 

@@ -1,14 +1,13 @@
-from datetime import date
-from datetime import datetime
-from datetime import timedelta
 import time
+from datetime import date, datetime, timedelta
+from typing import Optional, Union
 
 from pytz import timezone
 
 TIME_ZONE = timezone("Asia/Shanghai")
 
 
-def time_ms(ts: float | None = None):
+def time_ms(ts: Optional[float] = None):
     """int timestamp in ms.
 
     Args:
@@ -20,7 +19,7 @@ def time_ms(ts: float | None = None):
     return round((ts or time.time()) * 1000)
 
 
-def dayspac(ts1: float, ts2: float | None = None):
+def dayspac(ts1: float, ts2: Optional[float] = None):
     """return ts2 - ts1
 
     Args:
@@ -71,7 +70,7 @@ def approx_ts(timedesc: str) -> int:
     return int(time.mktime(dt))
 
 
-def sementic_time(timestamp: float | int) -> str:
+def sementic_time(timestamp: Union[float, int]) -> str:
     """reverse of :meth:`.approx_ts`
 
     :param timestamp: timestamp in second

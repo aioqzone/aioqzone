@@ -4,7 +4,18 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
-from typing import Awaitable, Callable, Generic, TypeVar
+from typing import (
+    Any,
+    Awaitable,
+    Callable,
+    Coroutine,
+    Dict,
+    Generic,
+    Optional,
+    Set,
+    Tuple,
+    TypeVar,
+)
 
 
 class Event:
@@ -30,7 +41,7 @@ class Emittable(Generic[Evt]):
     """An object has some event to trigger."""
 
     hook: Evt = NullEvent()  # type: ignore
-    _tasks: dict[str, set[asyncio.Task]]
+    _tasks: Dict[str, Set[asyncio.Task]]
     _loop: asyncio.AbstractEventLoop
 
     def __init__(self) -> None:
@@ -41,7 +52,9 @@ class Emittable(Generic[Evt]):
         assert not isinstance(hook, NullEvent)
         self.hook = hook
 
-    def add_hook_ref(self, hook_cls: str, coro: Awaitable[T]) -> asyncio.Task[T]:
+    def add_hook_ref(self, hook_cls, coro):
+        # type: (str, Coroutine[Any, Any, T]) -> asyncio.Task[T]
+        # NOTE: asyncio.Task becomes generic since py39
         task = self._loop.create_task(coro)  # type: ignore
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
@@ -50,8 +63,8 @@ class Emittable(Generic[Evt]):
     async def wait(
         self,
         *hook_cls: str,
-        timeout: float | None = None,
-    ) -> tuple[set[asyncio.Task], set[asyncio.Task]]:
+        timeout: Optional[float] = None,
+    ) -> Tuple[Set[asyncio.Task], Set[asyncio.Task]]:
         """Wait for all task in the specific task set(s).
 
         :param timeout: timeout, defaults to None
@@ -66,14 +79,14 @@ class Emittable(Generic[Evt]):
         """
         s = set()
         for i in hook_cls:
-            s |= self._tasks[i]
+            s.update(self._tasks[i])
         if not s:
             return set(), set()
         r = await asyncio.wait(s, timeout=timeout)
         if timeout is None and any(self._tasks[i] for i in hook_cls):
             # await potential new tasks in these sets, only if no timeout.
             r2 = await Emittable.wait(self, *hook_cls)
-            return r[0] | r2[0], set()
+            return set(*r[0], *r2[0]), set()
         return r
 
     def clear(self, *hook_cls: str, cancel: bool = True):
@@ -95,7 +108,7 @@ class Emittable(Generic[Evt]):
 class LoginEvent(Event):
     """Defines usual events happens during login."""
 
-    async def LoginFailed(self, msg: str | None = None):
+    async def LoginFailed(self, msg: Optional[str] = None):
         """Will be emitted on login failed.
 
         .. note::
@@ -114,8 +127,8 @@ class LoginEvent(Event):
 class QREvent(LoginEvent):
     """Defines usual events happens during QR login."""
 
-    cancel: Callable[[], Awaitable[None]] | None
-    resend: Callable[[], Awaitable[None]] | None
+    cancel: Optional[Callable[[], Awaitable[None]]]
+    resend: Optional[Callable[[], Awaitable[None]]]
 
     async def QrFetched(self, png: bytes, renew: bool = False):
         """Will be called on new QR code bytes are fetched. Means this will be triggered on:
@@ -132,10 +145,10 @@ class QREvent(LoginEvent):
         """
         pass
 
-    async def QrFailed(self, msg: str | None = None):
+    async def QrFailed(self, msg: Optional[str] = None):
         """QR login failed.
 
-        .. note: This event should always be called before :meth:`.LoginEvent.LoginFailed`.
+        .. note:: This event should always be called before :meth:`.LoginEvent.LoginFailed`.
 
         :param msg: Error msg, defaults to None.
         """

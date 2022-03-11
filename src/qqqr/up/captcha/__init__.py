@@ -1,20 +1,15 @@
 import asyncio
 import base64
 import json
-from math import floor
-from random import choice
-from random import choices
-from random import randint
-from random import random
 import re
+from math import floor
+from random import choices, randint, random
 from time import time
-from typing import Any, cast, Iterable, Mapping
-from urllib.parse import unquote
-from urllib.parse import urlencode
+from typing import Any, Dict, Iterable, Tuple, cast
+from urllib.parse import unquote, urlencode
 
 from aiohttp import ClientSession as Session
-from multidict import istr
-from multidict import MutableMultiMapping
+from multidict import MutableMultiMapping, istr
 from yarl import URL
 
 from jssupport.execjs import ExecJS
@@ -46,7 +41,7 @@ class ScriptHelper:
         m = re.search(r"window\.captchaConfig=(\{.*\});", iframe)
         assert m
         ijson = m.group(1)
-        self.conf: dict[str, Any] = json_loads(ijson)  # type: ignore
+        self.conf: Dict[str, Any] = json_loads(ijson)  # type: ignore
 
     def cdn(self, cdn: int) -> str:
         assert cdn in (0, 1, 2)
@@ -252,7 +247,7 @@ class Captcha:
         self.session.cookie_jar.update_cookies({"TDC_itoken": c})
         return self.vm
 
-    async def matchMd5(self, iframe: str, powCfg: dict) -> tuple[int, int]:
+    async def matchMd5(self, iframe: str, powCfg: dict) -> Tuple[int, int]:
         if not hasattr(self, "_matchMd5"):
             blob = await self.getBlob(iframe)
             m = re.search(r",(function\(\w,\w,\w\).*?duration.*?),", blob)
@@ -262,7 +257,7 @@ class Captcha:
             blob += "function matchMd5(p, m){return n.getWorkloadResult({nonce:p,target:m})}"
             self._matchMd5 = ExecJS(js=blob).bind("matchMd5")
         d = await self._matchMd5(powCfg["prefix"], powCfg["md5"])
-        d = cast(dict[str, int], json_loads(d.strip("\n")))
+        d = cast(Dict[str, int], json_loads(d.strip("\n")))
         return int(d["ans"]), int(d["duration"])
 
     @staticmethod
@@ -285,7 +280,7 @@ class Captcha:
         drag.reverse()
         return drag
 
-    async def rio(self, urls: Iterable[str]) -> tuple[bytes, ...]:
+    async def rio(self, urls: Iterable[str]) -> Tuple[bytes, ...]:
         async def inner(url):
             async with self.session.get(url, ssl=self.ssl) as r:
                 r.raise_for_status()

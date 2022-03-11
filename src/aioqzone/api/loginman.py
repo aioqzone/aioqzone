@@ -3,19 +3,15 @@ Collect some built-in login manager w/o caching.
 Users can inherit these managers and implement their own caching logic.
 """
 
-import asyncio
 import logging
-from typing import Type
+from typing import Dict, List, Optional, Type
 
 from aiohttp import ClientSession
 
-from qqqr.constants import QzoneAppid
-from qqqr.constants import QzoneProxy
-from qqqr.exception import TencentLoginError
-from qqqr.exception import UserBreak
+from qqqr.constants import QzoneAppid, QzoneProxy
+from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QRLogin
-from qqqr.up import UPLogin
-from qqqr.up import User
+from qqqr.up import UPLogin, User
 
 from ..exception import LoginError
 from ..interface.hook import QREvent
@@ -31,7 +27,7 @@ class ConstLoginMan(Loginable):
         super().__init__(uin)
         self._cookie = cookie
 
-    async def _new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> Dict[str, str]:
         return self._cookie
 
 
@@ -41,7 +37,7 @@ class UPLoginMan(Loginable):
         self.sess = sess
         self._pwd = pwd
 
-    async def _new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
         :raises `SystemExit`: if unexpected error raised
@@ -72,7 +68,7 @@ class QRLoginMan(Loginable):
         self.sess = sess
         self.refresh = refresh_time
 
-    async def _new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.UserBreak`: qr polling task is canceled
         :raises `TimeoutError`: qr polling task timeout
@@ -124,7 +120,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         sess: ClientSession,
         uin: int,
         strategy: str,
-        pwd: str | None = None,
+        pwd: Optional[str] = None,
         refresh_time: int = 6,
     ) -> None:
         self.strategy = strategy
@@ -134,7 +130,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         if strategy != "forbid":
             QRLoginMan.__init__(self, sess, uin, refresh_time)
 
-    async def _new_cookie(self) -> dict[str, str]:
+    async def _new_cookie(self) -> Dict[str, str]:
         """
 
         :raises `qqqr.exception.UserBreak`: qr login canceled
@@ -143,7 +139,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
 
         :return: cookie
         """
-        order: list[Type[Loginable]] = {
+        order: List[Type[Loginable]] = {
             "force": [QRLoginMan],
             "prefer": [QRLoginMan, UPLoginMan],
             "allow": [UPLoginMan, QRLoginMan],

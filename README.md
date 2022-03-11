@@ -2,9 +2,9 @@
 
 aioqzone is a python package handling Qzone web login and wrapping some common Qzone Http apis.
 
-> **PythonVersionAnnouncement**: Finally I've decided downgrade syntax to py37. Type-hinting will be solved by stub files in `/typings`. Other 3.7+ syntax-sugars will be removed in later commits. This is a hard decision but I'm developing a lib instead of an app. However py39 or later versions are still recommended.
+> **PythonVersionAnnouncement**: Finally I've decided downgrade syntax to py37. However py39 or later versions are still recommended.
 
-[![black](https://img.shields.io/badge/python-3.10-blue.svg)][home]
+[![black](https://img.shields.io/badge/python-3.7%20%7C%203.10-blue)][home]
 [![QQQR](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 

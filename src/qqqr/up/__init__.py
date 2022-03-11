@@ -1,8 +1,8 @@
-from dataclasses import dataclass
-from random import choice
-from random import random
 import re
+from dataclasses import dataclass
+from random import choice, random
 from time import time_ns
+from typing import Dict, Optional
 
 from aiohttp import ClientSession
 from multidict import istr
@@ -12,9 +12,7 @@ from jssupport.execjs import ExecJS
 from ..base import LoginBase
 from ..constants import StatusCode
 from ..exception import TencentLoginError
-from ..type import APPID
-from ..type import Proxy
-from ..type import PT_QR_APP
+from ..type import APPID, PT_QR_APP, Proxy
 from ..utils import get_all_cookie
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
@@ -51,7 +49,12 @@ class UPLogin(LoginBase):
     _captcha = None
 
     def __init__(
-        self, sess: ClientSession, app: APPID, proxy: Proxy, user: User, info: PT_QR_APP = None
+        self,
+        sess: ClientSession,
+        app: APPID,
+        proxy: Proxy,
+        user: User,
+        info: Optional[PT_QR_APP] = None,
     ):
         super().__init__(sess, app, proxy, info=info)
         assert user.uin
@@ -110,7 +113,7 @@ class UPLogin(LoginBase):
         r[0] = int(r[0])
         return CheckResult(*r)
 
-    async def login(self, r: CheckResult, pastcode: int = 0) -> dict[str, str]:
+    async def login(self, r: CheckResult, pastcode: int = 0) -> Dict[str, str]:
         if r.code == StatusCode.Authenticated:
             # OK
             pass

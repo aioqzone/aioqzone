@@ -1,15 +1,16 @@
 import ast
 import json
 import logging
+from platform import python_version_tuple
 from textwrap import dedent
-from typing import Callable
+from typing import Callable, Dict, List, Union
 
 from .execjs import ExecJS
 
 logger = logging.getLogger(__name__)
-JsonDict = dict[str | int, "JsonValue"]
-JsonList = list["JsonValue"]
-JsonValue = bool | int | str | JsonDict | JsonList
+JsonDict = Dict[Union[str, int], "JsonValue"]
+JsonList = List["JsonValue"]
+JsonValue = Union[bool, int, str, JsonDict, JsonList]
 
 
 class NodeLoader:
@@ -45,18 +46,24 @@ class NodeLoader:
 
 class AstLoader:
     class RewriteUndef(ast.NodeTransformer):
-        def visit_Name(self, node: ast.Name):
-            match node.id:
-                case "undefined" | "null":
-                    return ast.Constant(value=None)
-                case "true":
-                    return ast.Constant(value=True)
-                case "false":
-                    return ast.Constant(value=False)
-                case _:
-                    return ast.Str(s=node.id)
+        def __init__(self) -> None:
+            if int(python_version_tuple()[1]) < 8:
+                # NOTE: visit_Constant not available on py37
+                self.visit_Str = lambda node: ast.Str(s=node.s.replace("\\/", "/"))
 
-        def visit_Constant(self, node: ast.Constant) -> ast.Constant:
+        const = {
+            "undefined": ast.Constant(value=None),
+            "null": ast.Constant(value=None),
+            "true": ast.Constant(value=True),
+            "false": ast.Constant(value=False),
+        }
+
+        def visit_Name(self, node: ast.Name):
+            if node.id in self.const:
+                return self.const[node.id]
+            return ast.Str(s=node.id)
+
+        def visit_Constant(self, node: ast.Constant) -> Union[ast.Constant, ast.Str]:
             if not isinstance(node.value, str):
                 return node
             return ast.Str(s=node.value.replace("\\/", "/"))
@@ -84,7 +91,7 @@ def json_loads(js: str) -> JsonValue:
 
     If you need more parameters or another implementation, call `xxxLoader.json_loads` instead.
 
-    .. seealso: :meth:`.AstLoader.json_loads`
+    .. seealso:: :meth:`.AstLoader.json_loads`
 
     :param js: Used to Pass the JS/JSON string.
     """

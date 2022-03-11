@@ -1,12 +1,10 @@
 import asyncio
 
-from aiohttp import ClientSession
 import pytest
 import pytest_asyncio
+from aiohttp import ClientSession
 
-from qqqr.constants import QzoneAppid
-from qqqr.constants import QzoneProxy
-from qqqr.constants import StatusCode
+from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.qr import QRLogin
 
 from . import showqr as _showqr

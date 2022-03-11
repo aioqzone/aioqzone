@@ -1,13 +1,13 @@
 import asyncio
+from typing import List, Optional
 
-from aiohttp import ClientSession as Session
 import pytest
 import pytest_asyncio
+from aiohttp import ClientSession as Session
 
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
-from aioqzone.exception import LoginError
-from aioqzone.exception import QzoneError
+from aioqzone.exception import LoginError, QzoneError
 from aioqzone.type import FeedRep
 from aioqzone.utils.html import HtmlContent
 
@@ -40,17 +40,17 @@ class TestDummy:
         assert storage
 
     @pytest.mark.upstream
-    async def test_complete(self, api: DummyQapi, storage: list[FeedRep]):
+    async def test_complete(self, api: DummyQapi, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
-        f: FeedRep | None = first(storage, None)
+        f: Optional[FeedRep] = first(storage, None)
         assert f
         from aioqzone.utils.html import HtmlInfo
 
         _, info = HtmlInfo.from_html(f.html)
         assert await api.emotion_getcomments(f.uin, f.fid, info.feedstype)
 
-    async def test_detail(self, api: DummyQapi, storage: list[FeedRep]):
+    async def test_detail(self, api: DummyQapi, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
         for f in storage:
@@ -65,10 +65,10 @@ class TestDummy:
         except LoginError:
             pytest.xfail("Login failed")
 
-    async def test_photo_list(self, api: DummyQapi, storage: list[FeedRep]):
+    async def test_photo_list(self, api: DummyQapi, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
-        f: HtmlContent | None = first(
+        f: Optional[HtmlContent] = first(
             (HtmlContent.from_html(i.html, i.uin) for i in storage), lambda t: t.pic
         )
         if f is None:

@@ -1,20 +1,24 @@
 """
 Make some easy-to-use api from basic wrappers.
 """
-from ..type import AlbumData
-from ..type import FeedDetailRep
-from ..type import FeedMoreAux
-from ..type import FeedRep
-from ..type import FeedsCount
-from ..type import FloatViewPhoto
-from ..type import MsgListElm
+from typing import List, Optional, Tuple
+
+from ..type import (
+    AlbumData,
+    FeedDetailRep,
+    FeedMoreAux,
+    FeedRep,
+    FeedsCount,
+    FloatViewPhoto,
+    MsgListElm,
+)
 from .raw import QzoneApi
 
 
 class DummyQapi(QzoneApi):
     async def feeds3_html_more(
-        self, pagenum: int, trans: QzoneApi.FeedsMoreTransaction | None = None, count: int = 10
-    ) -> tuple[list[FeedRep], FeedMoreAux]:
+        self, pagenum: int, trans: Optional[QzoneApi.FeedsMoreTransaction] = None, count: int = 10
+    ) -> Tuple[List[FeedRep], FeedMoreAux]:
         r = await super().feeds3_html_more(pagenum, trans=trans, count=count)
         data = r["data"]
         main = r["main"]
@@ -33,10 +37,10 @@ class DummyQapi(QzoneApi):
         r = await super().get_feeds_count()
         return FeedsCount.parse_obj(r)
 
-    async def floatview_photo_list(self, album: AlbumData, num: int) -> list[FloatViewPhoto]:
+    async def floatview_photo_list(self, album: AlbumData, num: int) -> List[FloatViewPhoto]:
         r = await super().floatview_photo_list(album, num)
         return [FloatViewPhoto.parse_obj(i) for i in r["photos"]]  # type: ignore
 
-    async def emotion_msglist(self, uin: int, num: int = 20, pos: int = 0) -> list[MsgListElm]:
+    async def emotion_msglist(self, uin: int, num: int = 20, pos: int = 0) -> List[MsgListElm]:
         r = await super().emotion_msglist(uin, num, pos)
         return [MsgListElm.parse_obj(i) for i in r]

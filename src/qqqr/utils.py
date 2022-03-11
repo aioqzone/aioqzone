@@ -1,3 +1,5 @@
+from typing import Dict
+
 from aiohttp import ClientResponse
 from aiohttp.client_exceptions import ClientResponseError
 
@@ -17,12 +19,12 @@ def raise_for_status(response: ClientResponse, *accept_code: int):
             response.request_info,
             response.history,
             status=response.status,
-            message=response.reason,
+            message=response.reason or "",
             headers=response.headers,
         )
 
 
-def get_all_cookie(response: ClientResponse) -> dict[str, str]:
+def get_all_cookie(response: ClientResponse) -> Dict[str, str]:
     cookies = response.headers.getall("Set-Cookie")
     cookie_kv = (i.split(";")[0].split("=", maxsplit=1) for i in cookies)
     d = {}

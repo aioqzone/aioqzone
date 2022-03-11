@@ -1,5 +1,6 @@
-from pydantic import BaseModel
-from pydantic import Field
+from typing import List, Optional, Union
+
+from pydantic import BaseModel, Field
 from pydantic.networks import HttpUrl
 
 
@@ -63,9 +64,9 @@ class FeedRep(BaseModel):
     uin: int
     nickname: str
     html: str
-    # likecnt: int | None = None
-    # relycnt: int | None = None
-    # commentcnt: int | None = None
+    # likecnt: Optional[int] = None
+    # relycnt: Optional[int] = None
+    # commentcnt: Optional[int] = None
 
 
 class FeedMoreAux(BaseModel):
@@ -181,16 +182,16 @@ class FeedDetailRep(HasContent):
     abstime: int = Field(alias="created_time")
 
     # forward from
-    rt_con: HasContent | None = None
+    rt_con: Optional[HasContent] = None
     rt_uin: int = 0
     rt_uinname: str = ""
     rt_tid: str = ""
     rt_createTime: str = ""
     rt_abstime: int = Field(default=0, alias="rt_created_time")
-    pic: list[VideoRep | PicRep] | None = None
+    pic: Optional[List[Union[VideoRep, PicRep]]] = None
 
     cmtnum: int
-    commentlist: list[CommentRep] | None = None
+    commentlist: Optional[List[CommentRep]] = None
     fwdnum: int
 
 
@@ -222,23 +223,23 @@ class FloatViewPhoto(BaseModel):
     url1: HttpUrl = Field(alias="pre")
     url2: HttpUrl = Field(alias="picId")
     url3: HttpUrl = Field(alias="url")
-    video_info: VideoInfo2 | None = None
+    video_info: Optional[VideoInfo2] = None
 
     cmtTotal: int
     fwdnum: int
 
     likeTotal: int
     likeKey: str
-    likeList: list[dict] | None = None
+    likeList: Optional[List[dict]] = None
 
     lloc: str
     original_tid: str
     photocubage: int
     phototype: int
 
-    isMultiPic: bool | None = False
-    is_weixin_mode: bool | None = False
-    is_video: bool | None = False
+    isMultiPic: Optional[bool] = False
+    is_weixin_mode: Optional[bool] = False
+    is_video: Optional[bool] = False
 
     @property
     def picKey(self):

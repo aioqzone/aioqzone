@@ -1,15 +1,24 @@
+"""
+Offers a class to execute js by communicating with subprocess.
+
+... warning:: On win32 platform, importing this module will change asyncio event loop policy to
+:external:class:`asyncio.WindowsProactorEventLoopPolicy`!
+"""
+
 import asyncio
 from collections import defaultdict
 from functools import partial
-from typing import Any, Coroutine
+from sys import platform
+from typing import Any, Coroutine, Optional
 
 
 class ExecJS:
-    def __init__(self, node: str = "node", *, js: str | None = None):
+    def __init__(self, node: str = "node", *, js: Optional[str] = None):
         self.js = js
         self.que = []
         self.node = node
         assert self.version() is not None, f"`{self.node}` is not installed."
+        assert self.loop_policy_check()
 
     @staticmethod
     def callstr(func, *args, asis: bool = False) -> str:
@@ -67,3 +76,17 @@ class ExecJS:
         if stderr:
             raise RuntimeError(stderr.decode())
         return stdout.decode()
+
+    def loop_policy_check(self):
+        """On Windows, the default event loop :external:class:`asyncio.ProactorEventLoop` supports subprocesses,
+        whereas :external:class:`asyncio.SelectorEventLoop` does not.
+        """
+        if platform == "win32" and isinstance(
+            asyncio.get_event_loop_policy(), asyncio.WindowsSelectorEventLoopPolicy
+        ):
+            return False
+        return True
+
+
+if platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
