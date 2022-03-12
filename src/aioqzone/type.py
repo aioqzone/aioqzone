@@ -152,7 +152,7 @@ class VideoInfo2(BaseModel):
 
 
 class VideoRep(PicRep):
-    vid: VideoInfo = Field(alias="video_info")
+    video_info: VideoInfo
 
     @classmethod
     def from_floatview(cls, fv: "FloatViewPhoto"):
