@@ -135,6 +135,10 @@ class PicRep(BaseModel):
                 url3=fv.raw,
             )
 
+    def valid_url(self):
+        """Test if `self.thumb` and `self.raw` is :class:`HttpUrl`."""
+        return isinstance(self.thumb, HttpUrl) and isinstance(self.raw, HttpUrl)
+
 
 class VideoInfo(BaseModel):
     cover_height: int = 0  # same as VideoRep.height
