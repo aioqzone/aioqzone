@@ -3,6 +3,8 @@ Make some easy-to-use api from basic wrappers.
 """
 from typing import List, Optional, Tuple
 
+from pydantic import ValidationError
+
 from ..type import (
     AlbumData,
     FeedDetailRep,
@@ -39,7 +41,11 @@ class DummyQapi(QzoneApi):
 
     async def floatview_photo_list(self, album: AlbumData, num: int) -> List[FloatViewPhoto]:
         r = await super().floatview_photo_list(album, num)
-        return [FloatViewPhoto.parse_obj(i) for i in r["photos"]]  # type: ignore
+        try:
+            return [FloatViewPhoto.parse_obj(i) for i in r["photos"]]  # type: ignore
+        except ValidationError as e:
+            # for DEBUG only
+            raise e
 
     async def emotion_msglist(self, uin: int, num: int = 20, pos: int = 0) -> List[MsgListElm]:
         r = await super().emotion_msglist(uin, num, pos)

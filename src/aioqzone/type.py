@@ -107,15 +107,15 @@ class CommentRep(HasContent):
     abstime: int = Field(alias="create_time")
     owner: dict
     replyNum: int
-    tid: int
+    tid: int  # TODO: ?
 
 
 class PicRep(BaseModel):
     height: int = 0
     width: int = 0
-    url1: HttpUrl
-    url2: HttpUrl
-    url3: HttpUrl
+    thumb: Union[HttpUrl, str] = Field(alias="url1")
+    picId: Union[HttpUrl, str] = Field(alias="url2")
+    raw: Union[HttpUrl, str] = Field(alias="url3")
     is_video: int = False
 
     def from_url(self, url: HttpUrl):
@@ -130,9 +130,9 @@ class PicRep(BaseModel):
                 height=fv.height,
                 width=fv.width,
                 is_video=False,
-                url1=fv.url1,
-                url2=fv.url2,
-                url3=fv.url3,
+                url1=fv.thumb,
+                url2=fv.picId,
+                url3=fv.raw,
             )
 
 
@@ -152,7 +152,7 @@ class VideoInfo2(BaseModel):
 
 
 class VideoRep(PicRep):
-    video_info: VideoInfo
+    vid: VideoInfo = Field(alias="video_info")
 
     @classmethod
     def from_floatview(cls, fv: "FloatViewPhoto"):
@@ -162,13 +162,13 @@ class VideoRep(PicRep):
             height=fv.height,
             width=fv.width,
             is_video=True,
-            url1=fv.url1,
-            url2=fv.url2,
-            url3=fv.url3,
+            url1=fv.thumb,
+            url2=fv.picId,
+            url3=fv.raw,
             video_info=VideoInfo(
                 cover_height=fv.height,
                 cover_width=fv.width,
-                url1=fv.url1,
+                url1=fv.thumb,
                 url3=fv.video_info.raw,
                 video_id=fv.video_info.vid,
             ),
@@ -178,14 +178,14 @@ class VideoRep(PicRep):
 class FeedDetailRep(HasContent):
     uin: int
     name: str
-    tid: str
+    fid: str = Field(alias="tid")
     abstime: int = Field(alias="created_time")
 
     # forward from
     rt_con: Optional[HasContent] = None
     rt_uin: int = 0
     rt_uinname: str = ""
-    rt_tid: str = ""
+    rt_fid: str = Field(default="", alias="rt_tid")
     rt_createTime: str = ""
     rt_abstime: int = Field(default=0, alias="rt_created_time")
     pic: Optional[List[Union[VideoRep, PicRep]]] = None
@@ -214,15 +214,16 @@ class FloatViewPhoto(BaseModel):
     ownerName: str
     ownerUin: int
     photoOwner: int
-    tid: str
+    fid: str = Field(alias="tid")
     topicId: str
 
     height: int
     width: int
 
-    url1: HttpUrl = Field(alias="pre")
-    url2: HttpUrl = Field(alias="picId")
-    url3: HttpUrl = Field(alias="url")
+    thumb: HttpUrl = Field(alias="pre")
+    raw: HttpUrl = Field(alias="url")
+    picId: Union[HttpUrl, str]
+    picKey: str
     video_info: Optional[VideoInfo2] = None
 
     cmtTotal: int
@@ -233,17 +234,13 @@ class FloatViewPhoto(BaseModel):
     likeList: Optional[List[dict]] = None
 
     lloc: str
-    original_tid: str
-    photocubage: int
-    phototype: int
+    rt_fid: str = Field(alias="original_tid")
+    photocubage: Optional[int] = None
+    phototype: int = 1
 
     isMultiPic: Optional[bool] = False
     is_weixin_mode: Optional[bool] = False
     is_video: Optional[bool] = False
-
-    @property
-    def picKey(self):
-        return f"{self.tid},{self.url2}"
 
 
 class MsgListElm(HasContent):

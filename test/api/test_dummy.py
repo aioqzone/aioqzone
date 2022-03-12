@@ -3,6 +3,7 @@ from typing import List, Optional
 
 import pytest
 import pytest_asyncio
+from aiohttp import ClientResponseError
 from aiohttp import ClientSession as Session
 
 from aioqzone.api import DummyQapi
@@ -26,6 +27,12 @@ async def api(sess: Session, man: MixedLoginMan):
 
 class TestDummy:
     pytestmark = pytest.mark.asyncio
+
+    async def test_heartbeat(self, api: DummyQapi):
+        try:
+            assert await api.get_feeds_count()
+        except LoginError:
+            pytest.xfail("Login failed")
 
     async def test_more(self, api: DummyQapi, storage: list):
         future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
@@ -56,14 +63,8 @@ class TestDummy:
         for f in storage:
             try:
                 assert await api.emotion_msgdetail(f.uin, f.fid)
-            except QzoneError as e:
+            except (QzoneError, ClientResponseError) as e:
                 continue
-
-    async def test_heartbeat(self, api: DummyQapi):
-        try:
-            assert await api.get_feeds_count()
-        except LoginError:
-            pytest.xfail("Login failed")
 
     async def test_photo_list(self, api: DummyQapi, storage: List[FeedRep]):
         if not storage:
