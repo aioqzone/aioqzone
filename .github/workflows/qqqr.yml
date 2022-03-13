@@ -10,7 +10,7 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      pytest_arg: "-v test/qqqr/test_up.py test/qqqr/test_captcha.py"
+      pytest_arg: "-v test/login/test_up.py test/login/test_captcha.py"
     secrets:
       TEST_UIN: ${{ secrets.TEST_UIN }}
       TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
