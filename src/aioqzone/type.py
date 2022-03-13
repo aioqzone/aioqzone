@@ -119,7 +119,7 @@ class PicRep(BaseModel):
     is_video: int = False
 
     def from_url(self, url: HttpUrl):
-        self.url1 = self.url2 = self.url3 = url
+        self.thumb = self.picId = self.raw = url
 
     @classmethod
     def from_floatview(cls, fv: "FloatViewPhoto"):
