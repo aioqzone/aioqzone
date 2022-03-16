@@ -1,5 +1,6 @@
 import asyncio
 from abc import ABC, abstractmethod
+from time import time
 from typing import Dict
 
 from qqqr.encrypt import gtk
@@ -8,6 +9,8 @@ from ..interface.hook import Emittable, LoginEvent
 
 
 class Loginable(ABC, Emittable[LoginEvent]):
+    last_login: float = 0
+
     def __init__(self, uin: int) -> None:
         super().__init__()
         self.uin = uin
@@ -41,6 +44,7 @@ class Loginable(ABC, Emittable[LoginEvent]):
             # let the first coro. get result from Qzone.
             async with self.lock:
                 self._cookie = await self._new_cookie()
+                self.last_login = time()
                 return self._cookie
 
     @property

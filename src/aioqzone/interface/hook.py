@@ -128,8 +128,8 @@ class LoginEvent(Event):
 class QREvent(LoginEvent):
     """Defines usual events happens during QR login."""
 
-    cancel: Optional[Callable[[], Awaitable[None]]]
-    resend: Optional[Callable[[], Awaitable[None]]]
+    cancel: Optional[Callable[[], Coroutine[Any, Any, None]]]
+    resend: Optional[Callable[[], Coroutine[Any, Any, None]]]
 
     async def QrFetched(self, png: bytes, renew: bool = False):
         """Will be called on new QR code bytes are fetched. Means this will be triggered on:
