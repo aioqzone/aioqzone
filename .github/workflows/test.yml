@@ -12,6 +12,10 @@ on:
         required: true
       TEST_PASSWORD:
         required: true
+    outputs:
+      package-version:
+        description: version of this python package output by poetry
+        value: ${{ jobs.install-test.outputs.package-version }}
 
 jobs:
   install-test:
@@ -38,6 +42,9 @@ jobs:
         with:
           virtualenvs-create: true
           virtualenvs-in-project: true
+      - name: Get Package Version
+        id: version_step
+        run: echo "::set-output name=package::$(poetry version -s)"
       #----------------------------------------------
       #       load cached venv if cache exists
       #----------------------------------------------
