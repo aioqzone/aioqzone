@@ -93,8 +93,8 @@ class QRLogin(LoginBase):
                             break
                         if stat[0] == StatusCode.Authenticated:
                             return await self.login()
-            except (KeyboardInterrupt, asyncio.CancelledError):
-                raise UserBreak
+            except (KeyboardInterrupt, asyncio.CancelledError) as e:
+                raise UserBreak from e
             raise TimeoutError
 
         expire_callback = expire_callback or send_callback
