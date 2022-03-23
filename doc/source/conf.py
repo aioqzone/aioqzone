@@ -22,7 +22,7 @@ copyright = "2022, JamzumSum"
 author = "JamzumSum"
 
 # The full version, including alpha/beta/rc tags
-release = "0.2.3.dev0"
+release = "0.4.1a0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -35,6 +35,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.autodoc",
     "sphinx_autodoc_typehints",
+    "sphinx.ext.githubpages",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

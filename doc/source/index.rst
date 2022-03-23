@@ -7,13 +7,12 @@ Welcome to aioqzone's documentation!
 ====================================
 
 .. toctree::
-   :maxdepth: 3
-   :caption: Contents:
+   :maxdepth: 2
+   :caption: Packages
 
-   aioqzone/api/raw
-   aioqzone/api/dummy
-   aioqzone/exception
-   aioqzone/type
+   aioqzone/index
+   jssupport/index
+   qqqr/index
 
 
 Indices and tables

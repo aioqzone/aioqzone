@@ -20,4 +20,6 @@ tmp
 # useless documents
 archive
 /doc/*
+!/doc/Makefile
+!/doc/requirements.txt
 !/doc/source

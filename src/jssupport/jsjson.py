@@ -76,6 +76,7 @@ class AstLoader:
 
         :param js: Used to Pass the js/json string to be parsed.
         :param filename: Used to Specify the name of the file that is being read. This is only for debug use.
+        :rtype: `dict[str | int, Any]`
         :return: A jsonvalue object.
         """
 
@@ -94,5 +95,7 @@ def json_loads(js: str) -> JsonValue:
     .. seealso:: :meth:`.AstLoader.json_loads`
 
     :param js: Used to Pass the JS/JSON string.
+    :rtype: `dict[str | int, Any]`
+    :return: A jsonvalue object.
     """
     return AstLoader.json_loads(js)
