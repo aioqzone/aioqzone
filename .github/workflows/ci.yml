@@ -8,7 +8,8 @@ on:
     paths:
       - "src/**"
       - "test/**"
-      - ".github/workflows/*"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/test.yml"
       - "pyproject.toml"
     branches:
       - dev

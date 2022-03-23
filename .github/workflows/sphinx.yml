@@ -6,7 +6,10 @@ on:
   push:
     paths:
       - doc/**
-      - .github/workflows/sphinx.yml
+      - ".github/workflows/sphinx.yml"
+      - "!src/**" # ci.yml will handle these pushes
+      - "!test/**"
+      - "!pyproject.toml"
 
 jobs:
   sphinx-build-deploy:
