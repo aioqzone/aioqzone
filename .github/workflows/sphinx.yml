@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build HTML
-        uses: ammaraskar/sphinx-action@master
+        uses: ammaraskar/sphinx-action@0.4
         with:
           docs-folder: doc
           path: doc/build/html
