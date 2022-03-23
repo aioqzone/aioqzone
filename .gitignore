@@ -21,3 +21,4 @@ tmp
 archive
 /doc/*
 !/doc/source
+!/doc/requirements.txt

@@ -1,5 +1,5 @@
 # install dependency and current package
-name: Test
+name: Test Poetry Project
 
 on:
   workflow_call:
@@ -23,6 +23,9 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.10', '3.7']
+    outputs:
+      package-version:
+        ${{ steps.version_step.outputs.package }}
 
     steps:
       #----------------------------------------------
@@ -67,4 +70,4 @@ jobs:
           TEST_UIN: ${{ secrets.TEST_UIN }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
-          poetry run python -m pytest -m "not needuser and not upstream" ${{ inputs.pytest_arg }}
+          poetry run pytest -m "not needuser and not upstream" ${{ inputs.pytest_arg }}

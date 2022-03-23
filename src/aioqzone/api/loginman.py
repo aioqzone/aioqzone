@@ -4,6 +4,7 @@ Users can inherit these managers and implement their own caching logic.
 """
 
 import logging
+from enum import Enum
 from typing import Dict, List, Optional, Type
 
 from aiohttp import ClientSession
@@ -115,11 +116,17 @@ class QRLoginMan(Loginable):
 
 
 class MixedLoginMan(UPLoginMan, QRLoginMan):
+    class QrStrategy(str, Enum):
+        force = "force"
+        prefer = "prefer"
+        allow = "allow"
+        forbid = "forbid"
+
     def __init__(
         self,
         sess: ClientSession,
         uin: int,
-        strategy: str,
+        strategy: QrStrategy,
         pwd: Optional[str] = None,
         refresh_time: int = 6,
     ) -> None:
@@ -161,3 +168,6 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
 
         self.add_hook_ref("hook", self.hook.LoginFailed(msg))
         raise LoginError(msg, self.strategy)
+
+
+QrStrategy = MixedLoginMan.QrStrategy

@@ -1,4 +1,4 @@
-Types
+aioqzone Types
 ==============
 
 .. automodule:: aioqzone.type

@@ -1,0 +1,24 @@
+name: Sphinx Build and Deploy
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    paths:
+      - doc/**
+
+jobs:
+  sphinx-build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build HTML
+        uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: doc
+          path: doc/build/html
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: doc/build/html

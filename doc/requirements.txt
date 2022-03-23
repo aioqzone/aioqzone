@@ -1,0 +1,4 @@
+Sphinx
+autodoc-pydantic
+sphinx-autodoc-typehints < 1.16.0   # issue 223
+sphinx-rtd-theme

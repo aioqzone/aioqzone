@@ -1,5 +1,5 @@
-Exceptions
-=============
+aioqzone Exceptions
+=======================
 
 .. automodule:: aioqzone.exception
     :members:

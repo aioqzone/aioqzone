@@ -5,18 +5,7 @@ Define hooks that can trigger user actions.
 import asyncio
 from collections import defaultdict
 from itertools import chain
-from typing import (
-    Any,
-    Awaitable,
-    Callable,
-    Coroutine,
-    Dict,
-    Generic,
-    Optional,
-    Set,
-    Tuple,
-    TypeVar,
-)
+from typing import Any, Callable, Coroutine, Dict, Generic, Optional, Set, Tuple, TypeVar
 
 
 class Event:
@@ -35,7 +24,10 @@ class NullEvent(Event):
     __slots__ = ()
 
     def __getattribute__(self, __name: str):
-        assert False, "call `o.register_hook` before accessing o.hook"
+        try:
+            return super().__getattribute__(__name)
+        except AttributeError:
+            raise AssertionError("call `o.register_hook` before accessing o.hook")
 
 
 class Emittable(Generic[Evt]):
@@ -133,6 +125,7 @@ class QREvent(LoginEvent):
 
     async def QrFetched(self, png: bytes, renew: bool = False):
         """Will be called on new QR code bytes are fetched. Means this will be triggered on:
+
         1. QR login start
         2. QR expired
         3. QR is refreshed
@@ -140,9 +133,10 @@ class QREvent(LoginEvent):
         :param png: QR bytes (png format)
         :param renew: this QR is a refreshed QR, defaults to False
 
-        .. warning::
-            Develpers had better not rely on the parameter :param renew:.
-            Maintain the state by yourself is not difficult.
+        .. deprecated:: ?
+
+            Develpers had better not rely on the parameter `renew`.
+            Maintaining the state by yourself is not difficult.
         """
         pass
 
