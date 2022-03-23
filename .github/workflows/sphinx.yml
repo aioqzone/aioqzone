@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - doc/**
+      - .github/workflows/sphinx.yml
 
 jobs:
   sphinx-build-deploy:
