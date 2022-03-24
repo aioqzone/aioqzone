@@ -80,8 +80,145 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="hooks">
-<h1>Hooks<a class="headerlink" href="#hooks" title="Permalink to this headline"></a></h1>
+  <section id="module-aioqzone.interface.hook">
+<span id="hooks"></span><h1>Hooks<a class="headerlink" href="#module-aioqzone.interface.hook" title="Permalink to this headline"></a></h1>
+<p>Define hooks that can trigger user actions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.Emittable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.interface.hook.</span></span><span class="sig-name descname"><span class="pre">Emittable</span></span><a class="headerlink" href="#aioqzone.interface.hook.Emittable" title="Permalink to this definition"></a></dt>
+<dd><p>An object has some event to trigger.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.Emittable.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">hook_cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cancel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.interface.hook.Emittable.clear" title="Permalink to this definition"></a></dt>
+<dd><p>Clear the given task sets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hook_cls</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – task class names</p></li>
+<li><p><strong>cancel</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Cancel the task if a set is not empty, defaults to True. Else will just clear the ref.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.Emittable.wait">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">hook_cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.interface.hook.Emittable.wait" title="Permalink to this definition"></a></dt>
+<dd><p>Wait for all task in the specific task set(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<em>float</em><em>, </em><em>optional</em>) – timeout, defaults to None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code>]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>done, pending</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <cite>timeout</cite> is None, this method will loop until all tasks in the set(s) are done.
+That means if other tasks are added during awaiting, the added task will be waited as well.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.wait()</span></code></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.Event">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.interface.hook.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><a class="headerlink" href="#aioqzone.interface.hook.Event" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for event system.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.LoginEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.interface.hook.</span></span><span class="sig-name descname"><span class="pre">LoginEvent</span></span><a class="headerlink" href="#aioqzone.interface.hook.LoginEvent" title="Permalink to this definition"></a></dt>
+<dd><p>Defines usual events happens during login.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.LoginEvent.LoginFailed">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LoginFailed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.interface.hook.LoginEvent.LoginFailed" title="Permalink to this definition"></a></dt>
+<dd><p>Will be emitted on login failed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This event will be triggered on every failure of login attempt.
+Means that logic in this event may be executed multiple times.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Err msg, defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.LoginEvent.LoginSuccess">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LoginSuccess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.interface.hook.LoginEvent.LoginSuccess" title="Permalink to this definition"></a></dt>
+<dd><p>Will be emitted after login success. Low prior, scheduled by loop instead of awaiting.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.NullEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.interface.hook.</span></span><span class="sig-name descname"><span class="pre">NullEvent</span></span><a class="headerlink" href="#aioqzone.interface.hook.NullEvent" title="Permalink to this definition"></a></dt>
+<dd><p>For debugging</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.QREvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.interface.hook.</span></span><span class="sig-name descname"><span class="pre">QREvent</span></span><a class="headerlink" href="#aioqzone.interface.hook.QREvent" title="Permalink to this definition"></a></dt>
+<dd><p>Defines usual events happens during QR login.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.QREvent.QrFailed">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QrFailed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.interface.hook.QREvent.QrFailed" title="Permalink to this definition"></a></dt>
+<dd><p>QR login failed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This event should always be called before <a class="reference internal" href="#aioqzone.interface.hook.LoginEvent.LoginFailed" title="aioqzone.interface.hook.LoginEvent.LoginFailed"><code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginEvent.LoginFailed()</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Error msg, defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.QREvent.QrFetched">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QrFetched</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">png</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renew</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.interface.hook.QREvent.QrFetched" title="Permalink to this definition"></a></dt>
+<dd><p>Will be called on new QR code bytes are fetched. Means this will be triggered on:</p>
+<ol class="arabic simple">
+<li><p>QR login start</p></li>
+<li><p>QR expired</p></li>
+<li><p>QR is refreshed</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>png</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code>) – QR bytes (png format)</p></li>
+<li><p><strong>renew</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – this QR is a refreshed QR, defaults to False</p></li>
+</ul>
+</dd>
+</dl>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version ?: </span>Develpers had better not rely on the parameter <cite>renew</cite>.
+Maintaining the state by yourself is not difficult.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.interface.hook.QREvent.QrSucceess">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QrSucceess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.interface.hook.QREvent.QrSucceess" title="Permalink to this definition"></a></dt>
+<dd><p>QR login success.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

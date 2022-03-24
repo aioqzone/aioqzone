@@ -76,8 +76,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="aioqzone-exceptions">
-<h1>aioqzone Exceptions<a class="headerlink" href="#aioqzone-exceptions" title="Permalink to this headline"></a></h1>
+  <section id="module-aioqzone.exception">
+<span id="aioqzone-exceptions"></span><h1>aioqzone Exceptions<a class="headerlink" href="#module-aioqzone.exception" title="Permalink to this headline"></a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="aioqzone.exception.CorruptError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">CorruptError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.CorruptError" title="Permalink to this definition"></a></dt>
+<dd><p>Data corrupted in transfer.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="aioqzone.exception.LoginError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">LoginError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.LoginError" title="Permalink to this definition"></a></dt>
+<dd><p>Login failed for some reasons.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="aioqzone.exception.QzoneError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">QzoneError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.QzoneError" title="Permalink to this definition"></a></dt>
+<dd><p>HTTP OK, but Qzone returns an error code.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aioqzone.exception.QzoneError.msg">
+<span class="sig-name descname"><span class="pre">msg</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'unknown'</span></em><a class="headerlink" href="#aioqzone.exception.QzoneError.msg" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 
 
