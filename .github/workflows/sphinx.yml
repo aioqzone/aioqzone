@@ -7,7 +7,8 @@ on:
     paths:
       - doc/**
       - ".github/workflows/sphinx.yml"
-      - "!src/**" # ci.yml will handle these pushes
+      # ci.yml will handle these pushes
+      - "!src/**"
       - "!test/**"
       - "!pyproject.toml"
 
@@ -15,12 +16,31 @@ jobs:
   sphinx-build-deploy:
     runs-on: ubuntu-latest
     steps:
+      #----------------------------------------------
+      #   check-out repo and set-up node & python
+      #----------------------------------------------
       - uses: actions/checkout@v3
-      - name: Build HTML
-        uses: ammaraskar/sphinx-action@0.4
+      - uses: actions/setup-python@v3
         with:
-          docs-folder: doc
-          path: doc/build/html
+          python-version: "3.10"
+      #----------------------------------------------
+      #  -----  install & configure poetry  -----
+      #----------------------------------------------
+      - name: Install Poetry Action
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      #----------------------------------------------
+      # install your root project, if required
+      #----------------------------------------------
+      - name: Install library
+        run: poetry install --no-interaction -E doc
+      #----------------------------------------------
+      #             Run sphinx-build
+      #----------------------------------------------
+      - name: Build HTML
+        run: poetry run sphinx-build doc/source doc/build/html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:

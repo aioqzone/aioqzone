@@ -28,6 +28,11 @@ tox = {version = "^3.24.5", optional = true}
 pre-commit = {version = "^2.17.0", optional = true}
 black = {version = "^22.1.0", optional = true}
 isort = {version = "^5.10.1", optional = true}
+# extras: doc
+Sphinx = {version = "^4.4.0", optional = true}
+autodoc-pydantic = {version = "^1.6.1", optional = true}
+sphinx-autodoc-typehints = {version = "^1.17.0", optional = true}
+sphinx-rtd-theme = {version = "^1.0.0", optional = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.1"
@@ -39,6 +44,12 @@ dev = [
     "pre-commit",
     "black",
     "isort"
+]
+doc = [
+    "Sphinx",
+    "autodoc-pydantic",
+    "sphinx-autodoc-typehints",
+    "sphinx-rtd-theme"
 ]
 
 [build-system]
