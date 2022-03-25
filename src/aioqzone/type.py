@@ -205,7 +205,7 @@ class FeedDetailRep(HasConEntity):
     abstime: int = Field(alias="created_time")
 
     # forward from
-    rt_con: Optional[HasContent] = None
+    rt_con: Optional[HasConEntity] = None
     rt_uin: int = 0
     rt_uinname: str = ""
     rt_fid: str = Field(default="", alias="rt_tid")
