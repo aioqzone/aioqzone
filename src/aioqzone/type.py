@@ -117,7 +117,7 @@ class AtEntity(ConEntity):
 
 
 class HasConEntity(HasContent):
-    entities: List[ConEntity] = Field(default=[], alias="conlist")
+    entities: Optional[List[ConEntity]] = Field(default=None, alias="conlist")
 
 
 class CommentRep(HasContent):
