@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Qzone Dummy API &mdash; aioqzone 0.4.1a0 documentation</title>
+  <title>Qzone Dummy API &mdash; aioqzone 0.4.2a0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -85,8 +85,9 @@
 <h1>Qzone Dummy API<a class="headerlink" href="#qzone-dummy-api" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.DummyQapi">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.</span></span><span class="sig-name descname"><span class="pre">DummyQapi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loginman</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ua</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Mozilla/5.0</span> <span class="pre">(Windows</span> <span class="pre">NT</span> <span class="pre">10.0;</span> <span class="pre">Win64;</span> <span class="pre">x64)</span> <span class="pre">AppleWebKit/537.36</span> <span class="pre">(KHTML,</span> <span class="pre">like</span> <span class="pre">Gecko)</span> <span class="pre">Chrome/97.0.4692.99</span> <span class="pre">Safari/537.36</span> <span class="pre">Edg/97.0.1072.69'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.DummyQapi" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.</span></span><span class="sig-name descname"><span class="pre">DummyQapi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loginman</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ua</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Mozilla/5.0</span> <span class="pre">(Windows</span> <span class="pre">NT</span> <span class="pre">10.0;</span> <span class="pre">Win64;</span> <span class="pre">x64)</span> <span class="pre">AppleWebKit/537.36</span> <span class="pre">(KHTML,</span> <span class="pre">like</span> <span class="pre">Gecko)</span> <span class="pre">Chrome/99.0.4844.74</span> <span class="pre">Safari/537.36</span> <span class="pre">Edg/99.0.1150.46'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.DummyQapi" title="Permalink to this definition"></a></dt>
+<dd><p>A wrapper of <a class="reference internal" href="raw.html#aioqzone.api.raw.QzoneApi" title="aioqzone.api.raw.QzoneApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">QzoneApi</span></code></a>. Validate the responses, returns pydantic <cite>BaseModel</cite>.</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.api.DummyQapi.emotion_getcomments">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emotion_getcomments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feedstype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.DummyQapi.emotion_getcomments" title="Permalink to this definition"></a></dt>
 <dd><p>Get complete html of a given feed</p>
@@ -108,7 +109,7 @@
 </ul>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>dict[str, Any]</cite></p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>response dict</p>
@@ -137,7 +138,7 @@
 </ul>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>dict[str, Any]</cite></p>
+<dd class="field-odd"><p><a class="reference internal" href="../type.html#aioqzone.type.FeedDetailRep" title="aioqzone.type.FeedDetailRep"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedDetailRep</span></code></a></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dict reps the feed in detail</p>
@@ -171,7 +172,7 @@
 </ul>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>list[dict[str, Any]]</cite></p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../type.html#aioqzone.type.MsgListElm" title="aioqzone.type.MsgListElm"><code class="xref py py-class docutils literal notranslate"><span class="pre">MsgListElm</span></code></a>]</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a list of messages</p>
@@ -204,7 +205,7 @@
 </ul>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>dict[str, Any]</cite></p>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../type.html#aioqzone.type.FeedRep" title="aioqzone.type.FeedRep"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedRep</span></code></a>], <a class="reference internal" href="../type.html#aioqzone.type.FeedMoreAux" title="aioqzone.type.FeedMoreAux"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedMoreAux</span></code></a>]</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>feed attributes and html feed</p>
@@ -234,7 +235,7 @@
 </ul>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>dict[str, Any]</cite></p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="../type.html#aioqzone.type.FloatViewPhoto" title="aioqzone.type.FloatViewPhoto"><code class="xref py py-class docutils literal notranslate"><span class="pre">FloatViewPhoto</span></code></a>]</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>album details</p>

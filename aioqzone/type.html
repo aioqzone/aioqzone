@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aioqzone Types &mdash; aioqzone 0.4.1a0 documentation</title>
+  <title>aioqzone Types &mdash; aioqzone 0.4.2a0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/autodoc_pydantic.css" type="text/css" />
@@ -108,15 +108,40 @@
 </dd></dl>
 
 <dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.AtEntity">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.</span></span><span class="sig-name descname"><span class="pre">AtEntity</span></span><a class="headerlink" href="#aioqzone.type.AtEntity" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.AtEntity.nick" title="aioqzone.type.AtEntity.nick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nick</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.AtEntity.uin" title="aioqzone.type.AtEntity.uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.AtEntity.nick">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nick</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.AtEntity.nick" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.AtEntity.uin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.AtEntity.uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.CommentRep">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.</span></span><span class="sig-name descname"><span class="pre">CommentRep</span></span><a class="headerlink" href="#aioqzone.type.CommentRep" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="#aioqzone.type.CommentRep.abstime" title="aioqzone.type.CommentRep.abstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abstime</span> <span class="pre">(int)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#aioqzone.type.CommentRep.owner" title="aioqzone.type.CommentRep.owner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">owner</span> <span class="pre">(dict)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.CommentRep.name" title="aioqzone.type.CommentRep.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.CommentRep.pic" title="aioqzone.type.CommentRep.pic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pic</span> <span class="pre">(Optional[List[dict]])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.CommentRep.replyNum" title="aioqzone.type.CommentRep.replyNum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">replyNum</span> <span class="pre">(int)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.CommentRep.tid" title="aioqzone.type.CommentRep.tid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tid</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.CommentRep.uin" title="aioqzone.type.CommentRep.uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -126,8 +151,13 @@
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
-<dt class="sig sig-object py" id="aioqzone.type.CommentRep.owner">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">owner</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.CommentRep.owner" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="aioqzone.type.CommentRep.name">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.CommentRep.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.CommentRep.pic">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.CommentRep.pic" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -138,6 +168,28 @@
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.CommentRep.tid">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.CommentRep.tid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.CommentRep.uin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.CommentRep.uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.ConEntity">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.</span></span><span class="sig-name descname"><span class="pre">ConEntity</span></span><a class="headerlink" href="#aioqzone.type.ConEntity" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.ConEntity.type" title="aioqzone.type.ConEntity.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.ConEntity.type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.ConEntity.type" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -648,6 +700,23 @@
 </dd></dl>
 
 <dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.HasConEntity">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.</span></span><span class="sig-name descname"><span class="pre">HasConEntity</span></span><a class="headerlink" href="#aioqzone.type.HasConEntity" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.HasConEntity.conlist" title="aioqzone.type.HasConEntity.conlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conlist</span> <span class="pre">(List[Union[aioqzone.type.TextEntity,</span> <span class="pre">aioqzone.type.AtEntity]])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.HasConEntity.conlist">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">conlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.TextEntity" title="aioqzone.type.TextEntity"><span class="pre">aioqzone.type.TextEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.AtEntity" title="aioqzone.type.AtEntity"><span class="pre">aioqzone.type.AtEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.HasConEntity.conlist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.HasContent">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.</span></span><span class="sig-name descname"><span class="pre">HasContent</span></span><a class="headerlink" href="#aioqzone.type.HasContent" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -855,6 +924,23 @@
 <span class="sig-name descname"><span class="pre">valid_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.PicRep.valid_url" title="Permalink to this definition"></a></dt>
 <dd><p>Test if <cite>self.thumb</cite> and <cite>self.raw</cite> is <code class="xref py py-class docutils literal notranslate"><span class="pre">HttpUrl</span></code>.</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.TextEntity">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.</span></span><span class="sig-name descname"><span class="pre">TextEntity</span></span><a class="headerlink" href="#aioqzone.type.TextEntity" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.TextEntity.con" title="aioqzone.type.TextEntity.con"><code class="xref py py-obj docutils literal notranslate"><span class="pre">con</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.TextEntity.con">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.TextEntity.con" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
