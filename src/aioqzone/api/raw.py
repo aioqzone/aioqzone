@@ -30,7 +30,7 @@ StrDict = Dict[str, JsonValue]
 
 
 class QzoneApi:
-    """A wrapper for Qzone http interface."""
+    """Just a wrapper for Qzone http interface. No type validating."""
 
     encoding = "utf-8"
     host = "https://user.qzone.qq.com"
@@ -122,7 +122,6 @@ class QzoneApi:
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :rtype: `dict[str, Any]`
         :return: json response
         """
         if cb:
@@ -172,7 +171,6 @@ class QzoneApi:
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :rtype: `dict[str, Any]`
         :return: feed attributes and html feed
         """
 
@@ -236,7 +234,6 @@ class QzoneApi:
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :rtype: `dict[str, Any]`
         :return: response dict
         """
         default = {
@@ -280,7 +277,6 @@ class QzoneApi:
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :rtype: `dict[str, Any]`
         :return: a dict reps the feed in detail
 
         .. note:: share msg is not support, i.e. `appid=311`
@@ -404,7 +400,6 @@ class QzoneApi:
         :raises `SystemExit`: unexcpected error
         :raises `aioqzone.exception.CorruptError`: maybe data is corruptted
 
-        :rtype: `dict[str, Any]`
         :return: album details
 
         .. warning::
@@ -471,7 +466,6 @@ class QzoneApi:
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :rtype: `list[dict[str, Any]]`
         :return: a list of messages
 
         .. versionadded:: 0.2.6
@@ -520,7 +514,6 @@ class QzoneApi:
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :rtype: `dict[str, Any]`
         :return: qzone response as is, containing feed html and fid.
 
         .. versionadded:: 0.2.6
@@ -581,7 +574,6 @@ class QzoneApi:
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :rtype: `dict[str, Any] | None`
         :return: qzone response as is, usually nothing meaningful.
 
         .. versionadded:: 0.2.6
@@ -624,7 +616,6 @@ class QzoneApi:
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :rtype: `dict[str, Any]`
         :return: qzone response as is.
 
         .. versionadded:: 0.2.6

@@ -8,7 +8,7 @@ from multidict import istr
 
 from .type import APPID, PT_QR_APP, Proxy
 
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.69"
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.46"
 CIPHERS = [
     "ECDHE+AESGCM",
     "ECDHE+CHACHA20",

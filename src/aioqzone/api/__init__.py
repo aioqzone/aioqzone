@@ -18,6 +18,8 @@ from .raw import QzoneApi
 
 
 class DummyQapi(QzoneApi):
+    """A wrapper of :class:`.QzoneApi`. Validate the responses, returns pydantic `BaseModel`."""
+
     async def feeds3_html_more(
         self, pagenum: int, trans: Optional[QzoneApi.FeedsMoreTransaction] = None, count: int = 10
     ) -> Tuple[List[FeedRep], FeedMoreAux]:

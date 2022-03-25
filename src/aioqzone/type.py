@@ -103,11 +103,30 @@ class HasContent(BaseModel):
     content: str = ""
 
 
+class ConEntity(BaseModel):
+    type: int
+
+
+class TextEntity(ConEntity):
+    con: str = ""
+
+
+class AtEntity(ConEntity):
+    nick: str = ""
+    uin: int
+
+
+class HasConEntity(HasContent):
+    conlist: List[Union[TextEntity, AtEntity]]
+
+
 class CommentRep(HasContent):
     abstime: int = Field(alias="create_time")
-    owner: dict
+    name: str
+    uin: int
     replyNum: int
-    tid: int  # TODO: ?
+    tid: int
+    pic: Optional[List[dict]] = None
 
 
 class PicRep(BaseModel):
@@ -179,7 +198,7 @@ class VideoRep(PicRep):
         )
 
 
-class FeedDetailRep(HasContent):
+class FeedDetailRep(HasConEntity):
     uin: int
     name: str
     fid: str = Field(alias="tid")
