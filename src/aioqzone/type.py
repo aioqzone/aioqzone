@@ -117,7 +117,7 @@ class AtEntity(ConEntity):
 
 
 class HasConEntity(HasContent):
-    conlist: List[Union[TextEntity, AtEntity]]
+    entities: List[ConEntity] = Field(default=[], alias="conlist")
 
 
 class CommentRep(HasContent):

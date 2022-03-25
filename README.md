@@ -2,8 +2,6 @@
 
 aioqzone is a python package handling Qzone web login and wrapping some common Qzone Http apis.
 
-> **PythonVersionAnnouncement**: Finally I've decided downgrade syntax to py37. However py39 or later versions are still recommended.
-
 [![black](https://img.shields.io/badge/python-3.7%20%7C%203.10-blue)][home]
 [![QQQR](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -30,10 +28,10 @@ aioqzone is a python package handling Qzone web login and wrapping some common Q
 - [x] api response validation (pydantic)
 - [x] async design
 - [x] complete infrastructure to ease your own develop
+- [x] [doc support](https://jamzumsum.github.io/aioqzone)
 
 __Working On:__
 
-- [ ] doc support (readthedoc page available soon)
 - [ ] test coverage
 
 ## Dependency out of `setup.cfg`
