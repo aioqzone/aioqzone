@@ -22,7 +22,7 @@ copyright = "2022, JamzumSum"
 author = "JamzumSum"
 
 # The full version, including alpha/beta/rc tags
-release = "0.4.1a0"
+release = "0.1.0"  # This should be overwritten by command line options (-D).
 
 
 # -- General configuration ---------------------------------------------------
