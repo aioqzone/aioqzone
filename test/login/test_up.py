@@ -55,3 +55,5 @@ class TestRequest:
                 pytest.skip(str(e))
             else:
                 raise e
+        except NotImplementedError:
+            pytest.skip()

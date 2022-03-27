@@ -157,7 +157,11 @@ class UPLogin(LoginBase):
             rl = re.findall(r"'(.*?)'[,\)]", await response.text())
 
         rl[0] = int(rl[0])
-        if rl[0] != StatusCode.Authenticated:
+        if rl[0] == StatusCode.Authenticated:
+            pass
+        elif rl[0] == StatusCode.NeedVerify:
+            raise NotImplementedError
+        else:
             raise TencentLoginError(rl[0], rl[4])
 
         async with self.session.get(rl[2], allow_redirects=False, ssl=self.ssl) as response:
