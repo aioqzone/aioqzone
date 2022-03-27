@@ -8,9 +8,10 @@ from typing import Iterable, List, Optional, Union, cast
 from lxml.html import HtmlElement, fromstring
 from pydantic import BaseModel, HttpUrl
 
-from aioqzone.utils.daug import di
-
-from ..type import AlbumData, PicRep
+from ..type.entity import RespEntities, TextEntity
+from ..type.internal import AlbumData
+from ..type.resp import PicRep
+from ..utils.daug import di
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ class HtmlInfo(BaseModel):
 
 
 class HtmlContent(BaseModel):
-    content: str = ""
+    entities: Optional[List[RespEntities]]
     pic: Optional[List[PicRep]] = None
     album: Optional[AlbumData] = None
 
@@ -104,4 +105,6 @@ class HtmlContent(BaseModel):
                 )
             )
 
-        return cls(content=finfo.text_content(), pic=pic, album=album)
+        # TODO
+        alltxt = TextEntity(type=2, con=finfo.text_content())
+        return cls(entities=[alltxt], pic=pic, album=album)

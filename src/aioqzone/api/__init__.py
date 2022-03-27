@@ -5,15 +5,8 @@ from typing import List, Optional, Tuple
 
 from pydantic import ValidationError
 
-from ..type import (
-    AlbumData,
-    FeedDetailRep,
-    FeedMoreAux,
-    FeedRep,
-    FeedsCount,
-    FloatViewPhoto,
-    MsgListElm,
-)
+from ..type.internal import AlbumData
+from ..type.resp import *
 from .raw import QzoneApi
 
 

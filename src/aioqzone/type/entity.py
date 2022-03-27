@@ -20,21 +20,24 @@ class ConEntity(BaseModel):
 
 
 class TextEntity(ConEntity):
-    """Text."""
+    """Text, type=2."""
 
+    type: int = 2
     con: str = ""
 
 
 class AtEntity(ConEntity):
-    """At. like: ``@bot``"""
+    """At, type=0. like: ``@bot``"""
 
+    type: int = 0
     nick: str = ""
     uin: int
 
 
 class EmEntity(ConEntity):
-    """Emoji. like: ``[em]e100[/em]``"""
+    """Emoji, type=-1. like: ``[em]e100[/em]``"""
 
+    type: int = -1
     eid: int
 
 

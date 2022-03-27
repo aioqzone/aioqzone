@@ -20,7 +20,7 @@ from qqqr.utils import raise_for_status
 
 from ..exception import CorruptError, QzoneError
 from ..interface.login import Loginable
-from ..type import AlbumData, LikeData
+from ..type.internal import AlbumData, LikeData
 from ..utils.regex import response_callback
 from ..utils.time import time_ms
 
