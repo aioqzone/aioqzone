@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Entities &mdash; aioqzone 0.4.2a2 documentation</title>
+  <title>Entities &mdash; aioqzone 0.5.0.dev1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -92,11 +92,12 @@ and details the works of rich-text stringify.</p>
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.AtEntity">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">AtEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.AtEntity" title="Permalink to this definition"></a></dt>
-<dd><p>At. like: <code class="docutils literal notranslate"><span class="pre">&#64;bot</span></code></p>
+<dd><p>At, type=0. like: <code class="docutils literal notranslate"><span class="pre">&#64;bot</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">nick</span> <span class="pre">(str)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></p></li>
 </ul>
 </dd>
@@ -119,11 +120,12 @@ and details the works of rich-text stringify.</p>
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.EmEntity">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">EmEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.EmEntity" title="Permalink to this definition"></a></dt>
-<dd><p>Emoji. like: <code class="docutils literal notranslate"><span class="pre">[em]e100[/em]</span></code></p>
+<dd><p>Emoji, type=-1. like: <code class="docutils literal notranslate"><span class="pre">[em]e100[/em]</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eid</span> <span class="pre">(int)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -139,11 +141,12 @@ and details the works of rich-text stringify.</p>
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.TextEntity">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">TextEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.TextEntity" title="Permalink to this definition"></a></dt>
-<dd><p>Text.</p>
+<dd><p>Text, type=2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">con</span> <span class="pre">(str)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></p></li>
 </ul>
 </dd>
 </dl>
