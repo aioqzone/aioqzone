@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Type
 
 from aiohttp import ClientSession
 
-from qqqr.constants import QzoneAppid, QzoneProxy
+from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QRLogin
 from qqqr.up import UPLogin, User
@@ -50,9 +50,13 @@ class UPLoginMan(Loginable):
             self.sess.cookie_jar.update_cookies(cookie)
             return cookie
         except TencentLoginError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed())
+            self.add_hook_ref("hook", self.hook.LoginFailed(e.msg or ""))
             logger.warning(str(e))
             raise e
+        except NotImplementedError as e:
+            self.add_hook_ref("hook", self.hook.LoginFailed("10009：需要手机验证"))
+            logger.warning(str(e))
+            raise TencentLoginError(StatusCode.NeedVerify, "Dynamic code verify not implemented")
         except:
             logger.fatal("Unexpected error in QR login.", exc_info=True)
             try:
