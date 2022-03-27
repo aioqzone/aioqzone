@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Response Models &mdash; aioqzone 0.4.2a2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="jssupport" href="../../jssupport/index.html" />
+    <link rel="prev" title="Internal Types" href="internal.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> aioqzone
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api/index.html">aioqzone APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interface/index.html">aioqzone Interfaces</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Types</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="entities.html">Entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="internal.html">Internal Types</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Response Models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioqzone</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">aioqzone</a> &raquo;</li>
+          <li><a href="index.html">aioqzone Types</a> &raquo;</li>
+      <li>Response Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/aioqzone/type/resp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-aioqzone.type.resp">
+<span id="response-models"></span><h1>Response Models<a class="headerlink" href="#module-aioqzone.type.resp" title="Permalink to this headline"></a></h1>
+<p>This module defines types that represent responses from Qzone.
+These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code>, and can be used to validate responses.</p>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">CommentRep</span></span><a class="headerlink" href="#aioqzone.type.resp.CommentRep" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.CommentRep.abstime" title="aioqzone.type.resp.CommentRep.abstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abstime</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.CommentRep.name" title="aioqzone.type.resp.CommentRep.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.CommentRep.pic" title="aioqzone.type.resp.CommentRep.pic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pic</span> <span class="pre">(Optional[List[dict]])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.CommentRep.replyNum" title="aioqzone.type.resp.CommentRep.replyNum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">replyNum</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.CommentRep.tid" title="aioqzone.type.resp.CommentRep.tid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tid</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.CommentRep.uin" title="aioqzone.type.resp.CommentRep.uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep.abstime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'create_time')</span></em><a class="headerlink" href="#aioqzone.type.resp.CommentRep.abstime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep.name">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.CommentRep.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep.pic">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.CommentRep.pic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep.replyNum">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">replyNum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.CommentRep.replyNum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep.tid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.CommentRep.tid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep.uin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.CommentRep.uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">FeedDetailRep</span></span><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.abstime" title="aioqzone.type.resp.FeedDetailRep.abstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abstime</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.cmtnum" title="aioqzone.type.resp.FeedDetailRep.cmtnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cmtnum</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.commentlist" title="aioqzone.type.resp.FeedDetailRep.commentlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">commentlist</span> <span class="pre">(Optional[List[aioqzone.type.resp.CommentRep]])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.fid" title="aioqzone.type.resp.FeedDetailRep.fid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fid</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.fwdnum" title="aioqzone.type.resp.FeedDetailRep.fwdnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fwdnum</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.name" title="aioqzone.type.resp.FeedDetailRep.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.pic" title="aioqzone.type.resp.FeedDetailRep.pic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pic</span> <span class="pre">(Optional[List[Union[aioqzone.type.resp.VideoRep,</span> <span class="pre">aioqzone.type.resp.PicRep]]])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.rt_abstime" title="aioqzone.type.resp.FeedDetailRep.rt_abstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_abstime</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.rt_con" title="aioqzone.type.resp.FeedDetailRep.rt_con"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_con</span> <span class="pre">(Optional[aioqzone.type.entity.HasConEntity])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.rt_createTime" title="aioqzone.type.resp.FeedDetailRep.rt_createTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_createTime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.rt_fid" title="aioqzone.type.resp.FeedDetailRep.rt_fid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_fid</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.rt_uin" title="aioqzone.type.resp.FeedDetailRep.rt_uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_uin</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.rt_uinname" title="aioqzone.type.resp.FeedDetailRep.rt_uinname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_uinname</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.uin" title="aioqzone.type.resp.FeedDetailRep.uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.abstime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'created_time')</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.abstime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.cmtnum">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cmtnum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.cmtnum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.commentlist">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">commentlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.CommentRep" title="aioqzone.type.resp.CommentRep"><span class="pre">aioqzone.type.resp.CommentRep</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.commentlist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.fid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'tid')</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.fid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.fwdnum">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fwdnum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.fwdnum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.name">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.pic">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.VideoRep" title="aioqzone.type.resp.VideoRep"><span class="pre">aioqzone.type.resp.VideoRep</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.resp.PicRep" title="aioqzone.type.resp.PicRep"><span class="pre">aioqzone.type.resp.PicRep</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.pic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.rt_abstime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_abstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'rt_created_time')</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.rt_abstime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.rt_con">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">aioqzone.type.entity.HasConEntity</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.rt_con" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.rt_createTime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_createTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.rt_createTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.rt_fid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'rt_tid')</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.rt_fid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.rt_uin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.rt_uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.rt_uinname">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_uinname</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.rt_uinname" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.uin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">FeedMoreAux</span></span><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.aisortBeginTime" title="aioqzone.type.resp.FeedMoreAux.aisortBeginTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aisortBeginTime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.aisortEndTime" title="aioqzone.type.resp.FeedMoreAux.aisortEndTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aisortEndTime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.aisortNextTime" title="aioqzone.type.resp.FeedMoreAux.aisortNextTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aisortNextTime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.aisortOffset" title="aioqzone.type.resp.FeedMoreAux.aisortOffset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aisortOffset</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.begintime" title="aioqzone.type.resp.FeedMoreAux.begintime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">begintime</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.daylist" title="aioqzone.type.resp.FeedMoreAux.daylist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">daylist</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.dayspac" title="aioqzone.type.resp.FeedMoreAux.dayspac"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dayspac</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.endtime" title="aioqzone.type.resp.FeedMoreAux.endtime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">endtime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.externparam" title="aioqzone.type.resp.FeedMoreAux.externparam"><code class="xref py py-obj docutils literal notranslate"><span class="pre">externparam</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.hasMoreFeeds" title="aioqzone.type.resp.FeedMoreAux.hasMoreFeeds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hasMoreFeeds</span> <span class="pre">(bool)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.lastAccessRelateTime" title="aioqzone.type.resp.FeedMoreAux.lastAccessRelateTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lastAccessRelateTime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.lastaccesstime" title="aioqzone.type.resp.FeedMoreAux.lastaccesstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lastaccesstime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.pagenum" title="aioqzone.type.resp.FeedMoreAux.pagenum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pagenum</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux.uinlist" title="aioqzone.type.resp.FeedMoreAux.uinlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uinlist</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.aisortBeginTime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aisortBeginTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.aisortBeginTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.aisortEndTime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aisortEndTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.aisortEndTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.aisortNextTime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aisortNextTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.aisortNextTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.aisortOffset">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aisortOffset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.aisortOffset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.begintime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">begintime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.begintime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.daylist">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">daylist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.daylist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.dayspac">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dayspac</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.dayspac" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.endtime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">endtime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.endtime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.externparam">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">externparam</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.externparam" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.hasMoreFeeds">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hasMoreFeeds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.hasMoreFeeds" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.lastAccessRelateTime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lastAccessRelateTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.lastAccessRelateTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.lastaccesstime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lastaccesstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.lastaccesstime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.pagenum">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pagenum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.pagenum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.uinlist">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uinlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.uinlist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">FeedRep</span></span><a class="headerlink" href="#aioqzone.type.resp.FeedRep" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.abstime" title="aioqzone.type.resp.FeedRep.abstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abstime</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.appid" title="aioqzone.type.resp.FeedRep.appid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">appid</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.fid" title="aioqzone.type.resp.FeedRep.fid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fid</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.html" title="aioqzone.type.resp.FeedRep.html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">html</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.nickname" title="aioqzone.type.resp.FeedRep.nickname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nickname</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.typeid" title="aioqzone.type.resp.FeedRep.typeid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">typeid</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.uin" title="aioqzone.type.resp.FeedRep.uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.ver" title="aioqzone.type.resp.FeedRep.ver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ver</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.abstime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.abstime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.appid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">appid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.appid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.fid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'key')</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.fid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.html">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">html</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.html" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.nickname">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nickname</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.nickname" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.typeid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">typeid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.typeid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.uin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.ver">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.ver" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">FeedsCount</span></span><a class="headerlink" href="#aioqzone.type.resp.FeedsCount" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.aboutHostFeeds_new_cnt" title="aioqzone.type.resp.FeedsCount.aboutHostFeeds_new_cnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aboutHostFeeds_new_cnt</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.followFeeds_new_cnt" title="aioqzone.type.resp.FeedsCount.followFeeds_new_cnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">followFeeds_new_cnt</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.friendFeeds_new_cnt" title="aioqzone.type.resp.FeedsCount.friendFeeds_new_cnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">friendFeeds_new_cnt</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.friendFeeds_newblog_cnt" title="aioqzone.type.resp.FeedsCount.friendFeeds_newblog_cnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">friendFeeds_newblog_cnt</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.friendFeeds_newphoto_cnt" title="aioqzone.type.resp.FeedsCount.friendFeeds_newphoto_cnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">friendFeeds_newphoto_cnt</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.myFeeds_new_cnt" title="aioqzone.type.resp.FeedsCount.myFeeds_new_cnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">myFeeds_new_cnt</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.newfeeds_uinlist" title="aioqzone.type.resp.FeedsCount.newfeeds_uinlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">newfeeds_uinlist</span> <span class="pre">(list)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.replyHostFeeds_new_cnt" title="aioqzone.type.resp.FeedsCount.replyHostFeeds_new_cnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">replyHostFeeds_new_cnt</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedsCount.specialCareFeeds_new_cnt" title="aioqzone.type.resp.FeedsCount.specialCareFeeds_new_cnt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">specialCareFeeds_new_cnt</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.aboutHostFeeds_new_cnt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aboutHostFeeds_new_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.aboutHostFeeds_new_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.followFeeds_new_cnt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">followFeeds_new_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.followFeeds_new_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.friendFeeds_new_cnt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">friendFeeds_new_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.friendFeeds_new_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.friendFeeds_newblog_cnt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">friendFeeds_newblog_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.friendFeeds_newblog_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.friendFeeds_newphoto_cnt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">friendFeeds_newphoto_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.friendFeeds_newphoto_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.myFeeds_new_cnt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">myFeeds_new_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.myFeeds_new_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.newfeeds_uinlist">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">newfeeds_uinlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.newfeeds_uinlist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.replyHostFeeds_new_cnt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">replyHostFeeds_new_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.replyHostFeeds_new_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedsCount.specialCareFeeds_new_cnt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">specialCareFeeds_new_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedsCount.specialCareFeeds_new_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">FloatViewPhoto</span></span><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.albumId" title="aioqzone.type.resp.FloatViewPhoto.albumId"><code class="xref py py-obj docutils literal notranslate"><span class="pre">albumId</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.cmtTotal" title="aioqzone.type.resp.FloatViewPhoto.cmtTotal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cmtTotal</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.createTime" title="aioqzone.type.resp.FloatViewPhoto.createTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createTime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.desc" title="aioqzone.type.resp.FloatViewPhoto.desc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">desc</span> <span class="pre">(dict)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.fid" title="aioqzone.type.resp.FloatViewPhoto.fid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fid</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.fwdnum" title="aioqzone.type.resp.FloatViewPhoto.fwdnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fwdnum</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.height" title="aioqzone.type.resp.FloatViewPhoto.height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.isMultiPic" title="aioqzone.type.resp.FloatViewPhoto.isMultiPic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isMultiPic</span> <span class="pre">(Optional[bool])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.is_video" title="aioqzone.type.resp.FloatViewPhoto.is_video"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_video</span> <span class="pre">(Optional[bool])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.is_weixin_mode" title="aioqzone.type.resp.FloatViewPhoto.is_weixin_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_weixin_mode</span> <span class="pre">(Optional[bool])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.likeKey" title="aioqzone.type.resp.FloatViewPhoto.likeKey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">likeKey</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.likeList" title="aioqzone.type.resp.FloatViewPhoto.likeList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">likeList</span> <span class="pre">(Optional[List[dict]])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.likeTotal" title="aioqzone.type.resp.FloatViewPhoto.likeTotal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">likeTotal</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.lloc" title="aioqzone.type.resp.FloatViewPhoto.lloc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lloc</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.ownerName" title="aioqzone.type.resp.FloatViewPhoto.ownerName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ownerName</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.ownerUin" title="aioqzone.type.resp.FloatViewPhoto.ownerUin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ownerUin</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.photoOwner" title="aioqzone.type.resp.FloatViewPhoto.photoOwner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">photoOwner</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.photocubage" title="aioqzone.type.resp.FloatViewPhoto.photocubage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">photocubage</span> <span class="pre">(Optional[int])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.phototype" title="aioqzone.type.resp.FloatViewPhoto.phototype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phototype</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.picId" title="aioqzone.type.resp.FloatViewPhoto.picId"><code class="xref py py-obj docutils literal notranslate"><span class="pre">picId</span> <span class="pre">(Union[pydantic.networks.HttpUrl,</span> <span class="pre">str])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.picKey" title="aioqzone.type.resp.FloatViewPhoto.picKey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">picKey</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.raw" title="aioqzone.type.resp.FloatViewPhoto.raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw</span> <span class="pre">(pydantic.networks.HttpUrl)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.rt_fid" title="aioqzone.type.resp.FloatViewPhoto.rt_fid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_fid</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.thumb" title="aioqzone.type.resp.FloatViewPhoto.thumb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thumb</span> <span class="pre">(pydantic.networks.HttpUrl)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.topicId" title="aioqzone.type.resp.FloatViewPhoto.topicId"><code class="xref py py-obj docutils literal notranslate"><span class="pre">topicId</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.video_info" title="aioqzone.type.resp.FloatViewPhoto.video_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">video_info</span> <span class="pre">(Optional[aioqzone.type.resp.VideoInfo2])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto.width" title="aioqzone.type.resp.FloatViewPhoto.width"><code class="xref py py-obj docutils literal notranslate"><span class="pre">width</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.albumId">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">albumId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.albumId" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.cmtTotal">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cmtTotal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.cmtTotal" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.createTime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.createTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.desc">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">desc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.desc" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.fid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'tid')</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.fid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.fwdnum">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fwdnum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.fwdnum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.height">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.height" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.isMultiPic">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isMultiPic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.isMultiPic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.is_video">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_video</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.is_video" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.is_weixin_mode">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_weixin_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.is_weixin_mode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.likeKey">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">likeKey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.likeKey" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.likeList">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">likeList</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.likeList" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.likeTotal">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">likeTotal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.likeTotal" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.lloc">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lloc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.lloc" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.ownerName">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ownerName</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.ownerName" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.ownerUin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ownerUin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.ownerUin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.photoOwner">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">photoOwner</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.photoOwner" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.photocubage">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">photocubage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.photocubage" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.phototype">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">phototype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.phototype" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.picId">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">picId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pydantic.networks.HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.picId" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.picKey">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">picKey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.picKey" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.raw">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url')</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.raw" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Constraints</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minLength</strong> = 1</p></li>
+<li><p><strong>maxLength</strong> = 2083</p></li>
+<li><p><strong>format</strong> = uri</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.rt_fid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'original_tid')</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.rt_fid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.thumb">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'pre')</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.thumb" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Constraints</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minLength</strong> = 1</p></li>
+<li><p><strong>maxLength</strong> = 2083</p></li>
+<li><p><strong>format</strong> = uri</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.topicId">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">topicId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.topicId" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.video_info">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">video_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.VideoInfo2" title="aioqzone.type.resp.VideoInfo2"><span class="pre">aioqzone.type.resp.VideoInfo2</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.video_info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.width">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.width" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">MsgListElm</span></span><a class="headerlink" href="#aioqzone.type.resp.MsgListElm" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.MsgListElm.abstime" title="aioqzone.type.resp.MsgListElm.abstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abstime</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.MsgListElm.cmtnum" title="aioqzone.type.resp.MsgListElm.cmtnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cmtnum</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.MsgListElm.commentlist" title="aioqzone.type.resp.MsgListElm.commentlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">commentlist</span> <span class="pre">(list)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.MsgListElm.createTime" title="aioqzone.type.resp.MsgListElm.createTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createTime</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.MsgListElm.fid" title="aioqzone.type.resp.MsgListElm.fid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fid</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.MsgListElm.fwdnum" title="aioqzone.type.resp.MsgListElm.fwdnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fwdnum</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.MsgListElm.name" title="aioqzone.type.resp.MsgListElm.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.MsgListElm.uin" title="aioqzone.type.resp.MsgListElm.uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm.abstime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'created_time')</span></em><a class="headerlink" href="#aioqzone.type.resp.MsgListElm.abstime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm.cmtnum">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cmtnum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.MsgListElm.cmtnum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm.commentlist">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">commentlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.MsgListElm.commentlist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm.createTime">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.MsgListElm.createTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm.fid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'tid')</span></em><a class="headerlink" href="#aioqzone.type.resp.MsgListElm.fid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm.fwdnum">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fwdnum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.MsgListElm.fwdnum" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm.name">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.MsgListElm.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.MsgListElm.uin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.MsgListElm.uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">PicRep</span></span><a class="headerlink" href="#aioqzone.type.resp.PicRep" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.PicRep.height" title="aioqzone.type.resp.PicRep.height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.PicRep.is_video" title="aioqzone.type.resp.PicRep.is_video"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_video</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.PicRep.picId" title="aioqzone.type.resp.PicRep.picId"><code class="xref py py-obj docutils literal notranslate"><span class="pre">picId</span> <span class="pre">(Union[pydantic.networks.HttpUrl,</span> <span class="pre">str])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.PicRep.raw" title="aioqzone.type.resp.PicRep.raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw</span> <span class="pre">(Union[pydantic.networks.HttpUrl,</span> <span class="pre">str])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.PicRep.thumb" title="aioqzone.type.resp.PicRep.thumb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thumb</span> <span class="pre">(Union[pydantic.networks.HttpUrl,</span> <span class="pre">str])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.PicRep.width" title="aioqzone.type.resp.PicRep.width"><code class="xref py py-obj docutils literal notranslate"><span class="pre">width</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.height">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.height" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.is_video">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_video</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.is_video" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.picId">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">picId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pydantic.networks.HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url2')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.picId" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.raw">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pydantic.networks.HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url3')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.raw" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.thumb">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pydantic.networks.HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url1')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.thumb" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.width">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.width" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.from_floatview">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_floatview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.resp.PicRep.from_floatview" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.from_url">
+<span class="sig-name descname"><span class="pre">from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.resp.PicRep.from_url" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.valid_url">
+<span class="sig-name descname"><span class="pre">valid_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.resp.PicRep.valid_url" title="Permalink to this definition"></a></dt>
+<dd><p>Test if <cite>self.thumb</cite> and <cite>self.raw</cite> is <code class="xref py py-class docutils literal notranslate"><span class="pre">HttpUrl</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">VideoInfo</span></span><a class="headerlink" href="#aioqzone.type.resp.VideoInfo" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo.cover_height" title="aioqzone.type.resp.VideoInfo.cover_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cover_height</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo.cover_width" title="aioqzone.type.resp.VideoInfo.cover_width"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cover_width</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo.raw" title="aioqzone.type.resp.VideoInfo.raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw</span> <span class="pre">(pydantic.networks.HttpUrl)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo.thumb" title="aioqzone.type.resp.VideoInfo.thumb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thumb</span> <span class="pre">(pydantic.networks.HttpUrl)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo.vid" title="aioqzone.type.resp.VideoInfo.vid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vid</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.cover_height">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cover_height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.cover_height" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.cover_width">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cover_width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.cover_width" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.raw">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url3')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.raw" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Constraints</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minLength</strong> = 1</p></li>
+<li><p><strong>maxLength</strong> = 2083</p></li>
+<li><p><strong>format</strong> = uri</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.thumb">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url1')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.thumb" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Constraints</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minLength</strong> = 1</p></li>
+<li><p><strong>maxLength</strong> = 2083</p></li>
+<li><p><strong>format</strong> = uri</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.vid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'video_id')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.vid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo2">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">VideoInfo2</span></span><a class="headerlink" href="#aioqzone.type.resp.VideoInfo2" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo2.cover_height" title="aioqzone.type.resp.VideoInfo2.cover_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cover_height</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo2.cover_width" title="aioqzone.type.resp.VideoInfo2.cover_width"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cover_width</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo2.raw" title="aioqzone.type.resp.VideoInfo2.raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw</span> <span class="pre">(pydantic.networks.HttpUrl)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoInfo2.vid" title="aioqzone.type.resp.VideoInfo2.vid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vid</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo2.cover_height">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cover_height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo2.cover_height" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo2.cover_width">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cover_width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo2.cover_width" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo2.raw">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'video_url')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo2.raw" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Constraints</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minLength</strong> = 1</p></li>
+<li><p><strong>maxLength</strong> = 2083</p></li>
+<li><p><strong>format</strong> = uri</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo2.vid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo2.vid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoRep">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">VideoRep</span></span><a class="headerlink" href="#aioqzone.type.resp.VideoRep" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.VideoRep.video_info" title="aioqzone.type.resp.VideoRep.video_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">video_info</span> <span class="pre">(aioqzone.type.resp.VideoInfo)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoRep.video_info">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">video_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.resp.VideoInfo" title="aioqzone.type.resp.VideoInfo"><span class="pre">aioqzone.type.resp.VideoInfo</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoRep.video_info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoRep.from_floatview">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_floatview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.resp.VideoRep.from_floatview" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="internal.html" class="btn btn-neutral float-left" title="Internal Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../jssupport/index.html" class="btn btn-neutral float-right" title="jssupport" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, JamzumSum.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

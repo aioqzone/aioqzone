@@ -2,5 +2,9 @@ aioqzone Types
 ==============
 
 .. automodule:: aioqzone.type
-    :members:
-    :undoc-members:
+
+.. toctree::
+    :maxdepth: 1
+    :glob:
+
+    *
