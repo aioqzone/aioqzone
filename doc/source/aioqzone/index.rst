@@ -7,4 +7,4 @@ aioqzone
     api/index
     exception
     interface/index
-    type
+    type/index

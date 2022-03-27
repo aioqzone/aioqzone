@@ -1,57 +1,12 @@
+"""This module defines types that represent responses from Qzone.
+These `*Rep` classes are all :class:`pydantic.BaseModel`, and can be used to validate responses."""
+
 from typing import List, Optional, Union
 
 from pydantic import BaseModel, Field
 from pydantic.networks import HttpUrl
 
-
-class PersudoCurkey(str):
-    def __new__(cls, uin: int, abstime: int):
-        return str.__new__(cls, cls.build(uin, abstime))
-
-    def __init__(self, uin: int, abstime: int) -> None:
-        super().__init__()
-        self.uin = uin
-        self.abstime = abstime
-
-    @classmethod
-    def build(cls, uin: int, abstime: int):
-        return str(uin).rjust(12, "0") + str(abstime).rjust(12, "0")
-
-    @classmethod
-    def from_str(cls, curkey: str):
-        uin = curkey[:12]
-        abstime = curkey[12:]
-        uin = int(uin.lstrip("0"))
-        abstime = int(abstime.lstrip("0"))
-        return cls(uin=uin, abstime=abstime)
-
-
-class AlbumData(BaseModel):
-    topicid: str
-    pickey: str
-    hostuin: int
-
-
-# LikeData is not a response of any API. It's just a type def.
-class LikeData(BaseModel):
-    unikey: str
-    curkey: str
-    appid: int
-    typeid: int
-    fid: str
-    abstime: int
-
-    @staticmethod
-    def persudo_curkey(uin: int, abstime: int):
-        return str(PersudoCurkey(uin, abstime))
-
-    @staticmethod
-    def persudo_unikey(appid: int, uin: int, **kwds):
-        if appid == 311:
-            fid = kwds.get("fid", None) or kwds.get("key")
-            return f"https://user.qzone.qq.com/{uin}/mood/{fid}"
-
-        raise ValueError(appid)
+from .entity import HasConEntity, HasContent
 
 
 # Below are the response reps of Qzone Apis.
@@ -97,27 +52,6 @@ class FeedMoreAux(BaseModel):
     # friend_level: str
     # hidedNameList: list
     # owner_bitmap: str
-
-
-class HasContent(BaseModel):
-    content: str = ""
-
-
-class ConEntity(BaseModel):
-    type: int
-
-
-class TextEntity(ConEntity):
-    con: str = ""
-
-
-class AtEntity(ConEntity):
-    nick: str = ""
-    uin: int
-
-
-class HasConEntity(HasContent):
-    entities: Optional[List[ConEntity]] = Field(default=None, alias="conlist")
 
 
 class CommentRep(HasContent):

@@ -8,7 +8,7 @@ from aiohttp import ClientSession as Session
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
 from aioqzone.exception import LoginError
-from aioqzone.type import LikeData
+from aioqzone.type.internal import LikeData
 from aioqzone.utils.html import HtmlContent, HtmlInfo
 
 first = lambda it, pred: next(filter(pred, it), None)

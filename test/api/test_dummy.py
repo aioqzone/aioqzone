@@ -9,7 +9,7 @@ from aiohttp import ClientSession as Session
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.exception import LoginError, QzoneError
-from aioqzone.type import FeedRep
+from aioqzone.type.resp import FeedRep
 from aioqzone.utils.html import HtmlContent
 
 first = lambda it, pred: next(filter(pred, it), None)
