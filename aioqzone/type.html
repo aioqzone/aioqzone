@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aioqzone Types &mdash; aioqzone 0.4.2a0 documentation</title>
+  <title>aioqzone Types &mdash; aioqzone 0.4.2a2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/autodoc_pydantic.css" type="text/css" />
@@ -208,7 +208,7 @@
 <li><p><a class="reference internal" href="#aioqzone.type.FeedDetailRep.name" title="aioqzone.type.FeedDetailRep.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.FeedDetailRep.pic" title="aioqzone.type.FeedDetailRep.pic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pic</span> <span class="pre">(Optional[List[Union[aioqzone.type.VideoRep,</span> <span class="pre">aioqzone.type.PicRep]]])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.FeedDetailRep.rt_abstime" title="aioqzone.type.FeedDetailRep.rt_abstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_abstime</span> <span class="pre">(int)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#aioqzone.type.FeedDetailRep.rt_con" title="aioqzone.type.FeedDetailRep.rt_con"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_con</span> <span class="pre">(Optional[aioqzone.type.HasContent])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.FeedDetailRep.rt_con" title="aioqzone.type.FeedDetailRep.rt_con"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_con</span> <span class="pre">(Optional[aioqzone.type.HasConEntity])</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.FeedDetailRep.rt_createTime" title="aioqzone.type.FeedDetailRep.rt_createTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_createTime</span> <span class="pre">(str)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.FeedDetailRep.rt_fid" title="aioqzone.type.FeedDetailRep.rt_fid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_fid</span> <span class="pre">(str)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.FeedDetailRep.rt_uin" title="aioqzone.type.FeedDetailRep.rt_uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_uin</span> <span class="pre">(int)</span></code></a></p></li>
@@ -259,7 +259,7 @@
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.FeedDetailRep.rt_con">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.HasContent" title="aioqzone.type.HasContent"><span class="pre">aioqzone.type.HasContent</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.FeedDetailRep.rt_con" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.HasConEntity" title="aioqzone.type.HasConEntity"><span class="pre">aioqzone.type.HasConEntity</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.FeedDetailRep.rt_con" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -705,13 +705,13 @@
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference internal" href="#aioqzone.type.HasConEntity.conlist" title="aioqzone.type.HasConEntity.conlist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conlist</span> <span class="pre">(List[Union[aioqzone.type.TextEntity,</span> <span class="pre">aioqzone.type.AtEntity]])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.HasConEntity.entities" title="aioqzone.type.HasConEntity.entities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entities</span> <span class="pre">(Optional[List[aioqzone.type.ConEntity]])</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute pydantic_field">
-<dt class="sig sig-object py" id="aioqzone.type.HasConEntity.conlist">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">conlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.TextEntity" title="aioqzone.type.TextEntity"><span class="pre">aioqzone.type.TextEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.AtEntity" title="aioqzone.type.AtEntity"><span class="pre">aioqzone.type.AtEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.HasConEntity.conlist" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="aioqzone.type.HasConEntity.entities">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entities</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.ConEntity" title="aioqzone.type.ConEntity"><span class="pre">aioqzone.type.ConEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'conlist')</span></em><a class="headerlink" href="#aioqzone.type.HasConEntity.entities" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
