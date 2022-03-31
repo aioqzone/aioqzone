@@ -28,6 +28,8 @@ rnd6 = lambda: str(random())[2:8]
 def hex_add(h: str, o: int):
     if h.endswith("#"):
         return h + str(o)
+    if not h:
+        return o
     return hex(int(h, 16) + o)[2:]
 
 

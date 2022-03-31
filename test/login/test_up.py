@@ -1,6 +1,5 @@
 import asyncio
 from os import environ as env
-from sys import platform
 
 import pytest
 import pytest_asyncio
@@ -13,6 +12,8 @@ from qqqr.up import UPLogin, User
 
 @pytest.fixture(scope="module")
 def event_loop():
+    import jssupport.execjs  # set policy
+
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()

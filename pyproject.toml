@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.5.0.dev2"
+version = "0.5.1.dev1"
 description = "Python wrapper for Qzone web login and Qzone http api."
 authors = ["JamzumSum <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -29,10 +29,11 @@ pre-commit = {version = "^2.17.0", optional = true}
 black = {version = "^22.1.0", optional = true}
 isort = {version = "^5.10.1", optional = true}
 # extras: doc
-Sphinx = {version = "^4.4.0", optional = true}
+Sphinx = {version = "^4.5.0", optional = true}
 autodoc-pydantic = {version = "^1.6.1", optional = true}
 sphinx-autodoc-typehints = {version = "<1.16.0", optional = true}
 sphinx-rtd-theme = {version = "^1.0.0", optional = true}
+rsa = "^4.8"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.1"

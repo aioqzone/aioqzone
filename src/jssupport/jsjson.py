@@ -5,8 +5,6 @@ from platform import python_version_tuple
 from textwrap import dedent
 from typing import Callable, Dict, List, Union
 
-from .execjs import ExecJS
-
 logger = logging.getLogger(__name__)
 JsonDict = Dict[Union[str, int], "JsonValue"]
 JsonList = List["JsonValue"]
@@ -14,6 +12,8 @@ JsonValue = Union[bool, int, str, JsonDict, JsonList]
 
 
 class NodeLoader:
+    from .execjs import ExecJS
+
     jsonStringify = ExecJS(js="").bind("JSON.stringify", new=False)
 
     @classmethod

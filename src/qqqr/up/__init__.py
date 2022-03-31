@@ -7,13 +7,12 @@ from typing import Dict, Optional
 from aiohttp import ClientSession
 from multidict import istr
 
-from jssupport.execjs import ExecJS
-
 from ..base import LoginBase
 from ..constants import StatusCode
 from ..exception import TencentLoginError
-from ..type import APPID, PT_QR_APP, Proxy
+from ..type import APPID, PT_QR_APP, CheckResult, Proxy
 from ..utils import get_all_cookie
+from .encrypt import TeaEncoder
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
@@ -24,24 +23,6 @@ LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_log
 class User:
     uin: int
     pwd: str
-
-
-@dataclass
-class CheckResult:
-    code: int
-    verifycode: str
-    salt: str
-    verifysession: str
-    isRandSalt: int
-    ptdrvs: str
-    session: str
-
-    def __post_init__(self):
-        self.code = int(self.code)
-        self.isRandSalt = int(self.isRandSalt)
-        salt = self.salt.split("\\x")[1:]
-        salt = [chr(int(i, 16)) for i in salt]
-        self.salt = "".join(salt)
 
 
 class UPLogin(LoginBase):
@@ -60,28 +41,10 @@ class UPLogin(LoginBase):
         assert user.uin
         assert user.pwd
         self.user = user
+        self.pwder = TeaEncoder(user.pwd)
 
     async def encodePwd(self, r: CheckResult) -> str:
-        assert self.user.pwd, "password should not be empty"
-
-        if not hasattr(self, "getEncryption"):
-            async with self.session.get(LOGIN_JS, ssl=self.ssl) as response:
-                response.raise_for_status()
-                js = await response.text()
-
-            m = re.search(r"function\(module,exports,__webpack_require__\).*\}", js)
-            assert m
-            funcs = m.group(0)
-            js = "var navigator = new Object; navigator.appName = 'Netscape';"
-            js += f"var a = [{funcs}];"
-            js += "function n(k) { var t, e = new Object; return a[k](t, e, n), e }\n"
-            js += "function getEncryption(p, s, v) { var t, e = new Object; return a[9](t, e, n), e['default'].getEncryption(p, s, v, undefined) }"
-
-            js = ExecJS(self.node, js=js)
-            self.getEncryption = js.bind("getEncryption")
-
-        enc = await self.getEncryption(self.user.pwd, r.salt, r.verifycode)
-        return enc.strip()
+        return await self.pwder.encode(r)
 
     async def check(self):
         """[summary]
@@ -113,6 +76,20 @@ class UPLogin(LoginBase):
         r[0] = int(r[0])
         return CheckResult(*r)
 
+    async def sms(self, pt_sms_ticket: str):
+        data = {
+            "bkn": "",
+            "uin": self.user.uin,
+            "aid": self.app.appid,
+            "pt_sms_ticket": pt_sms_ticket,
+        }
+        async with self.session.get(
+            "https://ui.ptlogin2.qq.com/ssl/send_sms_code", params=data, ssl=self.ssl
+        ) as r:
+            rl = re.findall(r"'(.*?)'[,\)]", await r.text(encoding="utf8"))
+            # ptui_sendSMS_CB('10012', '短信发送成功！')
+        assert int(rl[0]) == 10012, rl[1]
+
     async def login(self, r: CheckResult, pastcode: int = 0) -> Dict[str, str]:
         if r.code == StatusCode.Authenticated:
             # OK
@@ -121,9 +98,9 @@ class UPLogin(LoginBase):
             # 0 -> 1: OK; !0 -> 1: Error
             cookie = await self.login(await self.passVC(r), StatusCode.NeedCaptcha)
             return cookie
-        elif r.code == StatusCode.NeedVerify and pastcode != StatusCode.NeedVerify:
+        elif r.code == StatusCode.NeedVerify and pastcode == StatusCode.NeedVerify:
             # !10009 -> 10009: OK; 10009 -> 10009: Error
-            raise NotImplementedError("wait for next version :D")
+            raise TencentLoginError(r.code, str(r))
         else:
             raise TencentLoginError(r.code, str(r))
 
@@ -160,7 +137,9 @@ class UPLogin(LoginBase):
         if rl[0] == StatusCode.Authenticated:
             pass
         elif rl[0] == StatusCode.NeedVerify:
+            m = response.cookies.get("pt_sms_ticket")
             raise NotImplementedError
+            await self.sms(m.value if m else "")
         else:
             raise TencentLoginError(rl[0], rl[4])
 

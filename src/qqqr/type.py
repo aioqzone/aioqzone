@@ -19,3 +19,21 @@ class Proxy:
 class APPID:
     appid: int
     daid: int
+
+
+@dataclass
+class CheckResult:
+    code: int
+    verifycode: str
+    salt: str
+    verifysession: str
+    isRandSalt: int
+    ptdrvs: str
+    session: str
+
+    def __post_init__(self):
+        self.code = int(self.code)
+        self.isRandSalt = int(self.isRandSalt)
+        salt = self.salt.split(r"\x")[1:]
+        salt = [chr(int(i, 16)) for i in salt]
+        self.salt = "".join(salt)
