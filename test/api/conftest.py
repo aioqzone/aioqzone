@@ -12,6 +12,8 @@ from . import showqr
 
 @pytest.fixture(scope="module")
 def event_loop():
+    import jssupport.execjs  # set policy
+
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()

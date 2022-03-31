@@ -38,9 +38,10 @@ class ExecJS:
             stderr=asyncio.subprocess.PIPE,
         )
         stdout, stderr = await p.communicate(js.encode())
+        removesuffix = lambda s: s[:-1] if str.endswith(s, "\n") else s
         if stderr:
-            raise RuntimeError(stderr.decode())
-        return stdout.decode()
+            raise RuntimeError(removesuffix(stderr.decode()))
+        return removesuffix(stdout.decode())
 
     def __call__(self, func: str, *args, asis: bool = False) -> Coroutine[Any, Any, str]:
         js = self.js

@@ -133,16 +133,16 @@ class TeaEncoder(PasswdEncoder):
     def _fromhex(self, s: str):
         return bytes(bytearray.fromhex(s))
 
-    def getEncryption(self, salt: str, verifycode: str):
+    async def getEncryption(self, salt: str, verifycode: str):
         e = salt.encode()
         # md5_pwd = o = self.tx_md5(pwd.encode())
         r = hashlib.md5(self._passwd.encode()).digest()
         p = self._tx_md5(r + e)
         a = rsa.encrypt(r, self.rsaKey)
-        # rsaData = a = binascii.b2a_hex(a)
+        rsaData = binascii.b2a_hex(a)
 
         # rsa length
-        s = self._hex2str(int(len(a) / 2))
+        s = self._hex2str(int(len(rsaData) / 2))
         s = s.zfill(4)
 
         # verifycode先转换为大写，然后转换为bytes
@@ -154,6 +154,6 @@ class TeaEncoder(PasswdEncoder):
 
         # TEA: KEY:p, s+a+ TEA.strToBytes(e) + c +l
         # JamzumSum EDIT: I tried `binascii.b2a_hex(e)` to replace `salt` to fix error
-        new_pwd = s.encode() + a + binascii.b2a_hex(e) + c.encode() + l
+        new_pwd = s.encode() + rsaData + binascii.b2a_hex(e) + c.encode() + l
         enc = self.encrypt(self._fromhex(new_pwd.decode()), self._fromhex(p))
         return base64.b64encode(enc, b"*-").decode().replace("=", "_")
