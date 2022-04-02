@@ -32,7 +32,7 @@ class NodeEncoder(PasswdEncoder):
     """
     AGPL-3.0
 
-    Copyright (C) 2021-2022 JamzumSum
+    Copyright (C) 2021-2022 aioqzone
 
     .. seealso:: https://github.com/JamzumSum/QQQR/blob/master/LICENCE
     """
@@ -153,7 +153,7 @@ class TeaEncoder(PasswdEncoder):
         c = c.zfill(4)
 
         # TEA: KEY:p, s+a+ TEA.strToBytes(e) + c +l
-        # JamzumSum EDIT: I tried `binascii.b2a_hex(e)` to replace `salt` to fix error
+        # aioqzone EDIT: I tried `binascii.b2a_hex(e)` to replace `salt` to fix error
         new_pwd = s.encode() + rsaData + binascii.b2a_hex(e) + c.encode() + l
         enc = self.encrypt(self._fromhex(new_pwd.decode()), self._fromhex(p))
         return base64.b64encode(enc, b"*-").decode().replace("=", "_")
