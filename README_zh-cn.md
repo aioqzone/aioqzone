@@ -3,7 +3,7 @@
 aioqzone封装了一些Qzone接口。
 
 [![black](https://img.shields.io/badge/python-3.7%20%7C%203.10-blue)][home]
-[![QQQR](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/JamzumSum/aioqzone/actions/workflows/qqqr.yml)
+[![QQQR](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [English](README.md)
@@ -57,7 +57,7 @@ __在做了:__
 ## 许可证
 
 ```
-Copyright (C) 2022 JamzumSum.
+Copyright (C) 2022 aioqzone.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
@@ -76,5 +76,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 - aioqzone 以 [AGPL-3.0](LICENSE) 开源.
 
 
-[home]: https://github.com/JamzumSum/aioqzone "Python wrapper for Qzone web login and Qzone http api"
-[aioqzone-feed]: https://github.com/JamzumSum/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
+[home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
+[aioqzone-feed]: https://github.com/aioqzone/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"

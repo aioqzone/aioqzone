@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.5.1.dev1"
+version = "0.5.1a0"
 description = "Python wrapper for Qzone web login and Qzone http api."
-authors = ["JamzumSum <zzzzss990315@gmail.com>"]
+authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
 readme = "README.md"
-homepage = "https://github.com/JamzumSum/aioqzone"
-repository = "https://github.com/JamzumSum/aioqzone"
+homepage = "https://github.com/aioqzone/aioqzone"
+repository = "https://github.com/aioqzone/aioqzone"
 documentation = "https://jamzumsum.github.io/aioqzone"
 
 packages = [
