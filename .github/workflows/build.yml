@@ -1,9 +1,9 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+# This workflow will install Python dependencies, build and publish this repo to PyPI.
 
 name: build
 
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - closed
@@ -19,7 +19,6 @@ jobs:
       #       check-out repo and set-up python
       #----------------------------------------------
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
       - uses: actions/setup-python@v3
         with:
           python-version: "3.10"
@@ -48,9 +47,12 @@ jobs:
       #----------------------------------------------
       #  --------    Build and release   ---------
       #----------------------------------------------
-      - name: Build dist
+      - name: Build dist and Publish to PyPI
         run: |
-          poetry build
+          export POETRY_PYPI_TOKEN_PYPI=${{ secrets.PYPI_TOKEN }}
+          poetry publish --build
+
       - uses: softprops/action-gh-release@v1
         with:
           files: dist/*
+          draft: true
