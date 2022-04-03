@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass
 from random import choice, random
 from time import time_ns
-from typing import Dict, Optional
+from typing import Dict, Optional, Type
 
 from aiohttp import ClientSession
 from multidict import istr
@@ -12,7 +12,7 @@ from ..constants import StatusCode
 from ..exception import TencentLoginError
 from ..type import APPID, PT_QR_APP, CheckResult, Proxy
 from ..utils import get_all_cookie
-from .encrypt import TeaEncoder
+from .encrypt import PasswdEncoder, TeaEncoder
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
@@ -28,6 +28,7 @@ class User:
 class UPLogin(LoginBase):
     node = "node"
     _captcha = None
+    encode_cls: Type[PasswdEncoder] = TeaEncoder
 
     def __init__(
         self,
@@ -41,7 +42,7 @@ class UPLogin(LoginBase):
         assert user.uin
         assert user.pwd
         self.user = user
-        self.pwder = TeaEncoder(user.pwd)
+        self.pwder = self.encode_cls(sess, user.pwd)
 
     async def encodePwd(self, r: CheckResult) -> str:
         return await self.pwder.encode(r)

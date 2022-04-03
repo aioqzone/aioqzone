@@ -47,7 +47,7 @@ class TestRequest:
             assert r.salt
             assert await login.encodePwd(r)
 
-    async def testLogin(self, login):
+    async def testLogin(self, login: UPLogin):
         r = await login.check()
         try:
             assert await login.login(r)

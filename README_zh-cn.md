@@ -28,7 +28,7 @@ aioqzone封装了一些Qzone接口。
 - [x] API 结果类型验证 (pydantic)
 - [x] 异步设计
 - [x] 易于二次开发
-- [x] 文档支持(https://jamzumsum.github.io/aioqzone)
+- [x] 文档支持(https://aioqzone.github.io/aioqzone)
 
 __在做了:__
 
