@@ -19,7 +19,7 @@ packages = [
 python = ">=3.7,<3.11"
 aiohttp = "^3.8.1"
 pydantic = "^1.9.0"
-pytz = "^2021.3"
+pytz = "^2022.1"
 lxml = "^4.8.0"
 cssselect = "^1.1.0"
 opencv-python-headless ="^4.5.5"
