@@ -28,7 +28,7 @@ aioqzone is a python package handling Qzone web login and wrapping some common Q
 - [x] api response validation (pydantic)
 - [x] async design
 - [x] complete infrastructure to ease your own develop
-- [x] [doc support](https://jamzumsum.github.io/aioqzone)
+- [x] [doc support](https://aioqzone.github.io/aioqzone)
 
 __Working On:__
 
