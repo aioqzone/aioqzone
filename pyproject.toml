@@ -8,12 +8,23 @@ readme = "README.md"
 homepage = "https://github.com/aioqzone/aioqzone"
 repository = "https://github.com/aioqzone/aioqzone"
 documentation = "https://aioqzone.github.io/aioqzone"
+keywords = ["qzone-api", "autologin", "asyncio-spider"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: aiohttp",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
+]
 
 packages = [
     { include = "aioqzone", from = "src" },
     { include = "jssupport", from = "src" },
     { include = "qqqr", from = "src" }
 ]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/aioqzone/aioqzone/issues"
 
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
