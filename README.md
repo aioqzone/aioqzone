@@ -2,8 +2,9 @@
 
 aioqzone is a python package handling Qzone web login and wrapping some common Qzone Http apis.
 
-[![black](https://img.shields.io/badge/python-3.7%20%7C%203.10-blue)][home]
+[![python](https://img.shields.io/pypi/pyversions/aioqzone?logo=python&logoColor=white)][home]
 [![QQQR](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml)
+[![version](https://img.shields.io/pypi/v/aioqzone?logo=python)][pypi]
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [简体中文](README_zh-cn.md)
@@ -34,9 +35,11 @@ __Working On:__
 
 - [ ] test coverage
 
-## Dependency out of `setup.cfg`
+## Node Dependencies
 
-- NodeJS (jssupport)
+- `jssupport.jsjson.AstLoader` needn't outside processes.
+- To use `jssupport.execjs` and `jssupport.jsjson.NodeLoader`, you need to have `Node.js` installed (at least).
+- To use  `jssupport.jsdom`, you need to have npm packages `jsdom` and `canvas` to be installed.
 
 ## Description
 
@@ -79,3 +82,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
 [aioqzone-feed]: https://github.com/aioqzone/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
+[pypi]: https://pypi.org/project/aioqzone

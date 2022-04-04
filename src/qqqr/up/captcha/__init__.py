@@ -5,17 +5,18 @@ import re
 from math import floor
 from random import choices, randint, random
 from time import time
-from typing import Any, Dict, Iterable, Tuple, cast
+from typing import Any, Dict, Iterable, List, Tuple, Type, cast
 from urllib.parse import unquote, urlencode
 
 from aiohttp import ClientSession as Session
 from multidict import MutableMultiMapping, istr
-from yarl import URL
 
 from jssupport.execjs import ExecJS
 from jssupport.jsjson import json_loads
 
 from .jigsaw import Jigsaw
+from .type import CaptchaConfig, PowCfg, PrehandleResp, VerifyResp
+from .vm import TDC
 
 PREHANDLE_URL = "https://t.captcha.qq.com/cap_union_prehandle"
 SHOW_NEW_URL = "https://t.captcha.qq.com/cap_union_new_show"
@@ -33,7 +34,7 @@ def hex_add(h: str, o: int):
     return hex(int(h, 16) + o)[2:]
 
 
-class ScriptHelper:
+class IframeParser:
     def __init__(self, appid: int, sid: str, subsid: int) -> None:
         self.aid = appid
         self.sid = sid
@@ -42,25 +43,25 @@ class ScriptHelper:
     def parseCaptchaConf(self, iframe: str):
         m = re.search(r"window\.captchaConfig=(\{.*\});", iframe)
         assert m
-        ijson = m.group(1)
-        self.conf: Dict[str, Any] = json_loads(ijson)  # type: ignore
+        self.conf = CaptchaConfig.parse_obj(json_loads(m.group(1)))
+        return self.conf
 
     def cdn(self, cdn: int) -> str:
         assert cdn in (0, 1, 2)
-        assert isinstance(self.conf, dict)
         data = {
             "aid": self.aid,
-            "sess": self.conf["sess"],
+            "sess": self.conf.sess,
             "sid": self.sid,
             "subsid": self.subsid + cdn,
         }
         if cdn:
             data["img_index"] = cdn
-        path = self.conf[f"cdnPic{cdn if cdn else 1}"]
+        path = getattr(self.conf, f"cdnPic{cdn if cdn else 1}")
+        assert isinstance(path, str)
         return f"https://t.captcha.qq.com{path}?{urlencode(data)}"
 
     @staticmethod
-    def slide_js_url(iframe):
+    def slide_blob_url(iframe):
         m = re.search(r"https://captcha\.gtimg\.com/1/tcaptcha-slide\.\w+\.js", iframe)
         assert m
         return m.group(0)
@@ -71,44 +72,9 @@ class ScriptHelper:
         assert m
         return "https://t.captcha.qq.com" + m.group(1)
 
-
-class VM:
-    vmAvailable = 0
-    vmByteCode = 0
-
-    def __init__(self, tdx: str, header: MutableMultiMapping[str]) -> None:
-        assert "User-Agent" in header
-        assert "cookie" in header
-        assert "Referer" in header
-        self.tdx = ExecJS(js=self.constructWindow(header) + tdx)
-
     @staticmethod
-    def constructWindow(header: MutableMultiMapping[str]):
-        window = 'var href="%s",ua="%s",cookie="%s"\n' % (
-            header["Referer"],
-            header["User-Agent"],
-            header["cookie"],
-        )
-        from pathlib import Path
-
-        with open(Path(__file__).parent / "window.js") as f:
-            window += f.read()
-        return window
-
-    async def getData(self):
-        return unquote((await self.tdx("window.TDC.getData", True)).strip())
-
-    async def getInfo(self) -> dict:
-        return cast(dict, json_loads(await self.tdx("window.TDC.getInfo")))
-
-    def setData(self, d: dict):
-        self.tdx.addfunc("window.TDC.setData", d)
-
-    def clearTc(self):
-        return self.tdx("window.TDC.clearTc")
-
-    async def getCookie(self):
-        return (await self.tdx.get("window.document.cookie")).strip()
+    def vmslide_js_url(iframe):
+        raise NotImplementedError
 
 
 class Captcha:
@@ -131,31 +97,11 @@ class Captcha:
     def base64_ua(self):
         return base64.b64encode(self.session.headers["User-Agent"].encode()).decode()
 
-    async def prehandle(self, xlogin_url):
+    async def prehandle(self, xlogin_url) -> PrehandleResp:
         """
-        call this before call `show`.
+        call this before calling :meth:`.iframe`.
 
-        args:
-            xlogin_url: the url requested in QRLogin.request
-
-        returns:
-            dict
-
-        example:
-        ~~~
-            {
-                "state": 1,
-                "ticket": "",
-                "capclass": "1",
-                "subcapclass": "15",
-                "src_1": "cap_union_new_show",
-                "src_2": "template/new_placeholder.html",
-                "src_3": "template/new_slide_placeholder.html",
-                "sess": "s0FXwryrkuYcdadBBb1d3_xihwN-42KXNAQQg6_5FKAuF-MdGmSlD9H7hQg29GLnk7uQLrsgHVRCQ7Mu1ylB6jY-XqrWaGPmoUfNJfJKjTY0ahaC16M6qb8bBsKJH67j8UPnI3r84TI35HMgtKh_t40jkHbp1l67l55rKEm4HHA27oIiEvD1rtUvb8UK2Rgfe7mb4wtuAvMrG-wVpZkamFhvx0e0GHlVCeDwBQ7o7cn0h4oH1V9pLN6GBkGiqBgHeTdFKqJH-FqNI*",
-                "randstr": "",
-                "sid": "874820883465668800"
-            }
-        ~~~
+        :param xlogin_url: the url requested in QRLogin.request
         """
         CALLBACK = "_aq_596882"
         data = {
@@ -186,13 +132,13 @@ class Captcha:
             m = re.search(CALLBACK + r"\((\{.*\})\)", await r.text())
 
         assert m
-        r = m.group(1)
-        r = json.loads(r)
-        self.sess = r["sess"]
+        r = PrehandleResp.parse_raw(m.group(1))
+        self.sess = r.sess
         self.subsid = 2
         return r
 
     async def iframe(self):
+        """call this right after calling :meth:`.prehandle`"""
         assert self.sess, "call prehandle first"
 
         data = {
@@ -223,8 +169,11 @@ class Captcha:
             self.prehandleLoadTime = data["prehandleLoadTime"]
             return await r.text()
 
-    async def getBlob(self, iframe: str):
-        js_url = ScriptHelper.slide_js_url(iframe)
+    show = iframe
+    """alias of :meth:`.iframe`"""
+
+    async def get_blob(self, iframe: str):
+        js_url = IframeParser.slide_blob_url(iframe)
         async with self.session.get(js_url, ssl=self.ssl) as r:
             r.raise_for_status()
             js = await r.text()
@@ -232,38 +181,31 @@ class Captcha:
         assert m
         return m.group(1)
 
-    async def getTdx(self, iframe: str):
-        js_url = ScriptHelper.tdx_js_url(iframe)
-        header = self.session.headers.copy()
-        header["cookie"] = "; ".join(
-            f"{k}={v.value}"
-            for k, v in self.session.cookie_jar.filter_cookies(URL("qq.com")).items()
-        )
+    async def get_tdc_vm(self, iframe: str, *, cls: Type[TDC] = TDC):
+        js_url = IframeParser.tdx_js_url(iframe)
+        self.vm = cls(iframe, header=self.session.headers.copy())
+
         async with self.session.get(js_url) as r:
             r.raise_for_status()
-            self.vm = VM(await r.text(), header=header)
+            self.vm.load_vm(await r.text())
 
-        m = re.search(r"TDC_itoken=([\w%]+);?", await self.vm.getCookie())
-        assert m
-        c = m.group(1)
-        self.session.cookie_jar.update_cookies({"TDC_itoken": c})
         return self.vm
 
-    async def matchMd5(self, iframe: str, powCfg: dict) -> Tuple[int, int]:
+    async def match_md5(self, iframe: str, powCfg: PowCfg) -> Tuple[int, int]:
         if not hasattr(self, "_matchMd5"):
-            blob = await self.getBlob(iframe)
+            blob = await self.get_blob(iframe)
             m = re.search(r",(function\(\w,\w,\w\).*?duration.*?),", blob)
             assert m
             blob = m.group(1)
             blob = f"var n=Object();!{blob}(null,n,null);"
             blob += "function matchMd5(p, m){return n.getWorkloadResult({nonce:p,target:m})}"
             self._matchMd5 = ExecJS(js=blob).bind("matchMd5")
-        d = await self._matchMd5(powCfg["prefix"], powCfg["md5"])
+        d = await self._matchMd5(powCfg.prefix, powCfg.md5)
         d = cast(Dict[str, int], json_loads(d.strip("\n")))
         return int(d["ans"]), int(d["duration"])
 
     @staticmethod
-    def imitateDrag(x: int):
+    def imitateDrag(x: int) -> List[List[int]]:
         assert x < 300
         # 244, 1247
         t = randint(1200, 1300)
@@ -291,31 +233,19 @@ class Captcha:
         return await asyncio.gather(*(inner(i) for i in urls))
 
     async def verify(self):
-        """
-        example:
-        ~~~
-        {
-            "errorCode": "0",
-            "randstr": "@VTn",
-            "ticket": "t03UtRJOy9txaidDDdx5FBzSN_uwipfzMGe1pjDMIoO3dS2UUp1EEWiuZmIotD_709cAYhPGWo2M-uQZxorFH8JtGEhqpSYeRQ1h84opX2TQYWGRFATffLj8vsw_U3YJPHR5MPcvHsVGtM*",
-            "errMessage": "",
-            "sess": ""
-        }
-        ~~~
-        """
-        s = ScriptHelper(self.appid, self.sid, self.subsid)
+        s = IframeParser(self.appid, self.sid, self.subsid)
         iframe = await self.iframe()
         s.parseCaptchaConf(iframe)
-        Ians, duration = await self.matchMd5(iframe, s.conf["powCfg"])
-        await self.getTdx(iframe)
+        Ians, duration = await self.match_md5(iframe, s.conf.powCfg)
+        await self.get_tdc_vm(iframe)
 
         waitEnd = time() + 0.6 * random() + 0.9
 
-        j = Jigsaw(*await self.rio(s.cdn(i) for i in range(3)), top=floor(int(s.conf["spt"])))
+        j = Jigsaw(*await self.rio(s.cdn(i) for i in range(3)), top=floor(int(s.conf.spt)))
 
-        self.vm.setData({"clientType": 2})
-        self.vm.setData({"coordinate": [10, 24, 0.4103]})
-        self.vm.setData(
+        self.vm.set_data({"clientType": 2})
+        self.vm.set_data({"coordinate": [10, 24, 0.4103]})
+        self.vm.set_data(
             {
                 "trycnt": 1,
                 "refreshcnt": 0,
@@ -323,53 +253,63 @@ class Captcha:
                 "dragobj": 1,
             }
         )
-        self.vm.setData({"ft": "qf_7P_n_H"})
-        collect = await self.vm.getData()
-        data = {
-            "aid": self.appid,
-            "protocol": "https",
-            "accver": 1,
-            "showtype": s.conf["showtype"],
-            "ua": self.base64_ua,
-            "noheader": s.conf["noheader"],
-            "fb": 1,
-            "enableDarkMode": 0,
-            "sid": self.sid,
-            "grayscale": 1,
-            "clientype": 2,
-            "sess": s.conf["sess"],
-            "fwidth": 0,
-            "wxLang": "",
-            "tcScale": 1,
-            "uid": s.conf["uid"],
-            "cap_cd": "",
-            "rnd": rnd6(),
-            "prehandleLoadTime": self.prehandleLoadTime,
-            "createIframeStart": self.createIframeStart,
-            "subsid": self.subsid,
-            "cdata": 0,
-            "vsig": s.conf["vsig"],
-            "websig": s.conf["websig"],
-            "subcapclass": s.conf["subcapclass"],
-            "fpinfo": "",
-            "ans": f"{j.left},{j.top};",
-            "nonce": s.conf["nonce"],
-            "vlg": f"{self.vm.vmAvailable}_{self.vm.vmByteCode}_1",
-            "pow_answer": hex_add(s.conf["powCfg"]["prefix"], Ians) if Ians else Ians,
-            "pow_calc_time": duration,
-            "eks": (await self.vm.getInfo())["info"],
-            "tlg": len(collect),
-            s.conf["collectdata"]: collect,
-            # TODO: unknown
-            # 'vData': 'gC*KM-*rjuHBcUjIt9kL6SV6JGdgfzMmP0BiFcaDg_7ctHwCjeoz4quIjb2FTgdJLBeCcKCZB_Mv7suXumolfmpSKZVIp7Un2N3b*fbwHX9aqRgjp5fmsgkf6aOgnhU_ttr_4xJZKVjStGX*hMwgBeHE_zuz-iDKy1coGdurLh559T6MoBdJdMAxtIlGJxAexbt6eDz3Aw5pD_tR01ElO7YY',
-        }
+        self.vm.set_data({"ft": "qf_7P_n_H"})
+        collect = await self.vm.get_data()
+        data = s.conf.dict(
+            include={
+                "showtype",
+                "noheader",
+                "sess",
+                "uid",
+                "vsig",
+                "websig",
+                "subcapclass",
+                "nonce",
+            }
+        )
+        data.update(
+            {
+                "protocol": "https",
+                "accver": 1,
+                "enableDarkMode": 0,
+                "grayscale": 1,
+                "clientype": 2,
+                "fwidth": 0,
+                "wxLang": "",
+                "tcScale": 1,
+                "cap_cd": "",
+                "cdata": 0,
+                "fpinfo": "",
+            }
+        )
+        data.update(
+            {
+                "aid": self.appid,
+                "ua": self.base64_ua,
+                "fb": 1,
+                "sid": self.sid,
+                "rnd": rnd6(),
+                "prehandleLoadTime": self.prehandleLoadTime,
+                "createIframeStart": self.createIframeStart,
+                "subsid": self.subsid,
+                "ans": f"{j.left},{j.top};",
+                "vlg": f"{self.vm.vmAvailable}_{self.vm.vmByteCode}_1",
+                "pow_answer": hex_add(s.conf.powCfg.prefix, Ians) if Ians else Ians,
+                "pow_calc_time": duration,
+                "eks": (await self.vm.get_info())["info"],
+                "tlg": len(collect),
+                s.conf.collectdata: collect,
+                # TODO: unknown
+                # 'vData': 'gC*KM-*rjuHBcUjIt9kL6SV6JGdgfzMmP0BiFcaDg_7ctHwCjeoz4quIjb2FTgdJLBeCcKCZB_Mv7suXumolfmpSKZVIp7Un2N3b*fbwHX9aqRgjp5fmsgkf6aOgnhU_ttr_4xJZKVjStGX*hMwgBeHE_zuz-iDKy1coGdurLh559T6MoBdJdMAxtIlGJxAexbt6eDz3Aw5pD_tR01ElO7YY',
+            }
+        )
         await asyncio.sleep(max(0, waitEnd - time()))
         async with self.session.post(VERIFY_URL, data=data, ssl=self.ssl) as r:
             self.sess = None
             self.createIframeStart = 0
             self.prehandleLoadTime = 0
-            r = await r.json()
+            r = VerifyResp.parse_raw(await r.text())
 
-        if int(r["errorCode"]):
-            raise RuntimeError(f"Code {r['errorCode']}: {r['errMessage']}")
+        if r.errorCode:
+            raise RuntimeError(f"Code {r.errorCode}: {r.errMessage}")
         return r

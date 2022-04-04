@@ -2,11 +2,13 @@
 .vscode
 .env
 poetry.lock
+package-lock.json
 
 # venv
 .venv
 .tox
 /venv
+node_modules
 
 # cache and tempfiles
 *.pyc
