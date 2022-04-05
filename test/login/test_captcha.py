@@ -100,7 +100,7 @@ class TestVM:
         cookie = await vm.get_cookie()
         assert "TDC_itoken" in cookie
 
-    @pytest.mark.skip
+    @pytest.mark.needuser
     async def test_decrypt(self, captcha: Captcha, iframe: str):
         vm = await captcha.get_tdc_vm(iframe)
         vm.set_data({"clientType": 2})
@@ -111,6 +111,6 @@ class TestVM:
         vm.set_data({"ft": "qf_7P_n_H"})
         collect = await vm.get_data()
 
-        dec: DecryptTDC = await captcha.get_tdc_vm(iframe, cls=DecryptTDC)  # type: ignore
+        dec = await captcha.get_tdc_vm(iframe, cls=DecryptTDC)
         decrypt = await dec.decrypt(collect)
         assert decrypt

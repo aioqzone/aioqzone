@@ -5,7 +5,7 @@ import re
 from math import floor
 from random import choices, randint, random
 from time import time
-from typing import Any, Dict, Iterable, List, Tuple, Type, cast
+from typing import Any, Dict, Iterable, List, Tuple, Type, TypeVar, cast
 from urllib.parse import unquote, urlencode
 
 from aiohttp import ClientSession as Session
@@ -16,7 +16,7 @@ from jssupport.jsjson import json_loads
 
 from .jigsaw import Jigsaw
 from .type import CaptchaConfig, PowCfg, PrehandleResp, VerifyResp
-from .vm import TDC
+from .vm import TDC, Slide
 
 PREHANDLE_URL = "https://t.captcha.qq.com/cap_union_prehandle"
 SHOW_NEW_URL = "https://t.captcha.qq.com/cap_union_new_show"
@@ -24,6 +24,8 @@ VERIFY_URL = "https://t.captcha.qq.com/cap_union_new_verify"
 
 time_s = lambda: int(1e3 * time())
 rnd6 = lambda: str(random())[2:8]
+
+_TDC_TY = TypeVar("_TDC_TY", bound=TDC)
 
 
 def hex_add(h: str, o: int):
@@ -181,15 +183,16 @@ class Captcha:
         assert m
         return m.group(1)
 
-    async def get_tdc_vm(self, iframe: str, *, cls: Type[TDC] = TDC):
+    async def get_tdc_vm(self, iframe: str, *, cls: Type[_TDC_TY] = TDC) -> _TDC_TY:
         js_url = IframeParser.tdx_js_url(iframe)
-        self.vm = cls(iframe, header=self.session.headers.copy())
+        self.tdc = cls(iframe, header=self.session.headers.copy())
+        self.vmslide = Slide()
 
         async with self.session.get(js_url) as r:
             r.raise_for_status()
-            self.vm.load_vm(await r.text())
+            self.tdc.load_vm(await r.text())
 
-        return self.vm
+        return cast(_TDC_TY, self.tdc)
 
     async def match_md5(self, iframe: str, powCfg: PowCfg) -> Tuple[int, int]:
         if not hasattr(self, "_matchMd5"):
@@ -243,9 +246,9 @@ class Captcha:
 
         j = Jigsaw(*await self.rio(s.cdn(i) for i in range(3)), top=floor(int(s.conf.spt)))
 
-        self.vm.set_data({"clientType": 2})
-        self.vm.set_data({"coordinate": [10, 24, 0.4103]})
-        self.vm.set_data(
+        self.tdc.set_data({"clientType": 2})
+        self.tdc.set_data({"coordinate": [10, 24, 0.4103]})
+        self.tdc.set_data(
             {
                 "trycnt": 1,
                 "refreshcnt": 0,
@@ -253,8 +256,9 @@ class Captcha:
                 "dragobj": 1,
             }
         )
-        self.vm.set_data({"ft": "qf_7P_n_H"})
-        collect = await self.vm.get_data()
+        self.tdc.set_data({"ft": "qf_7P_n_H"})
+        collect = await self.tdc.get_data()
+        tlg = len(collect)
         data = s.conf.dict(
             include={
                 "showtype",
@@ -293,14 +297,13 @@ class Captcha:
                 "createIframeStart": self.createIframeStart,
                 "subsid": self.subsid,
                 "ans": f"{j.left},{j.top};",
-                "vlg": f"{self.vm.vmAvailable}_{self.vm.vmByteCode}_1",
+                "vlg": f"{self.tdc.vmAvailable}_{self.tdc.vmByteCode}_1",
                 "pow_answer": hex_add(s.conf.powCfg.prefix, Ians) if Ians else Ians,
                 "pow_calc_time": duration,
-                "eks": (await self.vm.get_info())["info"],
-                "tlg": len(collect),
+                "eks": (await self.tdc.get_info())["info"],
+                "tlg": tlg,
                 s.conf.collectdata: collect,
-                # TODO: unknown
-                # 'vData': 'gC*KM-*rjuHBcUjIt9kL6SV6JGdgfzMmP0BiFcaDg_7ctHwCjeoz4quIjb2FTgdJLBeCcKCZB_Mv7suXumolfmpSKZVIp7Un2N3b*fbwHX9aqRgjp5fmsgkf6aOgnhU_ttr_4xJZKVjStGX*hMwgBeHE_zuz-iDKy1coGdurLh559T6MoBdJdMAxtIlGJxAexbt6eDz3Aw5pD_tR01ElO7YY',
+                "vData": await self.vmslide.get_data(s.conf.sess, tlg),
             }
         )
         await asyncio.sleep(max(0, waitEnd - time()))

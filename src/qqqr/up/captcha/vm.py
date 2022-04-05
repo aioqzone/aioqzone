@@ -1,9 +1,10 @@
 from pathlib import Path
 from typing import cast
-from urllib.parse import unquote
+from urllib.parse import unquote, urlencode
 
 from multidict import MutableMultiMapping
 
+from jssupport.execjs import ExecJS
 from jssupport.jsdom import JSDOM
 from jssupport.jsjson import json_loads
 
@@ -66,24 +67,34 @@ class DecryptTDC(TDC):
         self.vmcode = vmcode
 
     def decrypt(self, collect: str):
-        """... seealso:: https://www.52pojie.cn/thread-1521480-1-1.html"""
+        """.. seealso:: https://www.52pojie.cn/thread-1521480-1-1.html"""
 
         return self._js("dec", self.vmcode, collect)
 
 
 class Slide:
-    """Exec vm-slide.js in JSDOM."""
+    """Exec vdata.js in plain node."""
 
-    def __init__(self, iframe: str, header: MutableMultiMapping[str]) -> None:
-        self._js = JSDOM(
-            src=iframe,
-            ua=header["User-Agent"],
-            location=header["Referer"],
-            referrer="https://xui.ptlogin2.qq.com/",
-        )
+    def __init__(self) -> None:
+        self._js = ExecJS(js=self.vdatajs())
 
-    def load_vm(self, vmcode: str):
-        self._js.add_eval(vmcode)
+    def vdatajs(self) -> str:
+        with open(Path(__file__).parent / "vdata.js") as f:
+            return f.read()
 
-    async def get_data(self):
-        raise NotImplementedError
+    @staticmethod
+    def get_key(sess: str, tlg: int):
+        return "".join(sess[int(c)] for c in str(tlg))
+
+    def get_data(self, sess: str, tlg: int):
+        param = {
+            "key": self.get_key(sess, tlg),
+            "ss": "11%2Ctdc%2Cslide%2Cvm",
+            "tp": 8393678227721880383,
+            "env": 0,
+            "py": 0,
+            "version": 2,
+            "cLod": "loadTDC",
+            "inf": "iframe",
+        }
+        return self._js("enc", urlencode(param))
