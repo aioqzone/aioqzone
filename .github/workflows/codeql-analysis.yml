@@ -12,17 +12,13 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches:
-      - beta
-      - dev
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ beta ]
     paths:
       - "src/**"
       - "test/**"
       - ".github/workflows/codeql-analysis.yml"
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ beta ]
   schedule:
     - cron: '31 23 * * 0'
 

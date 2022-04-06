@@ -12,7 +12,7 @@ from ..constants import StatusCode
 from ..exception import TencentLoginError
 from ..type import APPID, PT_QR_APP, CheckResult, Proxy
 from ..utils import get_all_cookie
-from .encrypt import PasswdEncoder, TeaEncoder
+from .encrypt import NodeEncoder, PasswdEncoder, TeaEncoder
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
@@ -28,7 +28,7 @@ class User:
 class UPLogin(LoginBase):
     node = "node"
     _captcha = None
-    encode_cls: Type[PasswdEncoder] = TeaEncoder
+    encode_cls: Type[PasswdEncoder] = NodeEncoder
 
     def __init__(
         self,

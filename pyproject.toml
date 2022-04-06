@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.5.2.dev0"
+version = "0.5.2.dev1"
 description = "Python wrapper for Qzone web login and Qzone http api."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
