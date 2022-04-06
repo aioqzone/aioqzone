@@ -2,8 +2,9 @@
 
 aioqzone封装了一些Qzone接口。
 
-[![black](https://img.shields.io/badge/python-3.7%20%7C%203.10-blue)][home]
+[![python](https://img.shields.io/pypi/pyversions/aioqzone?logo=python&logoColor=white)][home]
 [![QQQR](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml)
+[![version](https://img.shields.io/pypi/v/aioqzone?logo=python)][pypi]
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [English](README.md)
@@ -34,9 +35,11 @@ __在做了:__
 
 - [ ] 完善的测试覆盖
 
-## `setup.cfg` 之外的依赖
+## node 依赖
 
-- NodeJS (jssupport)
+- `jssupport.jsjson.AstLoader` 不需要借助其他进程；
+- 要使用 `jssupport.execjs` 和 `jssupport.jsjson.NodeLoader`，您（至少）需要安装 `Node.js`；
+- 要使用 `jssupport.jsdom`，您需要安装 `jsdom` 和 `canvas` 两个 npm 包。
 
 ## 包描述
 
@@ -78,3 +81,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
 [aioqzone-feed]: https://github.com/aioqzone/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
+[pypi]: https://pypi.org/project/aioqzone
