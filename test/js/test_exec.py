@@ -1,12 +1,15 @@
 import pytest
 
 from jssupport.execjs import ExecJS
+from jssupport.jsdom import JSDOM
 
 pytestmark = pytest.mark.asyncio
 
 
 def test_version():
-    if ExecJS().version() is None:
+    from shutil import which
+
+    if which("node") is None:
         pytest.skip(allow_module_level=True)
 
 
@@ -22,3 +25,8 @@ async def test_bind():
     asis = asis.bind("a")
     assert "1" == await asis(1)
     assert "true" == await asis(True)
+
+
+async def test_check_jsdom():
+    dom = JSDOM(src="", ua="", location="", referrer="")
+    assert dom.check_jsdom()

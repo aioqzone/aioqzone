@@ -1,4 +1,5 @@
 from pathlib import Path
+from shutil import which
 
 from jssupport.execjs import ExecJS
 
@@ -10,6 +11,7 @@ class JSDOM(ExecJS):
         src = src.replace("\n", " ")
         pre_def = f"var src=`{src}`,ua='{ua}',location='{location}',referrer='{referrer}';\n"
         super().__init__(node, js=pre_def + self._windowjs())
+        assert self.check_jsdom(), "jsdom should be installed."
 
     def _windowjs(self):
         """Override this if you have other js files."""
@@ -21,3 +23,11 @@ class JSDOM(ExecJS):
 
     def add_eval(self, script: str):
         self.addfunc("window.eval", script)
+
+    def check_jsdom(self):
+        from subprocess import run
+
+        require = lambda m: run(
+            self.node, executable=which(self.node), input=f"require('{m}')", text=True
+        )
+        return require("jsdom").returncode == 0
