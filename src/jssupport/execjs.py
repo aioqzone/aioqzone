@@ -8,6 +8,7 @@ Offers a class to execute js by communicating with subprocess.
 import asyncio
 from collections import defaultdict
 from functools import partial
+from shutil import which
 from sys import platform
 from typing import Any, Coroutine, Optional
 
@@ -17,7 +18,7 @@ class ExecJS:
         self.js = js
         self.que = []
         self.node = node
-        assert self.version() is not None, f"`{self.node}` is not installed."
+        assert which(node) is not None, f"`{self.node}` is not installed."
         assert self.loop_policy_check()
 
     @staticmethod
@@ -36,6 +37,7 @@ class ExecJS:
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
+            executable=which(self.node),
         )
         stdout, stderr = await p.communicate(js.encode())
         removesuffix = lambda s: s[:-1] if str.endswith(s, "\n") else s
@@ -61,22 +63,6 @@ class ExecJS:
     def bind(self, func: str, new: bool = True):
         n = ExecJS(self.node, js=self.js) if new else self
         return partial(n.__call__, func)
-
-    def version(self):
-        import subprocess
-
-        try:
-            p = subprocess.Popen(
-                [self.node, "-v"],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-        except FileNotFoundError:
-            return
-        stdout, stderr = p.communicate()
-        if stderr:
-            raise RuntimeError(stderr.decode())
-        return stdout.decode()
 
     def loop_policy_check(self):
         """On Windows, the default event loop :external:class:`asyncio.ProactorEventLoop` supports subprocesses,
