@@ -49,7 +49,7 @@ class JSDOM(ExecJS):
         return dedent(js)
 
     def eval(self, script: str):
-        return self(f"window.eval({script})")
+        return self(f"window.eval(`{script}`)")
 
     def add_eval(self, script: str):
         self.add_run("window.eval", script)

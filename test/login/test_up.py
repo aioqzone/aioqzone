@@ -45,7 +45,8 @@ class TestRequest:
         if r.code != 1:
             assert r.verifycode
             assert r.salt
-            assert await login.encodePwd(r)
+            p = await login.encodePwd(r)
+            assert len(p) > 4
 
     async def testLogin(self, login: UPLogin):
         r = await login.check()

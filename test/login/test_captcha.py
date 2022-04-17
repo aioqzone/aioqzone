@@ -59,6 +59,8 @@ class TestCaptcha:
         ans, duration = await captcha.match_md5(iframe, shelper.conf.powCfg)
         assert ans <= 3e5
         assert duration > 0
+        ans2, _ = await captcha.match_md5(iframe, shelper.conf.powCfg)
+        assert ans == ans2
 
     async def test_puzzle(self, captcha: Captcha, shelper: IframeParser):
         j = Jigsaw(

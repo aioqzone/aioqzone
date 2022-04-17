@@ -41,25 +41,26 @@ class NodeEncoder(PasswdEncoder):
     Make sure this always work.
     """
 
-    __f = None
+    __env = None
 
     async def getEncryption(self, salt: str, verifycode: str) -> str:
-        if self.__f is None:
+        from jssupport.execjs import ExecJS, Partial
+
+        if self.__env is None:
             js = await self.login_js()
             m = re.search(r"function\(module,exports,__webpack_require__\).*\}", js)
             assert m
             funcs = m.group(0)
-            js = "var navigator = new Object; navigator.appName = 'Netscape';"
-            js += f"var a=[{funcs}];"
-            js += "function n(k) {var t,e=new Object;return a[k](t,e,n),e}\n"
-            js += "function getEncryption(p,s,v){var t,e=new Object;return a[9](t,e,n),e['default'].getEncryption(p,s,v,undefined)}"
+            env = ExecJS()
+            env.setup.append("var navigator = new Object; navigator.appName = 'Netscape'")
+            env.setup.append(f"var a=[{funcs}]")
+            env.setup.append("function n(k) {var t,e=new Object;return a[k](t,e,n),e}")
+            env.setup.append(
+                "function getEncryption(p,s,v){var t,e=new Object;return a[9](t,e,n),e['default'].getEncryption(p,s,v,undefined)}"
+            )
+            self.__env = env
 
-            from jssupport.execjs import ExecJS
-
-            js = ExecJS("node", js=js)
-            self.__f = js.bind("getEncryption")
-
-        return (await self.__f(self._passwd, salt, verifycode)).strip()
+        return (await self.__env(Partial("getEncryption", self._passwd, salt, verifycode))).strip()
 
 
 class TeaEncoder(PasswdEncoder):

@@ -1,20 +1,3 @@
-function hex2int(hex) {
-    var len = hex.length, a = new Array(len), code;
-    for (var i = 0; i < len; i++) {
-        code = hex.charCodeAt(i);
-        if (48 <= code && code < 58) {
-            code -= 48;
-        } else {
-            code = (code & 0xdf) - 65 + 10;
-        }
-        a[i] = code;
-    }
-
-    return a.reduce(function (acc, c) {
-        acc = 16 * acc + c;
-        return acc;
-    }, 0);
-}
 function Base64() {
     // private property
     this._keyStr = "GV5yc1_twaSpHPOE7R3jv9fqC2L-0TxMi4FuolBAbQeIgJU*XzZKWkDNh6n8dsrmY";

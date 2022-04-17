@@ -1,17 +1,16 @@
 import asyncio
 import base64
-import json
 import re
 from math import floor
 from random import choices, randint, random
 from time import time
-from typing import Any, Dict, Iterable, List, Tuple, Type, TypeVar, cast
-from urllib.parse import unquote, urlencode
+from typing import Dict, Iterable, List, Tuple, Type, TypeVar, cast
+from urllib.parse import urlencode
 
 from aiohttp import ClientSession as Session
-from multidict import MutableMultiMapping, istr
+from multidict import istr
 
-from jssupport.execjs import ExecJS
+from jssupport.execjs import ExecJS, Partial
 from jssupport.jsjson import json_loads
 
 from .jigsaw import Jigsaw
@@ -83,6 +82,7 @@ class Captcha:
     sess = None
     createIframeStart = 0
     subsid = 1
+    __blob = None
 
     # (c_login_2.js)showNewVC-->prehandle
     # prehandle(recall)--call tcapcha-frame.*.js-->new_show
@@ -195,16 +195,19 @@ class Captcha:
         return cast(_TDC_TY, self.tdc)
 
     async def match_md5(self, iframe: str, powCfg: PowCfg) -> Tuple[int, int]:
-        if not hasattr(self, "_matchMd5"):
+        if self.__blob is None:
             blob = await self.get_blob(iframe)
             m = re.search(r",(function\(\w,\w,\w\).*?duration.*?),", blob)
             assert m
             blob = m.group(1)
-            blob = f"var n=Object();!{blob}(null,n,null);"
-            blob += "function matchMd5(p, m){return n.getWorkloadResult({nonce:p,target:m})}"
-            self._matchMd5 = ExecJS(js=blob).bind("matchMd5")
-        d = await self._matchMd5(powCfg.prefix, powCfg.md5)
-        d = cast(Dict[str, int], json_loads(d.strip("\n")))
+            env = ExecJS()
+            env.setup.append(f"var n=Object();!{blob}(null,n,null)")
+            env.setup.append(
+                "function matchMd5(p, m){return n.getWorkloadResult({nonce:p,target:m})}"
+            )
+            self.__blob = env
+        d = await self.__blob(Partial("matchMd5", powCfg.prefix, powCfg.md5))
+        d = cast(Dict[str, int], json_loads(d))
         return int(d["ans"]), int(d["duration"])
 
     @staticmethod
@@ -303,7 +306,7 @@ class Captcha:
                 "eks": (await self.tdc.get_info())["info"],
                 "tlg": tlg,
                 s.conf.collectdata: collect,
-                "vData": await self.vmslide.get_data(s.conf.sess, tlg),
+                "vData": self.vmslide.get_data(s.conf.sess, tlg),
             }
         )
         await asyncio.sleep(max(0, waitEnd - time()))
