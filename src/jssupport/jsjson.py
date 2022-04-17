@@ -12,10 +12,6 @@ JsonValue = Union[bool, int, str, JsonDict, JsonList]
 
 
 class NodeLoader:
-    from .execjs import ExecJS
-
-    jsonStringify = ExecJS(js="").bind("JSON.stringify", new=False)
-
     @classmethod
     async def json_loads(
         cls, js: str, try_load_first: bool = True, parser: Callable[[str], JsonValue] = json.loads
@@ -35,7 +31,9 @@ class NodeLoader:
             except json.JSONDecodeError:
                 pass
 
-        json_str = await cls.jsonStringify(js, asis=True)
+        from .execjs import Partial
+
+        json_str = await Partial("JSON.stringify", js)()
         try:
             return parser(json_str)
         except json.JSONDecodeError as e:

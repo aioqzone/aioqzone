@@ -1,18 +1,38 @@
 from pathlib import Path
+from textwrap import dedent
 from typing import cast
 from urllib.parse import unquote, urlencode
 
 from multidict import MutableMultiMapping
 
-from jssupport.execjs import ExecJS
+from jssupport.execjs import Partial
 from jssupport.jsdom import JSDOM
 from jssupport.jsjson import json_loads
 
 
 class JSDOM_tdc(JSDOM):
     def _windowjs(self):
-        with open(Path(__file__).parent / "window.tdc.js") as f:
-            return super()._windowjs() + f.read()
+        js = """
+        window = new Proxy({
+            document: new Proxy(
+                { createElement: (e) => { return {}; } },
+                {
+                    get: (targ, name) => {
+                        if (name == "addEventListener") return undefined;
+                        if (targ[name] !== undefined) return targ[name];
+                        return dom.window.document[name];
+                    }
+                }
+            )
+        }, {
+            get: (targ, name) => {
+                if (name == "addEventListener") return undefined;
+                if (targ[name] !== undefined) return targ[name];
+                return dom.window[name];
+            }
+        })
+        """
+        return super()._windowjs() + dedent(js)
 
 
 class TDC:
@@ -30,8 +50,7 @@ class TDC:
         )
 
     def load_vm(self, vmcode: str):
-        assert self._js.js
-        self._js.js += f"window.eval(`{vmcode}`);"
+        self._js.setup.append(f"window.eval(`{vmcode}`);")
 
     async def get_data(self):
         return unquote((await self._js.eval("window.TDC.getData(!0)")).strip())
@@ -69,26 +88,22 @@ class DecryptTDC(TDC):
     def decrypt(self, collect: str):
         """.. seealso:: https://www.52pojie.cn/thread-1521480-1-1.html"""
 
-        return self._js("dec", self.vmcode, collect)
+        return self._js(Partial("dec", self.vmcode, collect))
 
 
 class Slide:
-    """Exec vdata.js in plain node."""
+    """Encode and encrypt params into vdata."""
 
-    def __init__(self) -> None:
-        self._js = ExecJS(js=self.vdatajs())
-
-    def vdatajs(self) -> str:
-        with open(Path(__file__).parent / "vdata.js") as f:
-            return f.read()
+    from .vdata import VData
 
     @staticmethod
     def get_key(sess: str, tlg: int):
         return "".join(sess[int(c)] for c in str(tlg))
 
-    def get_data(self, sess: str, tlg: int):
+    @classmethod
+    def get_data(cls, sess: str, tlg: int):
         param = {
-            "key": self.get_key(sess, tlg),
+            "key": cls.get_key(sess, tlg),
             "ss": "11%2Ctdc%2Cslide%2Cvm",
             "tp": 8393678227721880383,
             "env": 0,
@@ -97,4 +112,4 @@ class Slide:
             "cLod": "loadTDC",
             "inf": "iframe",
         }
-        return self._js("enc", urlencode(param))
+        return cls.VData.encrypt(urlencode(param))
