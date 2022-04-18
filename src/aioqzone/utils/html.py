@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 class HtmlInfo(BaseModel):
     """Some info that must be extract from html response"""
 
+    nickname: str = ""
     feedstype: int
     topicid: str
     complete: bool
@@ -31,6 +32,10 @@ class HtmlInfo(BaseModel):
         root: HtmlElement = fromstring(html)
         safe = lambda i: i[0] if i else HtmlElement()
 
+        # nickname
+        nick = safe(root.cssselect("div.f-single-head div.f-nick"))
+        nickname: str = nick.text_content().strip()
+
         # feed data
         elm_fd = safe(root.cssselect('div.f-single-content i[name="feed_data"]'))
 
@@ -42,6 +47,7 @@ class HtmlInfo(BaseModel):
         toggle = safe(root.cssselect('div.f-info a[data-cmd="qz_toggle"]'))
 
         return root, cls(
+            nickname=nickname,
             feedstype=elm_fd.get("data-feedstype", None),
             topicid=elm_fd.get("data-topicid", None),
             complete=not len(toggle),

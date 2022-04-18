@@ -10,10 +10,13 @@ on:
     branches:
       - "release"
       - "release/**"
+      - "beta"
+      - "beta/**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request_target' || github.event.pull_request.merged == true && startsWith(github.head_ref, 'dev')
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
