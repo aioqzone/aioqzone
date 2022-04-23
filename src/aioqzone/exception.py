@@ -26,6 +26,9 @@ class LoginError(RuntimeError):
         self.msg = msg
         self.strategy = strategy
 
+    def __str__(self) -> str:
+        return f"{self.msg} (strategy={self.strategy})"
+
 
 class CorruptError(ValueError):
     """Data corrupted in transfer."""
