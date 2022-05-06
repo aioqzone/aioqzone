@@ -43,6 +43,7 @@ class UPLoginMan(Loginable):
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
         :raises `SystemExit`: if unexpected error raised
         """
+        METH = self.hook.LoginMethod.up
         try:
             login = UPLogin(self.sess, QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
             cookie = await login.login(await login.check())
@@ -50,17 +51,17 @@ class UPLoginMan(Loginable):
             self.sess.cookie_jar.update_cookies(cookie)
             return cookie
         except TencentLoginError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed(e.msg or ""))
+            self.add_hook_ref("hook", self.hook.LoginFailed(METH, e.msg or ""))
             logger.warning(str(e))
             raise e
         except NotImplementedError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed("10009：需要手机验证"))
+            self.add_hook_ref("hook", self.hook.LoginFailed(METH, "10009：需要手机验证"))
             logger.warning(str(e))
             raise TencentLoginError(StatusCode.NeedVerify, "Dynamic code verify not implemented")
         except:
             logger.fatal("Unexpected error in QR login.", exc_info=True)
             try:
-                await self.hook.LoginFailed("密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
+                await self.hook.LoginFailed(METH, "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
             finally:
                 exit(1)
 
@@ -80,6 +81,7 @@ class QRLoginMan(Loginable):
         :raises `SystemExit`: if unexpected error raised when polling
         """
         assert isinstance(self.hook, QREvent)
+        METH = self.hook.LoginMethod.qr
 
         man = QRLogin(self.sess, QzoneAppid, QzoneProxy)
         task = man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
@@ -103,7 +105,7 @@ class QRLoginMan(Loginable):
             await self.hook.QrFailed()
             logger.warning(str(e))
             self.add_hook_ref("hook", self.hook.QrFailed(str(e)))
-            self.add_hook_ref("hook", self.hook.LoginFailed(str(e)))
+            self.add_hook_ref("hook", self.hook.LoginFailed(METH, str(e)))
             raise e
         except KeyboardInterrupt as e:
             raise UserBreak from e
@@ -112,7 +114,7 @@ class QRLoginMan(Loginable):
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
             try:
                 await self.hook.QrFailed(msg)
-                await self.hook.LoginFailed(msg)
+                await self.hook.LoginFailed(METH, msg)
             finally:
                 exit(1)
         finally:
@@ -170,7 +172,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         else:
             msg = "你在睡觉！"
 
-        self.add_hook_ref("hook", self.hook.LoginFailed(msg))
+        self.add_hook_ref("hook", self.hook.LoginFailed(self.hook.LoginMethod.mixed, msg))
         raise LoginError(msg, self.strategy)
 
 
