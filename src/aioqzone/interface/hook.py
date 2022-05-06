@@ -4,6 +4,7 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
+from enum import Enum
 from itertools import chain
 from typing import Any, Callable, Coroutine, Dict, Generic, Optional, Set, Tuple, TypeVar
 
@@ -101,19 +102,25 @@ class Emittable(Generic[Evt]):
 class LoginEvent(Event):
     """Defines usual events happens during login."""
 
-    async def LoginFailed(self, msg: Optional[str] = None):
+    class LoginMethod(str, Enum):
+        qr = "qr"
+        up = "up"
+        mixed = "mixed"
+
+    async def LoginFailed(self, meth: LoginMethod, msg: Optional[str] = None):
         """Will be emitted on login failed.
 
         .. note::
             This event will be triggered on every failure of login attempt.
-            Means that logic in this event may be executed multiple times.
+            These can be distinguished by the `meth` parameter.
 
+        :param meth: what method this login attempt used.
         :param msg: Err msg, defaults to None.
         """
         pass
 
     async def LoginSuccess(self):
-        """Will be emitted after login success. Low prior, scheduled by loop instead of awaiting."""
+        """Will be emitted after login success."""
         pass
 
 

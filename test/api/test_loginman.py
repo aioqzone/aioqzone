@@ -17,7 +17,7 @@ class LoginEvent_Test(LoginEvent):
     async def LoginSuccess(self):
         self.login_succ = True
 
-    async def LoginFailed(self, msg: Optional[str] = None):
+    async def LoginFailed(self, meth, msg):
         self.login_fail = msg
 
 
