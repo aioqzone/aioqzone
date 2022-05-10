@@ -46,7 +46,7 @@ __Working On:__
 |package    |brief description  |
 |-----------|-------------------|
 |aioqzone   |qzone api wrapper  |
-|jssupport  |exec js            |
+|jssupport  |communicate with node|
 |qqqr       |qzone web login    |
 
 ## Examples
