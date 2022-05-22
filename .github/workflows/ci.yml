@@ -10,7 +10,7 @@ on:
       - "test/**"
       - ".github/workflows/ci.yml"
       - ".github/workflows/test.yml"
-      - "pyproject.toml"
+      - "poetry.lock"
     branches:
       - dev
       - dev/**
