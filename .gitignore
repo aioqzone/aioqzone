@@ -1,7 +1,6 @@
 # local config
 .vscode
 .env
-poetry.lock
 poetry.toml
 package-lock.json
 
