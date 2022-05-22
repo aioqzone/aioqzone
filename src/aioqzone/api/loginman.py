@@ -9,11 +9,11 @@ from typing import Dict, List, Optional, Type
 
 from aiohttp import ClientSession
 
+from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QRLogin
 from qqqr.up import UPLogin, User
-from jssupport.exception import JsRuntimeError, JsImportError, NodeNotFoundError
 
 from ..exception import LoginError
 from ..interface.hook import QREvent
@@ -21,6 +21,7 @@ from ..interface.login import Loginable
 
 logger = logging.getLogger(__name__)
 JsError = JsRuntimeError, JsImportError, NodeNotFoundError
+
 
 class ConstLoginMan(Loginable):
     """Only for test"""
