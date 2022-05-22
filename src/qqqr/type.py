@@ -24,6 +24,8 @@ class APPID:
 @dataclass
 class CheckResult:
     code: int
+    """code = 0/2/3 hideVC; code = 1 showVC
+    """
     verifycode: str
     salt: str
     verifysession: str

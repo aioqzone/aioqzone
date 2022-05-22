@@ -1,5 +1,6 @@
 import re
 from dataclasses import dataclass
+from os import environ as env
 from random import choice, random
 from time import time_ns
 from typing import Dict, Optional, Type
@@ -25,10 +26,15 @@ class User:
     pwd: str
 
 
+UseEncoder = (
+    TeaEncoder if env.get("AIOQZONE_PWDENCODER", "").strip().lower() == "python" else NodeEncoder
+)
+
+
 class UPLogin(LoginBase):
     node = "node"
     _captcha = None
-    encode_cls: Type[PasswdEncoder] = NodeEncoder
+    encode_cls: Type[PasswdEncoder] = UseEncoder
 
     def __init__(
         self,
@@ -48,15 +54,12 @@ class UPLogin(LoginBase):
         return await self.pwder.encode(r)
 
     async def check(self):
-        """[summary]
+        """check procedure before login. This will return a CheckResult object containing
+        verify code, session, etc.
 
-        Raises:
-            HTTPError: [description]
+        :raises `aiohttp.ClientResponseError`:
 
-        Returns:
-            dict:
-                code = 0/2/3 hideVC;
-                code = 1 showVC
+        :return: CheckResult
         """
         data = {
             "regmaster": "",
@@ -78,6 +81,10 @@ class UPLogin(LoginBase):
         return CheckResult(*r)
 
     async def sms(self, pt_sms_ticket: str):
+        """Send verify sms (to get dynamic code)
+
+        :param pt_sms_ticket: corresponding value in cookie, of the key with the same name
+        """
         data = {
             "bkn": "",
             "uin": self.user.uin,
