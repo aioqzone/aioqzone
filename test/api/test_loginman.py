@@ -1,24 +1,31 @@
 import asyncio
 from os import environ as env
-from typing import Optional
 
 import pytest
 import pytest_asyncio
 from aiohttp import ClientSession
 
 import aioqzone.api.loginman as api
-from aioqzone.interface.hook import LoginEvent, QREvent
+from aioqzone.interface.hook import QREvent, UPEvent
 from qqqr.exception import TencentLoginError
 
 from . import showqr
 
 
-class LoginEvent_Test(LoginEvent):
+class UPEvent_Test(UPEvent):
     async def LoginSuccess(self):
         self.login_succ = True
 
-    async def LoginFailed(self, meth, msg):
+    async def LoginFailed(self, msg):
         self.login_fail = msg
+
+
+class QREvent_Test(QREvent):
+    async def QrFetched(self, png: bytes):
+        showqr(png)
+
+    async def QrSucceess(self):
+        self.qr_succ = True
 
 
 @pytest_asyncio.fixture(scope="class")
@@ -26,7 +33,7 @@ async def up():
     async with ClientSession() as sess:
         man = api.UPLoginMan(sess, int(env["TEST_UIN"]), pwd=env["TEST_PASSWORD"])
 
-        man.register_hook(LoginEvent_Test())
+        man.register_hook(UPEvent_Test())
         yield man
 
 
@@ -54,16 +61,9 @@ class TestUP:
 
 @pytest_asyncio.fixture(scope="class")
 async def qr():
-    class inner_qrevent(QREvent, LoginEvent_Test):
-        async def QrFetched(self, png: bytes):
-            showqr(png)
-
-        async def QrSucceess(self):
-            self.qr_succ = True
-
     async with ClientSession() as sess:
         man = api.QRLoginMan(sess, int(env["TEST_UIN"]))
-        man.register_hook(inner_qrevent())
+        man.register_hook(QREvent_Test())
         yield man
 
 
@@ -94,9 +94,11 @@ class TestQR:
     async def test_cancel(self, qr: api.QRLoginMan):
         pytest.skip("NotImplemented")
         await qr.new_cookie()
-        await qr.hook.cancel()  # type: ignore
+        assert qr.hook.cancel
+        await qr.hook.cancel()
 
     @pytest.mark.asyncio
     async def test_resend(self, qr: api.QRLoginMan):
         await qr.new_cookie()
-        await qr.hook.resend()  # type: ignore
+        assert qr.hook.resend
+        await qr.hook.resend()
