@@ -4,7 +4,6 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
-from enum import Enum
 from itertools import chain
 from typing import Any, Callable, Coroutine, Dict, Generic, Optional, Set, Tuple, TypeVar
 
@@ -28,7 +27,10 @@ class NullEvent(Event):
         try:
             return super().__getattribute__(__name)
         except AttributeError:
-            raise AssertionError("call `o.register_hook` before accessing o.hook")
+            raise AssertionError("call `o.register_hook` before accessing `o.hook`")
+
+    def __repr__(self) -> str:
+        return "NullEvent()"
 
 
 class Emittable(Generic[Evt]):
@@ -49,10 +51,10 @@ class Emittable(Generic[Evt]):
     def add_hook_ref(self, hook_cls, coro):
         # type: (str, Coroutine[Any, Any, T]) -> asyncio.Task[T]
         # NOTE: asyncio.Task becomes generic since py39
-        task = self._loop.create_task(coro)  # type: ignore
+        task = self._loop.create_task(coro)
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
-        return task  # type: ignore
+        return task
 
     async def wait(
         self,
@@ -102,22 +104,12 @@ class Emittable(Generic[Evt]):
 class LoginEvent(Event):
     """Defines usual events happens during login."""
 
-    class LoginMethod(str, Enum):
-        qr = "qr"
-        up = "up"
-        mixed = "mixed"
-
-    async def LoginFailed(self, meth: LoginMethod, msg: Optional[str] = None):
+    async def LoginFailed(self, msg: Optional[str] = None):
         """Will be emitted on login failed.
 
-        .. note::
-            This event will be triggered on every failure of login attempt.
-            These can be distinguished by the `meth` parameter.
-
-        :param meth: what method this login attempt used.
         :param msg: Err msg, defaults to None.
         """
-        pass
+        raise NotImplementedError
 
     async def LoginSuccess(self):
         """Will be emitted after login success."""
@@ -150,12 +142,25 @@ class QREvent(LoginEvent):
     async def QrFailed(self, msg: Optional[str] = None):
         """QR login failed.
 
-        .. note:: This event should always be called before :meth:`.LoginEvent.LoginFailed`.
-
         :param msg: Error msg, defaults to None.
+
+        .. deprecated:: 0.9.0
         """
-        pass
+        await self.LoginFailed(msg)
 
     async def QrSucceess(self):
-        """QR login success."""
-        pass
+        """QR login success.
+
+        .. deprecated:: 0.9.0
+        """
+        await self.LoginSuccess()
+
+
+class UPEvent(LoginEvent):
+    async def DynamicCode(self) -> int:
+        """Get dynamic code from sms. A sms with dynamic code will be sent to user's mobile before
+        this event is emitted. This hook should return that code (from user input, etc.).
+
+        :return: dynamic code in sms
+        """
+        return 0

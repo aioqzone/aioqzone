@@ -1,14 +1,16 @@
 import asyncio
 from abc import ABC, abstractmethod
 from time import time
-from typing import Dict
+from typing import Dict, TypeVar
 
 from qqqr.encrypt import gtk
 
 from ..interface.hook import Emittable, LoginEvent
 
+LgEvt = TypeVar("LgEvt", bound=LoginEvent)
 
-class Loginable(ABC, Emittable[LoginEvent]):
+
+class Loginable(ABC, Emittable[LgEvt]):
     last_login: float = 0
 
     def __init__(self, uin: int) -> None:
