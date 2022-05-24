@@ -7,11 +7,10 @@ from aiohttp.client_exceptions import ClientResponseError
 def raise_for_status(response: ClientResponse, *accept_code: int):
     """A checker more strict than `ClientResponse.raise_for_status`.
 
-    Args:
-        response (ClientResponse): Client Response. Default is None, means `(200, )`
+    :param response: Client response to check.
+    :param accept_code: Overwrite codes that can be accepted, If not given, default is `(200, )`
 
-    Raises:
-        `ClientResponseError`: if status not in `accept_code`
+    :raises `aiohttp.ClientResponseError`: if status not in :obj:`accept_code`
     """
     accept_code = accept_code or (200,)
     if response.status not in accept_code:

@@ -34,13 +34,11 @@ class QRLogin(LoginBase):
             return await r.content.read()
 
     async def pollStat(self):
-        """poll status of the qr
+        """Poll QR status.
 
-        Raises:
-            HTTPError: if response code != 200
+        :raises `aiohttp.ClientResponseError`: if response status code != 200
 
-        Returns:
-            list: (code, ?, url, ?, msg, my_name)
+        :return: list: (code, ?, url, ?, msg, my_name)
         """
         data = {
             "u1": self.proxy.s_url,
