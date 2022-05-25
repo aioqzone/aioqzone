@@ -4,6 +4,7 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
+from enum import Enum
 from itertools import chain
 from typing import Any, Callable, Coroutine, Dict, Generic, Optional, Set, Tuple, TypeVar
 
@@ -101,18 +102,28 @@ class Emittable(Generic[Evt]):
                 t.cancel()
 
 
+class LoginMethod(str, Enum):
+    qr = "qr"
+    up = "up"
+    mixed = "mixed"
+
+
 class LoginEvent(Event):
     """Defines usual events happens during login."""
 
-    async def LoginFailed(self, msg: Optional[str] = None):
+    async def LoginFailed(self, meth: LoginMethod, msg: Optional[str] = None):
         """Will be emitted on login failed.
 
+        :param meth: indicate what login method this login attempt used
         :param msg: Err msg, defaults to None.
         """
         raise NotImplementedError
 
-    async def LoginSuccess(self):
-        """Will be emitted after login success."""
+    async def LoginSuccess(self, meth: LoginMethod):
+        """Will be emitted after login success.
+
+        :param meth: indicate what login method this login attempt used
+        """
         pass
 
 
@@ -146,14 +157,14 @@ class QREvent(LoginEvent):
 
         .. deprecated:: 0.9.0
         """
-        await self.LoginFailed(msg)
+        await self.LoginFailed(LoginMethod.qr, msg)
 
     async def QrSucceess(self):
         """QR login success.
 
         .. deprecated:: 0.9.0
         """
-        await self.LoginSuccess()
+        await self.LoginSuccess(LoginMethod.qr)
 
 
 class UPEvent(LoginEvent):
