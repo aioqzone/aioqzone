@@ -13,10 +13,10 @@ from . import showqr
 
 
 class UPEvent_Test(UPEvent):
-    async def LoginSuccess(self):
+    async def LoginSuccess(self, meth):
         self.login_succ = True
 
-    async def LoginFailed(self, msg):
+    async def LoginFailed(self, meth, msg):
         self.login_fail = msg
 
 
@@ -24,7 +24,7 @@ class QREvent_Test(QREvent):
     async def QrFetched(self, png: bytes):
         showqr(png)
 
-    async def QrSucceess(self):
+    async def LoginSuccess(self, meth):
         self.qr_succ = True
 
 

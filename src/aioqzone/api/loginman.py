@@ -16,7 +16,7 @@ from qqqr.qr import QRLogin
 from qqqr.up import UPLogin, User
 
 from ..exception import LoginError
-from ..interface.hook import QREvent, UPEvent
+from ..interface.hook import LoginMethod, QREvent, UPEvent
 from ..interface.login import Loginable
 
 logger = logging.getLogger(__name__)
@@ -45,28 +45,29 @@ class UPLoginMan(Loginable[UPEvent]):
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
         :raises `SystemExit`: if unexpected error raised
         """
+        meth = LoginMethod.up
         try:
             login = UPLogin(self.sess, QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
             cookie = await login.login(await login.check())
-            self.add_hook_ref("hook", self.hook.LoginSuccess())
+            self.add_hook_ref("hook", self.hook.LoginSuccess(meth))
             self.sess.cookie_jar.update_cookies(cookie)
             return cookie
         except TencentLoginError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed(e.msg or ""))
+            self.add_hook_ref("hook", self.hook.LoginFailed(meth, e.msg))
             logger.warning(str(e))
             raise e
         except NotImplementedError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed("10009：需要手机验证"))
+            self.add_hook_ref("hook", self.hook.LoginFailed(meth, "10009：需要手机验证"))
             logger.warning(str(e))
             raise TencentLoginError(StatusCode.NeedVerify, "Dynamic code verify not implemented")
         except JsError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed("JS调用出错"))
+            self.add_hook_ref("hook", self.hook.LoginFailed(meth, "JS调用出错"))
             logger.error(str(e), exc_info=e)
             raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha")
         except:
             logger.fatal("Unexpected error in QR login.", exc_info=True)
             try:
-                await self.hook.LoginFailed("密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
+                await self.hook.LoginFailed(meth, "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
             finally:
                 exit(1)
 
@@ -85,6 +86,7 @@ class QRLoginMan(Loginable[QREvent]):
         :raises `TimeoutError`: qr polling task timeout
         :raises `SystemExit`: if unexpected error raised when polling
         """
+        meth = LoginMethod.qr
         man = QRLogin(self.sess, QzoneAppid, QzoneProxy)
         task = man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
 
@@ -100,12 +102,12 @@ class QRLoginMan(Loginable[QREvent]):
 
         try:
             cookie = await task
-            emit_hook(self.hook.LoginSuccess())
+            emit_hook(self.hook.LoginSuccess(meth))
             self.sess.cookie_jar.update_cookies(cookie)
             return cookie
         except TimeoutError as e:
             logger.warning(str(e))
-            emit_hook(self.hook.LoginFailed(str(e)))
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise e
         except KeyboardInterrupt as e:
             raise UserBreak from e
@@ -113,7 +115,7 @@ class QRLoginMan(Loginable[QREvent]):
             logger.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
             try:
-                await self.hook.LoginFailed(msg)
+                await self.hook.LoginFailed(meth, msg)
             finally:
                 exit(1)
         finally:
@@ -171,7 +173,7 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         else:
             msg = "你在睡觉！"
 
-        self.add_hook_ref("hook", self.hook.LoginFailed(msg))
+        self.add_hook_ref("hook", self.hook.LoginFailed(LoginMethod.mixed, msg))
         raise LoginError(msg, self.strategy)
 
 
