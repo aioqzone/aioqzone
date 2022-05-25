@@ -173,7 +173,6 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         else:
             msg = "你在睡觉！"
 
-        self.add_hook_ref("hook", self.hook.LoginFailed(LoginMethod.mixed, msg))
         raise LoginError(msg, self.strategy)
 
 

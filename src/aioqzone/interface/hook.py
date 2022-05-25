@@ -105,7 +105,6 @@ class Emittable(Generic[Evt]):
 class LoginMethod(str, Enum):
     qr = "qr"
     up = "up"
-    mixed = "mixed"
 
 
 class LoginEvent(Event):
