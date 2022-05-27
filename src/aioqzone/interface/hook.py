@@ -141,11 +141,6 @@ class QREvent(LoginEvent):
 
         :param png: QR bytes (png format)
         :param renew: this QR is a refreshed QR, defaults to False
-
-        .. deprecated:: ?
-
-            Develpers had better not rely on the parameter `renew`.
-            Maintaining the state by yourself is not difficult.
         """
         pass
 
