@@ -6,25 +6,31 @@ import pytest_asyncio
 from aiohttp import ClientSession
 
 import aioqzone.api.loginman as api
-from aioqzone.interface.hook import QREvent, UPEvent
+from aioqzone.interface.hook import LoginMethod, QREvent, UPEvent
 from qqqr.exception import TencentLoginError
 
 from . import showqr
 
+pytestmark = pytest.mark.asyncio
+
 
 class UPEvent_Test(UPEvent):
     async def LoginSuccess(self, meth):
+        assert meth == LoginMethod.up
         self.login_succ = True
 
     async def LoginFailed(self, meth, msg):
+        assert meth == LoginMethod.up
         self.login_fail = msg
 
 
 class QREvent_Test(QREvent):
-    async def QrFetched(self, png: bytes):
+    async def QrFetched(self, png: bytes, renew):
         showqr(png)
+        self.renew_flag = renew
 
     async def LoginSuccess(self, meth):
+        assert meth == LoginMethod.qr
         self.qr_succ = True
 
 
@@ -39,7 +45,6 @@ async def up():
 
 @pytest.mark.incremental
 class TestUP:
-    @pytest.mark.asyncio
     async def test_newcookie(self, up: api.UPLoginMan):
         try:
             cookie = await up.new_cookie()
@@ -70,7 +75,6 @@ async def qr():
 @pytest.mark.needuser
 @pytest.mark.incremental
 class TestQR:
-    @pytest.mark.asyncio
     async def test_newcookie(self, qr: api.QRLoginMan):
         try:
             cookie = await qr.new_cookie()
@@ -90,15 +94,14 @@ class TestQR:
     def test_gtk(self, qr: api.QRLoginMan):
         assert qr.gtk >= 0
 
-    @pytest.mark.asyncio
     async def test_cancel(self, qr: api.QRLoginMan):
         pytest.skip("NotImplemented")
         await qr.new_cookie()
         assert qr.hook.cancel
         await qr.hook.cancel()
 
-    @pytest.mark.asyncio
     async def test_resend(self, qr: api.QRLoginMan):
         await qr.new_cookie()
         assert qr.hook.resend
         await qr.hook.resend()
+        assert qr.hook.renew_flag  # type: ignore

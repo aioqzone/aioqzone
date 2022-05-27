@@ -94,7 +94,7 @@ class QRLoginMan(Loginable[QREvent]):
             task.cancel()
 
         async def tmp_resend():
-            await self.hook.QrFetched(await man.show())  # must be sent at once
+            await self.hook.QrFetched(await man.show(), renew=True)  # must be sent at once
 
         self.hook.cancel = tmp_cancel
         self.hook.resend = tmp_resend
@@ -173,7 +173,6 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
         else:
             msg = "你在睡觉！"
 
-        self.add_hook_ref("hook", self.hook.LoginFailed(LoginMethod.mixed, msg))
         raise LoginError(msg, self.strategy)
 
 
