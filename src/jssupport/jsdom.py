@@ -40,7 +40,6 @@ class JSDOM(ExecJS):
             url: location,
             referrer: referrer,
             userAgent: ua,
-            pretendToBeVisual: true,
             runScripts: "outside-only",
         });
         dom.reconfigure({ windowTop: {} });
