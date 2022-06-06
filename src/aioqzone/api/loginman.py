@@ -16,8 +16,7 @@ from qqqr.qr import QRLogin
 from qqqr.up import UPLogin, User
 
 from ..exception import LoginError
-from ..interface.hook import LoginMethod, QREvent, UPEvent
-from ..interface.login import Loginable
+from ..interface.login import Loginable, LoginMethod, QREvent, UPEvent
 
 logger = logging.getLogger(__name__)
 JsError = JsRuntimeError, JsImportError, NodeNotFoundError

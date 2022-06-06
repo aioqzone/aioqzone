@@ -6,7 +6,7 @@ import pytest_asyncio
 from aiohttp import ClientSession
 
 import aioqzone.api.loginman as api
-from aioqzone.interface.hook import LoginMethod, QREvent, UPEvent
+from aioqzone.interface.login import LoginMethod, QREvent, UPEvent
 from qqqr.exception import TencentLoginError
 
 from . import showqr
