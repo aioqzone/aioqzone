@@ -116,7 +116,7 @@ class LoginEvent(Event):
         :param meth: indicate what login method this login attempt used
         :param msg: Err msg, defaults to None.
         """
-        raise NotImplementedError
+        pass
 
     async def LoginSuccess(self, meth: LoginMethod):
         """Will be emitted after login success.
