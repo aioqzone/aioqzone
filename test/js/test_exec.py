@@ -6,7 +6,7 @@ from jssupport.jsdom import JSDOM
 pytestmark = pytest.mark.asyncio
 
 
-def test_version():
+async def test_version():
     if not ExecJS.check_node():
         pytest.skip(allow_module_level=True)
 

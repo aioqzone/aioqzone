@@ -44,11 +44,6 @@ class NodeLoader:
 
 class AstLoader:
     class RewriteUndef(ast.NodeTransformer):
-        def __init__(self) -> None:
-            if int(python_version_tuple()[1]) < 8:
-                # NOTE: visit_Constant not available on py37
-                self.visit_Str = lambda node: ast.Str(s=node.s.replace("\\/", "/"))
-
         const = {
             "undefined": ast.Constant(value=None),
             "null": ast.Constant(value=None),
@@ -61,11 +56,6 @@ class AstLoader:
                 return self.const[node.id]
             return ast.Str(s=node.id)
 
-        def visit_Constant(self, node: ast.Constant) -> Union[ast.Constant, ast.Str]:
-            if not isinstance(node.value, str):
-                return node
-            return ast.Str(s=node.value.replace("\\/", "/"))
-
     @classmethod
     def json_loads(cls, js: str, filename: str = "stdin") -> JsonValue:
         """
@@ -77,8 +67,8 @@ class AstLoader:
         :rtype: `dict[str | int, Any]`
         :return: A jsonvalue object.
         """
-
-        node = ast.parse(dedent(js), mode="eval")
+        js = dedent(js).replace(r"\/", "/")
+        node = ast.parse(js, mode="eval")
         node = ast.fix_missing_locations(cls.RewriteUndef().visit(node))
         code = compile(node, filename, mode="eval")
         return eval(code)

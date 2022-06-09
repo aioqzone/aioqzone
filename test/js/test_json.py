@@ -29,7 +29,7 @@ class TestJsJson:
         assert d["merge"] == [None]
 
     def test_escape(self):
-        s = "{html:'http:\\/\\/qq.com'}"
+        s = r"{html:'http:\/\/qq.com'}"
         d = json_loads(s)
         assert isinstance(d, dict)
         assert d["html"] == "http://qq.com"
