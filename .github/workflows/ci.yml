@@ -19,7 +19,7 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      pytest_arg: test
+      PYTEST_ARGS: -m "not needuser and not upstream" test
     secrets:
       TEST_UIN: ${{ secrets.TEST_UIN }}
       TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
