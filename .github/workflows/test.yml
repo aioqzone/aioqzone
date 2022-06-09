@@ -4,7 +4,7 @@ name: Test Poetry Project
 on:
   workflow_call:
     inputs:
-      pytest_arg:
+      PYTEST_ARGS:
         required: true
         type: string
     secrets:
@@ -35,30 +35,16 @@ jobs:
       - uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
+      - name: Install poetry
+        run: pipx install poetry
       - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      #----------------------------------------------
-      #  -----  install & configure poetry  -----
-      #----------------------------------------------
-      - name: Install Poetry Action
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+          cache: poetry
       - name: Get Package Version
         id: version_step
         run: echo "::set-output name=package::$(poetry version -s)"
-      #----------------------------------------------
-      #       load cached venv if cache exists
-      #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
       #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------
@@ -72,4 +58,4 @@ jobs:
           TEST_UIN: ${{ secrets.TEST_UIN }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
-          poetry run pytest -m "not needuser and not upstream" ${{ inputs.pytest_arg }}
+          poetry run pytest ${{ inputs.PYTEST_ARGS }}
