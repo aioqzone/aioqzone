@@ -1,16 +1,19 @@
-# Trigger a test on QQQR package everyday.
+# Trigger a test on QQQR package on push or every two days.
 
 name: QQQR
 
 on:
+  push:
+    paths:
+      - ./.github/workflows/qqqr.yml
   schedule:
-    - cron: 0 20 * * *
+    - cron: 0 20 * * 0/2
 
 jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      PYTEST_ARGS: "-v test/login/test_up.py test/login/test_captcha.py"
+      PYTEST_ARGS: -m "not needuser and not upstream" test/login/test_up.py test/login/test_captcha.py
     secrets:
       TEST_UIN: ${{ secrets.TEST_UIN }}
       TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
