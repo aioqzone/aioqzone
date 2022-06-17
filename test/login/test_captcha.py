@@ -1,4 +1,3 @@
-import asyncio
 from math import floor
 from os import environ as env
 
@@ -13,15 +12,6 @@ from qqqr.up.captcha.jigsaw import Jigsaw
 from qqqr.up.captcha.vm import DecryptTDC
 
 
-@pytest.fixture(scope="module")
-def event_loop():
-    import jssupport.execjs
-
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
-
-
 @pytest_asyncio.fixture(scope="module")
 async def captcha():
     async with ClientSession() as sess:
@@ -34,17 +24,18 @@ async def captcha():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def shelper(captcha, iframe: str):
+async def iframe(captcha: Captcha):
+    yield await captcha.iframe()
+
+
+@pytest_asyncio.fixture(scope="module")
+async def shelper(captcha: Captcha, iframe: str):
     shelper = IframeParser(captcha.appid, captcha.sid, 2)
     shelper.parseCaptchaConf(iframe)
     yield shelper
 
 
-@pytest_asyncio.fixture(scope="module")
-async def iframe(captcha):
-    yield await captcha.iframe()
-
-
+@pytest.mark.incremental
 class TestCaptcha:
     pytestmark = pytest.mark.asyncio
 

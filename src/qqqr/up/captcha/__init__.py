@@ -167,6 +167,7 @@ class Captcha:
             "createIframeStart": self.createIframeStart,
         }
         async with self.session.get(SHOW_NEW_URL, params=data, ssl=self.ssl) as r:
+            r.raise_for_status()
             self.session.headers.update({istr("referer"): str(r.url)})
             self.prehandleLoadTime = data["prehandleLoadTime"]
             return await r.text()

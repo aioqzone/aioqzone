@@ -1,4 +1,3 @@
-import asyncio
 from os import environ as env
 
 import pytest
@@ -10,29 +9,19 @@ from qqqr.exception import TencentLoginError
 from qqqr.up import UPLogin, User
 
 
-@pytest.fixture(scope="module")
-def event_loop():
-    import jssupport.execjs  # set policy
-
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
-
-
 @pytest_asyncio.fixture(scope="module")
-async def login():
-    async with ClientSession() as sess:
-        async with UPLogin(
-            sess,
-            QzoneAppid,
-            QzoneProxy,
-            User(
-                int(env["TEST_UIN"]),
-                env["TEST_PASSWORD"],
-            ),
-        ) as login:
-            await login.request()
-            yield login
+async def login(sess: ClientSession):
+    async with UPLogin(
+        sess,
+        QzoneAppid,
+        QzoneProxy,
+        User(
+            int(env["TEST_UIN"]),
+            env["TEST_PASSWORD"],
+        ),
+    ) as login:
+        await login.request()
+        yield login
 
 
 class TestRequest:

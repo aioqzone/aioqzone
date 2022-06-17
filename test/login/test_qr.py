@@ -10,19 +10,11 @@ from qqqr.qr import QRLogin
 from . import showqr as _showqr
 
 
-@pytest.fixture(scope="module")
-def event_loop():
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
-
-
 @pytest_asyncio.fixture(scope="module")
-async def login():
-    async with ClientSession() as sess:
-        async with QRLogin(sess, QzoneAppid, QzoneProxy) as login:
-            await login.request()
-            yield login
+async def login(sess: ClientSession):
+    async with QRLogin(sess, QzoneAppid, QzoneProxy) as login:
+        await login.request()
+        yield login
 
 
 class TestProcedure:
