@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from os import environ as env
 from random import choice, random
 from time import time_ns
-from typing import Dict, Optional, Type
+from typing import Awaitable, Callable, Dict, Optional, Type
 
 from aiohttp import ClientSession
 from multidict import istr
@@ -34,6 +34,7 @@ UseEncoder = (
 class UPLogin(LoginBase):
     node = "node"
     _captcha = None
+    get_smscode = None
     encode_cls: Type[PasswdEncoder] = UseEncoder
 
     def __init__(
@@ -50,8 +51,14 @@ class UPLogin(LoginBase):
         self.user = user
         self.pwder = self.encode_cls(sess, user.pwd)
 
+    def register_smscode_getter(self, getter: Callable[[], Awaitable[int]]):
+        self.get_smscode = getter
+
     async def encodePwd(self, r: CheckResult) -> str:
         return await self.pwder.encode(r)
+
+    async def deviceId(self) -> str:
+        return ""
 
     async def check(self):
         """check procedure before login. This will return a CheckResult object containing
@@ -98,7 +105,7 @@ class UPLogin(LoginBase):
             # ptui_sendSMS_CB('10012', '短信发送成功！')
         assert int(rl[0]) == 10012, rl[1]
 
-    async def login(self, r: CheckResult, pastcode: int = 0) -> Dict[str, str]:
+    async def login(self, r: CheckResult, pastcode: int = 0, **add) -> Dict[str, str]:
         if r.code == StatusCode.Authenticated:
             # OK
             pass
@@ -106,12 +113,22 @@ class UPLogin(LoginBase):
             # 0 -> 1: OK; !0 -> 1: Error
             cookie = await self.login(await self.passVC(r), StatusCode.NeedCaptcha)
             return cookie
-        elif r.code == StatusCode.NeedVerify and pastcode == StatusCode.NeedVerify:
+        elif r.code == pastcode == StatusCode.NeedVerify:
             # !10009 -> 10009: OK; 10009 -> 10009: Error
             raise TencentLoginError(r.code, str(r))
         else:
             raise TencentLoginError(r.code, str(r))
 
+        const = {
+            "h": 1,
+            "t": 1,
+            "g": 1,
+            "ptredirect": 0,
+            "from_ui": 1,
+            "ptlang": 2052,
+            "js_type": 1,
+            "pt_uistyle": 40,
+        }
         data = {
             "u": self.user.uin,
             "p": await self.encodePwd(r),
@@ -120,22 +137,17 @@ class UPLogin(LoginBase):
             "pt_verifysession_v1": r.verifysession,
             "pt_randsalt": r.isRandSalt,
             "u1": self.proxy.s_url,
-            "ptredirect": 0,
-            "h": 1,
-            "t": 1,
-            "g": 1,
-            "from_ui": 1,
-            "ptlang": 2052,
             "action": f"{3 if pastcode == StatusCode.NeedCaptcha else 2}-{choice([1, 2])}-{int(time_ns() / 1e6)}",
             # 'js_ver': 21072114,
-            "js_type": 1,
             "login_sig": self.login_sig,
-            "pt_uistyle": 40,
             "aid": self.app.appid,
             "daid": self.app.daid,
             "ptdrvs": r.ptdrvs,
             "sid": r.session,
+            "o1vId": await self.deviceId(),
         }
+        data.update(const)
+        data.update(add)
         self.session.headers.update({istr("referer"): "https://xui.ptlogin2.qq.com/"})
         async with self.session.get(LOGIN_URL, params=data, ssl=self.ssl) as response:
             response.raise_for_status()
@@ -146,8 +158,12 @@ class UPLogin(LoginBase):
             pass
         elif rl[0] == StatusCode.NeedVerify:
             m = response.cookies.get("pt_sms_ticket")
-            raise NotImplementedError
-            await self.sms(m.value if m else "")
+            if self.get_smscode:
+                await self.sms(m.value if m else "")
+                smscode = await self.get_smscode()
+                await self.login(r, StatusCode.NeedVerify, pt_sms_code=smscode)
+            else:
+                raise NotImplementedError
         else:
             raise TencentLoginError(rl[0], rl[4])
 
