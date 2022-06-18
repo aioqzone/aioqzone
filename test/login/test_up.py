@@ -27,6 +27,14 @@ async def login(sess: ClientSession):
 class TestRequest:
     pytestmark = pytest.mark.asyncio
 
+    @pytest.mark.needuser
+    async def testRegisterSmsCodeGetter(self, login: UPLogin):
+        async def input_getter():
+            with open("tmp/ntdin.txt") as f:
+                return int(f.readline().rstrip())
+
+        login.register_smscode_getter(input_getter)
+
     async def testEncodePwd(self, login: UPLogin):
         r = await login.check()
         if r.code == 1:
