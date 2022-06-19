@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.8.4a2.dev2"
+version = "0.9.0a1.dev1"
 description = "Python wrapper for Qzone web login and Qzone http api."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -11,7 +11,6 @@ documentation = "https://aioqzone.github.io/aioqzone"
 keywords = ["qzone-api", "autologin", "asyncio-spider"]
 classifiers = [
     "Development Status :: 4 - Beta",
-    "Framework :: aiohttp",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed"
@@ -49,6 +48,7 @@ autodoc-pydantic = {version = "^1.7.1", optional = true}
 sphinx-autodoc-typehints = {version = "<1.16.0", optional = true}
 sphinx-rtd-theme = {version = "^1.0.0", optional = true}
 rsa = "^4.8"
+httpx = "^0.23.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.1"

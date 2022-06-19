@@ -93,7 +93,7 @@ class QRLoginMan(Loginable[QREvent]):
             task.cancel()
 
         async def tmp_resend():
-            await self.hook.QrFetched(await man.show(), renew=True)  # must be sent at once
+            await self.hook.QrFetched(await man.new_qr(), renew=True)  # must be sent at once
 
         self.hook.cancel = tmp_cancel
         self.hook.resend = tmp_resend

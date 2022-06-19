@@ -4,7 +4,7 @@ from enum import Enum
 from time import time
 from typing import Any, Callable, Coroutine, Dict, Optional, TypeVar
 
-from qqqr.encrypt import gtk
+from qqqr.utils.encrypt import gtk
 
 from ..interface.hook import Emittable
 from .hook import Event

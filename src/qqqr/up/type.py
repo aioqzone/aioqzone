@@ -2,7 +2,25 @@
 
 from typing import Optional, Union
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl
+
+
+class CheckResp(BaseModel):
+    code: int
+    """code = 0/2/3 hideVC; code = 1 showVC
+    """
+    verifycode: str
+    salt_repr: str = Field(alias="salt")
+    verifysession: str
+    isRandSalt: int
+    ptdrvs: str
+    session: str
+
+    @property
+    def salt(self):
+        salt = self.salt_repr.split(r"\x")[1:]
+        salt = [chr(int(i, 16)) for i in salt]
+        return "".join(salt)
 
 
 class PrehandleResp(BaseModel):
