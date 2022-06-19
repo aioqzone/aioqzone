@@ -13,9 +13,9 @@ from aiohttp.client_exceptions import ClientResponseError
 from multidict import istr
 
 import aioqzone.api.constant as const
-from aioqzone.utils.daug import ud
 from jssupport.jsjson import JsonValue, json_loads
 from qqqr.base import UA
+from qqqr.utils.daug import du
 from qqqr.utils.net import raise_for_status
 
 from ..exception import CorruptError, QzoneError
@@ -54,7 +54,7 @@ class QzoneApi:
 
     async def aget(self, url: str, params: Optional[Dict[str, str]] = None):
         params = params or {}
-        params = ud(params, {"g_tk": str(await self._get_gtk())})
+        params = du(params, {"g_tk": str(await self._get_gtk())})
         self.sess.headers.update(
             {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
         )
@@ -64,7 +64,7 @@ class QzoneApi:
         self, url: str, params: Optional[Dict[str, str]] = None, data: Optional[dict] = None
     ):
         params = params or {}
-        params = ud(params, {"g_tk": str(await self._get_gtk())})
+        params = du(params, {"g_tk": str(await self._get_gtk())})
         self.sess.headers.update(
             {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
         )
@@ -210,7 +210,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.feeds3_html_more, ud(default, query)) as r:
+            async with await self.aget(const.feeds3_html_more, du(default, query)) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
@@ -258,7 +258,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_getcomments, data=ud(default, body)) as r:
+            async with await self.apost(const.emotion_getcomments, data=du(default, body)) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
             return self._rtext_handler(rtext)
@@ -296,7 +296,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.emotion_msgdetail, params=ud(default, query)) as r:
+            async with await self.aget(const.emotion_msgdetail, params=du(default, query)) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
 
@@ -367,7 +367,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(url, data=ud(default, body)) as r:
+            async with await self.apost(url, data=du(default, body)) as r:
                 r.raise_for_status()
                 rtext = await r.text(encoding=self.encoding)
             return self._rtext_handler(rtext, errno_key=("code", "ret"))
@@ -438,7 +438,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.floatview_photo_list, ud(default, query)) as r:
+            async with await self.aget(const.floatview_photo_list, du(default, query)) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext)
@@ -493,7 +493,7 @@ class QzoneApi:
         @self._relogin_retry
         async def retry_closure():
             async with await self.aget(
-                const.emotion_msglist, ud(param, add) if pos else param
+                const.emotion_msglist, du(param, add) if pos else param
             ) as r:
                 r.raise_for_status()
                 rtext = await r.text()
@@ -543,7 +543,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_publish, data=ud(default, body)) as r:
+            async with await self.apost(const.emotion_publish, data=du(default, body)) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext)
@@ -647,7 +647,7 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_update, data=ud(default, body)) as r:
+            async with await self.apost(const.emotion_update, data=du(default, body)) as r:
                 r.raise_for_status()
                 rtext = await r.text()
             return self._rtext_handler(rtext)

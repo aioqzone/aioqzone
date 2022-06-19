@@ -23,6 +23,13 @@ class CheckResp(BaseModel):
         return "".join(salt)
 
 
+class LoginResp(BaseModel):
+    code: int
+    url: HttpUrl
+    msg: str
+    nickname: str
+
+
 class PrehandleResp(BaseModel):
     state: int
     ticket: str

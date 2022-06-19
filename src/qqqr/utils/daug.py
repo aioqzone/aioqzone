@@ -14,7 +14,7 @@ def u_(*dicts: Mapping[K, V]) -> Iterable[Tuple[K, V]]:
     return chain(*(i.items() for i in dicts))
 
 
-def ud(*dicts: Mapping[K, V]) -> Dict[K, V]:
+def du(*dicts: Mapping[K, V]) -> Dict[K, V]:
     """returns union of these dict."""
     return dict(u_(*dicts))
 

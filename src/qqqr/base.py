@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from time import time
-from typing import Dict, Generic, Optional, TypeVar
+from typing import Dict, Generic, Optional, TypeVar, Union
 
 import httpx
 from httpx import AsyncClient
@@ -84,11 +84,12 @@ class LoginBase(ABC, Generic[_S]):
         self.login_sig = r.cookies["pt_login_sig"]
         return self
 
-    async def login(self, sess: _S) -> Dict[str, str]:
-        assert sess.login_url
-        return await self._get_login_url(sess.login_url)
+    @abstractmethod
+    async def login(self) -> Dict[str, str]:
+        """Block until cookie is received."""
+        raise NotImplementedError
 
-    async def _get_login_url(self, login_url: str):
+    async def _get_login_url(self, login_url: Union[str, httpx.URL]):
         r = await self.client.get(login_url, follow_redirects=False)
         raise_for_status(r, 302)
         return get_all_cookie(r)

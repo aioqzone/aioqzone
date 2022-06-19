@@ -8,10 +8,11 @@ from typing import Iterable, List, Optional, Union, cast
 from lxml.html import HtmlElement, fromstring
 from pydantic import BaseModel, HttpUrl
 
+from qqqr.utils.daug import di
+
 from ..type.entity import RespEntities, TextEntity
 from ..type.internal import AlbumData
 from ..type.resp import PicRep
-from ..utils.daug import di
 
 logger = logging.getLogger(__name__)
 
