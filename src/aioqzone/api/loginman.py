@@ -7,13 +7,14 @@ import logging
 from enum import Enum
 from typing import Dict, List, Optional, Type
 
-from aiohttp import ClientSession
+from httpx import AsyncClient
 
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.exception import TencentLoginError, UserBreak
-from qqqr.qr import QRLogin
-from qqqr.up import UPLogin, User
+from qqqr.qr import QrLogin
+from qqqr.up import UpLogin
+from qqqr.utils.daug import du
 
 from ..exception import LoginError
 from ..interface.login import Loginable, LoginMethod, QREvent, UPEvent
@@ -34,7 +35,7 @@ class ConstLoginMan(Loginable):
 
 
 class UPLoginMan(Loginable[UPEvent]):
-    def __init__(self, sess: ClientSession, uin: int, pwd: str) -> None:
+    def __init__(self, sess: AsyncClient, uin: int, pwd: str) -> None:
         Loginable.__init__(self, uin)
         self.sess = sess
         self._pwd = pwd
@@ -46,10 +47,9 @@ class UPLoginMan(Loginable[UPEvent]):
         """
         meth = LoginMethod.up
         try:
-            login = UPLogin(self.sess, QzoneAppid, QzoneProxy, User(self.uin, self._pwd))
-            cookie = await login.login(await login.check())
+            cookie = await UpLogin(self.sess, QzoneAppid, QzoneProxy, self.uin, self._pwd).login()
             self.add_hook_ref("hook", self.hook.LoginSuccess(meth))
-            self.sess.cookie_jar.update_cookies(cookie)
+            self.sess.cookies.update(cookie)  # optional
             return cookie
         except TencentLoginError as e:
             self.add_hook_ref("hook", self.hook.LoginFailed(meth, e.msg))
@@ -74,7 +74,7 @@ class UPLoginMan(Loginable[UPEvent]):
 class QRLoginMan(Loginable[QREvent]):
     hook: QREvent
 
-    def __init__(self, sess: ClientSession, uin: int, refresh_time: int = 6) -> None:
+    def __init__(self, sess: AsyncClient, uin: int, refresh_time: int = 6) -> None:
         Loginable.__init__(self, uin)
         self.sess = sess
         self.refresh = refresh_time
@@ -86,23 +86,15 @@ class QRLoginMan(Loginable[QREvent]):
         :raises `SystemExit`: if unexpected error raised when polling
         """
         meth = LoginMethod.qr
-        man = QRLogin(self.sess, QzoneAppid, QzoneProxy)
-        task = man.loop(send_callback=self.hook.QrFetched, refresh_time=self.refresh)
-
-        async def tmp_cancel():
-            task.cancel()
-
-        async def tmp_resend():
-            await self.hook.QrFetched(await man.new_qr(), renew=True)  # must be sent at once
-
-        self.hook.cancel = tmp_cancel
-        self.hook.resend = tmp_resend
+        man = QrLogin(self.sess, QzoneAppid, QzoneProxy)
         emit_hook = lambda c: self.add_hook_ref("hook", c)
+        self.hook.cancel_flag.clear()
+        self.hook.refresh_flag.clear()
 
         try:
-            cookie = await task
+            cookie = await man.login()
             emit_hook(self.hook.LoginSuccess(meth))
-            self.sess.cookie_jar.update_cookies(cookie)
+            self.sess.cookies.update(cookie)
             return cookie
         except TimeoutError as e:
             logger.warning(str(e))
@@ -118,19 +110,21 @@ class QRLoginMan(Loginable[QREvent]):
             finally:
                 exit(1)
         finally:
-            self.hook.cancel = self.hook.resend = None
+            self.hook.cancel_flag.clear()
+            self.hook.refresh_flag.clear()
+
+
+class QrStrategy(str, Enum):
+    force = "force"
+    prefer = "prefer"
+    allow = "allow"
+    forbid = "forbid"
 
 
 class MixedLoginMan(UPLoginMan, QRLoginMan):
-    class QrStrategy(str, Enum):
-        force = "force"
-        prefer = "prefer"
-        allow = "allow"
-        forbid = "forbid"
-
     def __init__(
         self,
-        sess: ClientSession,
+        sess: AsyncClient,
         uin: int,
         strategy: QrStrategy,
         pwd: Optional[str] = None,
@@ -145,7 +139,6 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
-
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
@@ -173,6 +166,3 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
             msg = "你在睡觉！"
 
         raise LoginError(msg, self.strategy)
-
-
-QrStrategy = MixedLoginMan.QrStrategy

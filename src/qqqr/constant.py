@@ -25,5 +25,5 @@ class StatusCode(IntEnum):
     NeedCaptcha = 1
     WrongPassword = 3
     ForceQR = 10005
-    NeedVerify = 10009  # Means, notify the owner
+    NeedSmsVerify = 10009  # Means, notify the owner
     RiskyNetwork = 23003

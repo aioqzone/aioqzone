@@ -2,16 +2,20 @@ import re
 from os import environ as env
 from random import choice, random
 from time import time_ns
-from typing import Awaitable, Callable, Dict, Optional, Type
+from typing import List, Optional, Type
 
+import httpx
 from httpx import AsyncClient
 
 from ..base import LoginBase, LoginSession
 from ..constant import StatusCode
+from ..event import Emittable
+from ..event.login import UpEvent
 from ..exception import TencentLoginError
 from ..type import APPID, PT_QR_APP, Proxy
+from ..utils.daug import du
 from .encrypt import NodeEncoder, PasswdEncoder, TeaEncoder
-from .type import CheckResp, VerifyResp
+from .type import CheckResp, LoginResp, VerifyResp
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
@@ -33,6 +37,14 @@ class UpSession(LoginSession):
         self.check_rst = check_result
         self.verify_rst: Optional[VerifyResp] = None
         self.sms_ticket = ""
+        self.sms_code: Optional[str] = None
+        self.login_history: List[LoginResp] = []
+
+    @property
+    def pastcode(self) -> int:
+        if self.login_history:
+            return self.login_history[-1].code
+        return 0
 
     @property
     def code(self):
@@ -53,10 +65,9 @@ class UpSession(LoginSession):
         return self.check_rst.verifysession
 
 
-class UPLogin(LoginBase[UpSession]):
+class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
     node = "node"
     _captcha = None
-    get_smscode = None
     encode_cls: Type[PasswdEncoder] = UseEncoder
 
     def __init__(
@@ -74,9 +85,6 @@ class UPLogin(LoginBase[UpSession]):
         self.uin = uin
         self.pwd = pwd
         self.pwder = self.encode_cls(client, pwd)
-
-    def register_smscode_getter(self, getter: Callable[[], Awaitable[int]]):
-        self.get_smscode = getter
 
     async def deviceId(self) -> str:
         return ""
@@ -113,10 +121,10 @@ class UPLogin(LoginBase[UpSession]):
         )
         return UpSession(CheckResp.parse_obj(rdict))
 
-    async def sms(self, sess: UpSession):
+    async def send_sms_code(self, sess: UpSession):
         """Send verify sms (to get dynamic code)
 
-        :param pt_sms_ticket: corresponding value in cookie, of the key with the same name
+        :param sess: The up login session to send sms code
         """
         data = {
             "bkn": "",
@@ -129,20 +137,7 @@ class UPLogin(LoginBase[UpSession]):
         # ptui_sendSMS_CB('10012', '短信发送成功！')
         assert int(rl[0]) == 10012, rl[1]
 
-    async def login(self, sess: UpSession, pastcode: int = 0, **add) -> Dict[str, str]:
-        if sess.code == StatusCode.Authenticated:
-            # OK
-            pass
-        elif sess.code == StatusCode.NeedCaptcha and pastcode == 0:
-            # 0 -> 1: OK; !0 -> 1: Error
-            cookie = await self.login(await self.passVC(sess), StatusCode.NeedCaptcha)
-            return cookie
-        elif sess.code == pastcode == StatusCode.NeedVerify:
-            # !10009 -> 10009: OK; 10009 -> 10009: Error
-            raise TencentLoginError(sess.code, str(sess))
-        else:
-            raise TencentLoginError(sess.code, str(sess))
-
+    async def try_login(self, sess: UpSession):
         const = {
             "h": 1,
             "t": 1,
@@ -152,17 +147,17 @@ class UPLogin(LoginBase[UpSession]):
             "ptlang": 2052,
             "js_type": 1,
             "pt_uistyle": 40,
+            # 'js_ver': 21072114,
         }
         data = {
             "u": self.uin,
             "p": await self.pwder.encode(sess.check_rst.salt, sess.verifycode),
             "verifycode": sess.verifycode,
-            "pt_vcode_v1": 1 if pastcode == StatusCode.NeedCaptcha else 0,
+            "pt_vcode_v1": int(sess.verify_rst is not None),
             "pt_verifysession_v1": sess.verifysession,
             "pt_randsalt": sess.check_rst.isRandSalt,
             "u1": self.proxy.s_url,
-            "action": f"{3 if pastcode == StatusCode.NeedCaptcha else 2}-{choice([1, 2])}-{int(time_ns() / 1e6)}",
-            # 'js_ver': 21072114,
+            "action": f"{3 if sess.verify_rst is not None else 2}-{choice([1, 2])}-{int(time_ns() / 1e6)}",
             "login_sig": self.login_sig,
             "aid": self.app.appid,
             "daid": self.app.daid,
@@ -170,28 +165,36 @@ class UPLogin(LoginBase[UpSession]):
             "sid": sess.check_rst.session,
             "o1vId": await self.deviceId(),
         }
-        data.update(const)
-        data.update(add)
+        if sess.sms_code:
+            data["pt_sms_code"] = sess.sms_code
         self.referer = "https://xui.ptlogin2.qq.com/"
-        response = await self.client.get(LOGIN_URL, params=data)
+
+        response = await self.client.get(LOGIN_URL, params=du(data, const))
         response.raise_for_status()
+
         rl = re.findall(r"'(.*?)'[,\)]", response.text)
-
-        rl[0] = int(rl[0])
-        if rl[0] == StatusCode.Authenticated:
-            pass
-        elif rl[0] == StatusCode.NeedVerify:
+        resp = LoginResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
+        if resp.code == StatusCode.NeedSmsVerify:
             sess.sms_ticket = response.cookies.get("pt_sms_ticket") or ""
-            if self.get_smscode:
-                await self.sms(sess)
-                smscode = await self.get_smscode()
-                await self.login(sess, StatusCode.NeedVerify, pt_sms_code=smscode)
-            else:
-                raise NotImplementedError
-        else:
-            raise TencentLoginError(rl[0], rl[4])
+        return resp
 
-        return await self._get_login_url(rl[2])
+    async def login(self):
+        sess = await self.new()
+        while True:
+            resp = await self.try_login(sess)
+            pastcode = sess.pastcode
+            sess.login_history.append(resp)
+            if resp.code == StatusCode.Authenticated:
+                return await self._get_login_url(httpx.URL(resp.url))
+            elif resp.code == StatusCode.NeedCaptcha and pastcode == 0:
+                sess = await self.passVC(sess)
+            elif resp.code == StatusCode.NeedSmsVerify:
+                if pastcode == StatusCode.NeedSmsVerify:
+                    raise TencentLoginError(resp.code, "")
+                await self.send_sms_code(sess)
+                sess.sms_code = await self.hook.GetSmsCode(resp.msg, resp.nickname)
+            else:
+                raise TencentLoginError(resp.code, resp.msg)
 
     def captcha(self, sid: str):
         if not self._captcha:
