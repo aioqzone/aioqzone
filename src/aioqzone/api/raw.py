@@ -16,7 +16,7 @@ import aioqzone.api.constant as const
 from aioqzone.utils.daug import ud
 from jssupport.jsjson import JsonValue, json_loads
 from qqqr.base import UA
-from qqqr.utils import raise_for_status
+from qqqr.utils.net import raise_for_status
 
 from ..exception import CorruptError, QzoneError
 from ..interface.login import Loginable

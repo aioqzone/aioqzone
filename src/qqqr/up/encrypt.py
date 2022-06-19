@@ -9,27 +9,27 @@ from abc import ABC, abstractmethod
 from random import randint
 from typing import Awaitable, Union
 
-from aiohttp import ClientSession
+from httpx import AsyncClient
 
-from ..type import CheckResult
 from .rsa import rsa_encrypt
+from .type import CheckResp
 
 LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_login_2.js"
 
 
 class PasswdEncoder(ABC):
-    def __init__(self, sess: ClientSession, passwd: str) -> None:
-        self.sess = sess
+    def __init__(self, client: AsyncClient, passwd: str) -> None:
+        self.sess = client
         self._passwd = passwd
 
-    def encode(self, r: CheckResult) -> Awaitable[str]:
+    async def encode(self, salt: str, verifycode: str) -> str:
         assert self._passwd, "password should not be empty"
-        return self.getEncryption(r.salt, r.verifycode)
+        return await self.getEncryption(salt, verifycode)
 
     async def login_js(self):
-        async with self.sess.get(LOGIN_JS) as response:
-            response.raise_for_status()
-            return await response.text()
+        response = await self.sess.get(LOGIN_JS)
+        response.raise_for_status()
+        return "".join([i async for i in response.aiter_text()])
 
     @abstractmethod
     async def getEncryption(self, salt: str, verifycode: str) -> str:

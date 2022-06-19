@@ -1,6 +1,6 @@
 from pathlib import Path
 from textwrap import dedent
-from typing import cast
+from typing import MutableMapping, cast
 from urllib.parse import unquote, urlencode
 
 from multidict import MutableMultiMapping
@@ -41,7 +41,7 @@ class TDC:
     vmAvailable = 0
     vmByteCode = 0
 
-    def __init__(self, iframe: str, header: MutableMultiMapping[str]) -> None:
+    def __init__(self, iframe: str, header: MutableMapping[str, str]) -> None:
         self._js = JSDOM_tdc(
             src=iframe,
             ua=header["User-Agent"],
