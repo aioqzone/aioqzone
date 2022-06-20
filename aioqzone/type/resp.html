@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Response Models &mdash; aioqzone 0.5.2.dev0 documentation</title>
+  <title>Response Models &mdash; aioqzone 0.9.0a1.dev2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -15,6 +15,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -83,7 +84,7 @@
            <div itemprop="articleBody">
              
   <section id="module-aioqzone.type.resp">
-<span id="response-models"></span><h1>Response Models<a class="headerlink" href="#module-aioqzone.type.resp" title="Permalink to this headline"></a></h1>
+<span id="response-models"></span><h1>Response Models<a class="headerlink" href="#module-aioqzone.type.resp" title="Permalink to this heading"></a></h1>
 <p>This module defines types that represent responses from Qzone.
 These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code>, and can be used to validate responses.</p>
 <dl class="py class pydantic_model">
@@ -153,6 +154,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.rt_uin" title="aioqzone.type.resp.FeedDetailRep.rt_uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_uin</span> <span class="pre">(int)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.rt_uinname" title="aioqzone.type.resp.FeedDetailRep.rt_uinname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rt_uinname</span> <span class="pre">(str)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.uin" title="aioqzone.type.resp.FeedDetailRep.uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep.video" title="aioqzone.type.resp.FeedDetailRep.video"><code class="xref py py-obj docutils literal notranslate"><span class="pre">video</span> <span class="pre">(Optional[List[aioqzone.type.resp.VideoInfo]])</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -168,7 +170,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.commentlist">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">commentlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.CommentRep" title="aioqzone.type.resp.CommentRep"><span class="pre">aioqzone.type.resp.CommentRep</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.commentlist" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">commentlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.CommentRep" title="aioqzone.type.resp.CommentRep"><span class="pre">CommentRep</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.commentlist" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -188,7 +190,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.pic">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.VideoRep" title="aioqzone.type.resp.VideoRep"><span class="pre">aioqzone.type.resp.VideoRep</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.resp.PicRep" title="aioqzone.type.resp.PicRep"><span class="pre">aioqzone.type.resp.PicRep</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.pic" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.VideoRep" title="aioqzone.type.resp.VideoRep"><span class="pre">VideoRep</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.resp.PicRep" title="aioqzone.type.resp.PicRep"><span class="pre">PicRep</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.pic" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -198,7 +200,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.rt_con">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">aioqzone.type.entity.HasConEntity</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.rt_con" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rt_con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">HasConEntity</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.rt_con" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -224,6 +226,11 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.uin">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedDetailRep.video">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">video</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.VideoInfo" title="aioqzone.type.resp.VideoInfo"><span class="pre">VideoInfo</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedDetailRep.video" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -580,7 +587,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.picId">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">picId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pydantic.networks.HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.picId" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">picId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.picId" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -590,7 +597,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.raw">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url')</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.raw" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url')</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.raw" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Constraints</dt>
 <dd class="field-odd"><ul class="simple">
@@ -609,7 +616,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.thumb">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'pre')</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.thumb" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'pre')</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.thumb" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Constraints</dt>
 <dd class="field-odd"><ul class="simple">
@@ -628,7 +635,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FloatViewPhoto.video_info">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">video_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.VideoInfo2" title="aioqzone.type.resp.VideoInfo2"><span class="pre">aioqzone.type.resp.VideoInfo2</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.video_info" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">video_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.VideoInfo2" title="aioqzone.type.resp.VideoInfo2"><span class="pre">VideoInfo2</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#aioqzone.type.resp.FloatViewPhoto.video_info" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -724,17 +731,17 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.picId">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">picId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pydantic.networks.HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url2')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.picId" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">picId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url2')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.picId" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.raw">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pydantic.networks.HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url3')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.raw" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url3')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.raw" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.PicRep.thumb">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pydantic.networks.HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url1')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.thumb" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url1')</span></em><a class="headerlink" href="#aioqzone.type.resp.PicRep.thumb" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -786,7 +793,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.raw">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url3')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.raw" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url3')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.raw" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Constraints</dt>
 <dd class="field-odd"><ul class="simple">
@@ -800,7 +807,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.thumb">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url1')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.thumb" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">thumb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'url1')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.thumb" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Constraints</dt>
 <dd class="field-odd"><ul class="simple">
@@ -815,6 +822,11 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.vid">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'video_id')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.vid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo.from_floatview">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_floatview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.resp.VideoInfo.from_floatview" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -844,7 +856,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.VideoInfo2.raw">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.networks.HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'video_url')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo2.raw" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">HttpUrl</span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'video_url')</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoInfo2.raw" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Constraints</dt>
 <dd class="field-odd"><ul class="simple">
@@ -875,7 +887,7 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.VideoRep.video_info">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">video_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.resp.VideoInfo" title="aioqzone.type.resp.VideoInfo"><span class="pre">aioqzone.type.resp.VideoInfo</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoRep.video_info" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">video_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.resp.VideoInfo" title="aioqzone.type.resp.VideoInfo"><span class="pre">VideoInfo</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.VideoRep.video_info" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
