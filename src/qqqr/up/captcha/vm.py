@@ -3,8 +3,6 @@ from textwrap import dedent
 from typing import MutableMapping, cast
 from urllib.parse import unquote, urlencode
 
-from multidict import MutableMultiMapping
-
 from jssupport.execjs import Partial
 from jssupport.jsdom import JSDOM
 from jssupport.jsjson import json_loads
@@ -74,7 +72,7 @@ class DecryptTDC(TDC):
             with open(Path(__file__).parent / "decrypt.js") as f:
                 return super()._windowjs() + f.read()
 
-    def __init__(self, iframe: str, header: MutableMultiMapping[str]) -> None:
+    def __init__(self, iframe: str, header: MutableMapping[str, str]) -> None:
         self._js = self.DecryptTDC(
             src=iframe,
             ua=header["User-Agent"],

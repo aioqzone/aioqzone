@@ -9,11 +9,9 @@ from typing import Callable, Dict, List, Optional, Tuple, Union, cast
 from urllib.parse import parse_qs, quote, unquote
 
 from httpx import AsyncClient, HTTPStatusError
-from multidict import istr
 
 import aioqzone.api.constant as const
 from jssupport.jsjson import JsonValue, json_loads
-from qqqr.base import UA
 from qqqr.utils.daug import du
 from qqqr.utils.net import raise_for_status
 
@@ -34,10 +32,17 @@ class QzoneApi:
     encoding = "utf-8"
     host = "https://user.qzone.qq.com"
 
-    def __init__(self, client: AsyncClient, loginman: Loginable, ua: str = UA) -> None:
-        client.headers.update({istr("User-Agent"): ua})
+    def __init__(self, client: AsyncClient, loginman: Loginable) -> None:
         self.client = client
         self.login = loginman
+
+    @property
+    def referer(self):
+        return self.client.headers["referer"]
+
+    @referer.setter
+    def referer(self, value: str):
+        self.client.headers["referer"] = value
 
     async def _get_gtk(self) -> int:
         """Get gtk with async-lock
@@ -54,9 +59,7 @@ class QzoneApi:
     async def aget(self, url: str, params: Optional[Dict[str, str]] = None):
         params = params or {}
         params = du(params, {"g_tk": str(await self._get_gtk())})
-        self.client.headers.update(
-            {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
-        )
+        self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
         return await self.client.get(self.host + url, params=params)
 
     async def apost(
@@ -64,9 +67,7 @@ class QzoneApi:
     ):
         params = params or {}
         params = du(params, {"g_tk": str(await self._get_gtk())})
-        self.client.headers.update(
-            {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
-        )
+        self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
         return await self.client.post(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
