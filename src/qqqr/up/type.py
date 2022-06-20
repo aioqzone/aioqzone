@@ -25,7 +25,7 @@ class CheckResp(BaseModel):
 
 class LoginResp(BaseModel):
     code: int
-    url: HttpUrl
+    url: Union[HttpUrl, str]
     msg: str
     nickname: str
 

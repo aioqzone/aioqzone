@@ -3,16 +3,14 @@ from typing import List, Optional
 
 import pytest
 import pytest_asyncio
-from aiohttp import ClientResponseError
-from aiohttp import ClientSession as Session
+from httpx import AsyncClient, HTTPStatusError
 
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.exception import LoginError, QzoneError
 from aioqzone.type.resp import FeedRep
+from aioqzone.utils import first
 from aioqzone.utils.html import HtmlContent
-
-first = lambda it, pred: next(filter(pred, it), None)
 
 
 @pytest.fixture(scope="module")
@@ -21,7 +19,7 @@ def storage():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def api(sess: Session, man: MixedLoginMan):
+async def api(sess: AsyncClient, man: MixedLoginMan):
     yield DummyQapi(sess, man)
 
 
@@ -63,14 +61,14 @@ class TestDummy:
         for f in storage:
             try:
                 assert await api.emotion_msgdetail(f.uin, f.fid)
-            except (QzoneError, ClientResponseError) as e:
+            except (QzoneError, HTTPStatusError) as e:
                 continue
 
     async def test_photo_list(self, api: DummyQapi, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
         f: Optional[HtmlContent] = first(
-            (HtmlContent.from_html(i.html, i.uin) for i in storage), lambda t: t.pic
+            (HtmlContent.from_html(i.html, i.uin) for i in storage), lambda t: bool(t.pic)
         )
         if f is None:
             pytest.skip("No feed with pic in storage")

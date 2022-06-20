@@ -3,15 +3,14 @@ from typing import Optional, Tuple
 
 import pytest
 import pytest_asyncio
-from aiohttp import ClientSession as Session
+from httpx import AsyncClient
 
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
 from aioqzone.exception import LoginError
 from aioqzone.type.internal import LikeData
+from aioqzone.utils import first
 from aioqzone.utils.html import HtmlContent, HtmlInfo
-
-first = lambda it, pred: next(filter(pred, it), None)
 
 
 @pytest.fixture(scope="module")
@@ -20,7 +19,7 @@ def storage():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def api(sess: Session, man: MixedLoginMan):
+async def api(sess: AsyncClient, man: MixedLoginMan):
     yield QzoneApi(sess, man)
 
 

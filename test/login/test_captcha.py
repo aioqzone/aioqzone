@@ -3,24 +3,22 @@ from os import environ as env
 
 import pytest
 import pytest_asyncio
-from aiohttp import ClientSession
+from httpx import AsyncClient
 
-from qqqr.constants import QzoneAppid, QzoneProxy
-from qqqr.up import UPLogin, User
+from qqqr.constant import QzoneAppid, QzoneProxy
+from qqqr.up import UpLogin
 from qqqr.up.captcha import TDC, Captcha, IframeParser
 from qqqr.up.captcha.jigsaw import Jigsaw
 from qqqr.up.captcha.vm import DecryptTDC
 
 
 @pytest_asyncio.fixture(scope="module")
-async def captcha():
-    async with ClientSession() as sess:
-        async with UPLogin(
-            sess, QzoneAppid, QzoneProxy, User(int(env["TEST_UIN"]), env["TEST_PASSWORD"])
-        ) as login:
-            captcha = login.captcha((await login.check()).session)
-            await captcha.prehandle(login.xlogin_url)
-            yield captcha
+async def captcha(sess: AsyncClient):
+    login = UpLogin(sess, QzoneAppid, QzoneProxy, int(env["TEST_UIN"]), env["TEST_PASSWORD"])
+    upsess = await login.new()
+    captcha = login.captcha(upsess.check_rst.session)
+    await captcha.prehandle(login.xlogin_url)
+    yield captcha
 
 
 @pytest_asyncio.fixture(scope="module")

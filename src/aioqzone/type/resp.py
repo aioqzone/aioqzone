@@ -100,6 +100,18 @@ class VideoInfo(BaseModel):
     raw: HttpUrl = Field(alias="url3")
     vid: str = Field(alias="video_id")
 
+    @classmethod
+    def from_floatview(cls, fv: "FloatViewPhoto"):
+        assert fv.is_video
+        assert fv.video_info
+        return cls(
+            cover_height=fv.height,
+            cover_width=fv.width,
+            url1=fv.thumb,
+            url3=fv.video_info.raw,
+            video_id=fv.video_info.vid,
+        )
+
 
 class VideoInfo2(BaseModel):
     cover_height: int = 0  # same as VideoRep.height
@@ -122,13 +134,7 @@ class VideoRep(PicRep):
             url1=fv.thumb,
             url2=fv.picId,
             url3=fv.raw,
-            video_info=VideoInfo(
-                cover_height=fv.height,
-                cover_width=fv.width,
-                url1=fv.thumb,
-                url3=fv.video_info.raw,
-                video_id=fv.video_info.vid,
-            ),
+            video_info=VideoInfo.from_floatview(fv),
         )
 
 
@@ -145,7 +151,10 @@ class FeedDetailRep(HasConEntity):
     rt_fid: str = Field(default="", alias="rt_tid")
     rt_createTime: str = ""
     rt_abstime: int = Field(default=0, alias="rt_created_time")
+
+    # medias
     pic: Optional[List[Union[VideoRep, PicRep]]] = None
+    video: Optional[List[VideoInfo]] = None
 
     cmtnum: int
     commentlist: Optional[List[CommentRep]] = None

@@ -2,7 +2,9 @@ import asyncio
 
 import pytest
 import pytest_asyncio
-from aiohttp import ClientSession
+from httpx import AsyncClient
+
+from qqqr.ssl import ssl_context
 
 
 @pytest.fixture(scope="module")
@@ -16,5 +18,5 @@ def event_loop():
 
 @pytest_asyncio.fixture(scope="module")
 async def sess():
-    async with ClientSession() as sess:
+    async with AsyncClient(verify=ssl_context()) as sess:
         yield sess
