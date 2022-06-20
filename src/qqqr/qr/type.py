@@ -1,9 +1,11 @@
+from typing import Union
+
 from pydantic import BaseModel
 from pydantic.networks import HttpUrl
 
 
 class PollResp(BaseModel):
     code: int
-    url: HttpUrl
+    url: Union[HttpUrl, str]
     msg: str
-    my_name: str
+    nickname: str

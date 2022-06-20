@@ -3,10 +3,10 @@ from os import environ as env
 
 import pytest
 import pytest_asyncio
-from aiohttp import ClientSession
+from httpx import AsyncClient
 
 import aioqzone.api.loginman as api
-from aioqzone.interface.login import LoginMethod, QREvent, UPEvent
+from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from qqqr.exception import TencentLoginError
 
 from . import showqr
@@ -25,22 +25,37 @@ class UPEvent_Test(UPEvent):
 
 
 class QREvent_Test(QREvent):
+    def __init__(self) -> None:
+        super().__init__()
+        self._cancel = asyncio.Event()
+        self._refresh = asyncio.Event()
+
     async def QrFetched(self, png: bytes, renew):
         showqr(png)
         self.renew_flag = renew
 
     async def LoginSuccess(self, meth):
         assert meth == LoginMethod.qr
-        self.qr_succ = True
+        self.login_succ = True
+
+    async def LoginFailed(self, meth, msg):
+        assert meth == LoginMethod.qr
+        self.login_fail = msg
+
+    @property
+    def cancel_flag(self) -> asyncio.Event:
+        return self._cancel
+
+    @property
+    def refresh_flag(self) -> asyncio.Event:
+        return self._refresh
 
 
 @pytest_asyncio.fixture(scope="class")
-async def up():
-    async with ClientSession() as sess:
-        man = api.UPLoginMan(sess, int(env["TEST_UIN"]), pwd=env["TEST_PASSWORD"])
-
-        man.register_hook(UPEvent_Test())
-        yield man
+async def up(sess: AsyncClient):
+    man = api.UPLoginMan(sess, int(env["TEST_UIN"]), pwd=env["TEST_PASSWORD"])
+    man.register_hook(UPEvent_Test())
+    yield man
 
 
 @pytest.mark.incremental
@@ -65,11 +80,10 @@ class TestUP:
 
 
 @pytest_asyncio.fixture(scope="class")
-async def qr():
-    async with ClientSession() as sess:
-        man = api.QRLoginMan(sess, int(env["TEST_UIN"]))
-        man.register_hook(QREvent_Test())
-        yield man
+async def qr(sess: AsyncClient):
+    man = api.QRLoginMan(sess, int(env["TEST_UIN"]))
+    man.register_hook(QREvent_Test())
+    yield man
 
 
 @pytest.mark.needuser
@@ -86,7 +100,6 @@ class TestQR:
             assert "p_skey" in cookie
             await asyncio.sleep(1)
             assert hasattr(qr.hook, "login_succ")
-            assert hasattr(qr.hook, "qr_succ")
 
     def test_cookie(self, qr: api.QRLoginMan):
         assert qr.cookie
@@ -95,13 +108,10 @@ class TestQR:
         assert qr.gtk >= 0
 
     async def test_cancel(self, qr: api.QRLoginMan):
-        pytest.skip("NotImplemented")
         await qr.new_cookie()
-        assert qr.hook.cancel
-        await qr.hook.cancel()
+        qr.hook.cancel_flag.set()
 
     async def test_resend(self, qr: api.QRLoginMan):
         await qr.new_cookie()
-        assert qr.hook.resend
-        await qr.hook.resend()
+        qr.hook.refresh_flag.set()
         assert qr.hook.renew_flag  # type: ignore

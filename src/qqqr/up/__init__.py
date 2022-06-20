@@ -93,10 +93,11 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         """check procedure before login. This will return a CheckResult object containing
         verify code, session, etc.
 
-        :raises `aiohttp.ClientResponseError`:
+        :raises `httpx.HTTPStatusError`:
 
         :return: CheckResult
         """
+        await self.request()
         data = {
             "regmaster": "",
             "pt_tea": 2,
@@ -180,14 +181,15 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
 
     async def login(self):
         sess = await self.new()
+        if sess.code == StatusCode.NeedCaptcha:
+            await self.passVC(sess)
+
         while True:
             resp = await self.try_login(sess)
             pastcode = sess.pastcode
             sess.login_history.append(resp)
             if resp.code == StatusCode.Authenticated:
                 return await self._get_login_url(httpx.URL(resp.url))
-            elif resp.code == StatusCode.NeedCaptcha and pastcode == 0:
-                sess = await self.passVC(sess)
             elif resp.code == StatusCode.NeedSmsVerify:
                 if pastcode == StatusCode.NeedSmsVerify:
                     raise TencentLoginError(resp.code, "")

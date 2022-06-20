@@ -21,7 +21,7 @@ POLL_QR = "https://ssl.ptlogin2.qq.com/ptqrlogin"
 LOGIN_URL = "https://ptlogin2.qzone.qq.com/check_sig"
 
 
-@dataclass(slots=True, unsafe_hash=True)
+@dataclass(unsafe_hash=True)
 class QR:
     png: bytes
     sig: str
@@ -42,6 +42,7 @@ class QrSession(LoginSession):
 
 class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
     async def new(self) -> QrSession:
+        await self.request()
         return QrSession(await self.show())
 
     async def show(self) -> QR:
@@ -62,7 +63,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
     async def poll(self, sess: QrSession) -> PollResp:
         """Poll QR status.
 
-        :raises `aiohttp.ClientResponseError`: if response status code != 200
+        :raises `httpx.HTTPStatusError`: if response status code != 200
 
         :return: a poll response object
         """
@@ -90,7 +91,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
         r.raise_for_status()
 
         rlist = re.findall(r"'(.*?)'[,\)]", r.text)
-        resp = PollResp.parse_obj(dict(zip(["code", "?", "url", "?", "msg", "my_name"], rlist)))
+        resp = PollResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rlist)))
 
         if resp.code == StatusCode.Authenticated:
             sess.login_url = str(resp.url)

@@ -4,7 +4,7 @@ from httpx import HTTPStatusError, Response
 
 
 def raise_for_status(response: Response, *accept_code: int):
-    """A checker more strict than :external+httpx:meth:`Response.raise_for_status`.
+    """A checker more strict than :meth:`~httpx.Response.raise_for_status`.
 
     :param response: Client response to check.
     :param accept_code: Overwrite codes that can be accepted, If not given, default is `(200, )`

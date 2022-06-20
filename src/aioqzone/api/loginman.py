@@ -5,21 +5,20 @@ Users can inherit these managers and implement their own caching logic.
 
 import logging
 from enum import Enum
-from typing import Dict, List, Optional, Type
+from typing import Dict, List, Optional
 
 from httpx import AsyncClient
 
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
-from qqqr.constants import QzoneAppid, QzoneProxy, StatusCode
+from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.up import UpLogin
-from qqqr.utils.daug import du
 
+from ..event.login import Loginable, LoginMethod, QREvent, UPEvent
 from ..exception import LoginError
-from ..interface.login import Loginable, LoginMethod, QREvent, UPEvent
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 JsError = JsRuntimeError, JsImportError, NodeNotFoundError
 
 
@@ -35,10 +34,15 @@ class ConstLoginMan(Loginable):
 
 
 class UPLoginMan(Loginable[UPEvent]):
-    def __init__(self, sess: AsyncClient, uin: int, pwd: str) -> None:
-        Loginable.__init__(self, uin)
-        self.sess = sess
-        self._pwd = pwd
+    def __init__(self, client: AsyncClient, uin: int, pwd: str) -> None:
+        assert pwd
+        super().__init__(uin)
+        self.client = client
+        self.uplogin = UpLogin(self.client, QzoneAppid, QzoneProxy, self.uin, pwd)
+
+    def register_hook(self, hook: UPEvent):
+        self.uplogin.register_hook(hook)
+        return super().register_hook(hook)
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
@@ -47,24 +51,26 @@ class UPLoginMan(Loginable[UPEvent]):
         """
         meth = LoginMethod.up
         try:
-            cookie = await UpLogin(self.sess, QzoneAppid, QzoneProxy, self.uin, self._pwd).login()
+            cookie = await self.uplogin.login()
             self.add_hook_ref("hook", self.hook.LoginSuccess(meth))
-            self.sess.cookies.update(cookie)  # optional
+            self.client.cookies.update(cookie)  # optional
             return cookie
         except TencentLoginError as e:
             self.add_hook_ref("hook", self.hook.LoginFailed(meth, e.msg))
-            logger.warning(str(e))
+            log.warning(str(e))
             raise e
         except NotImplementedError as e:
             self.add_hook_ref("hook", self.hook.LoginFailed(meth, "10009：需要手机验证"))
-            logger.warning(str(e))
-            raise TencentLoginError(StatusCode.NeedVerify, "Dynamic code verify not implemented")
+            log.warning(str(e))
+            raise TencentLoginError(
+                StatusCode.NeedSmsVerify, "Dynamic code verify not implemented"
+            )
         except JsError as e:
             self.add_hook_ref("hook", self.hook.LoginFailed(meth, "JS调用出错"))
-            logger.error(str(e), exc_info=e)
+            log.error(str(e), exc_info=e)
             raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha")
         except:
-            logger.fatal("Unexpected error in QR login.", exc_info=True)
+            log.fatal("Unexpected error in QR login.", exc_info=True)
             try:
                 await self.hook.LoginFailed(meth, "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
             finally:
@@ -72,12 +78,15 @@ class UPLoginMan(Loginable[UPEvent]):
 
 
 class QRLoginMan(Loginable[QREvent]):
-    hook: QREvent
-
-    def __init__(self, sess: AsyncClient, uin: int, refresh_time: int = 6) -> None:
+    def __init__(self, client: AsyncClient, uin: int, refresh_time: int = 6) -> None:
         Loginable.__init__(self, uin)
-        self.sess = sess
+        self.client = client
         self.refresh = refresh_time
+        self.qrlogin = QrLogin(self.client, QzoneAppid, QzoneProxy)
+
+    def register_hook(self, hook: QREvent):
+        self.qrlogin.register_hook(hook)
+        return super().register_hook(hook)
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
@@ -86,24 +95,23 @@ class QRLoginMan(Loginable[QREvent]):
         :raises `SystemExit`: if unexpected error raised when polling
         """
         meth = LoginMethod.qr
-        man = QrLogin(self.sess, QzoneAppid, QzoneProxy)
         emit_hook = lambda c: self.add_hook_ref("hook", c)
         self.hook.cancel_flag.clear()
         self.hook.refresh_flag.clear()
 
         try:
-            cookie = await man.login()
+            cookie = await self.qrlogin.login()
             emit_hook(self.hook.LoginSuccess(meth))
-            self.sess.cookies.update(cookie)
+            self.client.cookies.update(cookie)
             return cookie
         except TimeoutError as e:
-            logger.warning(str(e))
+            log.warning(str(e))
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise e
         except KeyboardInterrupt as e:
             raise UserBreak from e
         except:
-            logger.fatal("Unexpected error in QR login.", exc_info=True)
+            log.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
             try:
                 await self.hook.LoginFailed(meth, msg)
@@ -121,21 +129,32 @@ class QrStrategy(str, Enum):
     forbid = "forbid"
 
 
-class MixedLoginMan(UPLoginMan, QRLoginMan):
+MixedLoginEvent = type("MixedLoginEvent", (QREvent, UPEvent), {})
+
+
+class MixedLoginMan(Loginable[MixedLoginEvent]):
     def __init__(
         self,
-        sess: AsyncClient,
+        client: AsyncClient,
         uin: int,
         strategy: QrStrategy,
         pwd: Optional[str] = None,
         refresh_time: int = 6,
     ) -> None:
+        super().__init__(uin)
         self.strategy = strategy
-        if strategy != "force":
+        self._order: List[Loginable] = []
+        if strategy != QrStrategy.force:
             assert pwd
-            UPLoginMan.__init__(self, sess, uin, pwd)
-        if strategy != "forbid":
-            QRLoginMan.__init__(self, sess, uin, refresh_time)
+            self._order.append(UPLoginMan(client, uin, pwd))
+        if strategy != QrStrategy.forbid:
+            self._order.append(QRLoginMan(client, uin, refresh_time))
+        if strategy == QrStrategy.prefer:
+            self._order = self._order[::-1]
+
+    def register_hook(self, hook: MixedLoginEvent):
+        for c in self._order:
+            c.register_hook(hook)
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
@@ -145,15 +164,9 @@ class MixedLoginMan(UPLoginMan, QRLoginMan):
 
         :return: cookie
         """
-        order: List[Type[Loginable]] = {
-            "force": [QRLoginMan],
-            "prefer": [QRLoginMan, UPLoginMan],
-            "allow": [UPLoginMan, QRLoginMan],
-            "forbid": [UPLoginMan],
-        }[self.strategy]
-        for c in order:
+        for c in self._order:
             try:
-                return await c._new_cookie(self)
+                return await c._new_cookie()
             except (TencentLoginError, TimeoutError) as e:
                 continue
             # UserBreak, SystemExit: raise as is
