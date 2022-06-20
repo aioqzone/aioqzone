@@ -69,6 +69,9 @@ class UPLoginMan(Loginable[UPEvent]):
             self.add_hook_ref("hook", self.hook.LoginFailed(meth, "JS调用出错"))
             log.error(str(e), exc_info=e)
             raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha")
+        except GeneratorExit as e:
+            log.warning("GeneratorExit captured, login cancelled.")
+            raise e
         except:
             log.fatal("Unexpected error in QR login.", exc_info=True)
             try:
@@ -110,6 +113,9 @@ class QRLoginMan(Loginable[QREvent]):
             raise e
         except KeyboardInterrupt as e:
             raise UserBreak from e
+        except GeneratorExit as e:
+            log.warning("GeneratorExit captured, login cancelled.")
+            raise e
         except:
             log.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
@@ -167,9 +173,10 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
         for c in self._order:
             try:
                 return await c._new_cookie()
-            except (TencentLoginError, TimeoutError) as e:
+            except (TencentLoginError, TimeoutError, GeneratorExit) as e:
                 continue
-            # UserBreak, SystemExit: raise as is
+            # except (UserBreak, SystemExit, SystemError) as e:
+            #     raise e
 
         if self.strategy == "forbid":
             msg = "您可能被限制账密登陆. 扫码登陆仍然可行."

@@ -8,7 +8,6 @@ from typing import Dict, Iterable, List, Tuple, Type, TypeVar, cast
 from urllib.parse import urlencode
 
 from httpx import AsyncClient
-from multidict import istr
 
 from jssupport.execjs import ExecJS, Partial
 from jssupport.jsjson import json_loads
@@ -91,8 +90,7 @@ class Captcha:
         self.session = client
         self.appid = appid
         self.sid = sid
-
-        self.session.headers.update({istr("referer"): "https://xui.ptlogin2.qq.com/"})
+        self.session.headers["referer"] = "https://xui.ptlogin2.qq.com/"
 
     @property
     def base64_ua(self):
@@ -167,7 +165,7 @@ class Captcha:
         }
         r = await self.session.get(SHOW_NEW_URL, params=data)
         r.raise_for_status()
-        self.session.headers.update({istr("referer"): str(r.url)})
+        self.session.headers["referer"] = str(r.url)
         self.prehandleLoadTime = data["prehandleLoadTime"]
         return "".join([i async for i in r.aiter_text()])
 
