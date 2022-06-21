@@ -56,8 +56,8 @@ class TDC:
     async def get_info(self) -> dict:
         return cast(dict, json_loads(await self._js.eval("window.TDC.getInfo()")))
 
-    def set_data(self, d: dict):
-        self._js.add_eval(f"window.TDC.setData({d})")
+    def set_data(self, **data):
+        self._js.add_eval(f"window.TDC.setData({data})")
 
     def clear_tc(self):
         return self._js.eval("window.TDC.clearTc()")
