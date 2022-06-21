@@ -49,9 +49,6 @@ jobs:
       - name: Get Package Version
         id: version_step
         run: echo "::set-output name=package::$(poetry version -s)"
-      - name: Get Package Version
-        id: version_step
-        run: echo "::set-output name=package::$(poetry version -s)"
       #----------------------------------------------
       #       load cached venv if cache exists
       #----------------------------------------------
