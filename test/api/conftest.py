@@ -2,6 +2,7 @@ import asyncio
 
 import pytest
 import pytest_asyncio
+from httpx import AsyncClient
 
 from aioqzone.api.loginman import MixedLoginEvent, MixedLoginMan, QrStrategy
 from qqqr.ssl import ssl_context
