@@ -7,19 +7,17 @@ import re
 import struct
 from abc import ABC, abstractmethod
 from random import randint
-from typing import Awaitable, Union
+from typing import Union
 
-from httpx import AsyncClient
-
+from ..utils.net import ClientAdapter
 from .rsa import rsa_encrypt
-from .type import CheckResp
 
 LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_login_2.js"
 
 
 class PasswdEncoder(ABC):
-    def __init__(self, client: AsyncClient, passwd: str) -> None:
-        self.sess = client
+    def __init__(self, client: ClientAdapter, passwd: str) -> None:
+        self.client = client
         self._passwd = passwd
 
     async def encode(self, salt: str, verifycode: str) -> str:
@@ -27,9 +25,9 @@ class PasswdEncoder(ABC):
         return await self.getEncryption(salt, verifycode)
 
     async def login_js(self):
-        response = await self.sess.get(LOGIN_JS)
-        response.raise_for_status()
-        return "".join([i async for i in response.aiter_text()])
+        async with await self.client.get(LOGIN_JS) as r:
+            r.raise_for_status()
+            return "".join([i async for i in r.aiter_text()])
 
     @abstractmethod
     async def getEncryption(self, salt: str, verifycode: str) -> str:

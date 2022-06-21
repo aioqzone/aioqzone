@@ -1,7 +1,6 @@
 import ast
 import json
 import logging
-from platform import python_version_tuple
 from textwrap import dedent
 from typing import Callable, Dict, List, Union
 

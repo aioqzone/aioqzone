@@ -2,19 +2,19 @@ from os import environ as env
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
 
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.up import UpEvent, UpLogin
+from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 
 
 @pytest_asyncio.fixture(scope="module")
-async def login(sess: AsyncClient):
+async def login(client: ClientAdapter):
     yield UpLogin(
-        sess,
+        client,
         QzoneAppid,
         QzoneProxy,
         int(env["TEST_UIN"]),

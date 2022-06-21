@@ -2,10 +2,10 @@ import asyncio
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
 
 from aioqzone.api.loginman import MixedLoginEvent, MixedLoginMan, QrStrategy
 from qqqr.ssl import ssl_context
+from qqqr.utils.net import ClientAdapter
 
 from . import showqr
 
@@ -20,17 +20,17 @@ def event_loop():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def sess():
-    async with AsyncClient(verify=ssl_context()) as sess:
-        yield sess
+async def client():
+    async with AsyncClient(verify=ssl_context()) as client:
+        yield ClientAdapter(client)
 
 
 @pytest_asyncio.fixture(scope="module")
-async def man(sess: AsyncClient):
+async def man(client: ClientAdapter):
     from os import environ as env
 
     man = MixedLoginMan(
-        sess,
+        client,
         int(env["TEST_UIN"]),
         QrStrategy[env.get("TEST_QRSTRATEGY", "forbid")],  # forbid QR by default.
         pwd=env.get("TEST_PASSWORD", None),

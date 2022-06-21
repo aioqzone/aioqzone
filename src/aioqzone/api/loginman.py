@@ -7,13 +7,12 @@ import logging
 from enum import Enum
 from typing import Dict, List, Optional
 
-from httpx import AsyncClient
-
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.up import UpLogin
+from qqqr.utils.net import ClientAdapter
 
 from ..event.login import Loginable, LoginMethod, QREvent, UPEvent
 from ..exception import LoginError
@@ -34,7 +33,7 @@ class ConstLoginMan(Loginable):
 
 
 class UPLoginMan(Loginable[UPEvent]):
-    def __init__(self, client: AsyncClient, uin: int, pwd: str) -> None:
+    def __init__(self, client: ClientAdapter, uin: int, pwd: str) -> None:
         assert pwd
         super().__init__(uin)
         self.client = client
@@ -81,7 +80,7 @@ class UPLoginMan(Loginable[UPEvent]):
 
 
 class QRLoginMan(Loginable[QREvent]):
-    def __init__(self, client: AsyncClient, uin: int, refresh_time: int = 6) -> None:
+    def __init__(self, client: ClientAdapter, uin: int, refresh_time: int = 6) -> None:
         Loginable.__init__(self, uin)
         self.client = client
         self.refresh = refresh_time
@@ -141,7 +140,7 @@ MixedLoginEvent = type("MixedLoginEvent", (QREvent, UPEvent), {})
 class MixedLoginMan(Loginable[MixedLoginEvent]):
     def __init__(
         self,
-        client: AsyncClient,
+        client: ClientAdapter,
         uin: int,
         strategy: QrStrategy,
         pwd: Optional[str] = None,
