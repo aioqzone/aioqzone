@@ -44,8 +44,8 @@ class PrehandleResp(BaseModel):
 
 
 class VerifyResp(BaseModel):
-    errorCode: int
-    randstr: str
+    code: int = Field(alias="errorCode")
+    verifycode: str = Field(alias="randstr")
     ticket: str
     errMessage: str
     sess: str

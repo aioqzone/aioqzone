@@ -54,13 +54,13 @@ class UpSession(LoginSession):
     @property
     def code(self):
         if self.verify_rst:
-            return self.verify_rst.errorCode
+            return self.verify_rst.code
         return self.check_rst.code
 
     @property
     def verifycode(self):
         if self.verify_rst:
-            return self.verify_rst.randstr
+            return self.verify_rst.verifycode
         return self.check_rst.verifycode
 
     @property
@@ -214,11 +214,10 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         if not self._captcha:
             from .captcha import Captcha
 
-            self._captcha = Captcha(self.client, self.app.appid, sid)
+            self._captcha = Captcha(self.client, self.app.appid, sid, str(self.xlogin_url))
         return self._captcha
 
     async def passVC(self, sess: UpSession):
         c = self.captcha(sess.check_rst.session)
-        await c.prehandle(self.xlogin_url)
         sess.verify_rst = await c.verify()
         return sess
