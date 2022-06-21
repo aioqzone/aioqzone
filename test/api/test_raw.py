@@ -3,7 +3,6 @@ from typing import Optional, Tuple
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
 
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
@@ -11,6 +10,7 @@ from aioqzone.exception import LoginError
 from aioqzone.type.internal import LikeData
 from aioqzone.utils import first
 from aioqzone.utils.html import HtmlContent, HtmlInfo
+from qqqr.utils.net import ClientAdapter
 
 
 @pytest.fixture(scope="module")
@@ -19,8 +19,8 @@ def storage():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def api(sess: AsyncClient, man: MixedLoginMan):
-    yield QzoneApi(sess, man)
+async def api(client: ClientAdapter, man: MixedLoginMan):
+    yield QzoneApi(client, man)
 
 
 class TestRaw:

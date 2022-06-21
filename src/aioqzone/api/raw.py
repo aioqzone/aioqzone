@@ -8,12 +8,12 @@ from random import randint, random
 from typing import Callable, Dict, List, Optional, Tuple, Union, cast
 from urllib.parse import parse_qs, quote, unquote
 
-from httpx import AsyncClient, HTTPStatusError
+from httpx import HTTPStatusError
 
 import aioqzone.api.constant as const
 from jssupport.jsjson import JsonValue, json_loads
 from qqqr.utils.daug import du
-from qqqr.utils.net import raise_for_status
+from qqqr.utils.net import ClientAdapter, raise_for_status
 
 from ..event.login import Loginable
 from ..exception import CorruptError, QzoneError
@@ -32,7 +32,7 @@ class QzoneApi:
     encoding = "utf-8"
     host = "https://user.qzone.qq.com"
 
-    def __init__(self, client: AsyncClient, loginman: Loginable) -> None:
+    def __init__(self, client: ClientAdapter, loginman: Loginable) -> None:
         self.client = client
         self.login = loginman
 
@@ -210,9 +210,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.aget(const.feeds3_html_more, du(default, query))
-            r.raise_for_status()
-            rtext = "".join([i async for i in r.aiter_text()])
+            async with await self.aget(const.feeds3_html_more, du(default, query)) as r:
+                r.raise_for_status()
+                rtext = "".join([i async for i in r.aiter_text()])
 
             return self._rtext_handler(rtext)
 
@@ -258,9 +258,10 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.apost(const.emotion_getcomments, data=du(default, body))
-            r.raise_for_status()
-            rtext = "".join([i async for i in r.aiter_text()])
+            async with await self.apost(const.emotion_getcomments, data=du(default, body)) as r:
+                r.raise_for_status()
+                rtext = "".join([i async for i in r.aiter_text()])
+
             return self._rtext_handler(rtext)
 
         return await retry_closure()
@@ -296,9 +297,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.aget(const.emotion_msgdetail, params=du(default, query))
-            r.raise_for_status()
-            return self._rtext_handler(r.text)
+            async with await self.aget(const.emotion_msgdetail, params=du(default, query)) as r:
+                r.raise_for_status()
+                return self._rtext_handler(r.text)
 
         return await retry_closure()
 
@@ -321,9 +322,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.aget(const.get_feeds_count, query)
-            r.raise_for_status()
-            return self._rtext_handler(r.text)
+            async with await self.aget(const.get_feeds_count, query) as r:
+                r.raise_for_status()
+                return self._rtext_handler(r.text)
 
         r = await retry_closure()
         return r["data"]  # type: ignore
@@ -363,9 +364,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.apost(url, data=du(default, body))
-            r.raise_for_status()
-            return self._rtext_handler(r.text, errno_key=("code", "ret"))
+            async with await self.apost(url, data=du(default, body)) as r:
+                r.raise_for_status()
+                return self._rtext_handler(r.text, errno_key=("code", "ret"))
 
         try:
             await retry_closure()
@@ -433,9 +434,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.aget(const.floatview_photo_list, du(default, query))
-            r.raise_for_status()
-            return self._rtext_handler(r.text)
+            async with await self.aget(const.floatview_photo_list, du(default, query)) as r:
+                r.raise_for_status()
+                return self._rtext_handler(r.text)
 
         rjson = (await retry_closure())["data"]
         if query["t"] != int(rjson.pop("t")):  # type: ignore
@@ -486,9 +487,11 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.aget(const.emotion_msglist, du(param, add) if pos else param)
-            r.raise_for_status()
-            rtext = "".join([i async for i in r.aiter_text()])
+            async with await self.aget(
+                const.emotion_msglist, du(param, add) if pos else param
+            ) as r:
+                r.raise_for_status()
+                rtext = "".join([i async for i in r.aiter_text()])
             return self._rtext_handler(rtext)
 
         data = await retry_closure()
@@ -535,9 +538,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.apost(const.emotion_publish, data=du(default, body))
-            r.raise_for_status()
-            return self._rtext_handler(r.text)
+            async with await self.apost(const.emotion_publish, data=du(default, body)) as r:
+                r.raise_for_status()
+                return self._rtext_handler(r.text)
 
         return await retry_closure()
 
@@ -584,12 +587,12 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.apost(const.emotion_delete, data=body)
-            # upstream error: qzone server returns 503, but the feed operation is done.
-            raise_for_status(r, 200, 503)
-            if r.status_code == 503:
-                return
-            return self._rtext_handler(r.text)
+            async with await self.apost(const.emotion_delete, data=body) as r:
+                # upstream error: qzone server returns 503, but the feed operation is done.
+                raise_for_status(r, 200, 503)
+                if r.status_code == 503:
+                    return
+                return self._rtext_handler(r.text)
 
         return await retry_closure()
 
@@ -637,8 +640,8 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            r = await self.apost(const.emotion_update, data=du(default, body))
-            r.raise_for_status()
-            return self._rtext_handler(r.text)
+            async with await self.apost(const.emotion_update, data=du(default, body)) as r:
+                r.raise_for_status()
+                return self._rtext_handler(r.text)
 
         return await retry_closure()

@@ -5,7 +5,6 @@ from time import time_ns
 from typing import List, Optional, Type
 
 import httpx
-from httpx import AsyncClient
 
 from ..base import LoginBase, LoginSession
 from ..constant import StatusCode
@@ -14,6 +13,7 @@ from ..event.login import UpEvent
 from ..exception import TencentLoginError
 from ..type import APPID, PT_QR_APP, Proxy
 from ..utils.daug import du
+from ..utils.net import ClientAdapter
 from .encrypt import NodeEncoder, PasswdEncoder, TeaEncoder
 from .type import CheckResp, LoginResp, VerifyResp
 
@@ -31,9 +31,14 @@ class UpSession(LoginSession):
     def __init__(
         self,
         check_result: CheckResp,
+        local_token: str,
+        login_sig: str,
+        *,
         create_time: float = ...,
     ) -> None:
-        super().__init__(create_time)
+        super().__init__(create_time=create_time)
+        self.local_token = local_token
+        self.login_sig = login_sig
         self.check_rst = check_result
         self.verify_rst: Optional[VerifyResp] = None
         self.sms_ticket = ""
@@ -72,7 +77,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
 
     def __init__(
         self,
-        client: AsyncClient,
+        client: ClientAdapter,
         app: APPID,
         proxy: Proxy,
         uin: int,
@@ -97,7 +102,11 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
 
         :return: CheckResult
         """
-        await self.request()
+        async with await self.client.get(self.xlogin_url) as r:
+            r.raise_for_status()
+            local_token = r.cookies["pt_local_token"]
+            login_sig = r.cookies["pt_login_sig"]
+
         data = {
             "regmaster": "",
             "pt_tea": 2,
@@ -106,21 +115,22 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
             "appid": self.app.appid,
             # 'js_ver': 21072114,
             "js_type": 1,
-            "login_sig": self.login_sig,
+            "login_sig": login_sig,
             "u1": self.proxy.s_url,
             "r": random(),
             "pt_uistyle": 40,
         }
-        r = await self.client.get(CHECK_URL, params=data)
-        r.raise_for_status()
-        rlist = re.findall(r"'(.*?)'[,\)]", r.text)
+        async with await self.client.get(CHECK_URL, params=data) as r:
+            r.raise_for_status()
+            rl = re.findall(r"'(.*?)'[,\)]", r.text)
+
         rdict = dict(
             zip(
                 ["code", "verifycode", "salt", "verifysession", "isRandSalt", "ptdrvs", "session"],
-                rlist,
+                rl,
             )
         )
-        return UpSession(CheckResp.parse_obj(rdict))
+        return UpSession(CheckResp.parse_obj(rdict), local_token, login_sig)
 
     async def send_sms_code(self, sess: UpSession):
         """Send verify sms (to get dynamic code)
@@ -133,8 +143,10 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
             "aid": self.app.appid,
             "pt_sms_ticket": sess.sms_ticket,
         }
-        r = await self.client.get("https://ui.ptlogin2.qq.com/ssl/send_sms_code", params=data)
-        rl = re.findall(r"'(.*?)'[,\)]", r.text)
+        async with await self.client.get(
+            "https://ui.ptlogin2.qq.com/ssl/send_sms_code", params=data
+        ) as r:
+            rl = re.findall(r"'(.*?)'[,\)]", r.text)
         # ptui_sendSMS_CB('10012', '短信发送成功！')
         assert int(rl[0]) == 10012, rl[1]
 
@@ -159,7 +171,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
             "pt_randsalt": sess.check_rst.isRandSalt,
             "u1": self.proxy.s_url,
             "action": f"{3 if sess.verify_rst is not None else 2}-{choice([1, 2])}-{int(time_ns() / 1e6)}",
-            "login_sig": self.login_sig,
+            "login_sig": sess.login_sig,
             "aid": self.app.appid,
             "daid": self.app.daid,
             "ptdrvs": sess.check_rst.ptdrvs,
@@ -170,8 +182,8 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
             data["pt_sms_code"] = sess.sms_code
         self.referer = "https://xui.ptlogin2.qq.com/"
 
-        response = await self.client.get(LOGIN_URL, params=du(data, const))
-        response.raise_for_status()
+        async with await self.client.get(LOGIN_URL, params=du(data, const)) as response:
+            response.raise_for_status()
 
         rl = re.findall(r"'(.*?)'[,\)]", response.text)
         resp = LoginResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))

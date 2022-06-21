@@ -3,11 +3,11 @@ from os import environ as env
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
 
 import aioqzone.api.loginman as api
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from qqqr.exception import TencentLoginError
+from qqqr.utils.net import ClientAdapter
 
 from . import showqr
 
@@ -52,8 +52,8 @@ class QREvent_Test(QREvent):
 
 
 @pytest_asyncio.fixture(scope="class")
-async def up(sess: AsyncClient):
-    man = api.UPLoginMan(sess, int(env["TEST_UIN"]), pwd=env["TEST_PASSWORD"])
+async def up(client: ClientAdapter):
+    man = api.UPLoginMan(client, int(env["TEST_UIN"]), pwd=env["TEST_PASSWORD"])
     man.register_hook(UPEvent_Test())
     yield man
 
@@ -80,8 +80,8 @@ class TestUP:
 
 
 @pytest_asyncio.fixture(scope="class")
-async def qr(sess: AsyncClient):
-    man = api.QRLoginMan(sess, int(env["TEST_UIN"]))
+async def qr(client: ClientAdapter):
+    man = api.QRLoginMan(client, int(env["TEST_UIN"]))
     man.register_hook(QREvent_Test())
     yield man
 

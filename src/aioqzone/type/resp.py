@@ -54,6 +54,11 @@ class FeedMoreAux(BaseModel):
     # owner_bitmap: str
 
 
+class FeedMoreResp(BaseModel):
+    feeds: List[FeedRep] = Field(alias="data")
+    aux: FeedMoreAux = Field(alias="main")
+
+
 class CommentRep(HasContent):
     abstime: int = Field(alias="create_time")
     name: str

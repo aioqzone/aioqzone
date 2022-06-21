@@ -7,11 +7,10 @@ from time import time
 from typing import Dict, Iterable, List, Tuple, Type, TypeVar, cast
 from urllib.parse import urlencode
 
-from httpx import AsyncClient
-
 from jssupport.execjs import ExecJS, Partial
 from jssupport.jsjson import json_loads
 
+from ...utils.net import ClientAdapter
 from ..type import CaptchaConfig, PowCfg, PrehandleResp, VerifyResp
 from .jigsaw import Jigsaw
 from .vm import TDC, Slide
@@ -86,15 +85,15 @@ class Captcha:
     # (c_login_2.js)showNewVC-->prehandle
     # prehandle(recall)--call tcapcha-frame.*.js-->new_show
     # new_show(html)--js in html->loadImg(url)
-    def __init__(self, client: AsyncClient, appid: int, sid: str):
-        self.session = client
+    def __init__(self, client: ClientAdapter, appid: int, sid: str):
+        self.client = client
         self.appid = appid
         self.sid = sid
-        self.session.headers["referer"] = "https://xui.ptlogin2.qq.com/"
+        self.client.headers["referer"] = "https://xui.ptlogin2.qq.com/"
 
     @property
     def base64_ua(self):
-        return base64.b64encode(self.session.headers["User-Agent"].encode()).decode()
+        return base64.b64encode(self.client.headers["User-Agent"].encode()).decode()
 
     async def prehandle(self, xlogin_url) -> PrehandleResp:
         """
@@ -126,9 +125,9 @@ class Captcha:
             "sess": "",
         }
         self.createIframeStart = time_s()
-        r = await self.session.get(PREHANDLE_URL, params=data)
-        r.raise_for_status()
-        m = re.search(CALLBACK + r"\((\{.*\})\)", r.text)
+        async with await self.client.get(PREHANDLE_URL, params=data) as r:
+            r.raise_for_status()
+            m = re.search(CALLBACK + r"\((\{.*\})\)", r.text)
 
         assert m
         r = PrehandleResp.parse_raw(m.group(1))
@@ -163,32 +162,33 @@ class Captcha:
             "prehandleLoadTime": time_s() - self.createIframeStart,
             "createIframeStart": self.createIframeStart,
         }
-        r = await self.session.get(SHOW_NEW_URL, params=data)
-        r.raise_for_status()
-        self.session.headers["referer"] = str(r.url)
         self.prehandleLoadTime = data["prehandleLoadTime"]
-        return "".join([i async for i in r.aiter_text()])
+        async with await self.client.get(SHOW_NEW_URL, params=data) as r:
+            r.raise_for_status()
+            self.client.referer = str(r.url)
+            return "".join([i async for i in r.aiter_text()])
 
     show = iframe
     """alias of :meth:`.iframe`"""
 
     async def get_blob(self, iframe: str):
         js_url = IframeParser.slide_blob_url(iframe)
-        r = await self.session.get(js_url)
-        r.raise_for_status()
-        js = "".join([i async for i in r.aiter_text()])
+        async with await self.client.get(js_url) as r:
+            r.raise_for_status()
+            js = "".join([i async for i in r.aiter_text()])
+
         m = re.search(r"'(!function.*;')", js)
         assert m
         return m.group(1)
 
     async def get_tdc_vm(self, iframe: str, *, cls: Type[_TDC_TY] = TDC) -> _TDC_TY:
         js_url = IframeParser.tdx_js_url(iframe)
-        self.tdc = cls(iframe, header=self.session.headers)
+        self.tdc = cls(iframe, header=self.client.headers)
         self.vmslide = Slide()
 
-        r = await self.session.get(js_url)
-        r.raise_for_status()
-        self.tdc.load_vm("".join([i async for i in r.aiter_text()]))
+        async with await self.client.get(js_url) as r:
+            r.raise_for_status()
+            self.tdc.load_vm("".join([i async for i in r.aiter_text()]))
 
         return cast(_TDC_TY, self.tdc)
 
@@ -230,9 +230,9 @@ class Captcha:
 
     async def rio(self, urls: Iterable[str]) -> Tuple[bytes, ...]:
         async def inner(url):
-            r = await self.session.get(url)
-            r.raise_for_status()
-            return b"".join([i async for i in r.aiter_bytes()])
+            async with await self.client.get(url) as r:
+                r.raise_for_status()
+                return b"".join([i async for i in r.aiter_bytes()])
 
         return await asyncio.gather(*(inner(i) for i in urls))
 
@@ -308,11 +308,11 @@ class Captcha:
             }
         )
         await asyncio.sleep(max(0, waitEnd - time()))
-        r = await self.session.post(VERIFY_URL, data=data)
-        self.sess = None
-        self.createIframeStart = 0
-        self.prehandleLoadTime = 0
-        r = VerifyResp.parse_raw(r.text)
+        async with await self.client.post(VERIFY_URL, data=data) as r:
+            self.sess = None
+            self.createIframeStart = 0
+            self.prehandleLoadTime = 0
+            r = VerifyResp.parse_raw(r.text)
 
         if r.errorCode:
             raise RuntimeError(f"Code {r.errorCode}: {r.errMessage}")

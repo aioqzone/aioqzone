@@ -25,4 +25,6 @@ def ssl_context():
 async def ja3Detect(client: httpx.AsyncClient) -> dict:
     """Get https://ja3er.com/json"""
     r = await client.get("https://ja3er.com/json")
-    return r.json()
+    d = r.json()
+    await r.aclose()
+    return d

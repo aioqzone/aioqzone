@@ -29,8 +29,8 @@ class QR:
 
 
 class QrSession(LoginSession):
-    def __init__(self, first_qr: QR, create_time: float = ..., refresh_times: int = 0) -> None:
-        super().__init__(create_time)
+    def __init__(self, first_qr: QR, *, create_time: float = ..., refresh_times: int = 0) -> None:
+        super().__init__(create_time=create_time)
         self.refreshed = refresh_times
         self.current_qr = first_qr
 
@@ -42,7 +42,6 @@ class QrSession(LoginSession):
 
 class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
     async def new(self) -> QrSession:
-        await self.request()
         return QrSession(await self.show())
 
     async def show(self) -> QR:
@@ -57,8 +56,8 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
             "daid": self.app.daid,
             "pt_3rd_aid": 0,
         }
-        r = await self.client.get(SHOW_QR, params=data)
-        return QR(r.content, r.cookies["qrsig"])
+        async with await self.client.get(SHOW_QR, params=data) as r:
+            return QR(r.content, r.cookies["qrsig"])
 
     async def poll(self, sess: QrSession) -> PollResp:
         """Poll QR status.
@@ -87,11 +86,11 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
             "daid": self.app.daid,
         }
 
-        r = await self.client.get(POLL_QR, params=du(data, const))
-        r.raise_for_status()
+        async with await self.client.get(POLL_QR, params=du(data, const)) as r:
+            r.raise_for_status()
+            rl = re.findall(r"'(.*?)'[,\)]", r.text)
 
-        rlist = re.findall(r"'(.*?)'[,\)]", r.text)
-        resp = PollResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rlist)))
+        resp = PollResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
 
         if resp.code == StatusCode.Authenticated:
             sess.login_url = str(resp.url)

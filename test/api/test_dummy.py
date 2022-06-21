@@ -3,7 +3,7 @@ from typing import List, Optional
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient, HTTPStatusError
+from httpx import HTTPStatusError
 
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
@@ -11,6 +11,7 @@ from aioqzone.exception import LoginError, QzoneError
 from aioqzone.type.resp import FeedRep
 from aioqzone.utils import first
 from aioqzone.utils.html import HtmlContent
+from qqqr.utils.net import ClientAdapter
 
 
 @pytest.fixture(scope="module")
@@ -19,8 +20,8 @@ def storage():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def api(sess: AsyncClient, man: MixedLoginMan):
-    yield DummyQapi(sess, man)
+async def api(client: ClientAdapter, man: MixedLoginMan):
+    yield DummyQapi(client, man)
 
 
 class TestDummy:
@@ -38,10 +39,10 @@ class TestDummy:
             r = await future
         except LoginError:
             pytest.xfail("Login failed")
-        for ls, aux in r:  # type: ignore
-            assert isinstance(ls, list)
-            assert aux.dayspac >= 0
-            storage.extend(ls)
+        for i in r:
+            assert isinstance(i.feeds, list)
+            assert i.aux.dayspac >= 0
+            storage.extend(i.feeds)
         assert storage
 
     @pytest.mark.upstream

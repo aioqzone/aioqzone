@@ -2,11 +2,11 @@ import asyncio
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
 
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.event.login import QrEvent
 from qqqr.qr import QrLogin, QrSession
+from qqqr.utils.net import ClientAdapter
 
 from . import showqr as _showqr
 
@@ -14,8 +14,8 @@ pytestmark = pytest.mark.asyncio
 
 
 @pytest_asyncio.fixture(scope="module")
-async def login(sess: AsyncClient):
-    login = QrLogin(sess, QzoneAppid, QzoneProxy)
+async def login(client: ClientAdapter):
+    login = QrLogin(client, QzoneAppid, QzoneProxy)
 
     class showqr2user(QrEvent):
         def __init__(self) -> None:
