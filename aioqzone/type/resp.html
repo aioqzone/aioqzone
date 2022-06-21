@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Response Models &mdash; aioqzone 0.9.0a1.dev3 documentation</title>
+  <title>Response Models &mdash; aioqzone 0.9.0a1.dev4 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -326,6 +326,29 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreAux.uinlist">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uinlist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreAux.uinlist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreResp">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">FeedMoreResp</span></span><a class="headerlink" href="#aioqzone.type.resp.FeedMoreResp" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreResp.aux" title="aioqzone.type.resp.FeedMoreResp.aux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aux</span> <span class="pre">(aioqzone.type.resp.FeedMoreAux)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.FeedMoreResp.feeds" title="aioqzone.type.resp.FeedMoreResp.feeds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feeds</span> <span class="pre">(List[aioqzone.type.resp.FeedRep])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreResp.aux">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aux</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux" title="aioqzone.type.resp.FeedMoreAux"><span class="pre">FeedMoreAux</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'main')</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreResp.aux" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.FeedMoreResp.feeds">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feeds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.resp.FeedRep" title="aioqzone.type.resp.FeedRep"><span class="pre">FeedRep</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'data')</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedMoreResp.feeds" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
