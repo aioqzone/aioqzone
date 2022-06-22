@@ -40,6 +40,12 @@ jobs:
         with:
           config: cliff.toml
           args: -t ${{ needs.test.outputs.package-version }} {{ steps.get_sha.outputs.beta_sha }}..HEAD
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Set the PR body
+        id: pr_body
+        run: echo "::set-output name=md::$(cat ${{ steps.git-cliff.outputs.changelog }})"
 
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
@@ -48,4 +54,4 @@ jobs:
           destination_branch: beta
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: ${{ needs.test.outputs.package-version }}
-          pr_body: ${{ steps.git-cliff.outputs.changelog }}
+          pr_body: cat "${{ steps.pr_body.outputs.md }}"

@@ -14,11 +14,15 @@ body = """
     ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
 {% else %}\
     ## [unreleased]
-{% endif %}\
-{% for commit in commits %}
+{% endif %}
+{% for commit in commits %}\
+
     ### {{ commit.id | truncate(length=7, end="") }}
-    {% for line in commit.message | split(pat="\n\n") %}
-        - {{ line | replace(from="\n", to="") }}\
+
+    {% for line in commit.message | split(pat="\n\n") %}\
+        {% if line is not starting_with("@") %}\
+            - {{ line | trim_end_matches(pat="\n") }}\
+        {% endif %}
     {% endfor %}
 {% endfor %}
 """
