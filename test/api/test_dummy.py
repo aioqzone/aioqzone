@@ -34,12 +34,12 @@ class TestDummy:
             pytest.xfail("Login failed")
 
     async def test_more(self, api: DummyQapi, storage: list):
-        future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
         try:
-            r = await future
+            f = await api.feeds3_html_more(0)
+            r = await asyncio.gather(*(api.feeds3_html_more(i) for i in range(1, 3)))
         except LoginError:
             pytest.xfail("Login failed")
-        for i in r:
+        for i in [f] + list(r):
             assert isinstance(i.feeds, list)
             assert i.aux.dayspac >= 0
             storage.extend(i.feeds)
