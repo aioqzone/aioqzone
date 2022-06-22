@@ -16,7 +16,6 @@ from ..utils.daug import du
 from ..utils.encrypt import hash33
 
 SHOW_QR = "https://ssl.ptlogin2.qq.com/ptqrshow"
-XLOGIN_URL = "https://xui.ptlogin2.qq.com/cgi-bin/xlogin"
 POLL_QR = "https://ssl.ptlogin2.qq.com/ptqrlogin"
 LOGIN_URL = "https://ptlogin2.qzone.qq.com/check_sig"
 
