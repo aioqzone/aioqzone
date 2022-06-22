@@ -18,6 +18,7 @@ on:
 jobs:
   test:
     uses: ./.github/workflows/test.yml
+    if: "!contains(github.event.head_commit.message, '@no-test')"
     with:
       PYTEST_ARGS: -m "not needuser and not upstream" test
     secrets:
@@ -42,6 +43,7 @@ jobs:
 
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
+        if: "!contains(github.event.head_commit.message, '@no-pr')"
         with:
           destination_branch: beta
           github_token: ${{ secrets.GITHUB_TOKEN }}
