@@ -29,10 +29,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Get beta SHA
+        id: get_sha
+        run: echo "::set-output name=beta_sha::$(git rev-parse --short beta)"
+
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v1
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: -t ${{ needs.test.outputs.package-version }} {{ steps.get_sha.outputs.beta_sha }}..HEAD
+
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: beta
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: ${{ needs.test.outputs.package-version }}
-          pr_body: ${{ github.event.head_commit.message }} # only push event has head_commit
+          pr_body: ${{ steps.git-cliff.outputs.changelog }}
