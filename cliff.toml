@@ -15,16 +15,21 @@ body = """
 {% else %}\
     ## [unreleased]
 {% endif %}
+<details>
+
 {% for commit in commits %}\
 
     ### {{ commit.id | truncate(length=7, end="") }}
 
     {% for line in commit.message | split(pat="\n\n") %}\
-        {% if line is not starting_with("@") %}\
+        {% if line is not starting_with("@") and line is containing(":") %}\
             - {{ line | trim_end_matches(pat="\n") }}\
         {% endif %}
     {% endfor %}
 {% endfor %}
+
+</details>
+
 """
 # remove the leading and trailing whitespaces from the template
 trim = true
