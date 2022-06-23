@@ -8,8 +8,8 @@ from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
 from aioqzone.exception import LoginError
 from aioqzone.type.internal import LikeData
-from aioqzone.utils import first
 from aioqzone.utils.html import HtmlContent, HtmlInfo
+from qqqr.utils.iter import first
 from qqqr.utils.net import ClientAdapter
 
 
@@ -41,7 +41,7 @@ class TestRaw:
     async def test_complete(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.skip("storage is empty")
-        f: Optional[dict] = first(storage, None)
+        f: Optional[dict] = first(storage, default=None)
         assert f
         _, info = HtmlInfo.from_html(f["html"])
         d = await api.emotion_getcomments(f["uin"], f["key"], info.feedstype)
@@ -50,7 +50,7 @@ class TestRaw:
     async def test_detail(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.skip("storage is empty")
-        f: Optional[dict] = first(storage, lambda f: int(f["appid"]) == 311)
+        f: Optional[dict] = first(storage, lambda f: int(f["appid"]) == 311, default=None)
         if f is None:
             pytest.skip("No 311 feed in storage.")
         assert f
@@ -71,7 +71,9 @@ class TestRaw:
         if not storage:
             pytest.skip("storage is empty")
         f: Optional[Tuple[dict, HtmlInfo]] = first(
-            ((i, HtmlInfo.from_html(i["html"])[1]) for i in storage), lambda t: t[1].unikey
+            ((i, HtmlInfo.from_html(i["html"])[1]) for i in storage),
+            lambda t: t[1].unikey,
+            default=None,
         )
         if f is None:
             pytest.skip("No feed with unikey.")
@@ -93,7 +95,9 @@ class TestRaw:
         if not storage:
             pytest.skip("storage is empty")
         f: Optional[HtmlContent] = first(
-            (HtmlContent.from_html(i["html"], i["uin"]) for i in storage), lambda t: t.pic
+            (HtmlContent.from_html(i["html"], i["uin"]) for i in storage),
+            lambda t: t.pic,
+            default=None,
         )
         if f is None:
             pytest.skip("No feed with pic in storage")

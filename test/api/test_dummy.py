@@ -9,8 +9,8 @@ from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.exception import LoginError, QzoneError
 from aioqzone.type.resp import FeedRep
-from aioqzone.utils import first
 from aioqzone.utils.html import HtmlContent
+from qqqr.utils.iter import first
 from qqqr.utils.net import ClientAdapter
 
 
@@ -49,7 +49,7 @@ class TestDummy:
     async def test_complete(self, api: DummyQapi, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
-        f: Optional[FeedRep] = first(storage, None)
+        f: Optional[FeedRep] = first(storage, default=None)
         assert f
         from aioqzone.utils.html import HtmlInfo
 
@@ -69,7 +69,9 @@ class TestDummy:
         if not storage:
             pytest.xfail("storage is empty")
         f: Optional[HtmlContent] = first(
-            (HtmlContent.from_html(i.html, i.uin) for i in storage), lambda t: bool(t.pic)
+            (HtmlContent.from_html(i.html, i.uin) for i in storage),
+            lambda t: bool(t.pic),
+            default=None,
         )
         if f is None:
             pytest.skip("No feed with pic in storage")

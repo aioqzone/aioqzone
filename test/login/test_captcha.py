@@ -23,15 +23,13 @@ async def captcha(client: ClientAdapter):
 
 @pytest_asyncio.fixture(scope="class")
 async def sess(captcha: Captcha):
-    yield await captcha.new()
+    sess = await captcha.new()
+    await captcha.get_tdc_vm(sess)
+    yield sess
 
 
 @pytest.mark.incremental
 class TestCaptcha:
-    async def test_iframe(self, captcha: Captcha, sess: TcaptchaSession):
-        await captcha.iframe(sess)
-        assert sess._iframe
-
     async def test_windowconf(self, sess: TcaptchaSession):
         assert sess.conf
 
@@ -45,8 +43,9 @@ class TestCaptcha:
 
     async def test_puzzle(self, captcha: Captcha, sess: TcaptchaSession):
         await captcha.get_captcha_problem(sess)
-        j = Jigsaw(*sess.cdn_imgs, top=sess.conf.spt)
-        assert j.width > 0
+        await captcha.solve_captcha(sess)
+        assert sess.jig_ans[0]
+        assert sess.jig_ans[1]
 
     async def test_verify(self, captcha: Captcha):
         r = await captcha.verify()
@@ -56,8 +55,6 @@ class TestCaptcha:
 
 @pytest_asyncio.fixture(scope="class")
 async def vm(captcha: Captcha, sess: TcaptchaSession):
-    if not hasattr(sess, "conf"):
-        await captcha.iframe(sess)
     await captcha.get_tdc_vm(sess)
     yield sess.tdc
 
