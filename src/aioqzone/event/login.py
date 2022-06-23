@@ -2,12 +2,12 @@ import asyncio
 from abc import ABC, abstractmethod
 from enum import Enum
 from time import time
-from typing import Any, Callable, Coroutine, Dict, Optional, TypeVar
+from typing import Dict, Optional, TypeVar
 
-from qqqr.encrypt import gtk
-
-from ..interface.hook import Emittable
-from .hook import Event
+from qqqr.event import Emittable, Event
+from qqqr.event.login import QrEvent as _qrevt
+from qqqr.event.login import UpEvent as _upevt
+from qqqr.utils.encrypt import gtk
 
 
 class LoginMethod(str, Enum):
@@ -37,49 +37,16 @@ class LoginEvent(Event):
 LgEvt = TypeVar("LgEvt", bound=LoginEvent)
 
 
-class QREvent(LoginEvent):
+class QREvent(LoginEvent, _qrevt):
     """Defines usual events happens during QR login."""
 
-    cancel: Optional[Callable[[], Coroutine[Any, Any, None]]] = None
-    resend: Optional[Callable[[], Coroutine[Any, Any, None]]] = None
-
-    async def QrFetched(self, png: bytes, renew: bool = False):
-        """Will be called on new QR code bytes are fetched. Means this will be triggered on:
-
-        1. QR login start
-        2. QR expired
-        3. QR is refreshed
-
-        :param png: QR bytes (png format)
-        :param renew: this QR is a refreshed QR, defaults to False
-        """
-        pass
-
-    async def QrFailed(self, msg: Optional[str] = None):
-        """QR login failed.
-
-        :param msg: Error msg, defaults to None.
-
-        .. deprecated:: 0.9.0
-        """
-        await self.LoginFailed(LoginMethod.qr, msg)
-
-    async def QrSucceess(self):
-        """QR login success.
-
-        .. deprecated:: 0.9.0
-        """
-        await self.LoginSuccess(LoginMethod.qr)
+    pass
 
 
-class UPEvent(LoginEvent):
-    async def DynamicCode(self) -> int:
-        """Get dynamic code from sms. A sms with dynamic code will be sent to user's mobile before
-        this event is emitted. This hook should return that code (from user input, etc.).
+class UPEvent(LoginEvent, _upevt):
+    """Defines usual events happens during password login."""
 
-        :return: dynamic code in sms
-        """
-        return 0
+    pass
 
 
 class Loginable(ABC, Emittable[LgEvt]):

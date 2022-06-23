@@ -3,15 +3,14 @@ from typing import Optional, Tuple
 
 import pytest
 import pytest_asyncio
-from aiohttp import ClientSession as Session
 
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.raw import QzoneApi
 from aioqzone.exception import LoginError
 from aioqzone.type.internal import LikeData
 from aioqzone.utils.html import HtmlContent, HtmlInfo
-
-first = lambda it, pred: next(filter(pred, it), None)
+from qqqr.utils.iter import first
+from qqqr.utils.net import ClientAdapter
 
 
 @pytest.fixture(scope="module")
@@ -20,20 +19,20 @@ def storage():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def api(sess: Session, man: MixedLoginMan):
-    yield QzoneApi(sess, man)
+async def api(client: ClientAdapter, man: MixedLoginMan):
+    yield QzoneApi(client, man)
 
 
 class TestRaw:
     pytestmark = pytest.mark.asyncio
 
     async def test_more(self, api: QzoneApi, storage: list):
-        future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
         try:
-            r = await future
+            f = await api.feeds3_html_more(0)
+            r = await asyncio.gather(*(api.feeds3_html_more(i) for i in range(1, 3)))
         except LoginError:
             pytest.xfail("Login failed")
-        for i in r:  # type: ignore
+        for i in [f] + list(r):
             assert isinstance(i["data"], list)
             storage.extend(i["data"])
         assert storage
@@ -42,7 +41,7 @@ class TestRaw:
     async def test_complete(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.skip("storage is empty")
-        f: Optional[dict] = first(storage, None)
+        f: Optional[dict] = first(storage, default=None)
         assert f
         _, info = HtmlInfo.from_html(f["html"])
         d = await api.emotion_getcomments(f["uin"], f["key"], info.feedstype)
@@ -51,7 +50,7 @@ class TestRaw:
     async def test_detail(self, api: QzoneApi, storage: list):
         if not storage:
             pytest.skip("storage is empty")
-        f: Optional[dict] = first(storage, lambda f: int(f["appid"]) == 311)
+        f: Optional[dict] = first(storage, lambda f: int(f["appid"]) == 311, default=None)
         if f is None:
             pytest.skip("No 311 feed in storage.")
         assert f
@@ -72,7 +71,9 @@ class TestRaw:
         if not storage:
             pytest.skip("storage is empty")
         f: Optional[Tuple[dict, HtmlInfo]] = first(
-            ((i, HtmlInfo.from_html(i["html"])[1]) for i in storage), lambda t: t[1].unikey
+            ((i, HtmlInfo.from_html(i["html"])[1]) for i in storage),
+            lambda t: t[1].unikey,
+            default=None,
         )
         if f is None:
             pytest.skip("No feed with unikey.")
@@ -94,7 +95,9 @@ class TestRaw:
         if not storage:
             pytest.skip("storage is empty")
         f: Optional[HtmlContent] = first(
-            (HtmlContent.from_html(i["html"], i["uin"]) for i in storage), lambda t: t.pic
+            (HtmlContent.from_html(i["html"], i["uin"]) for i in storage),
+            lambda t: t.pic,
+            default=None,
         )
         if f is None:
             pytest.skip("No feed with pic in storage")

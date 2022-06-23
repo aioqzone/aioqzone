@@ -1,6 +1,6 @@
 # This workflow will install Python dependencies, build and publish this repo to PyPI.
 
-name: build
+name: Publish to PyPI
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request_target' || github.event.pull_request.merged == true && startsWith(github.head_ref, 'dev')
+    if: contains(github.event.issue.labels.*.name, 'publish')
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python

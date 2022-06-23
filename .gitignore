@@ -13,6 +13,7 @@ node_modules
 # cache and tempfiles
 *.pyc
 tmp
+/data
 
 # build, metadata and distributions
 /dist
@@ -20,6 +21,6 @@ tmp
 *.egg-info
 
 # useless documents
-archive
+/archive
 /doc/*
 !/doc/source

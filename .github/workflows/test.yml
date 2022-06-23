@@ -35,18 +35,29 @@ jobs:
       - uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
-      - name: Install poetry
-        run: pipx install poetry
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: poetry
+      #----------------------------------------------
+      #  -----  install & configure poetry  -----
+      #----------------------------------------------
+      - name: Install Poetry Action
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-in-project: true
       - name: Get Package Version
         id: version_step
-        run: |
-          poetry env use ${{ matrix.python-version }}
-          echo "::set-output name=package::$(poetry version -s)"
+        run: echo "::set-output name=package::$(poetry version -s)"
+      #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
       #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------

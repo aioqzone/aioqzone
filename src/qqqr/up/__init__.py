@@ -1,29 +1,25 @@
 import re
-from dataclasses import dataclass
 from os import environ as env
 from random import choice, random
 from time import time_ns
-from typing import Awaitable, Callable, Dict, Optional, Type
+from typing import List, Optional, Type
 
-from aiohttp import ClientSession
-from multidict import istr
+import httpx
 
-from ..base import LoginBase
-from ..constants import StatusCode
+from ..base import LoginBase, LoginSession
+from ..constant import StatusCode
+from ..event import Emittable
+from ..event.login import UpEvent
 from ..exception import TencentLoginError
-from ..type import APPID, PT_QR_APP, CheckResult, Proxy
-from ..utils import get_all_cookie
+from ..type import APPID, PT_QR_APP, Proxy
+from ..utils.daug import du
+from ..utils.net import ClientAdapter
 from .encrypt import NodeEncoder, PasswdEncoder, TeaEncoder
+from .type import CheckResp, LoginResp, VerifyResp
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
 LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_login_2.js"
-
-
-@dataclass
-class User:
-    uin: int
-    pwd: str
 
 
 UseEncoder = (
@@ -31,94 +27,130 @@ UseEncoder = (
 )
 
 
-class UPLogin(LoginBase):
+class UpSession(LoginSession):
+    def __init__(
+        self,
+        check_result: CheckResp,
+        local_token: str,
+        login_sig: str,
+        *,
+        create_time: float = ...,
+    ) -> None:
+        super().__init__(create_time=create_time)
+        self.local_token = local_token
+        self.login_sig = login_sig
+        self.check_rst = check_result
+        self.verify_rst: Optional[VerifyResp] = None
+        self.sms_ticket = ""
+        self.sms_code: Optional[str] = None
+        self.login_history: List[LoginResp] = []
+
+    @property
+    def pastcode(self) -> int:
+        if self.login_history:
+            return self.login_history[-1].code
+        return 0
+
+    @property
+    def code(self):
+        if self.verify_rst:
+            return self.verify_rst.code
+        return self.check_rst.code
+
+    @property
+    def verifycode(self):
+        if self.verify_rst:
+            return self.verify_rst.verifycode
+        return self.check_rst.verifycode
+
+    @property
+    def verifysession(self):
+        if self.verify_rst:
+            return self.verify_rst.ticket
+        return self.check_rst.verifysession
+
+
+class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
     node = "node"
     _captcha = None
-    get_smscode = None
     encode_cls: Type[PasswdEncoder] = UseEncoder
 
     def __init__(
         self,
-        sess: ClientSession,
+        client: ClientAdapter,
         app: APPID,
         proxy: Proxy,
-        user: User,
+        uin: int,
+        pwd: str,
         info: Optional[PT_QR_APP] = None,
     ):
-        super().__init__(sess, app, proxy, info=info)
-        assert user.uin
-        assert user.pwd
-        self.user = user
-        self.pwder = self.encode_cls(sess, user.pwd)
-
-    def register_smscode_getter(self, getter: Callable[[], Awaitable[int]]):
-        self.get_smscode = getter
-
-    async def encodePwd(self, r: CheckResult) -> str:
-        return await self.pwder.encode(r)
+        super().__init__(client, app, proxy, info=info)
+        assert uin
+        assert pwd
+        self.uin = uin
+        self.pwd = pwd
+        self.pwder = self.encode_cls(client, pwd)
 
     async def deviceId(self) -> str:
         return ""
 
-    async def check(self):
+    async def new(self):
         """check procedure before login. This will return a CheckResult object containing
         verify code, session, etc.
 
-        :raises `aiohttp.ClientResponseError`:
+        :raises `httpx.HTTPStatusError`:
 
         :return: CheckResult
         """
+        async with await self.client.get(self.xlogin_url) as r:
+            r.raise_for_status()
+            local_token = r.cookies["pt_local_token"]
+            login_sig = r.cookies["pt_login_sig"]
+
         data = {
             "regmaster": "",
             "pt_tea": 2,
             "pt_vcode": 1,
-            "uin": self.user.uin,
+            "uin": self.uin,
             "appid": self.app.appid,
             # 'js_ver': 21072114,
             "js_type": 1,
-            "login_sig": self.login_sig,
+            "login_sig": login_sig,
             "u1": self.proxy.s_url,
             "r": random(),
             "pt_uistyle": 40,
         }
-        async with self.session.get(CHECK_URL, params=data, ssl=self.ssl) as r:
+        async with await self.client.get(CHECK_URL, params=data) as r:
             r.raise_for_status()
-            r = re.findall(r"'(.*?)'[,\)]", await r.text())
-        r[0] = int(r[0])
-        return CheckResult(*r)
+            rl = re.findall(r"'(.*?)'[,\)]", r.text)
 
-    async def sms(self, pt_sms_ticket: str):
+        rdict = dict(
+            zip(
+                ["code", "verifycode", "salt", "verifysession", "isRandSalt", "ptdrvs", "session"],
+                rl,
+            )
+        )
+        return UpSession(CheckResp.parse_obj(rdict), local_token, login_sig)
+
+    async def send_sms_code(self, sess: UpSession):
         """Send verify sms (to get dynamic code)
 
-        :param pt_sms_ticket: corresponding value in cookie, of the key with the same name
+        :param sess: The up login session to send sms code
         """
         data = {
             "bkn": "",
-            "uin": self.user.uin,
+            "uin": self.uin,
             "aid": self.app.appid,
-            "pt_sms_ticket": pt_sms_ticket,
+            "pt_sms_ticket": sess.sms_ticket,
         }
-        async with self.session.get(
-            "https://ui.ptlogin2.qq.com/ssl/send_sms_code", params=data, ssl=self.ssl
+        async with await self.client.get(
+            "https://ui.ptlogin2.qq.com/ssl/send_sms_code", params=data
         ) as r:
-            rl = re.findall(r"'(.*?)'[,\)]", await r.text(encoding="utf8"))
-            # ptui_sendSMS_CB('10012', '短信发送成功！')
+            rl = re.findall(r"'(.*?)'[,\)]", r.text)
+        # ptui_sendSMS_CB('10012', '短信发送成功！')
         assert int(rl[0]) == 10012, rl[1]
 
-    async def login(self, r: CheckResult, pastcode: int = 0, **add) -> Dict[str, str]:
-        if r.code == StatusCode.Authenticated:
-            # OK
-            pass
-        elif r.code == StatusCode.NeedCaptcha and pastcode == 0:
-            # 0 -> 1: OK; !0 -> 1: Error
-            cookie = await self.login(await self.passVC(r), StatusCode.NeedCaptcha)
-            return cookie
-        elif r.code == pastcode == StatusCode.NeedVerify:
-            # !10009 -> 10009: OK; 10009 -> 10009: Error
-            raise TencentLoginError(r.code, str(r))
-        else:
-            raise TencentLoginError(r.code, str(r))
-
+    async def try_login(self, sess: UpSession):
         const = {
             "h": 1,
             "t": 1,
@@ -128,60 +160,64 @@ class UPLogin(LoginBase):
             "ptlang": 2052,
             "js_type": 1,
             "pt_uistyle": 40,
+            # 'js_ver': 21072114,
         }
         data = {
-            "u": self.user.uin,
-            "p": await self.encodePwd(r),
-            "verifycode": r.verifycode,
-            "pt_vcode_v1": 1 if pastcode == StatusCode.NeedCaptcha else 0,
-            "pt_verifysession_v1": r.verifysession,
-            "pt_randsalt": r.isRandSalt,
+            "u": self.uin,
+            "p": await self.pwder.encode(sess.check_rst.salt, sess.verifycode),
+            "verifycode": sess.verifycode,
+            "pt_vcode_v1": int(sess.verify_rst is not None),
+            "pt_verifysession_v1": sess.verifysession,
+            "pt_randsalt": sess.check_rst.isRandSalt,
             "u1": self.proxy.s_url,
-            "action": f"{3 if pastcode == StatusCode.NeedCaptcha else 2}-{choice([1, 2])}-{int(time_ns() / 1e6)}",
-            # 'js_ver': 21072114,
-            "login_sig": self.login_sig,
+            "action": f"{3 if sess.verify_rst is not None else 2}-{choice([1, 2])}-{int(time_ns() / 1e6)}",
+            "login_sig": sess.login_sig,
             "aid": self.app.appid,
             "daid": self.app.daid,
-            "ptdrvs": r.ptdrvs,
-            "sid": r.session,
+            "ptdrvs": sess.check_rst.ptdrvs,
+            "sid": sess.check_rst.session,
             "o1vId": await self.deviceId(),
         }
-        data.update(const)
-        data.update(add)
-        self.session.headers.update({istr("referer"): "https://xui.ptlogin2.qq.com/"})
-        async with self.session.get(LOGIN_URL, params=data, ssl=self.ssl) as response:
+        if sess.sms_code:
+            data["pt_sms_code"] = sess.sms_code
+        self.referer = "https://xui.ptlogin2.qq.com/"
+
+        async with await self.client.get(LOGIN_URL, params=du(data, const)) as response:
             response.raise_for_status()
-            rl = re.findall(r"'(.*?)'[,\)]", await response.text())
 
-        rl[0] = int(rl[0])
-        if rl[0] == StatusCode.Authenticated:
-            pass
-        elif rl[0] == StatusCode.NeedVerify:
-            m = response.cookies.get("pt_sms_ticket")
-            if self.get_smscode:
-                await self.sms(m.value if m else "")
-                smscode = await self.get_smscode()
-                await self.login(r, StatusCode.NeedVerify, pt_sms_code=smscode)
+        rl = re.findall(r"'(.*?)'[,\)]", response.text)
+        resp = LoginResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
+        if resp.code == StatusCode.NeedSmsVerify:
+            sess.sms_ticket = response.cookies.get("pt_sms_ticket") or ""
+        return resp
+
+    async def login(self):
+        sess = await self.new()
+        if sess.code == StatusCode.NeedCaptcha:
+            await self.passVC(sess)
+
+        while True:
+            resp = await self.try_login(sess)
+            pastcode = sess.pastcode
+            sess.login_history.append(resp)
+            if resp.code == StatusCode.Authenticated:
+                return await self._get_login_url(httpx.URL(resp.url))
+            elif resp.code == StatusCode.NeedSmsVerify:
+                if pastcode == StatusCode.NeedSmsVerify:
+                    raise TencentLoginError(resp.code, "")
+                await self.send_sms_code(sess)
+                sess.sms_code = await self.hook.GetSmsCode(resp.msg, resp.nickname)
             else:
-                raise NotImplementedError
-        else:
-            raise TencentLoginError(rl[0], rl[4])
-
-        async with self.session.get(rl[2], allow_redirects=False, ssl=self.ssl) as response:
-            return get_all_cookie(response)
+                raise TencentLoginError(resp.code, resp.msg)
 
     def captcha(self, sid: str):
         if not self._captcha:
             from .captcha import Captcha
 
-            self._captcha = Captcha(self.session, self.ssl, self.app.appid, sid)
+            self._captcha = Captcha(self.client, self.app.appid, sid, str(self.xlogin_url))
         return self._captcha
 
-    async def passVC(self, r: CheckResult):
-        c = self.captcha(r.session)
-        await c.prehandle(self.xlogin_url)
-        d = await c.verify()
-        r.code = d.errorCode
-        r.verifycode = d.randstr
-        r.verifysession = d.ticket
-        return r
+    async def passVC(self, sess: UpSession):
+        c = self.captcha(sess.check_rst.session)
+        sess.verify_rst = await c.verify()
+        return sess

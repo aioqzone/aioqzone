@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.8.4a2.dev2"
+version = "0.9.1a1.dev2"
 description = "Python wrapper for Qzone web login and Qzone http api."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -11,7 +11,6 @@ documentation = "https://aioqzone.github.io/aioqzone"
 keywords = ["qzone-api", "autologin", "asyncio-spider"]
 classifiers = [
     "Development Status :: 4 - Beta",
-    "Framework :: aiohttp",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed"
@@ -29,13 +28,13 @@ exclude = ["*.js"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-aiohttp = "^3.8.1"
+httpx = "^0.23.0"
 pydantic = "^1.9.0"
 pytz = "^2022.1"
 lxml = "^4.9.0"
 cssselect = "^1.1.0"
 numpy = [
-    {version = "~1.21.2", python = ">=3.7,<3.8"},
+    {version = "~1.21.6", python = ">=3.7,<3.8"},
     {version = "^1.22.3", python = "^3.8"}
 ]
 opencv-python-headless = "^4.5.5"

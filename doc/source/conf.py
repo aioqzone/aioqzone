@@ -64,4 +64,4 @@ autodoc_pydantic_model_show_json = False
 autodoc_pydantic_model_undoc_members = False
 
 # external inventory
-intersphinx_mapping = {"aiohttp": ("https://docs.aiohttp.org/en/stable/", None)}
+intersphinx_mapping = {"httpx": ("https://www.python-httpx.org/", None)}

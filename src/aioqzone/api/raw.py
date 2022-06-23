@@ -8,18 +8,15 @@ from random import randint, random
 from typing import Callable, Dict, List, Optional, Tuple, Union, cast
 from urllib.parse import parse_qs, quote, unquote
 
-from aiohttp import ClientSession as Session
-from aiohttp.client_exceptions import ClientResponseError
-from multidict import istr
+from httpx import HTTPStatusError
 
 import aioqzone.api.constant as const
-from aioqzone.utils.daug import ud
 from jssupport.jsjson import JsonValue, json_loads
-from qqqr.base import UA
-from qqqr.utils import raise_for_status
+from qqqr.utils.daug import du
+from qqqr.utils.net import ClientAdapter, raise_for_status
 
+from ..event.login import Loginable
 from ..exception import CorruptError, QzoneError
-from ..interface.login import Loginable
 from ..type.internal import AlbumData, LikeData
 from ..utils.regex import response_callback
 from ..utils.time import time_ms
@@ -35,10 +32,17 @@ class QzoneApi:
     encoding = "utf-8"
     host = "https://user.qzone.qq.com"
 
-    def __init__(self, session: Session, loginman: Loginable, ua: str = UA) -> None:
-        session.headers.update({istr("User-Agent"): ua})
-        self.sess = session
+    def __init__(self, client: ClientAdapter, loginman: Loginable) -> None:
+        self.client = client
         self.login = loginman
+
+    @property
+    def referer(self):
+        return self.client.headers["referer"]
+
+    @referer.setter
+    def referer(self, value: str):
+        self.client.headers["referer"] = value
 
     async def _get_gtk(self) -> int:
         """Get gtk with async-lock
@@ -54,21 +58,17 @@ class QzoneApi:
 
     async def aget(self, url: str, params: Optional[Dict[str, str]] = None):
         params = params or {}
-        params = ud(params, {"g_tk": str(await self._get_gtk())})
-        self.sess.headers.update(
-            {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
-        )
-        return self.sess.get(self.host + url, params=params)
+        params = du(params, {"g_tk": str(await self._get_gtk())})
+        self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
+        return await self.client.get(self.host + url, params=params)
 
     async def apost(
         self, url: str, params: Optional[Dict[str, str]] = None, data: Optional[dict] = None
     ):
         params = params or {}
-        params = ud(params, {"g_tk": str(await self._get_gtk())})
-        self.sess.headers.update(
-            {istr("referer"): f"https://user.qzone.qq.com/{self.login.uin}/infocenter"}
-        )
-        return self.sess.post(self.host + url, params=params, data=data)
+        params = du(params, {"g_tk": str(await self._get_gtk())})
+        self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
+        return await self.client.post(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
         """A decorator which will relogin and retry given func if cookie expired.
@@ -92,8 +92,8 @@ class QzoneApi:
             except QzoneError as e:
                 if e.code not in [-3000, -4002]:
                     raise e
-            except ClientResponseError as e:
-                if e.status != 403:
+            except HTTPStatusError as e:
+                if e.response.status_code != 403:
                     raise e
 
             logger.info(f"Cookie expire in {func.__qualname__}. Relogin...")
@@ -112,7 +112,7 @@ class QzoneApi:
         """Deal with rtext from Qzone api response, returns parsed json dict.
         Inner used only.
 
-        :param rtext: result from :external:meth:`asyncio.ClientResponse.text`
+        :param rtext: response text
         :param cb: The text is to be parsed by callback_regex, defaults to True.
         :param errno_key: Error # key, defaults to ('code', 'err').
         :param msg_key: Error message key, defaults to ('msg', 'message').
@@ -165,7 +165,7 @@ class QzoneApi:
         :param trans: reps a skim transaction. Mutable.
         :param count: feed count, defaults to 10.
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -210,9 +210,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.feeds3_html_more, ud(default, query)) as r:
+            async with await self.aget(const.feeds3_html_more, du(default, query)) as r:
                 r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
+                rtext = "".join([i async for i in r.aiter_text()])
 
             return self._rtext_handler(rtext)
 
@@ -228,7 +228,7 @@ class QzoneApi:
         :param tid: feed id
         :param feedstype: feedstype in html
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -258,9 +258,10 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_getcomments, data=ud(default, body)) as r:
+            async with await self.apost(const.emotion_getcomments, data=du(default, body)) as r:
                 r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
+                rtext = "".join([i async for i in r.aiter_text()])
+
             return self._rtext_handler(rtext)
 
         return await retry_closure()
@@ -271,7 +272,7 @@ class QzoneApi:
         :param owner: owner uin
         :param fid: feed id, named fid, tid or feedkey
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -296,18 +297,16 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.emotion_msgdetail, params=ud(default, query)) as r:
+            async with await self.aget(const.emotion_msgdetail, params=du(default, query)) as r:
                 r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
-
-            return self._rtext_handler(rtext)
+                return self._rtext_handler(r.text)
 
         return await retry_closure()
 
     async def get_feeds_count(self) -> Dict[str, Union[int, list]]:
         """Get feeds update count (new feeds, new photos, new comments, etc)
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -325,9 +324,7 @@ class QzoneApi:
         async def retry_closure():
             async with await self.aget(const.get_feeds_count, query) as r:
                 r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
-
-            return self._rtext_handler(rtext)
+                return self._rtext_handler(r.text)
 
         r = await retry_closure()
         return r["data"]  # type: ignore
@@ -338,7 +335,7 @@ class QzoneApi:
         :param likedata: Necessary data for like/unlike
         :param like: True as like, False as unlike, defaults to True.
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
@@ -367,10 +364,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(url, data=ud(default, body)) as r:
+            async with await self.apost(url, data=du(default, body)) as r:
                 r.raise_for_status()
-                rtext = await r.text(encoding=self.encoding)
-            return self._rtext_handler(rtext, errno_key=("code", "ret"))
+                return self._rtext_handler(r.text, errno_key=("code", "ret"))
 
         try:
             await retry_closure()
@@ -378,8 +374,8 @@ class QzoneApi:
         except QzoneError as e:
             logger.warning(f"Error in dolike/unlike. {e}")
             return False
-        except ClientResponseError as e:
-            logger.error("Error in dolike/unlike.", exc_info=True)
+        except HTTPStatusError as e:
+            logger.error("Error in dolike/unlike.", exc_info=e)
             raise e
         except SystemExit as e:
             raise e  # pass through SystemExit
@@ -393,7 +389,7 @@ class QzoneApi:
         :param album: Necessary album data
         :param num: pic num
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -438,10 +434,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.floatview_photo_list, ud(default, query)) as r:
+            async with await self.aget(const.floatview_photo_list, du(default, query)) as r:
                 r.raise_for_status()
-                rtext = await r.text()
-            return self._rtext_handler(rtext)
+                return self._rtext_handler(r.text)
 
         rjson = (await retry_closure())["data"]
         if query["t"] != int(rjson.pop("t")):  # type: ignore
@@ -460,7 +455,7 @@ class QzoneApi:
         :param num: number, defaults to 20
         :param pos: start position, defaults to 0
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -493,10 +488,10 @@ class QzoneApi:
         @self._relogin_retry
         async def retry_closure():
             async with await self.aget(
-                const.emotion_msglist, ud(param, add) if pos else param
+                const.emotion_msglist, du(param, add) if pos else param
             ) as r:
                 r.raise_for_status()
-                rtext = await r.text()
+                rtext = "".join([i async for i in r.aiter_text()])
             return self._rtext_handler(rtext)
 
         data = await retry_closure()
@@ -508,7 +503,7 @@ class QzoneApi:
         :param content: text content.
         :param right: feed access right, defaults to 0 (Not used till now)
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -543,10 +538,9 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_publish, data=ud(default, body)) as r:
+            async with await self.apost(const.emotion_publish, data=du(default, body)) as r:
                 r.raise_for_status()
-                rtext = await r.text()
-            return self._rtext_handler(rtext)
+                return self._rtext_handler(r.text)
 
         return await retry_closure()
 
@@ -568,7 +562,7 @@ class QzoneApi:
         :param topicId: topic id, got from html
         :param uin: host uin, defaults to None, means current logined user.
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -596,10 +590,9 @@ class QzoneApi:
             async with await self.apost(const.emotion_delete, data=body) as r:
                 # upstream error: qzone server returns 503, but the feed operation is done.
                 raise_for_status(r, 200, 503)
-                if r.status == 503:
+                if r.status_code == 503:
                     return
-                rtext = await r.text()
-            return self._rtext_handler(rtext)
+                return self._rtext_handler(r.text)
 
         return await retry_closure()
 
@@ -610,7 +603,7 @@ class QzoneApi:
         :param content: new content in text.
         :param uin: host uin, defaults to None, means current logined user.
 
-        :raises `aiohttp.ClientResponseError`: error http response code
+        :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -647,9 +640,8 @@ class QzoneApi:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_update, data=ud(default, body)) as r:
+            async with await self.apost(const.emotion_update, data=du(default, body)) as r:
                 r.raise_for_status()
-                rtext = await r.text()
-            return self._rtext_handler(rtext)
+                return self._rtext_handler(r.text)
 
         return await retry_closure()

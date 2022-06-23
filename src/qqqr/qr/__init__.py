@@ -1,22 +1,49 @@
 import asyncio
 import re
+from dataclasses import dataclass
 from random import random
-from typing import Awaitable, Callable, Dict, Optional
 
-from ..base import LoginBase
-from ..constants import StatusCode
-from ..encrypt import hash33
+import httpx
+
+from qqqr.qr.type import PollResp
+
+from ..base import LoginBase, LoginSession
+from ..constant import StatusCode
+from ..event import Emittable
+from ..event.login import QrEvent
 from ..exception import UserBreak
-from ..utils import get_all_cookie, raise_for_status
+from ..utils.daug import du
+from ..utils.encrypt import hash33
 
 SHOW_QR = "https://ssl.ptlogin2.qq.com/ptqrshow"
-XLOGIN_URL = "https://xui.ptlogin2.qq.com/cgi-bin/xlogin"
 POLL_QR = "https://ssl.ptlogin2.qq.com/ptqrlogin"
 LOGIN_URL = "https://ptlogin2.qzone.qq.com/check_sig"
 
 
-class QRLogin(LoginBase):
-    async def show(self):
+@dataclass(unsafe_hash=True)
+class QR:
+    png: bytes
+    sig: str
+    expired: bool = False
+
+
+class QrSession(LoginSession):
+    def __init__(self, first_qr: QR, *, create_time: float = ..., refresh_times: int = 0) -> None:
+        super().__init__(create_time=create_time)
+        self.refreshed = refresh_times
+        self.current_qr = first_qr
+
+    def new_qr(self, qr: QR):
+        self.current_qr.expired = True
+        self.current_qr = qr
+        self.refreshed += 1
+
+
+class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
+    async def new(self) -> QrSession:
+        return QrSession(await self.show())
+
+    async def show(self) -> QR:
         data = {
             "appid": self.app.appid,
             "e": 2,
@@ -28,72 +55,78 @@ class QRLogin(LoginBase):
             "daid": self.app.daid,
             "pt_3rd_aid": 0,
         }
-        async with self.session.get(SHOW_QR, params=data, ssl=self.ssl) as r:
-            r.raise_for_status()
-            self.qrsig = r.cookies["qrsig"].value
-            return await r.content.read()
+        async with await self.client.get(SHOW_QR, params=data) as r:
+            return QR(r.content, r.cookies["qrsig"])
 
-    async def pollStat(self):
+    async def poll(self, sess: QrSession) -> PollResp:
         """Poll QR status.
 
-        :raises `aiohttp.ClientResponseError`: if response status code != 200
+        :raises `httpx.HTTPStatusError`: if response status code != 200
 
-        :return: list: (code, ?, url, ?, msg, my_name)
+        :return: a poll response object
         """
-        data = {
-            "u1": self.proxy.s_url,
-            "ptqrtoken": hash33(self.qrsig),
-            "ptredirect": 0,
+        const = {
             "h": 1,
             "t": 1,
             "g": 1,
             "from_ui": 1,
+            "ptredirect": 0,
             "ptlang": 2052,
-            # 'action': 3-2-1626611307380,
-            # 'js_ver': 21071516,
             "js_type": 1,
-            "login_sig": "",
             "pt_uistyle": 40,
-            "aid": self.app.appid,
-            "daid": self.app.daid,
-            # 'ptdrvs': 'JIkvP2N0eJUzU3Owd7jOvAkvMctuVfODUMSPltXYZwCLh8aJ2y2hdSyFLGxMaH1U',
-            # 'sid': 6703626068650368611,
             "has_onekey": 1,
         }
-        async with self.session.get(POLL_QR, params=data, ssl=self.ssl) as r:
+        data = {
+            "u1": self.proxy.s_url,
+            "ptqrtoken": hash33(sess.current_qr.sig),
+            # 'js_ver': 21071516,
+            "login_sig": "",
+            "aid": self.app.appid,
+            "daid": self.app.daid,
+        }
+
+        async with await self.client.get(POLL_QR, params=du(data, const)) as r:
             r.raise_for_status()
-            r = re.findall(r"'(.*?)'[,\)]", await r.text())
-            r[0] = int(r[0])
-            if r[0] == 0:
-                self.login_url = r[2]
-            return r
+            rl = re.findall(r"'(.*?)'[,\)]", r.text)
 
-    async def login(self):
-        async with self.session.get(self.login_url, allow_redirects=False, ssl=self.ssl) as r:
-            raise_for_status(r, 302)
-            return get_all_cookie(r)
+        resp = PollResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
 
-    def loop(self, send_callback, expire_callback=None, refresh_time=6, polling_freq=3):
-        # type: (Callable[[bytes], Awaitable[None]], Optional[Callable[[bytes], Awaitable[None]]], int, float) -> asyncio.Task[Dict[str, str]]
-        expire_callback = expire_callback or send_callback
+        if resp.code == StatusCode.Authenticated:
+            sess.login_url = str(resp.url)
+        return resp
 
-        async def innerloop():
-            assert expire_callback
-            try:
-                for i in range(refresh_time):
-                    send = expire_callback if i else send_callback
-                    await send(await self.show())
-                    # future.set_exception(UserBreak)
-                    while True:
-                        await asyncio.sleep(polling_freq)
-                        stat = await self.pollStat()
-                        if stat[0] == StatusCode.Expired:
-                            break
-                        if stat[0] == StatusCode.Authenticated:
-                            return await self.login()
-            except (KeyboardInterrupt, asyncio.CancelledError) as e:
-                raise UserBreak from e
-            raise TimeoutError
+    async def _loop(
+        self,
+        *,
+        refresh_times: int = 6,
+        polling_freq: float = 3,
+    ):
+        expired = 0
+        refresh_flag = self.hook.refresh_flag
+        cancel_flag = self.hook.cancel_flag
+        sess = await self.new()
 
-        expire_callback = expire_callback or send_callback
-        return asyncio.create_task(innerloop())
+        while expired < refresh_times:
+            await self.hook.QrFetched(sess.current_qr.png, expired)
+            # future.set_exception(UserBreak)
+            while not refresh_flag.is_set():
+                if cancel_flag.is_set():
+                    raise UserBreak
+                await asyncio.sleep(polling_freq)
+                stat = await self.poll(sess)
+                if stat.code == StatusCode.Expired:
+                    expired += 1
+                    break
+                elif stat.code == StatusCode.Authenticated:
+                    assert sess.login_url
+                    return await self._get_login_url(httpx.URL(stat.url))
+            sess.new_qr(await self.show())
+            refresh_flag.clear()
+
+        raise TimeoutError
+
+    async def login(self, refresh_time: int = 6, polling_freq: float = 3):
+        try:
+            return await self._loop(refresh_times=refresh_time, polling_freq=polling_freq)
+        except (KeyboardInterrupt, asyncio.CancelledError) as e:
+            raise UserBreak from e

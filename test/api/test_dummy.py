@@ -3,16 +3,15 @@ from typing import List, Optional
 
 import pytest
 import pytest_asyncio
-from aiohttp import ClientResponseError
-from aiohttp import ClientSession as Session
+from httpx import HTTPStatusError
 
 from aioqzone.api import DummyQapi
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.exception import LoginError, QzoneError
 from aioqzone.type.resp import FeedRep
 from aioqzone.utils.html import HtmlContent
-
-first = lambda it, pred: next(filter(pred, it), None)
+from qqqr.utils.iter import first
+from qqqr.utils.net import ClientAdapter
 
 
 @pytest.fixture(scope="module")
@@ -21,8 +20,8 @@ def storage():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def api(sess: Session, man: MixedLoginMan):
-    yield DummyQapi(sess, man)
+async def api(client: ClientAdapter, man: MixedLoginMan):
+    yield DummyQapi(client, man)
 
 
 class TestDummy:
@@ -35,22 +34,22 @@ class TestDummy:
             pytest.xfail("Login failed")
 
     async def test_more(self, api: DummyQapi, storage: list):
-        future = asyncio.gather(*(api.feeds3_html_more(i) for i in range(3)))
         try:
-            r = await future
+            f = await api.feeds3_html_more(0)
+            r = await asyncio.gather(*(api.feeds3_html_more(i) for i in range(1, 3)))
         except LoginError:
             pytest.xfail("Login failed")
-        for ls, aux in r:  # type: ignore
-            assert isinstance(ls, list)
-            assert aux.dayspac >= 0
-            storage.extend(ls)
+        for i in [f] + list(r):
+            assert isinstance(i.feeds, list)
+            assert i.aux.dayspac >= 0
+            storage.extend(i.feeds)
         assert storage
 
     @pytest.mark.upstream
     async def test_complete(self, api: DummyQapi, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
-        f: Optional[FeedRep] = first(storage, None)
+        f: Optional[FeedRep] = first(storage, default=None)
         assert f
         from aioqzone.utils.html import HtmlInfo
 
@@ -63,14 +62,16 @@ class TestDummy:
         for f in storage:
             try:
                 assert await api.emotion_msgdetail(f.uin, f.fid)
-            except (QzoneError, ClientResponseError) as e:
+            except (QzoneError, HTTPStatusError) as e:
                 continue
 
     async def test_photo_list(self, api: DummyQapi, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
         f: Optional[HtmlContent] = first(
-            (HtmlContent.from_html(i.html, i.uin) for i in storage), lambda t: t.pic
+            (HtmlContent.from_html(i.html, i.uin) for i in storage),
+            lambda t: bool(t.pic),
+            default=None,
         )
         if f is None:
             pytest.skip("No feed with pic in storage")

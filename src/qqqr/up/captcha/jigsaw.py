@@ -1,4 +1,6 @@
-import os
+from pathlib import Path
+from random import choices, randint
+from typing import List, Tuple
 
 import cv2 as cv
 import numpy as np
@@ -13,9 +15,11 @@ def frombytes(b, dtype="uint8", flags=cv.IMREAD_COLOR) -> np.ndarray:
 
 
 class Piece:
-    def __init__(self, img: np.ndarray) -> None:
-        self.mask = img[:, :, 3:]
-        self.img = img[:, :, :3] * (self.mask == 255)
+    def __init__(self, img: np.ndarray, piece_pos: Tuple[slice, slice]) -> None:
+        x, y = piece_pos
+        piece = img[y, x]
+        self.mask = piece[:, :, 3:]
+        self.img = piece[:, :, :3] * (self.mask >= 128)
 
     def strip(self):
         if not hasattr(self, "bbox"):
@@ -64,20 +68,22 @@ class Piece:
 
 
 class Jigsaw:
-    def __init__(self, origin: bytes, puzzle: bytes, piece: bytes, top: int) -> None:
+    def __init__(
+        self, puzzle: bytes, piece: bytes, piece_pos: Tuple[slice, slice], top: int
+    ) -> None:
         self.top = top
-        self.ans = frombytes(origin)
         self.puzzle = frombytes(puzzle)
-        self.piece = Piece(frombytes(piece, flags=cv.IMREAD_UNCHANGED))
+        self.piece = Piece(frombytes(piece, flags=cv.IMREAD_UNCHANGED), piece_pos)
 
     @staticmethod
-    def save(ans, puzzle, piece, top):
+    def save(puzzle, piece, top):
         import yaml
 
-        os.makedirs("data", exist_ok=True)
-        ex = len([i for i in os.listdir("data") if i.endswith(".yml")])
-        with open(f"data/{ex}.yml", "w") as f:
-            yaml.safe_dump({"origin": ans, "puzzle": puzzle, "piece": piece, "top": top}, f)
+        data_path = Path("./data")
+        data_path.mkdir(exist_ok=True)
+        ex = len(list(data_path.glob("*.yml")))
+        with open(data_path / f"{ex}.yml", "w") as f:
+            yaml.safe_dump({"puzzle": puzzle, "piece": piece, "top": top}, f)
 
     @classmethod
     def load(cls, filename):
@@ -88,7 +94,7 @@ class Jigsaw:
 
     @property
     def width(self) -> int:
-        return self.ans.shape[1]
+        return self.puzzle.shape[1]
 
     @property
     def rate(self):
@@ -96,7 +102,7 @@ class Jigsaw:
         return TC_OPERATION_WIDTH / 680
 
     @property
-    def left(self):
+    def left(self) -> int:
         if not hasattr(self, "_left"):
             self._left = self.solve() - self.piece.padding[0]
         return self._left
@@ -114,15 +120,36 @@ class Jigsaw:
         left = int(np.argmax(r))
 
         if debug:
-            cv.imshow("match", np.tile(r, (200, 1)))
-            cv.imshow("spiece", spiece)
+            debug_out = Path("data/debug")
+            debug_out.mkdir(exist_ok=True, parents=True)
+            cv.imwrite((debug_out / "match.png").as_posix(), np.tile(r * 255, (200, 1)))  # type: ignore
+            cv.imwrite((debug_out / "spiece.png").as_posix(), spiece)
 
             cont = [
                 [[x + left - self.piece.padding[0], y + self.top]] for (x, y), in self.piece.cont
             ]
             cont = np.array(cont, dtype="int")
             d = cv.drawContours(self.puzzle, [cont], 0, (0, 0, 255), 2)
-            cv.imshow("contour", d)
-            cv.waitKey()
+            cv.imwrite((debug_out / "contour.png").as_posix(), d)
 
         return left
+
+
+def imitate_drag(x: int) -> List[List[int]]:
+    assert x < 300
+    # 244, 1247
+    t = randint(1200, 1300)
+    n = randint(50, 65)
+    X = lambda i: randint(1, max(2, i // 10)) if i < n - 15 else randint(6, 12)
+    Y = lambda: choices([-1, 1, 0], cum_weights=[0.1, 0.2, 1], k=1)[0]
+    T = lambda: randint(*choices(((65, 280), (6, 10)), cum_weights=(0.05, 1), k=1)[0])
+    xs = ts = 0
+    drag = []
+    for i in range(n):
+        xi, ti = X(i), T()
+        drag.append([xi, Y(), ti])
+        xs += xi
+        ts += ti
+    drag.append([max(1, x - xs), Y(), max(1, t - ts)])
+    drag.reverse()
+    return drag
