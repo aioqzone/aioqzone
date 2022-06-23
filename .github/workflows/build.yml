@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'publish')
+    # if: contains(github.event.issue.labels.*.name, 'publish')
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
