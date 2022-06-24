@@ -5,7 +5,21 @@ Define hooks that can trigger user actions.
 import asyncio
 from collections import defaultdict
 from itertools import chain
-from typing import Any, Coroutine, Dict, Generic, Optional, Set, Tuple, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Coroutine,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Set,
+    Tuple,
+    Type,
+    TypeVar,
+)
+
+from typing_extensions import Self
 
 
 class Event:
@@ -106,3 +120,65 @@ class Emittable(Generic[Evt]):
             while s:
                 t = s.pop()
                 t.cancel()
+
+
+class EventManager:
+    """EventManager is a convenient way to create/trace/manage friend classes."""
+
+    __orig_bases__: Dict[Type[Event], Type[Event]]
+    __updated: bool = False
+
+    def sub_of(self, event: Type[Evt]) -> Type[Evt]:
+        """Use this method to get current inheritence from an ancestor which was given to the
+        factory.
+
+        >>> class Mgr(EventManager[Event1, Event2]): pass
+        >>> m = Mgr()
+        >>> m.sub_of(Event1)    # must be one of Event1, Event2
+        Event1
+        """
+        return self.__orig_bases__[event]  # type: ignore
+
+    def __repr__(self) -> str:
+        return f"EventManager of {self.__orig_bases__}"
+
+    def __class_getitem__(cls, events: List[Type[Event]]):
+        """Factory.
+
+        >>> class Mgr(EventManager[Event1, Event2]):    # create a manager of Event1 and Event2
+        >>>     pass
+        """
+        name = "Mixed" + "".join(i.__name__.capitalize() for i in events)
+        return type(
+            name,
+            (cls,),
+            dict(
+                __orig_bases__={i: i for i in events},
+            ),
+        )
+
+    def _get_sub_func(self, ty: Type[Evt]) -> Optional[Callable[[Type[Evt]], Type[Evt]]]:
+        """Given a event type, returns a method in which a subclass is returned.
+        By default these methods should be named as `_sub_xxxx` (lowercase). One may
+        override this method to change this manner.
+
+        >>> class Mgr(EventManager[Event1]):
+        >>>     def _sub_event1(self, base):
+        >>>         class my_event1(base): ...
+        >>>         return my_event1
+        """
+        return getattr(self, f"_sub_{ty.__name__.lower()}", None)
+
+    def __init__(self) -> None:
+        self._update_bases()
+
+    def _update_bases(self):
+        """Remember to call this **after** your own init."""
+        if self.__updated:
+            return
+        for k in self.__orig_bases__:
+            sub_func = self._get_sub_func(k)
+            if sub_func is None:
+                continue
+            self.__orig_bases__[k] = sub_func(k)
+        self.__updated = True
