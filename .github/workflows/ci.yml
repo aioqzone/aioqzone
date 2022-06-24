@@ -45,7 +45,7 @@ jobs:
 
       - name: Set the PR body
         id: pr_body
-        run: echo "::set-output name=md::$(cat ${{ steps.git-cliff.outputs.changelog }})"
+        run: echo "::set-output name=md::$(cat CHANGELOG.md)"
 
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
