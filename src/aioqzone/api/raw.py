@@ -218,7 +218,13 @@ class QzoneApi:
 
         r = await retry_closure()
         data = r["data"]
+        assert isinstance(data, dict)
         trans.extern[pagenum + 1] = unquote(data["main"]["externparam"])  # type: ignore
+
+        feeds = data.get("data", [])
+        assert isinstance(feeds, list)
+        data["data"] = list(filter(None, feeds))  # remove null
+
         return cast(StrDict, data)
 
     async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> StrDict:
