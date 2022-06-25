@@ -29,23 +29,18 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Get beta SHA
-        id: get_sha
-        run: echo "::set-output name=beta_sha::$(git rev-parse --short beta)"
-
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v1
         id: git-cliff
         with:
           config: cliff.toml
-          args: -t ${{ needs.test.outputs.package-version }} {{ steps.get_sha.outputs.beta_sha }}..HEAD
+          args: -t ${{ needs.test.outputs.package-version }} ${{ github.event.pull_request.head.sha }}..HEAD
         env:
           OUTPUT: CHANGELOG.md
 
       - name: Set the PR body
         id: pr_body
-        run: echo "::set-output name=md::$(cat CHANGELOG.md)"
+        run: echo "::set-output name=md::$(cat ${{ steps.git-cliff.outputs.changelog }})"
 
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
@@ -54,4 +49,8 @@ jobs:
           destination_branch: beta
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: ${{ needs.test.outputs.package-version }}
-          pr_body: cat "${{ steps.pr_body.outputs.md }}"
+          pr_body: ${{ steps.pr_body.outputs.md }}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
