@@ -15,7 +15,8 @@ aioqzone封装了一些Qzone接口。
 
 - [x] 二维码登录
 - [x] 密码登录 (受限)
-- [ ] 计算验证码答案 (答案正确但不能通过)
+- [x] 计算验证码答案
+- [ ] 通过网络环境检测
 - [x] 爬取HTML说说
 - [x] 爬取说说详细内容
 - [x] 爬取空间相册
@@ -40,6 +41,7 @@ __在做了:__
 - `jssupport.jsjson.AstLoader` 不需要借助其他进程；
 - 要使用 `jssupport.execjs` 和 `jssupport.jsjson.NodeLoader`，您（至少）需要安装 `Node.js`；
 - 要使用 `jssupport.jsdom`，您需要安装 `jsdom` 和 `canvas` 两个 npm 包。
+- 验证码部分需要使用 `canvas`，因此您需要正确配置运行环境内的 font config. 前往 [#45](https://github.com/aioqzone/aioqzone/issues/45) 查看详情.
 
 ## 包描述
 
