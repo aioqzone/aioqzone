@@ -148,7 +148,7 @@ class EventManager:
         >>> class Mgr(EventManager[Event1, Event2]):    # create a manager of Event1 and Event2
         >>>     pass
         """
-        name = "Mixed" + "".join(i.__name__.capitalize() for i in events)
+        name = "Mgr" + "".join(i.__name__.capitalize() for i in events)
         return type(
             name,
             (cls,),

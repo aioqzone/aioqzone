@@ -43,3 +43,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: doc/build/html
+
+concurrency:
+  group: doc-${{ github.ref }}
+  cancel-in-progress: true

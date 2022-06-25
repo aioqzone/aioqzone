@@ -5,10 +5,11 @@ Users can inherit these managers and implement their own caching logic.
 
 import logging
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
+from qqqr.event.login import QrEvent, UpEvent
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.up import UpLogin
@@ -134,7 +135,12 @@ class QrStrategy(str, Enum):
     forbid = "forbid"
 
 
-MixedLoginEvent = type("MixedLoginEvent", (QREvent, UPEvent), {})
+class MixedLoginEvent(QREvent, UPEvent):
+    def __instancecheck__(self, o: object) -> bool:
+        return isinstance(o, QREvent) and isinstance(o, UPEvent)
+
+    def __subclasscheck__(self, cls: type) -> bool:
+        return issubclass(cls, QREvent) and issubclass(cls, UPEvent)
 
 
 class MixedLoginMan(Loginable[MixedLoginEvent]):
@@ -157,9 +163,12 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
         if strategy == QrStrategy.prefer:
             self._order = self._order[::-1]
 
-    def register_hook(self, hook: MixedLoginEvent):
+    def register_hook(self, hook: Union[MixedLoginEvent, QrEvent, UpEvent]):
         for c in self._order:
-            c.register_hook(hook)
+            if isinstance(c, QRLoginMan) and isinstance(hook, QREvent):
+                c.register_hook(hook)
+            if isinstance(c, UPLoginMan) and isinstance(hook, UPEvent):
+                c.register_hook(hook)
 
     async def _new_cookie(self) -> Dict[str, str]:
         """

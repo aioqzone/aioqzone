@@ -72,3 +72,7 @@ jobs:
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
           poetry run pytest ${{ inputs.PYTEST_ARGS }}
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true

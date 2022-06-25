@@ -70,3 +70,8 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
+
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
