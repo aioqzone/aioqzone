@@ -115,11 +115,11 @@ class Emittable(Generic[Evt]):
         for i in hook_cls:
             s = self._tasks[i]
             if s and not cancel:
+                # dangerous
                 s.clear()
                 continue
-            while s:
-                t = s.pop()
-                t.cancel()
+            for t in s:
+                t.cancel()  # done callback will remove the task from this set
 
 
 class EventManager:
