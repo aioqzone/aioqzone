@@ -53,3 +53,7 @@ class DummyQapi(QzoneApi):
     async def emotion_msglist(self, uin: int, num: int = 20, pos: int = 0) -> List[MsgListElm]:
         r = await super().emotion_msglist(uin, num, pos)
         return [MsgListElm.parse_obj(i) for i in r]
+
+    async def emotion_publish(self, content: str, right: int = 0) -> PublishResp:
+        r = await super().emotion_publish(content, right)
+        return PublishResp.parse_obj(r)

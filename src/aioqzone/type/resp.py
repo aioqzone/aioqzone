@@ -225,3 +225,16 @@ class MsgListElm(HasContent):
     fid: str = Field(alias="tid")
     uin: int
     name: str
+
+
+class PublishResp(BaseModel):
+    attach: str = ""
+    code: int
+    feedinfo: str
+    message: str
+    needVerify: bool
+    abstime: int = Field(alias="now")
+    republish: bool
+    secret: bool
+    tid: str
+    vote: str = ""
