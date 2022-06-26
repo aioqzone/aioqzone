@@ -68,6 +68,8 @@ class QzoneApi:
         params = params or {}
         params = du(params, {"g_tk": str(await self._get_gtk())})
         self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
+        if data:
+            data["qzreferrer"] = self.referer
         return await self.client.post(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
@@ -259,7 +261,6 @@ class QzoneApi:
             "uin": uin,
             "tid": tid,
             "feedsType": feedstype,
-            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
         }
 
         @self._relogin_retry
@@ -357,7 +358,6 @@ class QzoneApi:
             "fupdate": 1,
         }
         body = {
-            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
             "opuin": self.login.uin,
             "unikey": likedata.unikey,
             "curkey": likedata.curkey,
@@ -539,7 +539,6 @@ class QzoneApi:
             "con": content,
             "feedversion": 1,
             "hostuin": self.login.uin,
-            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
         }
 
         @self._relogin_retry
@@ -588,7 +587,6 @@ class QzoneApi:
             "feedsTime": abstime,
             "fupdate": 1,
             "ref": "feeds",
-            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
         }
 
         @self._relogin_retry
@@ -640,7 +638,6 @@ class QzoneApi:
             "to_sign": 0,
             "ugcright_id": "TODO",  # TODO
             "hostuin": uin or self.login.uin,
-            "qzreferrer": f"https://user.qzone.qq.com/{self.login.uin}",
             # 'pic_bo': ''
         }
 
@@ -651,3 +648,63 @@ class QzoneApi:
                 return self._rtext_handler(r.text)
 
         return await retry_closure()
+
+    async def emotion_re_feeds(
+        self,
+        comment: str,
+        topicId: str,
+        typeid: int,
+        owner: int,
+        *,
+        is_private: bool = False,
+    ) -> str:
+        """Reply (comment) a feed. Rich types are not supported now.
+
+        :param comment: the comment string.
+        :param typeid: typeid
+        :param topicId: topic id, got from html
+        :param owner: owner uin
+
+        :raises `httpx.HTTPStatusError`: error http response code
+        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `aioqzone.exception.LoginError`: not logined
+        :raises `SystemExit`: unexcpected error
+
+        :return: new feed html
+
+        .. versionadded:: 0.9.3a1
+
+        .. seealso:: `.emotion_getcomments`
+        """
+        default = dict(
+            inCharset="utf-8",
+            outCharset="utf-8",
+            plat="qzone",
+            source="ic",
+            isSignIn="",
+            format="fs",
+            ref="feeds",
+        )
+        data = dict(
+            topicId=topicId,
+            feedsType=typeid,
+            hostUin=owner,
+            platformid=50,
+            uin=self.login.uin,
+            content=comment,
+            richval="",  # no rich types
+            richtype="",
+            private=int(is_private),
+            paramstr=1,
+        )
+
+        @self._relogin_retry
+        async def retry_closure():
+            async with await self.apost(const.emotion_re_feeds, data=du(default, data)) as r:
+                r.raise_for_status()
+                return self._rtext_handler(r.text)
+
+        r = await retry_closure()
+        assert isinstance(r["data"], dict)
+        return cast(str, r["data"]["feeds"])

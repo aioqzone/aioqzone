@@ -207,6 +207,8 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
                     raise TencentLoginError(resp.code, "")
                 await self.send_sms_code(sess)
                 sess.sms_code = await self.hook.GetSmsCode(resp.msg, resp.nickname)
+                if sess.sms_code is None:
+                    raise TencentLoginError(resp.code, "未获得动态验证码")
             else:
                 raise TencentLoginError(resp.code, resp.msg)
 

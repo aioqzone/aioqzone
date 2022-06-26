@@ -12,8 +12,10 @@ from aioqzone.utils.html import HtmlContent, HtmlInfo
 from qqqr.utils.iter import first
 from qqqr.utils.net import ClientAdapter
 
+pytestmark = pytest.mark.asyncio
 
-@pytest.fixture(scope="module")
+
+@pytest.fixture(scope="class")
 def storage():
     return []
 
@@ -23,9 +25,7 @@ async def api(client: ClientAdapter, man: MixedLoginMan):
     yield QzoneApi(client, man)
 
 
-class TestRaw:
-    pytestmark = pytest.mark.asyncio
-
+class TestDownload:
     async def test_more(self, api: QzoneApi, storage: list):
         try:
             f = await api.feeds3_html_more(0)
@@ -105,23 +105,35 @@ class TestRaw:
         assert f.album
         await api.floatview_photo_list(f.album, 10)
 
-    @pytest.mark.upstream
-    async def test_publish(self, api: QzoneApi, storage: list):
-        try:
-            r = await api.emotion_publish("Test")
-        except LoginError:
-            pytest.xfail("login failed")
-        assert isinstance(r, dict)  # type: ignore
-        assert r["tid"]
-        storage.clear()
-        storage.append(r)
 
-    @pytest.mark.upstream
-    async def test_delete(self, api: QzoneApi, storage: list):
-        if not storage:
-            pytest.skip("storage is empty")
-        r = storage[-1]
-        if not r:
-            pytest.xfail("storage is empty")
-        _, info = HtmlInfo.from_html(r["feedinfo"])
-        r = await api.emotion_delete(r["tid"], r["now"], 311, 0, info.topicid)
+@pytest_asyncio.fixture(scope="class")
+async def published(api: QzoneApi):
+    try:
+        r = await api.emotion_publish("Test")
+    except LoginError:
+        return
+    assert isinstance(r, dict)
+    assert r["tid"]
+    return r
+
+
+@pytest.mark.upstream
+class TestUpload:
+    async def test_publish(self, published: Optional[dict]):
+        if published is None:
+            pytest.xfail("login failed")
+            # should fail this entire class
+
+    async def test_reply(self, api: QzoneApi, published: Optional[dict]):
+        if published is None:
+            pytest.skip("login failed")
+        _, info = HtmlInfo.from_html(published["feedinfo"])
+        r = await api.emotion_re_feeds("comment", info.topicid, 0, api.login.uin)
+        assert isinstance(r, str)
+
+    async def test_delete(self, api: QzoneApi, published: Optional[dict]):
+        if published is None:
+            pytest.skip("login failed")
+        _, info = HtmlInfo.from_html(published["feedinfo"])
+        r = await api.emotion_delete(published["tid"], published["now"], 311, 0, info.topicid)
+        assert r

@@ -8,6 +8,5 @@ floatview_photo_list = "/proxy/domain/plist.photo.qq.com/fcgi-bin/cgi_floatview_
 emotion_msglist = "/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6"
 emotion_publish = "/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_publish_v6"
 emotion_delete = "/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_delete_v6"
-emotion_update = (
-    "https://user.qzone.qq.com/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_update"
-)
+emotion_update = "/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_update"
+emotion_re_feeds = "/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_re_feeds"
