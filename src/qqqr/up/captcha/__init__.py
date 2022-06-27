@@ -2,28 +2,27 @@ import asyncio
 import base64
 import json
 import re
+from hashlib import md5
 from math import floor
 from random import random
 from time import time
-from typing import Dict, List, Type, TypeVar, cast
+from typing import List, Type, TypeVar
 
 from httpx import URL
-
-from jssupport.execjs import ExecJS, Partial
-from jssupport.jsjson import json_loads
 
 from ...utils.daug import du
 from ...utils.iter import first
 from ...utils.net import ClientAdapter
-from ..type import CaptchaData, PrehandleResp, VerifyResp
+from ..type import PrehandleResp, VerifyResp
 from .jigsaw import Jigsaw, imitate_drag
-from .vm import TDC, MatchMd5
+from .vm import TDC
 
 PREHANDLE_URL = "https://t.captcha.qq.com/cap_union_prehandle"
 SHOW_NEW_URL = "https://t.captcha.qq.com/cap_union_new_show"
 VERIFY_URL = "https://t.captcha.qq.com/cap_union_new_verify"
 
-time_s = lambda: int(1e3 * time())
+time_ms = lambda: int(1e3 * time())
+"""+new Date"""
 rnd6 = lambda: str(random())[2:8]
 
 _TDC_TY = TypeVar("_TDC_TY", bound=TDC)
@@ -58,9 +57,21 @@ class TcaptchaSession:
     def set_js_env(self, tdc: TDC):
         self.tdc = tdc
 
-    def set_pow_answer(self, ans: int, duration: int):
-        self.pow_ans = ans
-        self.duration = duration
+    def solve_workload(self, *, timeout: float = 30.0):
+        pow_cfg = self.conf.common.pow_cfg
+        nonce = str(pow_cfg.prefix).encode()
+        target = pow_cfg.md5.lower()
+
+        start = time()
+        cnt = 0
+
+        while time() - start < timeout:
+            if md5(nonce + str(cnt).encode()).hexdigest() == target:
+                break
+            cnt += 1
+
+        self.pow_ans = cnt
+        self.duration = int((time() - start) * 1e3)
 
     def set_captcha_answer(self, left: int, top: int):
         self.jig_ans = left, top
@@ -86,8 +97,6 @@ class Captcha:
         self.sid = sid
         self.xlogin_url = xlogin_url
         self.client.referer = "https://xui.ptlogin2.qq.com/"
-        self.__match_md5 = MatchMd5()
-        """Static js environment to match md5"""
 
     @property
     def base64_ua(self):
@@ -144,11 +153,6 @@ class Captcha:
 
         sess.set_js_env(tdc)
 
-    async def match_md5(self, sess: TcaptchaSession):
-        pow_cfg = sess.conf.common.pow_cfg
-        ans, dur = await self.__match_md5(pow_cfg.prefix, pow_cfg.md5)
-        sess.set_pow_answer(ans, dur)
-
     async def get_captcha_problem(self, sess: TcaptchaSession):
         async def r(url):
             async with await self.client.get(url) as r:
@@ -190,7 +194,7 @@ class Captcha:
 
         waitEnd = time() + 0.6 * random() + 0.9
 
-        await self.match_md5(sess)
+        sess.solve_workload()
         await self.get_captcha_problem(sess)
         await self.solve_captcha(sess)
 

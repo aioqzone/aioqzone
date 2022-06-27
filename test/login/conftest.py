@@ -4,6 +4,7 @@ import pytest
 import pytest_asyncio
 from httpx import AsyncClient
 
+from qqqr.constant import UA
 from qqqr.ssl import ssl_context
 from qqqr.utils.net import ClientAdapter
 
@@ -20,4 +21,6 @@ def event_loop():
 @pytest_asyncio.fixture(scope="module")
 async def client():
     async with AsyncClient(verify=ssl_context()) as client:
-        yield ClientAdapter(client)
+        client = ClientAdapter(client)
+        client.ua = UA
+        yield client
