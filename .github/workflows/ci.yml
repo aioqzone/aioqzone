@@ -15,6 +15,10 @@ on:
       - dev
       - dev/**
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     uses: ./.github/workflows/test.yml
@@ -59,7 +63,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: ${{ needs.test.outputs.package-version }}
           pr_template: CHANGELOG.md
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
