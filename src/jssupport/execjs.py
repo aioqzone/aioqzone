@@ -134,13 +134,13 @@ class ExecJS:
             js += ";"
         return partial(self.exec, node=self.node, js=js)
 
-    def __call__(self, expr: Optional[JsExpr]):
+    async def __call__(self, expr: Optional[JsExpr]):
         f = self.bind(expr)
         self.run.clear()
-        return f()
+        return await f()
 
-    def get(self, prop: str):
-        return self(prop)
+    async def get(self, prop: str):
+        return await self(prop)
 
 
 if platform == "win32":

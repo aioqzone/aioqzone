@@ -6,7 +6,7 @@ import pytest_asyncio
 from qqqr.constant import QzoneAppid, QzoneProxy
 from qqqr.up import UpLogin
 from qqqr.up.captcha import TDC, Captcha, TcaptchaSession
-from qqqr.up.captcha.jigsaw import Jigsaw, imitate_drag
+from qqqr.up.captcha.jigsaw import imitate_drag
 from qqqr.up.captcha.vm import DecryptTDC
 from qqqr.utils.net import ClientAdapter
 
@@ -33,13 +33,13 @@ class TestCaptcha:
     async def test_windowconf(self, sess: TcaptchaSession):
         assert sess.conf
 
-    async def test_match_md5(self, captcha: Captcha, sess: TcaptchaSession):
-        await captcha.match_md5(sess)
+    async def test_match_md5(self, sess: TcaptchaSession):
+        sess.solve_workload()
         ans = sess.pow_ans
-        assert ans <= 3e5
-        assert sess.duration > 0
-        await captcha.match_md5(sess)
-        assert ans == sess.pow_ans
+        assert 0 < ans <= 3e5
+        assert sess.duration >= 50, f"{ans}, {sess.duration}"
+        sess.solve_workload()
+        assert ans == sess.pow_ans, f"{ans} != {sess.pow_ans}"
 
     async def test_puzzle(self, captcha: Captcha, sess: TcaptchaSession):
         await captcha.get_captcha_problem(sess)
@@ -90,4 +90,4 @@ async def test_decrypt(vm: TDC, captcha: Captcha, sess: TcaptchaSession):
 
     await captcha.get_tdc_vm(sess, cls=DecryptTDC)
     decrypt = await DecryptTDC.decrypt(sess.tdc, collect)  # type: ignore
-    assert decrypt
+    print(decrypt)

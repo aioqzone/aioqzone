@@ -32,19 +32,22 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: beta
+
       - name: Get beta SHA
-        id: beta_sha
+        id: beta-sha
         run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
 
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          fetch-depth: 0
+
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v1
         id: git-cliff
         with:
           config: cliff.toml
-          args: -t ${{ needs.test.outputs.package-version }} ${{ steps.beta_sha.outputs.sha }}..HEAD
+          args: -t ${{ needs.test.outputs.package-version }} ${{ steps.beta-sha.outputs.sha }}..HEAD
         env:
           OUTPUT: CHANGELOG.md
 

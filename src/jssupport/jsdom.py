@@ -35,11 +35,12 @@ class JSDOM(ExecJS):
         js = """
         const jsdom = require("jsdom");
         const { JSDOM } = jsdom;
+        const resourceLoader = new jsdom.ResourceLoader({userAgent: ua});
         const dom = new JSDOM(src, {
             pretendToBeVisual: true,
             url: location,
             referrer: referrer,
-            userAgent: ua,
+            resources: resourceLoader,
             runScripts: "outside-only",
         });
         dom.reconfigure({ windowTop: {} });
@@ -47,8 +48,8 @@ class JSDOM(ExecJS):
         """
         return dedent(js)
 
-    def eval(self, script: str):
-        return self(f"window.eval(`{script}`)")
+    async def eval(self, script: str):
+        return await self(f"window.eval(`{script}`)")
 
     def add_eval(self, script: str):
         self.add_run("window.eval", script)
