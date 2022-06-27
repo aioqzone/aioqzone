@@ -71,7 +71,8 @@ class TcaptchaSession:
             cnt += 1
 
         self.pow_ans = cnt
-        self.duration = int((time() - start) * 1e3)
+        # on some environment this time is too low... add a limit
+        self.duration = max(int((time() - start) * 1e3), 50)
 
     def set_captcha_answer(self, left: int, top: int):
         self.jig_ans = left, top

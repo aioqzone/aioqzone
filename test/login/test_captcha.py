@@ -36,8 +36,8 @@ class TestCaptcha:
     async def test_match_md5(self, sess: TcaptchaSession):
         sess.solve_workload()
         ans = sess.pow_ans
-        assert ans <= 3e5
-        assert sess.duration > 0, f"{ans}, {sess.duration}"
+        assert 0 < ans <= 3e5
+        assert sess.duration >= 50, f"{ans}, {sess.duration}"
         sess.solve_workload()
         assert ans == sess.pow_ans, f"{ans} != {sess.pow_ans}"
 
