@@ -37,9 +37,9 @@ class TestCaptcha:
         sess.solve_workload()
         ans = sess.pow_ans
         assert ans <= 3e5
-        assert sess.duration > 0
+        assert sess.duration > 0, f"{ans}, {sess.duration}"
         sess.solve_workload()
-        assert ans == sess.pow_ans
+        assert ans == sess.pow_ans, f"{ans} != {sess.pow_ans}"
 
     async def test_puzzle(self, captcha: Captcha, sess: TcaptchaSession):
         await captcha.get_captcha_problem(sess)
