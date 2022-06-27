@@ -15,10 +15,6 @@ on:
       - dev
       - dev/**
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   test:
     uses: ./.github/workflows/test.yml
@@ -35,10 +31,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          ref: beta
+
       - name: Get beta SHA
         id: beta-sha
-        run: echo "::set-output name=sha::$(git rev-parse --short beta)"
+        run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v1
         id: git-cliff
@@ -56,3 +59,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: ${{ needs.test.outputs.package-version }}
           pr_template: CHANGELOG.md
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
