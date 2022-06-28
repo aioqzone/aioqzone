@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Execute JavaScripts &mdash; aioqzone 0.9.3a2.dev2 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/autodoc_pydantic.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mocking a Dom Environment" href="jsdom.html" />
+    <link rel="prev" title="jssupport" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> aioqzone
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../aioqzone/index.html">aioqzone</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">jssupport</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Execute JavaScripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsdom.html">Mocking a Dom Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsjson.html">Parsing Javascript Dictionary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../qqqr/index.html">QQQR</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aioqzone</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">jssupport</a> &raquo;</li>
+      <li>Execute JavaScripts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/jssupport/execjs.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-jssupport.execjs">
+<span id="execute-javascripts"></span><h1>Execute JavaScripts<a class="headerlink" href="#module-jssupport.execjs" title="Permalink to this heading"></a></h1>
+<p>Offers a class to execute js by communicating with subprocess.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>On win32 platform, importing this module will change asyncio event loop policy to
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-policy.html#asyncio.WindowsProactorEventLoopPolicy" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.WindowsProactorEventLoopPolicy</span></code></a>!</p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jssupport.execjs.</span></span><span class="sig-name descname"><span class="pre">ExecJS</span></span><a class="headerlink" href="#jssupport.execjs.ExecJS" title="Permalink to this definition"></a></dt>
+<dd><p>Execute javascript in such order:</p>
+<ul class="simple">
+<li><p>setup: <a class="reference internal" href="#jssupport.execjs.ExecJS.setup" title="jssupport.execjs.ExecJS.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>, <a class="reference internal" href="#jssupport.execjs.ExecJS.add_setup" title="jssupport.execjs.ExecJS.add_setup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_setup()</span></code></a></p></li>
+<li><p>run: <a class="reference internal" href="#jssupport.execjs.ExecJS.run" title="jssupport.execjs.ExecJS.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>, <a class="reference internal" href="#jssupport.execjs.ExecJS.add_run" title="jssupport.execjs.ExecJS.add_run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_run()</span></code></a></p></li>
+<li><p>post: <a class="reference internal" href="#jssupport.execjs.ExecJS.post" title="jssupport.execjs.ExecJS.post"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code></a>, <a class="reference internal" href="#jssupport.execjs.ExecJS.add_post" title="jssupport.execjs.ExecJS.add_post"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_post()</span></code></a></p></li>
+</ul>
+<p>If it is required to change executable name, use classvar <a class="reference internal" href="#jssupport.execjs.ExecJS.node" title="jssupport.execjs.ExecJS.node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node</span></code></a>. Note that this must be a
+executable name, so something like <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">-c</span></code> is illegal.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.add_post">
+<span class="sig-name descname"><span class="pre">add_post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.ExecJS.add_post" title="Permalink to this definition"></a></dt>
+<dd><p>Add a post function to <a class="reference internal" href="#jssupport.execjs.ExecJS.post" title="jssupport.execjs.ExecJS.post"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.add_run">
+<span class="sig-name descname"><span class="pre">add_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.ExecJS.add_run" title="Permalink to this definition"></a></dt>
+<dd><p>Add a function to <a class="reference internal" href="#jssupport.execjs.ExecJS.run" title="jssupport.execjs.ExecJS.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.add_setup">
+<span class="sig-name descname"><span class="pre">add_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.ExecJS.add_setup" title="Permalink to this definition"></a></dt>
+<dd><p>Add a setup function to <a class="reference internal" href="#jssupport.execjs.ExecJS.setup" title="jssupport.execjs.ExecJS.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.bind">
+<span class="sig-name descname"><span class="pre">bind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.ExecJS.bind" title="Permalink to this definition"></a></dt>
+<dd><p>Return an partial of <cite>.exec</cite>, with <cite>node</cite> set to <a class="reference internal" href="#jssupport.execjs.ExecJS.node" title="jssupport.execjs.ExecJS.node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node</span></code></a>,
+and <cite>js</cite> set to current javascripts in queue: (setup + run + post).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="#jssupport.execjs.Partial" title="jssupport.execjs.Partial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Partial</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]) – Optional. If given, the expression will be added to <a class="reference internal" href="#jssupport.execjs.ExecJS.run" title="jssupport.execjs.ExecJS.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.check_all">
+<span class="sig-name descname"><span class="pre">check_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.ExecJS.check_all" title="Permalink to this definition"></a></dt>
+<dd><p>Run all checks to see if the environment is ready to run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.exec">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">js</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.ExecJS.exec" title="Permalink to this definition"></a></dt>
+<dd><p>Execute <cite>js</cite> using given <cite>node</cite> executable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.get">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.ExecJS.get" title="Permalink to this definition"></a></dt>
+<dd><p>Get a property from this environment. <a class="reference internal" href="#jssupport.execjs.ExecJS.run" title="jssupport.execjs.ExecJS.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a> will be cleared.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prop</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The property to get.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.loop_policy_check">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loop_policy_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.ExecJS.loop_policy_check" title="Permalink to this definition"></a></dt>
+<dd><p>On Windows, the default event loop <a class="reference external" href="https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.ProactorEventLoop" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.ProactorEventLoop</span></code></a> supports subprocesses,
+whereas <a class="reference external" href="https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.SelectorEventLoop" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.SelectorEventLoop</span></code></a> does not.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.node">
+<span class="sig-name descname"><span class="pre">node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'node'</span></em><a class="headerlink" href="#jssupport.execjs.ExecJS.node" title="Permalink to this definition"></a></dt>
+<dd><p>node executable name. Default as <strong class="program">node</strong>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.post">
+<span class="sig-name descname"><span class="pre">post</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#jssupport.execjs.Partial" title="jssupport.execjs.Partial"><span class="pre">Partial</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.execjs.ExecJS.post" title="Permalink to this definition"></a></dt>
+<dd><p>Expressions executed after <a class="reference internal" href="#jssupport.execjs.ExecJS.run" title="jssupport.execjs.ExecJS.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>.
+Will not be cleared after executing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.run">
+<span class="sig-name descname"><span class="pre">run</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#jssupport.execjs.Partial" title="jssupport.execjs.Partial"><span class="pre">Partial</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.execjs.ExecJS.run" title="Permalink to this definition"></a></dt>
+<dd><p>Expressions to be executed, after <a class="reference internal" href="#jssupport.execjs.ExecJS.setup" title="jssupport.execjs.ExecJS.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a> but before <a class="reference internal" href="#jssupport.execjs.ExecJS.post" title="jssupport.execjs.ExecJS.post"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code></a>.
+Will be cleared after executing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jssupport.execjs.ExecJS.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#jssupport.execjs.Partial" title="jssupport.execjs.Partial"><span class="pre">Partial</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.execjs.ExecJS.setup" title="Permalink to this definition"></a></dt>
+<dd><p>Expressions executed before <a class="reference internal" href="#jssupport.execjs.ExecJS.run" title="jssupport.execjs.ExecJS.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>.
+Will not be cleared after executing.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="jssupport.execjs.Partial">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jssupport.execjs.</span></span><span class="sig-name descname"><span class="pre">Partial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.execjs.Partial" title="Permalink to this definition"></a></dt>
+<dd><p>A partial like <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">functools.partial</span></code></a>. It represents a expression in javascript,
+which includes a predicate (<cite>func</cite>) and its arguments.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="jssupport" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="jsdom.html" class="btn btn-neutral float-right" title="Mocking a Dom Environment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, aioqzone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

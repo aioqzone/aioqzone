@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uin-Password Login &mdash; aioqzone 0.9.3a2.dev2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Solving Tcaptcha" href="captcha/index.html" />
+    <link rel="prev" title="QrLogin Types" href="../qr/type.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> aioqzone
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../aioqzone/index.html">aioqzone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">QQQR</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../event/index.html">aioqzone Event-Hook System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qr/index.html">QRcode Login</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Uin-Password Login</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="captcha/index.html">Solving Tcaptcha</a></li>
+<li class="toctree-l3"><a class="reference internal" href="type.html">UpLogin Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../base.html">QQQR Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioqzone</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">QQQR</a> &raquo;</li>
+      <li>Uin-Password Login</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/qqqr/up/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="uin-password-login">
+<h1>Uin-Password Login<a class="headerlink" href="#uin-password-login" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="captcha/index.html">Solving Tcaptcha</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="type.html">UpLogin Types</a></li>
+</ul>
+</div>
+<span class="target" id="module-qqqr.up"></span><dl class="py class">
+<dt class="sig sig-object py" id="qqqr.up.UpLogin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.</span></span><span class="sig-name descname"><span class="pre">UpLogin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="qqqr.up.UpLogin.encode_cls">
+<span class="sig-name descname"><span class="pre">encode_cls</span></span><a class="headerlink" href="#qqqr.up.UpLogin.encode_cls" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">NodeEncoder</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qqqr.up.UpLogin.login">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.login" title="Permalink to this definition"></a></dt>
+<dd><p>Block until cookie is received.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qqqr.up.UpLogin.new">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.new" title="Permalink to this definition"></a></dt>
+<dd><p>check procedure before login. This will return a CheckResult object containing
+verify code, session, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>httpx.HTTPStatusError</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CheckResult</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qqqr.up.UpLogin.send_sms_code">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send_sms_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.send_sms_code" title="Permalink to this definition"></a></dt>
+<dd><p>Send verify sms (to get dynamic code)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sess</strong> (<a class="reference internal" href="#qqqr.up.UpSession" title="qqqr.up.UpSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpSession</span></code></a>) – The up login session to send sms code</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qqqr.up.UpSession">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.</span></span><span class="sig-name descname"><span class="pre">UpSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_sig</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpSession" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qqqr.up.random">
+<span class="sig-prename descclassname"><span class="pre">qqqr.up.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">x</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">interval</span> <span class="pre">[0,</span> <span class="pre">1).</span></span></span><a class="headerlink" href="#qqqr.up.random" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../qr/type.html" class="btn btn-neutral float-left" title="QrLogin Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="captcha/index.html" class="btn btn-neutral float-right" title="Solving Tcaptcha" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, aioqzone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

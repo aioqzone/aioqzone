@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event and Hooks &mdash; aioqzone 0.9.3a2.dev2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="QRcode Login" href="../qr/index.html" />
+    <link rel="prev" title="aioqzone Event-Hook System" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> aioqzone
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../aioqzone/index.html">aioqzone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">QQQR</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Event-Hook System</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Event and Hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../qr/index.html">QRcode Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../up/index.html">Uin-Password Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../base.html">QQQR Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioqzone</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">QQQR</a> &raquo;</li>
+          <li><a href="index.html">aioqzone Event-Hook System</a> &raquo;</li>
+      <li>Event and Hooks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/qqqr/event/hook.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="event-and-hooks">
+<h1>Event and Hooks<a class="headerlink" href="#event-and-hooks" title="Permalink to this heading"></a></h1>
+<p>aioqzone has designed a simple hook management system. You may extend your own event, or just
+inherit a event and implement your hooks.</p>
+<span class="target" id="module-qqqr.event"></span><p>Define hooks that can trigger user actions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="qqqr.event.Emittable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.event.</span></span><span class="sig-name descname"><span class="pre">Emittable</span></span><a class="headerlink" href="#qqqr.event.Emittable" title="Permalink to this definition"></a></dt>
+<dd><p>An object has some event to trigger.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="qqqr.event.Emittable.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">hook_cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cancel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.event.Emittable.clear" title="Permalink to this definition"></a></dt>
+<dd><p>Clear the given task sets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hook_cls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – task class names</p></li>
+<li><p><strong>cancel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Cancel the task if a set is not empty, defaults to True. Else will just clear the ref.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qqqr.event.Emittable.wait">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">hook_cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.event.Emittable.wait" title="Permalink to this definition"></a></dt>
+<dd><p>Wait for all task in the specific task set(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>optional</em>) – timeout, defaults to None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code>]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>done, pending</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <cite>timeout</cite> is None, this method will loop until all tasks in the set(s) are done.
+That means if other tasks are added during awaiting, the added task will be waited as well.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.wait()</span></code></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qqqr.event.Event">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.event.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><a class="headerlink" href="#qqqr.event.Event" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for event system.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qqqr.event.EventManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.event.</span></span><span class="sig-name descname"><span class="pre">EventManager</span></span><a class="headerlink" href="#qqqr.event.EventManager" title="Permalink to this definition"></a></dt>
+<dd><p>EventManager is a convenient way to create/trace/manage friend classes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="qqqr.event.EventManager.sub_of">
+<span class="sig-name descname"><span class="pre">sub_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.event.EventManager.sub_of" title="Permalink to this definition"></a></dt>
+<dd><p>Use this method to get current inheritence from an ancestor which was given to the
+factory.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Mgr</span><span class="p">(</span><span class="n">EventManager</span><span class="p">[</span><span class="n">Event1</span><span class="p">,</span> <span class="n">Event2</span><span class="p">]):</span> <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Mgr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">sub_of</span><span class="p">(</span><span class="n">Event1</span><span class="p">)</span>    <span class="c1"># must be one of Event1, Event2</span>
+<span class="go">Event1</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[~Evt]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qqqr.event.NullEvent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.event.</span></span><span class="sig-name descname"><span class="pre">NullEvent</span></span><a class="headerlink" href="#qqqr.event.NullEvent" title="Permalink to this definition"></a></dt>
+<dd><p>For debugging</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="aioqzone Event-Hook System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../qr/index.html" class="btn btn-neutral float-right" title="QRcode Login" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, aioqzone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UpLogin Types &mdash; aioqzone 0.9.3a2.dev2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="QQQR Bases" href="../base.html" />
+    <link rel="prev" title="Solving Tcaptcha" href="captcha/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> aioqzone
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../aioqzone/index.html">aioqzone</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">QQQR</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../event/index.html">aioqzone Event-Hook System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qr/index.html">QRcode Login</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Uin-Password Login</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="captcha/index.html">Solving Tcaptcha</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">UpLogin Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../base.html">QQQR Bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioqzone</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">QQQR</a> &raquo;</li>
+          <li><a href="index.html">Uin-Password Login</a> &raquo;</li>
+      <li>UpLogin Types</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/qqqr/up/type.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-qqqr.up.type">
+<span id="uplogin-types"></span><h1>UpLogin Types<a class="headerlink" href="#module-qqqr.up.type" title="Permalink to this heading"></a></h1>
+<p>Response validation in <cite>qqqr.up.captcha</cite></p>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.BgElemCfg">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">BgElemCfg</span></span><a class="headerlink" href="#qqqr.up.type.BgElemCfg" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.BgElemCfg.img_url" title="qqqr.up.type.BgElemCfg.img_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">img_url</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.BgElemCfg.init_pos" title="qqqr.up.type.BgElemCfg.init_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_pos</span> <span class="pre">(List[int])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.BgElemCfg.img_url">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">img_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.BgElemCfg.img_url" title="Permalink to this definition"></a></dt>
+<dd><p>relative url to get jigsaw puzzle image (background with dimmed piece shape).</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.BgElemCfg.init_pos">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_pos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0,</span> <span class="pre">0]</span></em><a class="headerlink" href="#qqqr.up.type.BgElemCfg.init_pos" title="Permalink to this definition"></a></dt>
+<dd><p>sprite init position on captcha (x, y)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.CaptchaData">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">CaptchaData</span></span><a class="headerlink" href="#qqqr.up.type.CaptchaData" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.CaptchaData.common" title="qqqr.up.type.CaptchaData.common"><code class="xref py py-obj docutils literal notranslate"><span class="pre">common</span> <span class="pre">(qqqr.up.type.CommonCaptchaConf)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CaptchaData.render" title="qqqr.up.type.CaptchaData.render"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render</span> <span class="pre">(qqqr.up.type.CaptchaDisplay)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CaptchaData.common">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">common</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#qqqr.up.type.CommonCaptchaConf" title="qqqr.up.type.CommonCaptchaConf"><span class="pre">CommonCaptchaConf</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'comm_captcha_cfg')</span></em><a class="headerlink" href="#qqqr.up.type.CaptchaData.common" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CaptchaData.render">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">render</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#qqqr.up.type.CaptchaDisplay" title="qqqr.up.type.CaptchaDisplay"><span class="pre">CaptchaDisplay</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'dyn_show_info')</span></em><a class="headerlink" href="#qqqr.up.type.CaptchaData.render" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.CaptchaDisplay">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">CaptchaDisplay</span></span><a class="headerlink" href="#qqqr.up.type.CaptchaDisplay" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.CaptchaDisplay.bg" title="qqqr.up.type.CaptchaDisplay.bg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bg</span> <span class="pre">(qqqr.up.type.BgElemCfg)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CaptchaDisplay.fg_binding_list" title="qqqr.up.type.CaptchaDisplay.fg_binding_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fg_binding_list</span> <span class="pre">(List[qqqr.up.type.FgBindingCfg])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CaptchaDisplay.sprite_url" title="qqqr.up.type.CaptchaDisplay.sprite_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sprite_url</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CaptchaDisplay.sprites" title="qqqr.up.type.CaptchaDisplay.sprites"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sprites</span> <span class="pre">(List[qqqr.up.type.FgElemCfg])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CaptchaDisplay.bg">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#qqqr.up.type.BgElemCfg" title="qqqr.up.type.BgElemCfg"><span class="pre">BgElemCfg</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'bg_elem_cfg')</span></em><a class="headerlink" href="#qqqr.up.type.CaptchaDisplay.bg" title="Permalink to this definition"></a></dt>
+<dd><p>Background (puzzle)</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CaptchaDisplay.fg_binding_list">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fg_binding_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#qqqr.up.type.FgBindingCfg" title="qqqr.up.type.FgBindingCfg"><span class="pre">FgBindingCfg</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CaptchaDisplay.fg_binding_list" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CaptchaDisplay.sprite_url">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sprite_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CaptchaDisplay.sprite_url" title="Permalink to this definition"></a></dt>
+<dd><p>relative url to get jigsaw piece (and handle) image.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CaptchaDisplay.sprites">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sprites</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#qqqr.up.type.FgElemCfg" title="qqqr.up.type.FgElemCfg"><span class="pre">FgElemCfg</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'fg_elem_list')</span></em><a class="headerlink" href="#qqqr.up.type.CaptchaDisplay.sprites" title="Permalink to this definition"></a></dt>
+<dd><p>Foreground sprites</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">CheckResp</span></span><a class="headerlink" href="#qqqr.up.type.CheckResp" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.CheckResp.code" title="qqqr.up.type.CheckResp.code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">code</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CheckResp.isRandSalt" title="qqqr.up.type.CheckResp.isRandSalt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isRandSalt</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CheckResp.ptdrvs" title="qqqr.up.type.CheckResp.ptdrvs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ptdrvs</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CheckResp.salt_repr" title="qqqr.up.type.CheckResp.salt_repr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">salt_repr</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CheckResp.session" title="qqqr.up.type.CheckResp.session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">session</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CheckResp.verifycode" title="qqqr.up.type.CheckResp.verifycode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verifycode</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CheckResp.verifysession" title="qqqr.up.type.CheckResp.verifysession"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verifysession</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp.code">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CheckResp.code" title="Permalink to this definition"></a></dt>
+<dd><p>code = 0/2/3 hideVC; code = 1 showVC</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp.isRandSalt">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isRandSalt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CheckResp.isRandSalt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp.ptdrvs">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ptdrvs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CheckResp.ptdrvs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp.salt_repr">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">salt_repr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'salt')</span></em><a class="headerlink" href="#qqqr.up.type.CheckResp.salt_repr" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp.session">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">session</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CheckResp.session" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp.verifycode">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">verifycode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CheckResp.verifycode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp.verifysession">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">verifysession</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CheckResp.verifysession" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qqqr.up.type.CheckResp.salt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">salt</span></span><a class="headerlink" href="#qqqr.up.type.CheckResp.salt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.CommonCaptchaConf">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">CommonCaptchaConf</span></span><a class="headerlink" href="#qqqr.up.type.CommonCaptchaConf" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.CommonCaptchaConf.pow_cfg" title="qqqr.up.type.CommonCaptchaConf.pow_cfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pow_cfg</span> <span class="pre">(qqqr.up.type.PowCfg)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.CommonCaptchaConf.tdc_path" title="qqqr.up.type.CommonCaptchaConf.tdc_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tdc_path</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CommonCaptchaConf.pow_cfg">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pow_cfg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#qqqr.up.type.PowCfg" title="qqqr.up.type.PowCfg"><span class="pre">PowCfg</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CommonCaptchaConf.pow_cfg" title="Permalink to this definition"></a></dt>
+<dd><p>Ians, duration = match_md5(pow_cfg)</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.CommonCaptchaConf.tdc_path">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tdc_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.CommonCaptchaConf.tdc_path" title="Permalink to this definition"></a></dt>
+<dd><p>relative path to get tdc.js</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.FgBindingCfg">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">FgBindingCfg</span></span><a class="headerlink" href="#qqqr.up.type.FgBindingCfg" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.FgBindingCfg.bind_factor" title="qqqr.up.type.FgBindingCfg.bind_factor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_factor</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.FgBindingCfg.bind_type" title="qqqr.up.type.FgBindingCfg.bind_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind_type</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.FgBindingCfg.master" title="qqqr.up.type.FgBindingCfg.master"><code class="xref py py-obj docutils literal notranslate"><span class="pre">master</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.FgBindingCfg.slave" title="qqqr.up.type.FgBindingCfg.slave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slave</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.FgBindingCfg.bind_factor">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bind_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.FgBindingCfg.bind_factor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.FgBindingCfg.bind_type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bind_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.FgBindingCfg.bind_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.FgBindingCfg.master">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">master</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.FgBindingCfg.master" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.FgBindingCfg.slave">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">slave</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.FgBindingCfg.slave" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.FgElemCfg">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">FgElemCfg</span></span><a class="headerlink" href="#qqqr.up.type.FgElemCfg" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.FgElemCfg.id" title="qqqr.up.type.FgElemCfg.id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">id</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.FgElemCfg.move_cfg" title="qqqr.up.type.FgElemCfg.move_cfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_cfg</span> <span class="pre">(Optional[qqqr.up.type.MoveCfg])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.FgElemCfg.id">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.FgElemCfg.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.FgElemCfg.move_cfg">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">move_cfg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#qqqr.up.type.MoveCfg" title="qqqr.up.type.MoveCfg"><span class="pre">MoveCfg</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#qqqr.up.type.FgElemCfg.move_cfg" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.LoginResp">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">LoginResp</span></span><a class="headerlink" href="#qqqr.up.type.LoginResp" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.LoginResp.code" title="qqqr.up.type.LoginResp.code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">code</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.LoginResp.msg" title="qqqr.up.type.LoginResp.msg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">msg</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.LoginResp.nickname" title="qqqr.up.type.LoginResp.nickname"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nickname</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.LoginResp.url" title="qqqr.up.type.LoginResp.url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">url</span> <span class="pre">(Union[pydantic.networks.HttpUrl,</span> <span class="pre">str])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.LoginResp.code">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.LoginResp.code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.LoginResp.msg">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">msg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.LoginResp.msg" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.LoginResp.nickname">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nickname</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.LoginResp.nickname" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.LoginResp.url">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><span class="pre">HttpUrl</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.LoginResp.url" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.MoveCfg">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">MoveCfg</span></span><a class="headerlink" href="#qqqr.up.type.MoveCfg" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.MoveCfg.data_type" title="qqqr.up.type.MoveCfg.data_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_type</span> <span class="pre">(Optional[List[str]])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.MoveCfg.move_factor" title="qqqr.up.type.MoveCfg.move_factor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_factor</span> <span class="pre">(List[int])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.MoveCfg.track_limit" title="qqqr.up.type.MoveCfg.track_limit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">track_limit</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.MoveCfg.data_type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#qqqr.up.type.MoveCfg.data_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.MoveCfg.move_factor">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">move_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.MoveCfg.move_factor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.MoveCfg.track_limit">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">track_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.MoveCfg.track_limit" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.PowCfg">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">PowCfg</span></span><a class="headerlink" href="#qqqr.up.type.PowCfg" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.PowCfg.md5" title="qqqr.up.type.PowCfg.md5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">md5</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PowCfg.prefix" title="qqqr.up.type.PowCfg.prefix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prefix</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PowCfg.md5">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">md5</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PowCfg.md5" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PowCfg.prefix">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prefix</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PowCfg.prefix" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">PrehandleResp</span></span><a class="headerlink" href="#qqqr.up.type.PrehandleResp" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.capclass" title="qqqr.up.type.PrehandleResp.capclass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">capclass</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.captcha" title="qqqr.up.type.PrehandleResp.captcha"><code class="xref py py-obj docutils literal notranslate"><span class="pre">captcha</span> <span class="pre">(qqqr.up.type.CaptchaData)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.log_js" title="qqqr.up.type.PrehandleResp.log_js"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_js</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.randstr" title="qqqr.up.type.PrehandleResp.randstr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">randstr</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.sess" title="qqqr.up.type.PrehandleResp.sess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sess</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.sid" title="qqqr.up.type.PrehandleResp.sid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sid</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.src_1" title="qqqr.up.type.PrehandleResp.src_1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">src_1</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.src_2" title="qqqr.up.type.PrehandleResp.src_2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">src_2</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.src_3" title="qqqr.up.type.PrehandleResp.src_3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">src_3</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.state" title="qqqr.up.type.PrehandleResp.state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.subcapclass" title="qqqr.up.type.PrehandleResp.subcapclass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subcapclass</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.ticket" title="qqqr.up.type.PrehandleResp.ticket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ticket</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.PrehandleResp.uip" title="qqqr.up.type.PrehandleResp.uip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uip</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.capclass">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">capclass</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.capclass" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.captcha">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">captcha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#qqqr.up.type.CaptchaData" title="qqqr.up.type.CaptchaData"><span class="pre">CaptchaData</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'data')</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.captcha" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.log_js">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log_js</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.log_js" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.randstr">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">randstr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.randstr" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.sess">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sess</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.sess" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.sid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.sid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.src_1">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">src_1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.src_1" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.src_2">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">src_2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.src_2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.src_3">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">src_3</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.src_3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.state">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.subcapclass">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subcapclass</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.subcapclass" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.ticket">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ticket</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.ticket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.PrehandleResp.uip">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.PrehandleResp.uip" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.Sprite">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">Sprite</span></span><a class="headerlink" href="#qqqr.up.type.Sprite" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a sprite from a source material.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.Sprite.init_pos" title="qqqr.up.type.Sprite.init_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_pos</span> <span class="pre">(List[int])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.Sprite.size_2d" title="qqqr.up.type.Sprite.size_2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">size_2d</span> <span class="pre">(List[int])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.Sprite.sprite_pos" title="qqqr.up.type.Sprite.sprite_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sprite_pos</span> <span class="pre">(List[int])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.Sprite.init_pos">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_pos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.Sprite.init_pos" title="Permalink to this definition"></a></dt>
+<dd><p>sprite init position on captcha (x, y)</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.Sprite.size_2d">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size_2d</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.Sprite.size_2d" title="Permalink to this definition"></a></dt>
+<dd><p>sprite size (w, h)</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.Sprite.sprite_pos">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sprite_pos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.Sprite.sprite_pos" title="Permalink to this definition"></a></dt>
+<dd><p>sprite position on material (x, y)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qqqr.up.type.Sprite.height">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">height</span></span><a class="headerlink" href="#qqqr.up.type.Sprite.height" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qqqr.up.type.Sprite.width">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">width</span></span><a class="headerlink" href="#qqqr.up.type.Sprite.width" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="qqqr.up.type.VerifyResp">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">VerifyResp</span></span><a class="headerlink" href="#qqqr.up.type.VerifyResp" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#qqqr.up.type.VerifyResp.code" title="qqqr.up.type.VerifyResp.code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">code</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.VerifyResp.errMessage" title="qqqr.up.type.VerifyResp.errMessage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">errMessage</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.VerifyResp.sess" title="qqqr.up.type.VerifyResp.sess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sess</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.VerifyResp.ticket" title="qqqr.up.type.VerifyResp.ticket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ticket</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#qqqr.up.type.VerifyResp.verifycode" title="qqqr.up.type.VerifyResp.verifycode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verifycode</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.VerifyResp.code">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'errorCode')</span></em><a class="headerlink" href="#qqqr.up.type.VerifyResp.code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.VerifyResp.errMessage">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">errMessage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.VerifyResp.errMessage" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.VerifyResp.sess">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sess</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.VerifyResp.sess" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.VerifyResp.ticket">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ticket</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#qqqr.up.type.VerifyResp.ticket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="qqqr.up.type.VerifyResp.verifycode">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">verifycode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'randstr')</span></em><a class="headerlink" href="#qqqr.up.type.VerifyResp.verifycode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="captcha/index.html" class="btn btn-neutral float-left" title="Solving Tcaptcha" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../base.html" class="btn btn-neutral float-right" title="QQQR Bases" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, aioqzone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Entities &mdash; aioqzone 0.9.2a2.dev1 documentation</title>
+  <title>Entities &mdash; aioqzone 0.9.3a2.dev2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -44,7 +44,6 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api/index.html">aioqzone APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interface/index.html">aioqzone Interfaces</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Types</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Entities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="internal.html">Internal Types</a></li>
@@ -97,12 +96,27 @@ and details the works of rich-text stringify.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">nick</span> <span class="pre">(str)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.entity.AtEntity.nick" title="aioqzone.type.entity.AtEntity.nick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nick</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.entity.AtEntity.type" title="aioqzone.type.entity.AtEntity.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.entity.AtEntity.uin" title="aioqzone.type.entity.AtEntity.uin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uin</span> <span class="pre">(int)</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.AtEntity.nick">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nick</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.nick" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.AtEntity.type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.AtEntity.uin">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.uin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class pydantic_model">
@@ -112,10 +126,15 @@ and details the works of rich-text stringify.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.entity.ConEntity.type" title="aioqzone.type.entity.ConEntity.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.ConEntity.type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.ConEntity.type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class pydantic_model">
@@ -125,18 +144,62 @@ and details the works of rich-text stringify.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eid</span> <span class="pre">(int)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.entity.EmEntity.eid" title="aioqzone.type.entity.EmEntity.eid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eid</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.entity.EmEntity.type" title="aioqzone.type.entity.EmEntity.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.EmEntity.eid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.EmEntity.eid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.EmEntity.type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#aioqzone.type.entity.EmEntity.type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.entity.HasConEntity">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">HasConEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.HasConEntity" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.entity.HasConEntity.entities" title="aioqzone.type.entity.HasConEntity.entities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entities</span> <span class="pre">(Optional[List[Union[aioqzone.type.entity.AtEntity,</span> <span class="pre">aioqzone.type.entity.TextEntity]]])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.HasConEntity.entities">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entities</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.entity.AtEntity" title="aioqzone.type.entity.AtEntity"><span class="pre">AtEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.entity.TextEntity" title="aioqzone.type.entity.TextEntity"><span class="pre">TextEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'conlist')</span></em><a class="headerlink" href="#aioqzone.type.entity.HasConEntity.entities" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="aioqzone.type.entity.HasContent">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">HasContent</span></span><a class="headerlink" href="#aioqzone.type.entity.HasContent" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#aioqzone.type.entity.HasContent.content" title="aioqzone.type.entity.HasContent.content"><code class="xref py py-obj docutils literal notranslate"><span class="pre">content</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.HasContent.content">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.HasContent.content" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="aioqzone.type.entity.RespEntities">
 <span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">RespEntities</span></span><a class="headerlink" href="#aioqzone.type.entity.RespEntities" title="Permalink to this definition"></a></dt>
 <dd><p>Entities that occurs in Qzone responses.</p>
-<p>alias of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference internal" href="#aioqzone.type.entity.AtEntity" title="aioqzone.type.entity.AtEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">AtEntity</span></code></a>, <a class="reference internal" href="#aioqzone.type.entity.TextEntity" title="aioqzone.type.entity.TextEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextEntity</span></code></a>]</p>
+<p>alias of <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#aioqzone.type.entity.AtEntity" title="aioqzone.type.entity.AtEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">AtEntity</span></code></a>, <a class="reference internal" href="#aioqzone.type.entity.TextEntity" title="aioqzone.type.entity.TextEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextEntity</span></code></a>]</p>
 </dd></dl>
 
 <dl class="py class pydantic_model">
@@ -146,11 +209,21 @@ and details the works of rich-text stringify.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">con</span> <span class="pre">(str)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.entity.TextEntity.con" title="aioqzone.type.entity.TextEntity.con"><code class="xref py py-obj docutils literal notranslate"><span class="pre">con</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.entity.TextEntity.type" title="aioqzone.type.entity.TextEntity.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(int)</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.TextEntity.con">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.TextEntity.con" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.entity.TextEntity.type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#aioqzone.type.entity.TextEntity.type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
