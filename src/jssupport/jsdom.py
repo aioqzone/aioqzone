@@ -6,10 +6,18 @@ from .execjs import ExecJS
 
 
 class JSDOM(ExecJS):
-    """.. note:: requires :js:mod:`jsdom` installed."""
+    """JSDOM class provides a complete environment to encounter detection based on collecting
+    runtime environment information.
+
+    .. note:: requires :js:mod:`jsdom` to be installed.
+    """
 
     @classmethod
     def check_jsdom(cls):
+        """Check if :js:mod:`jsdom` is installed.
+
+        :return: True if :js:mod:`jsdom` can be imported. Otherwise False.
+        """
         from subprocess import run
 
         require = lambda m: run(
@@ -25,7 +33,7 @@ class JSDOM(ExecJS):
     def __init__(self, *, src: str = "", ua: str = "", location: str = "", referrer: str = ""):
         super().__init__()
         src = src.replace("\n", " ")
-        pre_def = f"var src=`{src}`,ua='{ua}',location='{location}',referrer='{referrer}';\n"
+        pre_def = f"var src=`{src}`,ua='{ua}',url='{location}',referrer='{referrer}';\n"
         self.setup.append(pre_def)
         self.setup.append(self._windowjs())
 
@@ -38,7 +46,7 @@ class JSDOM(ExecJS):
         const resourceLoader = new jsdom.ResourceLoader({userAgent: ua});
         const dom = new JSDOM(src, {
             pretendToBeVisual: true,
-            url: location,
+            url: url,
             referrer: referrer,
             resources: resourceLoader,
             runScripts: "outside-only",
@@ -49,7 +57,15 @@ class JSDOM(ExecJS):
         return dedent(js)
 
     async def eval(self, script: str):
+        """Eval a script(expression) throught :js:meth:`window.eval`.
+
+        :return: script(expression) result, if any.
+        """
         return await self(f"window.eval(`{script}`)")
 
     def add_eval(self, script: str):
+        """Cache this script into queue. Scripts will be called in order.
+
+        :return: None
+        """
         self.add_run("window.eval", script)

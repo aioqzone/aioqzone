@@ -1,8 +1,11 @@
 """
 Offers a class to execute js by communicating with subprocess.
 
-.. warning:: On win32 platform, importing this module will change asyncio event loop policy to
-:external:class:`asyncio.WindowsProactorEventLoopPolicy`!
+.. warning::
+
+    On win32 platform, importing this module will change asyncio event loop policy to
+    :external+python:class:`asyncio.WindowsProactorEventLoopPolicy`!
+
 """
 
 import asyncio
@@ -19,9 +22,17 @@ JsExpr = Union[str, "Partial"]
 
 
 class Partial:
+    """A partial like :external+python:obj:`functools.partial`. It represents a expression in javascript,
+    which includes a predicate (`func`) and its arguments.
+    """
+
     __slots__ = "func", "args", "asis"
 
     def __init__(self, name: str, *args, asis: bool = False) -> None:
+        """
+        :param asis: If True, the argument's :meth:`repr` will be saved directly.
+        Otherwise we will look for some appropriate "repr" for an argument.
+        """
         self.func = name
         self.args = args
         self.asis = asis
@@ -74,8 +85,8 @@ class ExecJS:
 
     @classmethod
     def loop_policy_check(cls):
-        """On Windows, the default event loop :external:class:`asyncio.ProactorEventLoop` supports subprocesses,
-        whereas :external:class:`asyncio.SelectorEventLoop` does not.
+        """On Windows, the default event loop :external+python:class:`asyncio.ProactorEventLoop` supports subprocesses,
+        whereas :external+python:class:`asyncio.SelectorEventLoop` does not.
         """
         if platform == "win32" and isinstance(
             asyncio.get_event_loop_policy(), asyncio.WindowsSelectorEventLoopPolicy
@@ -84,6 +95,7 @@ class ExecJS:
         return True
 
     def check_all(self):
+        """Run all checks to see if the environment is ready to run."""
         if not self.check_node():
             raise NodeNotFoundError(self.node)
         assert self.loop_policy_check(), "loop policy cannot be `WindowsSelectorEventLoopPolicy`"
@@ -95,19 +107,23 @@ class ExecJS:
         self.post = []
 
     def add_setup(self, func: str, *args, asis: bool = False):
+        """Add a setup function to :obj:`.setup`."""
         self.setup.append(Partial(func, *args, asis=asis))
         return self
 
     def add_run(self, func: str, *args, asis: bool = False):
+        """Add a function to :obj:`.run`."""
         self.run.append(Partial(func, *args, asis=asis))
         return self
 
     def add_post(self, func: str, *args, asis: bool = False):
+        """Add a post function to :obj:`.post`."""
         self.post.append(Partial(func, *args, asis=asis))
         return self
 
     @staticmethod
     async def exec(node: str, js: str) -> str:
+        """Execute `js` using given `node` executable."""
         p = await asyncio.subprocess.create_subprocess_exec(
             node,
             stdin=asyncio.subprocess.PIPE,
@@ -122,6 +138,11 @@ class ExecJS:
         return removesuffix(stdout.decode())
 
     def bind(self, expr: Optional[JsExpr] = None):
+        """Return an partial of `.exec`, with `node` set to :obj:`.node`,
+        and `js` set to current javascripts in queue: (setup + run + post).
+
+        :param expr: Optional. If given, the expression will be added to :obj:`.run`.
+        """
         js = ""
         if expr is None:
             pass
@@ -135,11 +156,19 @@ class ExecJS:
         return partial(self.exec, node=self.node, js=js)
 
     async def __call__(self, expr: Optional[JsExpr]):
+        """Run current javascripts. :obj:`.run` will be cleared.
+
+        :param expr: Optional. If given, the expression will be added to :obj:`.run`.
+        """
         f = self.bind(expr)
         self.run.clear()
         return await f()
 
     async def get(self, prop: str):
+        """Get a property from this environment. :obj:`.run` will be cleared.
+
+        :param prop: The property to get.
+        """
         return await self(prop)
 
 

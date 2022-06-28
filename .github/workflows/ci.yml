@@ -41,7 +41,6 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v1
         id: git-cliff

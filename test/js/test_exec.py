@@ -26,6 +26,13 @@ async def test_bind():
     assert await asis() != await asis()
 
 
-async def test_check_jsdom():
-    dom = JSDOM(src="", ua="", location="", referrer="")
-    assert dom.check_jsdom()
+async def test_jsdom():
+    assert JSDOM.check_jsdom()
+
+    ua = "cherry"
+    location = "http://a.com/here"
+    referrer = "http://a.com/past"
+    dom = JSDOM(ua=ua, location=location, referrer=referrer)
+    assert await dom.get("window.navigator.userAgent") == ua
+    assert await dom.get("window.document.location.href") == location
+    assert await dom.get("window.document.referrer") == referrer
