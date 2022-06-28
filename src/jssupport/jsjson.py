@@ -11,13 +11,17 @@ JsonValue = Union[bool, int, str, JsonDict, JsonList]
 
 
 class NodeLoader:
+    """`NodeLoader` converts a string representation of JS/JSON data into a Python object.
+    It may use :js:meth:`JSON.stringify` to convert js to json.
+    """
+
     @classmethod
     async def json_loads(
         cls, js: str, try_load_first: bool = True, parser: Callable[[str], JsonValue] = json.loads
     ) -> JsonValue:
         """
         The json_loads function converts a string representation of JS/JSON data into a Python object.
-        It may use :node:meth:`JSON.stringify` to convert js to json.
+        It may use :js:meth:`JSON.stringify` to convert js to json.
 
         :param js: Used to Pass in the json string.
         :param try_load_first: Used to Specify whether to try loading the json string with the `parser` first.
@@ -42,6 +46,8 @@ class NodeLoader:
 
 
 class AstLoader:
+    """`AstLoader` uses standard :mod:`ast` module to parse the js/json"""
+
     class RewriteUndef(ast.NodeTransformer):
         const = {
             "undefined": ast.Constant(value=None),
@@ -63,7 +69,6 @@ class AstLoader:
 
         :param js: Used to Pass the js/json string to be parsed.
         :param filename: Used to Specify the name of the file that is being read. This is only for debug use.
-        :rtype: `dict[str | int, Any]`
         :return: A jsonvalue object.
         """
         js = dedent(js).replace(r"\/", "/")
@@ -75,14 +80,13 @@ class AstLoader:
 
 def json_loads(js: str) -> JsonValue:
     """The json_loads function converts a string representation of JS/JSON data into a Python object.
-    Current implementation is using :mod:`ast`.
+    Current implementation is using :external+python:mod:`ast`.
 
     If you need more parameters or another implementation, call `xxxLoader.json_loads` instead.
 
     .. seealso:: :meth:`.AstLoader.json_loads`
 
     :param js: Used to Pass the JS/JSON string.
-    :rtype: `dict[str | int, Any]`
     :return: A jsonvalue object.
     """
     return AstLoader.json_loads(js)

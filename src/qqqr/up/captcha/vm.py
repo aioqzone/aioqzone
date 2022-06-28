@@ -62,6 +62,10 @@ class TDC(JSDOM):
 
 
 class DecryptTDC(TDC):
+    def __init__(self, iframe: str, header: MutableMapping[str, str]) -> None:
+        super().__init__(iframe, header)
+        self.add_post("process.exit", 0)
+
     def _windowjs(self):
         with open(Path(__file__).parent / "archive/decrypt.js") as f:
             return JSDOM._windowjs(self) + f.read()
