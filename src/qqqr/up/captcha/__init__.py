@@ -58,6 +58,15 @@ class TcaptchaSession:
         self.tdc = tdc
 
     def solve_workload(self, *, timeout: float = 30.0):
+        """
+        The solve_workload function solves the workload from Tcaptcha:
+        It solves md5(:obj:`PowCfg.prefix` + str(?)) == :obj:`PowCfg.md5`.
+        The result and the calculating duration will be saved into this session.
+
+        :param timeout: Calculating timeout, default as 30 seconds.
+        :return: None
+        """
+
         pow_cfg = self.conf.common.pow_cfg
         nonce = str(pow_cfg.prefix).encode()
         target = pow_cfg.md5.lower()
@@ -93,6 +102,13 @@ class Captcha:
     # prehandle(recall)--call tcapcha-frame.*.js-->new_show
     # new_show(html)--js in html->loadImg(url)
     def __init__(self, client: ClientAdapter, appid: int, sid: str, xlogin_url: str):
+        """
+        :param client: network client
+        :param appid: Specify the appid of the application
+        :param sid: Session id got from :meth:`UpLogin.new`
+        :param xlogin_url: :obj:`LoginBase.xlogin_url`
+        """
+
         self.client = client
         self.appid = appid
         self.sid = sid
@@ -101,6 +117,12 @@ class Captcha:
 
     @property
     def base64_ua(self):
+        """
+        The base64_ua function encodes the User-Agent header in base64.
+
+        :return: A string containing the base64 encoded user agent
+        """
+
         return base64.b64encode(self.client.ua.encode()).decode()
 
     async def new(self):
@@ -144,7 +166,15 @@ class Captcha:
     prehandle = new
     """alias of :meth:`.new`"""
 
-    async def get_tdc_vm(self, sess: TcaptchaSession, *, cls: Type[_TDC_TY] = TDC):
+    async def get_tdc(self, sess: TcaptchaSession, *, cls: Type[_TDC_TY] = TDC):
+        """
+        The get_tdc function is a coroutine that sets an instance of the :class:`TDC` class to `sess`.
+
+        :param sess: captcha session
+        :param cls: Specify the type of :class:`TDC` instance to be returned, default as :class:`TDC`.
+        :return: None
+        """
+
         js_url = sess.tdx_js_url()
         tdc = cls("", header=self.client.headers)
 
@@ -155,6 +185,15 @@ class Captcha:
         sess.set_js_env(tdc)
 
     async def get_captcha_problem(self, sess: TcaptchaSession):
+        """
+        The get_captcha_problem function is a coroutine that accepts a TcaptchaSession object as an argument.
+        It then uses the session to make an HTTP GET request to the captcha images (the problem). The images
+        will be stored in the given session.
+
+        :param sess: captcha session
+        :return: None
+        """
+
         async def r(url):
             async with await self.client.get(url) as r:
                 r.raise_for_status()
@@ -164,6 +203,18 @@ class Captcha:
             sess.cdn_imgs.append(i)
 
     async def solve_captcha(self, sess: TcaptchaSession):
+        """
+        The solve_captcha function solves the captcha problem. If captcha images is not set,
+        it will call :meth:`.get_captcha_problem` firstly.
+
+        It then solve the captcha as that in :class:`.Jigsaw`. The answer is saved into `sess`.
+
+        This function will also call :meth:`TDC.set_data` to imitate human behavior when solving captcha.
+
+        :param sess: Store the information of the current session
+        :return: None
+        """
+
         if not sess.cdn_imgs:
             await self.get_captcha_problem(sess)
         assert sess.cdn_imgs
@@ -191,7 +242,7 @@ class Captcha:
 
     async def verify(self):
         sess = await self.new()
-        await self.get_tdc_vm(sess)
+        await self.get_tdc(sess)
 
         waitEnd = time() + 0.6 * random() + 0.9
 

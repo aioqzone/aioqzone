@@ -91,8 +91,6 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
 
         resp = PollResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
 
-        if resp.code == StatusCode.Authenticated:
-            sess.login_url = str(resp.url)
         return resp
 
     async def _loop(
@@ -118,8 +116,8 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
                     expired += 1
                     break
                 elif stat.code == StatusCode.Authenticated:
-                    assert sess.login_url
-                    return await self._get_login_url(httpx.URL(stat.url))
+                    sess.login_url = str(stat.url)
+                    return await self._get_login_url(sess)
             sess.new_qr(await self.show())
             refresh_flag.clear()
 
