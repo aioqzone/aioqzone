@@ -20,7 +20,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="QrLogin Types" href="type.html" />
+    <link rel="next" title="QrLogin and QrSession" href="login.html" />
     <link rel="prev" title="Event and Hooks" href="../event/hook.html" /> 
 </head>
 
@@ -46,6 +46,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">QQQR</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../event/index.html">aioqzone Event-Hook System</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">QRcode Login</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="login.html">QrLogin and QrSession</a></li>
 <li class="toctree-l3"><a class="reference internal" href="type.html">QrLogin Types</a></li>
 </ul>
 </li>
@@ -85,52 +86,10 @@
 <h1>QRcode Login<a class="headerlink" href="#qrcode-login" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="login.html">QrLogin and QrSession</a></li>
 <li class="toctree-l1"><a class="reference internal" href="type.html">QrLogin Types</a></li>
 </ul>
 </div>
-<span class="target" id="module-qqqr.qr"></span><dl class="py class">
-<dt class="sig sig-object py" id="qqqr.qr.QR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.qr.</span></span><span class="sig-name descname"><span class="pre">QR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">png</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expired</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.qr.QR" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="qqqr.qr.QrLogin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.qr.</span></span><span class="sig-name descname"><span class="pre">QrLogin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.qr.QrLogin" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="qqqr.qr.QrLogin.login">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polling_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.qr.QrLogin.login" title="Permalink to this definition"></a></dt>
-<dd><p>Block until cookie is received.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qqqr.qr.QrLogin.poll">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">poll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.qr.QrLogin.poll" title="Permalink to this definition"></a></dt>
-<dd><p>Poll QR status.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>httpx.HTTPStatusError</strong> – if response status code != 200</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="type.html#qqqr.qr.type.PollResp" title="qqqr.qr.type.PollResp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PollResp</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a poll response object</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="qqqr.qr.QrSession">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.qr.</span></span><span class="sig-name descname"><span class="pre">QrSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_qr</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.qr.QrSession" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="qqqr.qr.random">
-<span class="sig-prename descclassname"><span class="pre">qqqr.qr.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">x</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">interval</span> <span class="pre">[0,</span> <span class="pre">1).</span></span></span><a class="headerlink" href="#qqqr.qr.random" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 </section>
 
 
@@ -138,7 +97,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../event/hook.html" class="btn btn-neutral float-left" title="Event and Hooks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="type.html" class="btn btn-neutral float-right" title="QrLogin Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="login.html" class="btn btn-neutral float-right" title="QrLogin and QrSession" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
