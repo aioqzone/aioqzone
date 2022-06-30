@@ -1,14 +1,9 @@
 Uin-Password Login
 ========================
 
-.. currentmodule:: qqqr.up
-
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :glob:
 
-    captcha/index
+    captcha/*
     *
-
-.. automodule:: qqqr.up
-    :members:

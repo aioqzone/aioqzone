@@ -24,7 +24,7 @@ async def captcha(client: ClientAdapter):
 @pytest_asyncio.fixture(scope="class")
 async def sess(captcha: Captcha):
     sess = await captcha.new()
-    await captcha.get_tdc_vm(sess)
+    await captcha.get_tdc(sess)
     yield sess
 
 
@@ -55,7 +55,7 @@ class TestCaptcha:
 
 @pytest_asyncio.fixture(scope="class")
 async def vm(captcha: Captcha, sess: TcaptchaSession):
-    await captcha.get_tdc_vm(sess)
+    await captcha.get_tdc(sess)
     yield sess.tdc
 
 
@@ -88,6 +88,6 @@ async def test_decrypt(vm: TDC, captcha: Captcha, sess: TcaptchaSession):
 
     collect = await vm.get_data()
 
-    await captcha.get_tdc_vm(sess, cls=DecryptTDC)
+    await captcha.get_tdc(sess, cls=DecryptTDC)
     decrypt = await DecryptTDC.decrypt(sess.tdc, collect)  # type: ignore
     print(decrypt)

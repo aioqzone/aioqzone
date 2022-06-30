@@ -12,11 +12,15 @@ QzoneProxy = Proxy(
     "https://qzs.qq.com/qzone/v6/portal/proxy.html",
     "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone",
 )
+"""Built-in web Qzone Proxy."""
 
 QzoneAppid = APPID(549000912, 5)
+"""Built-in web Qzone appid and daid."""
 
 
 class StatusCode(IntEnum):
+    """Qzone response code in login."""
+
     # Unified
     Authenticated = 0
     # QR

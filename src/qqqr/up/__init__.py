@@ -4,8 +4,6 @@ from random import choice, random
 from time import time_ns
 from typing import List, Optional, Type
 
-import httpx
-
 from ..base import LoginBase, LoginSession
 from ..constant import StatusCode
 from ..event import Emittable
@@ -95,12 +93,12 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         return ""
 
     async def new(self):
-        """check procedure before login. This will return a CheckResult object containing
-        verify code, session, etc.
+        """Create a :class:`UpSession`. This will call `check` api of Qzone, and receive result
+        about whether this login needs a captcha, sms verification, etc.
 
         :raises `httpx.HTTPStatusError`:
 
-        :return: CheckResult
+        :return: a up login session
         """
         async with await self.client.get(self.xlogin_url) as r:
             r.raise_for_status()
@@ -151,6 +149,14 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         assert int(rl[0]) == 10012, rl[1]
 
     async def try_login(self, sess: UpSession):
+        """
+        Check if current session meets the login condition.
+        It takes a session object and returns response of this try.
+
+        :param sess: Store the session information
+        :return: A login response
+        """
+
         const = {
             "h": 1,
             "t": 1,
@@ -201,7 +207,8 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
             pastcode = sess.pastcode
             sess.login_history.append(resp)
             if resp.code == StatusCode.Authenticated:
-                return await self._get_login_url(httpx.URL(resp.url))
+                sess.login_url = str(resp.url)
+                return await self._get_login_url(sess)
             elif resp.code == StatusCode.NeedSmsVerify:
                 if pastcode == StatusCode.NeedSmsVerify:
                     raise TencentLoginError(resp.code, "")
@@ -213,6 +220,15 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
                 raise TencentLoginError(resp.code, resp.msg)
 
     def captcha(self, sid: str):
+        """
+        The captcha function is used to build and cache a :class:`Captcha` instance.
+        It takes in a string, which is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance.
+
+
+        :param sid: Pass the session id to the captcha function
+        :return: An instance of the captcha class
+        """
+
         if not self._captcha:
             from .captcha import Captcha
 
@@ -220,6 +236,14 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         return self._captcha
 
     async def passVC(self, sess: UpSession):
+        """
+        The passVC function is used to pass the verification tcaptcha.
+        It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
+
+        :param sess: the session object
+        :return: The session with :obj:`~UpSession.verify_rst` is set.
+        """
+
         c = self.captcha(sess.check_rst.session)
         sess.verify_rst = await c.verify()
         return sess

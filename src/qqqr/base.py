@@ -10,10 +10,17 @@ from .utils.net import ClientAdapter, get_all_cookie, raise_for_status
 
 
 class LoginSession(ABC):
+    """A LoginSession collects all data generated or received during login."""
+
     login_url: Optional[str] = None
+    """GET this login url to get cookies."""
     logined: bool = False
+    """whether this session is logined."""
 
     def __init__(self, *, create_time: float = ...) -> None:
+        """
+        :param create_time: Set the default value of create_time to the current time when an instance is created
+        """
         super().__init__()
         self.create_time = time() if create_time == ... else create_time
 
@@ -25,6 +32,12 @@ class LoginBase(ABC, Generic[_S]):
     def __init__(
         self, client: ClientAdapter, app: APPID, proxy: Proxy, info: Optional[PT_QR_APP] = None
     ):
+        """
+        :param client: network client
+        :param app: contains appid and daid. This specify which app you are logining.
+        :param proxy: specify where to redirect after login. This can be got from login HTTP request workload.
+        :param info: Optional, app help link, download link, etc.
+        """
         self.app = app
         self.proxy = proxy
         self.info = info or PT_QR_APP()
@@ -66,11 +79,16 @@ class LoginBase(ABC, Generic[_S]):
         """Block until cookie is received."""
         raise NotImplementedError
 
-    async def _get_login_url(self, login_url: Union[str, httpx.URL]):
-        async with await self.client.get(login_url, follow_redirects=False) as r:
+    async def _get_login_url(self, sess: _S):
+        assert sess.login_url
+        assert not sess.logined, "This session is logined."
+        async with await self.client.get(sess.login_url, follow_redirects=False) as r:
             raise_for_status(r, 302)
-            return get_all_cookie(r)
+            r = get_all_cookie(r)
+            sess.logined = True
+            return r
 
     @abstractmethod
     async def new(self) -> _S:
+        """Create a new :class:`LoginSession`."""
         raise NotImplementedError

@@ -39,7 +39,7 @@ __在做了:__
 ## node 依赖
 
 - `jssupport.jsjson.AstLoader` 不需要借助其他进程；
-- 要使用 `jssupport.execjs` 和 `jssupport.jsjson.NodeLoader`，您（至少）需要安装 `Node.js`；
+- 要使用 `jssupport.execjs` 和 `jssupport.jsjson.NodeLoader`，您（至少）需要安装 `Node.js` >= v14；
 - 要使用 `jssupport.jsdom`，您需要安装 `jsdom` 和 `canvas` 两个 npm 包。
 - 验证码部分需要使用 `canvas`，因此您需要正确配置运行环境内的 font config. 前往 [#45](https://github.com/aioqzone/aioqzone/issues/45) 查看详情.
 

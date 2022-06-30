@@ -1,7 +1,7 @@
+import sys
 from dataclasses import dataclass
-from platform import python_version_tuple
 
-if int(python_version_tuple()[1]) >= 10:
+if sys.version_info >= (3, 9):
     frozen = dataclass(frozen=True, slots=True)
 else:
     frozen = dataclass(frozen=True)
