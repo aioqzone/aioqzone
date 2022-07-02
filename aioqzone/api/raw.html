@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Qzone Raw API &mdash; aioqzone 0.9.3a2.dev3 documentation</title>
+  <title>Qzone API &mdash; aioqzone 0.9.4a1.dev1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="aioqzone Exceptions" href="../exception.html" />
-    <link rel="prev" title="Qzone Dummy API" href="dummy.html" /> 
+    <link rel="next" title="Qzone API with Typing and Validation" href="dummy.html" />
+    <link rel="prev" title="Qzone APIs" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,9 +42,9 @@
               <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone APIs</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="dummy.html">Qzone Dummy API</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Qzone Raw API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Qzone APIs</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Qzone API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dummy.html">Qzone API with Typing and Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
@@ -53,6 +53,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
 </ul>
 
         </div>
@@ -70,8 +77,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">aioqzone</a> &raquo;</li>
-          <li><a href="index.html">aioqzone APIs</a> &raquo;</li>
-      <li>Qzone Raw API</li>
+          <li><a href="index.html">Qzone APIs</a> &raquo;</li>
+      <li>Qzone API</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/aioqzone/api/raw.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,18 +88,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="qzone-raw-api">
-<h1>Qzone Raw API<a class="headerlink" href="#qzone-raw-api" title="Permalink to this heading"></a></h1>
+  <section id="qzone-api">
+<h1>Qzone API<a class="headerlink" href="#qzone-api" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.raw.QzoneApi">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.raw.</span></span><span class="sig-name descname"><span class="pre">QzoneApi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loginman</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.raw.QzoneApi" title="Permalink to this definition"></a></dt>
 <dd><p>Just a wrapper for Qzone http interface. No type validating.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="aioqzone.api.raw.QzoneApi.FeedsMoreTransaction">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FeedsMoreTransaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.raw.QzoneApi.FeedsMoreTransaction" title="Permalink to this definition"></a></dt>
-<dd><p>Represents a feeds3_html_more transaction.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.api.raw.QzoneApi.emotion_delete">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emotion_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abstime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typeid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topicId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.raw.QzoneApi.emotion_delete" title="Permalink to this definition"></a></dt>
@@ -338,14 +339,18 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.api.raw.QzoneApi.feeds3_html_more">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feeds3_html_more</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pagenum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.raw.QzoneApi.feeds3_html_more" title="Permalink to this definition"></a></dt>
-<dd><p>return a list of dict, each dict reps a page of feeds.</p>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feeds3_html_more</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pagenum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daylist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uinlist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.raw.QzoneApi.feeds3_html_more" title="Permalink to this definition"></a></dt>
+<dd><p>return a dict with <code class="docutils literal notranslate"><span class="pre">main</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> field.
+<code class="docutils literal notranslate"><span class="pre">main</span></code> field contains some auxiliary information, while data is a list of dict,
+each dict represents one feed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pagenum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – #page &gt;= 0</p></li>
-<li><p><strong>trans</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="#aioqzone.api.raw.QzoneApi.FeedsMoreTransaction" title="aioqzone.api.raw.QzoneApi.FeedsMoreTransaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedsMoreTransaction</span></code></a>]) – reps a skim transaction. Mutable.</p></li>
-<li><p><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – feed count, defaults to 10.</p></li>
+<li><p><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – feed count, max as 10, defaults to 10.</p></li>
+<li><p><strong>external</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – <cite>!main.externparam</cite> field in last response</p></li>
+<li><p><strong>daylist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – <cite>!main.daylist</cite> field in last response</p></li>
+<li><p><strong>uinlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – <cite>!main.uinlist</cite> field in last response</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -364,6 +369,10 @@
 <dd class="field-even"><p>feed attributes and html feed</p>
 </dd>
 </dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.9.4a1: </span>let <cite>count</cite> &lt;= 10;
+Use external string directly and remove <cite>FeedsMoreTransaction</cite>.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -469,8 +478,8 @@ Call this api every 300s can help keep cookie alive.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="dummy.html" class="btn btn-neutral float-left" title="Qzone Dummy API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../exception.html" class="btn btn-neutral float-right" title="aioqzone Exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Qzone APIs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dummy.html" class="btn btn-neutral float-right" title="Qzone API with Typing and Validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

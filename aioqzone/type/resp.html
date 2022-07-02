@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Response Models &mdash; aioqzone 0.9.3a2.dev3 documentation</title>
+  <title>Response Models &mdash; aioqzone 0.9.4a1.dev1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -42,7 +42,7 @@
               <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../api/index.html">aioqzone APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/index.html">Qzone APIs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Types</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="entities.html">Entities</a></li>
@@ -54,6 +54,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
 </ul>
 
         </div>
@@ -85,7 +92,7 @@
   <section id="module-aioqzone.type.resp">
 <span id="response-models"></span><h1>Response Models<a class="headerlink" href="#module-aioqzone.type.resp" title="Permalink to this heading"></a></h1>
 <p>This module defines types that represent responses from Qzone.
-These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code>, and can be used to validate responses.</p>
+These <cite>*Rep</cite> or <cite>*Resp</cite> classes are <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code> which can be used to validate responses.</p>
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">CommentRep</span></span><a class="headerlink" href="#aioqzone.type.resp.CommentRep" title="Permalink to this definition"></a></dt>
@@ -355,7 +362,9 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">FeedRep</span></span><a class="headerlink" href="#aioqzone.type.resp.FeedRep" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Represents a feed in <a class="reference internal" href="../api/dummy.html#aioqzone.api.DummyQapi.feeds3_html_more" title="aioqzone.api.DummyQapi.feeds3_html_more"><code class="xref py py-meth docutils literal notranslate"><span class="pre">feeds3_html_more()</span></code></a>.
+The feed content is in html format.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="#aioqzone.type.resp.FeedRep.abstime" title="aioqzone.type.resp.FeedRep.abstime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abstime</span> <span class="pre">(int)</span></code></a></p></li>
@@ -372,17 +381,29 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.abstime">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.abstime" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../reference.html#term-abstime"><span class="xref std std-term">abstime</span></a> in references.</p>
+</div>
+</dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.appid">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">appid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.appid" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../reference.html#term-appid"><span class="xref std std-term">appid</span></a> in references.</p>
+</div>
+</dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.fid">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'key')</span></em><a class="headerlink" href="#aioqzone.type.resp.FeedRep.fid" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../reference.html#term-fid"><span class="xref std std-term">fid</span></a> in references.</p>
+</div>
+</dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.FeedRep.html">
@@ -799,11 +820,11 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.attach" title="aioqzone.type.resp.PublishResp.attach"><code class="xref py py-obj docutils literal notranslate"><span class="pre">attach</span> <span class="pre">(str)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.code" title="aioqzone.type.resp.PublishResp.code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">code</span> <span class="pre">(int)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.feedinfo" title="aioqzone.type.resp.PublishResp.feedinfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feedinfo</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.fid" title="aioqzone.type.resp.PublishResp.fid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fid</span> <span class="pre">(str)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.message" title="aioqzone.type.resp.PublishResp.message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message</span> <span class="pre">(str)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.needVerify" title="aioqzone.type.resp.PublishResp.needVerify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">needVerify</span> <span class="pre">(bool)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.republish" title="aioqzone.type.resp.PublishResp.republish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">republish</span> <span class="pre">(bool)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.secret" title="aioqzone.type.resp.PublishResp.secret"><code class="xref py py-obj docutils literal notranslate"><span class="pre">secret</span> <span class="pre">(bool)</span></code></a></p></li>
-<li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.tid" title="aioqzone.type.resp.PublishResp.tid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tid</span> <span class="pre">(str)</span></code></a></p></li>
 <li><p><a class="reference internal" href="#aioqzone.type.resp.PublishResp.vote" title="aioqzone.type.resp.PublishResp.vote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vote</span> <span class="pre">(str)</span></code></a></p></li>
 </ul>
 </dd>
@@ -829,6 +850,11 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="aioqzone.type.resp.PublishResp.fid">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'tid')</span></em><a class="headerlink" href="#aioqzone.type.resp.PublishResp.fid" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.PublishResp.message">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.PublishResp.message" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -846,11 +872,6 @@ These <cite>*Rep</cite> classes are all <code class="xref py py-class docutils l
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.resp.PublishResp.secret">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">secret</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.PublishResp.secret" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute pydantic_field">
-<dt class="sig sig-object py" id="aioqzone.type.resp.PublishResp.tid">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.resp.PublishResp.tid" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Qzone Dummy API &mdash; aioqzone 0.9.3a2.dev3 documentation</title>
+  <title>Qzone API with Typing and Validation &mdash; aioqzone 0.9.4a1.dev1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Qzone Raw API" href="raw.html" />
-    <link rel="prev" title="aioqzone APIs" href="index.html" /> 
+    <link rel="next" title="aioqzone Exceptions" href="../exception.html" />
+    <link rel="prev" title="Qzone API" href="raw.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,9 +42,9 @@
               <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone APIs</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Qzone Dummy API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="raw.html">Qzone Raw API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Qzone APIs</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="raw.html">Qzone API</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Qzone API with Typing and Validation</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
@@ -53,6 +53,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
 </ul>
 
         </div>
@@ -70,8 +77,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">aioqzone</a> &raquo;</li>
-          <li><a href="index.html">aioqzone APIs</a> &raquo;</li>
-      <li>Qzone Dummy API</li>
+          <li><a href="index.html">Qzone APIs</a> &raquo;</li>
+      <li>Qzone API with Typing and Validation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/aioqzone/api/dummy.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,12 +88,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="qzone-dummy-api">
-<h1>Qzone Dummy API<a class="headerlink" href="#qzone-dummy-api" title="Permalink to this heading"></a></h1>
+  <section id="qzone-api-with-typing-and-validation">
+<h1>Qzone API with Typing and Validation<a class="headerlink" href="#qzone-api-with-typing-and-validation" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.DummyQapi">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.</span></span><span class="sig-name descname"><span class="pre">DummyQapi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loginman</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.DummyQapi" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper of <a class="reference internal" href="raw.html#aioqzone.api.raw.QzoneApi" title="aioqzone.api.raw.QzoneApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">QzoneApi</span></code></a>. Validate the responses, returns pydantic <cite>BaseModel</cite>.</p>
+<dd><p>A wrapper of <a class="reference internal" href="raw.html#aioqzone.api.raw.QzoneApi" title="aioqzone.api.raw.QzoneApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">QzoneApi</span></code></a>. It will validate the returns from <a class="reference internal" href="raw.html#aioqzone.api.raw.QzoneApi" title="aioqzone.api.raw.QzoneApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">QzoneApi</span></code></a>,
+and return a typed response. The value returned is usually a <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, sometimes
+just a basic type if not needed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.api.DummyQapi.emotion_getcomments">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">emotion_getcomments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feedstype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.DummyQapi.emotion_getcomments" title="Permalink to this definition"></a></dt>
@@ -221,32 +230,22 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.api.DummyQapi.feeds3_html_more">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feeds3_html_more</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pagenum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.DummyQapi.feeds3_html_more" title="Permalink to this definition"></a></dt>
-<dd><p>return a list of dict, each dict reps a page of feeds.</p>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feeds3_html_more</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pagenum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.DummyQapi.feeds3_html_more" title="Permalink to this definition"></a></dt>
+<dd><p>This will call <a class="reference internal" href="raw.html#aioqzone.api.raw.QzoneApi.feeds3_html_more" title="aioqzone.api.raw.QzoneApi.feeds3_html_more"><code class="xref py py-meth docutils literal notranslate"><span class="pre">QzoneApi.feeds3_html_more()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pagenum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – #page &gt;= 0</p></li>
-<li><p><strong>trans</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="raw.html#aioqzone.api.raw.QzoneApi.FeedsMoreTransaction" title="aioqzone.api.raw.QzoneApi.FeedsMoreTransaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedsMoreTransaction</span></code></a>]) – reps a skim transaction. Mutable.</p></li>
-<li><p><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – feed count, defaults to 10.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>aux</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreAux" title="aioqzone.type.resp.FeedMoreAux"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedMoreAux</span></code></a>]) – <a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreResp.aux" title="aioqzone.type.resp.FeedMoreResp.aux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aux</span></code></a> field of last return (pagenum - 1).</p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>httpx.HTTPStatusError</strong> – error http response code</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.QzoneError" title="aioqzone.exception.QzoneError"><strong>aioqzone.exception.QzoneError</strong></a> – error qzone response code</p></li>
-<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="(in Python v3.10)"><strong>SystemExit</strong></a> – unexcpected error</p></li>
-</ul>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreResp" title="aioqzone.type.resp.FeedMoreResp"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedMoreResp</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreResp" title="aioqzone.type.resp.FeedMoreResp"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedMoreResp</span></code></a></p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>feed attributes and html feed</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a validated and typed response with a list of <a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreResp.feeds" title="aioqzone.type.resp.FeedMoreResp.feeds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feeds</span></code></a> and <a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreResp.aux" title="aioqzone.type.resp.FeedMoreResp.aux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aux</span></code></a> info.</p>
 </dd>
 </dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.9.4a1: </span>use <cite>aux</cite> instead of previous <cite>trans</cite> keyword.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -321,8 +320,8 @@ Call this api every 300s can help keep cookie alive.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="aioqzone APIs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="raw.html" class="btn btn-neutral float-right" title="Qzone Raw API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="raw.html" class="btn btn-neutral float-left" title="Qzone API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../exception.html" class="btn btn-neutral float-right" title="aioqzone Exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
