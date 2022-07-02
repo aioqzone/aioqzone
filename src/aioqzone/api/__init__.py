@@ -1,5 +1,5 @@
 """
-Make some easy-to-use api from basic wrappers.
+Create an easy-to-use api from :mod:`.raw`.
 """
 import logging
 from typing import List, Optional
@@ -14,12 +14,29 @@ log = logging.getLogger(__name__)
 
 
 class DummyQapi(QzoneApi):
-    """A wrapper of :class:`.QzoneApi`. Validate the responses, returns pydantic `BaseModel`."""
+    """A wrapper of :class:`.QzoneApi`. It will validate the returns from :class:`.QzoneApi`,
+    and return a typed response. The value returned is usually a :class:`BaseModel`, sometimes
+    just a basic type if not needed."""
 
     async def feeds3_html_more(
-        self, pagenum: int, trans: Optional[QzoneApi.FeedsMoreTransaction] = None, count: int = 10
+        self, pagenum: int, count: int = 10, *, aux: Optional[FeedMoreAux] = None
     ) -> FeedMoreResp:
-        r = await super().feeds3_html_more(pagenum, trans=trans, count=count)
+        """This will call :meth:`.QzoneApi.feeds3_html_more`.
+
+        :param aux: :obj:`~.FeedMoreResp.aux` field of last return (pagenum - 1).
+        :return: a validated and typed response with a list of :obj:`~.FeedMoreResp.feeds` and :obj:`~.FeedMoreResp.aux` info.
+
+        .. versionchanged:: 0.9.4a1
+
+            use `aux` instead of previous `trans` keyword.
+        """
+        r = await super().feeds3_html_more(
+            pagenum,
+            count=count,
+            external=aux and aux.externparam,
+            daylist=aux and aux.daylist or "",
+            uinlist=aux and aux.uinlist or "",
+        )
         return FeedMoreResp.parse_obj(r)
 
     async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> str:

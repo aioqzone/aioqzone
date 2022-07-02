@@ -146,26 +146,24 @@ class QzoneApi:
                 raise QzoneError(err, rdict=r)
         return r  # type: ignore
 
-    class FeedsMoreTransaction:
-        """Represents a feeds3_html_more transaction."""
-
-        def __init__(self, default: Optional[Dict[int, str]] = None) -> None:
-            self.extern = default or {}
-
-        def parse(self, page: int):
-            unquoted = self.extern.get(page, "undefined")
-            if unquoted == "undefined":
-                return {}
-            return {k: v[-1] for k, v in parse_qs(unquoted, keep_blank_values=True).items()}
-
     async def feeds3_html_more(
-        self, pagenum: int, trans: Optional[FeedsMoreTransaction] = None, count: int = 10
+        self,
+        pagenum: int,
+        count: int = 10,
+        *,
+        external: Optional[str] = None,
+        daylist: str = "",
+        uinlist: str = "",
     ) -> StrDict:
-        """return a list of dict, each dict reps a page of feeds.
+        """return a dict with ``main`` and ``data`` field.
+        ``main`` field contains some auxiliary information, while data is a list of dict,
+        each dict represents one feed.
 
         :param pagenum: #page >= 0
-        :param trans: reps a skim transaction. Mutable.
-        :param count: feed count, defaults to 10.
+        :param count: feed count, max as 10, defaults to 10.
+        :param external: `!main.externparam` field in last response
+        :param daylist: `!main.daylist` field in last response
+        :param uinlist: `!main.uinlist` field in last response
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
@@ -174,17 +172,18 @@ class QzoneApi:
         :raises `SystemExit`: unexcpected error
 
         :return: feed attributes and html feed
+
+        .. versionchanged:: 0.9.4a1
+
+            let `count` <= 10;
+            Use external string directly and remove `FeedsMoreTransaction`.
         """
 
         default = {
             "scope": 0,
             "view": 1,
-            "daylist": "",
-            "uinlist": "",
             "gid": "",
-            "flag": 1,
-            "filter": "all",
-            "applist": "all",
+            "flag": "1",
             "refresh": 0,
             "aisortEndTime": 0,
             "aisortOffset": 0,
@@ -199,15 +198,24 @@ class QzoneApi:
             "useutf8": 1,
             "outputhtmlfeed": 1,
         }
-        trans = trans or self.FeedsMoreTransaction()
+        if external and external != "undefined":
+            last_qs = {k: v[-1] for k, v in parse_qs(external, keep_blank_values=True).items()}
+        else:
+            last_qs = {}
+        applist = "all"
         query = {
+            "daylist": daylist,
+            "uinlist": uinlist,
+            "filter": applist,
+            "applist": applist,
             "rd": random(),
+            "windowId": random(),
             "uin": self.login.uin,
             "pagenum": pagenum + 1,
-            "begintime": trans.parse(pagenum).get("basetime", "undefined"),
-            "count": count,
+            "begintime": last_qs.get("basetime", "undefined"),
+            "count": min(10, count),
             "usertime": time_ms(),
-            "externparam": quote(trans.extern.get(pagenum, "undefined")),
+            "externparam": external,
         }
 
         @self._relogin_retry
@@ -221,7 +229,6 @@ class QzoneApi:
         r = await retry_closure()
         data = r["data"]
         assert isinstance(data, dict)
-        trans.extern[pagenum + 1] = unquote(data["main"]["externparam"])  # type: ignore
 
         feeds = data.get("data", [])
         assert isinstance(feeds, list)

@@ -17,6 +17,7 @@ class ConEntity(BaseModel):
     """Base class for all content entities. All entities has a #type."""
 
     type: int
+    """Official qzone type is positive. Our self-defined entities will have a negative type."""
 
 
 class TextEntity(ConEntity):
