@@ -6,13 +6,28 @@
 Welcome to aioqzone's documentation!
 ====================================
 
+aioqzone provides python interface to
+
+- login into Qzone
+- calling Qzone HTTP interface
+
 .. toctree::
    :maxdepth: 2
    :caption: Packages
+   :glob:
 
    aioqzone/index
    jssupport/index
    qqqr/index
+   *
+
+.. toctree::
+   :caption: Links
+   :hidden:
+
+   GitHub <https://github.com/aioqzone/aioqzone>
+   PyPI <https://pypi.org/project/aioqzone>
+   Contributing <https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md>
 
 
 Indices and tables

@@ -1,5 +1,6 @@
 """This module defines types that represent responses from Qzone.
-These `*Rep` classes are all :class:`pydantic.BaseModel`, and can be used to validate responses."""
+These `*Rep` or `*Resp` classes are :class:`pydantic.BaseModel` which can be used to validate responses.
+"""
 
 from typing import List, Optional, Union
 
@@ -11,11 +12,18 @@ from .entity import HasConEntity, HasContent
 
 # Below are the response reps of Qzone Apis.
 class FeedRep(BaseModel):
+    """Represents a feed in :meth:`~aioqzone.api.DummyQapi.feeds3_html_more`.
+    The feed content is in html format.
+    """
+
     ver: int
     appid: int
+    """.. seealso:: :term:`appid` in references."""
     typeid: int
     fid: str = Field(alias="key")
+    """.. seealso:: :term:`fid` in references."""
     abstime: int
+    """.. seealso:: :term:`abstime` in references."""
     uin: int
     nickname: str
     html: str
@@ -236,5 +244,5 @@ class PublishResp(BaseModel):
     abstime: int = Field(alias="now")
     republish: bool
     secret: bool
-    tid: str
+    fid: str = Field(alias="tid")
     vote: str = ""

@@ -1,8 +1,8 @@
-aioqzone APIs
+Qzone APIs
 ===================
 
 .. toctree::
     :maxdepth: 1
-    :glob:
 
-    *
+    raw
+    dummy
