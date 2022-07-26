@@ -47,6 +47,7 @@ class UPLoginMan(Loginable[UPEvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
+        :raises `httpx.HTTPError`: if error occurs in http transport.
         :raises `SystemExit`: if unexpected error raised
         """
         meth = LoginMethod.up
@@ -94,6 +95,7 @@ class QRLoginMan(Loginable[QREvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.UserBreak`: qr polling task is canceled
+        :raises `httpx.HTTPError`: if error occurs in http transport.
         :raises `TimeoutError`: qr polling task timeout
         :raises `SystemExit`: if unexpected error raised when polling
         """
@@ -173,6 +175,7 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.UserBreak`: qr login canceled
+        :raises `httpx.HTTPError`: if error occurs in http transport.
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 

@@ -79,16 +79,18 @@ class QzoneApi:
         1. `aioqzone.exception.QzoneError` code -3000 or -4002
         2. HTTP response code 403
 
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
-
         .. note:: Decorate code as less as possible
         .. warning:: Do NOT modify args in the wrapped code.
         """
 
         @wraps(func)
         async def relogin_wrapper(*args, **kwds):
+            """
+            :raises `qqqr.exception.UserBreak`: qr login canceled
+            :raises `httpx.HTTPError`: if error occurs in http transport.
+            :raises `aioqzone.exception.LoginError`: not logined
+            :raises `SystemExit`: unexcpected error
+            """
             try:
                 return await func(*args, **kwds)
             except QzoneError as e:
@@ -166,6 +168,7 @@ class QzoneApi:
         :param uinlist: `!main.uinlist` field in last response
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -244,6 +247,7 @@ class QzoneApi:
         :param feedstype: feedstype in html
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -287,6 +291,7 @@ class QzoneApi:
         :param fid: feed id, named fid, tid or feedkey
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -321,6 +326,7 @@ class QzoneApi:
         """Get feeds update count (new feeds, new photos, new comments, etc)
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -350,6 +356,7 @@ class QzoneApi:
         :param like: True as like, False as unlike, defaults to True.
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
@@ -403,6 +410,7 @@ class QzoneApi:
         :param num: pic num
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -469,6 +477,7 @@ class QzoneApi:
         :param pos: start position, defaults to 0
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -517,6 +526,7 @@ class QzoneApi:
         :param right: feed access right, defaults to 0 (Not used till now)
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -575,6 +585,7 @@ class QzoneApi:
         :param uin: host uin, defaults to None, means current logined user.
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -615,6 +626,7 @@ class QzoneApi:
         :param uin: host uin, defaults to None, means current logined user.
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
@@ -673,6 +685,7 @@ class QzoneApi:
         :param owner: owner uin
 
         :raises `httpx.HTTPStatusError`: error http response code
+        :raises `httpx.HTTPError`: if http error occurs in login
         :raises `aioqzone.exception.QzoneError`: error qzone response code
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
