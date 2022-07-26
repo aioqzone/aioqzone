@@ -6,6 +6,7 @@ Users can inherit these managers and implement their own caching logic.
 import logging
 from enum import Enum
 from typing import Dict, List, Optional, Union
+from urllib.error import HTTPError
 
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
@@ -175,7 +176,6 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `httpx.HTTPError`: if error occurs in http transport.
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
@@ -184,7 +184,7 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
         for c in self._order:
             try:
                 return await c._new_cookie()
-            except (TencentLoginError, TimeoutError, GeneratorExit) as e:
+            except (TencentLoginError, TimeoutError, GeneratorExit, HTTPError) as e:
                 continue
             # except (UserBreak, SystemExit, SystemError) as e:
             #     raise e
