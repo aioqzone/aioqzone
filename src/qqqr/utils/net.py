@@ -1,7 +1,7 @@
 from functools import wraps
 from typing import Dict, Union
 
-from httpx import URL, AsyncClient, HTTPStatusError, Response
+from httpx import URL, AsyncClient, HTTPStatusError, Response, Timeout
 
 
 def raise_for_status(response: Response, *accept_code: int):
@@ -47,7 +47,13 @@ class ClientAdapter:
             await self.response.aclose()
 
     def __init__(self, client: AsyncClient) -> None:
+        """
+        .. versionchanged:: 0.9.4a4
+
+            `timeout` of the client will be overwrite.
+        """
         self.client = client
+        client.timeout = Timeout(None)
 
     @property
     def referer(self):
