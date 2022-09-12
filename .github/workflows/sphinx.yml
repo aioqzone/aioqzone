@@ -14,25 +14,20 @@ jobs:
     if: "!contains(github.event.head_commit.message, '@no-doc')"
     steps:
       #----------------------------------------------
-      #   check-out repo and set-up node & python
+      #     check-out repo and set-up python
       #----------------------------------------------
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      #----------------------------------------------
-      #  -----  install & configure poetry  -----
-      #----------------------------------------------
-      - name: Install Poetry Action
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+          cache: poetry
       #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------
       - name: Install library
-        run: poetry install --no-interaction -E doc
+        run: poetry install -n -E doc
       #----------------------------------------------
       #             Run sphinx-build
       #----------------------------------------------
