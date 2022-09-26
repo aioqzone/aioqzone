@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Execute JavaScripts &mdash; aioqzone 0.9.4a4.dev2 documentation</title>
+  <title>Execute JavaScripts &mdash; aioqzone 0.9.5.dev1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/autodoc_pydantic.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -43,7 +44,25 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../aioqzone/index.html">aioqzone</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">jssupport</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Execute JavaScripts</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Execute JavaScripts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jssupport.execjs.ExecJS"><code class="docutils literal notranslate"><span class="pre">ExecJS</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.add_post"><code class="docutils literal notranslate"><span class="pre">ExecJS.add_post()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.add_run"><code class="docutils literal notranslate"><span class="pre">ExecJS.add_run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.add_setup"><code class="docutils literal notranslate"><span class="pre">ExecJS.add_setup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.bind"><code class="docutils literal notranslate"><span class="pre">ExecJS.bind()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.check_all"><code class="docutils literal notranslate"><span class="pre">ExecJS.check_all()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.exec"><code class="docutils literal notranslate"><span class="pre">ExecJS.exec()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.get"><code class="docutils literal notranslate"><span class="pre">ExecJS.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.loop_policy_check"><code class="docutils literal notranslate"><span class="pre">ExecJS.loop_policy_check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.node"><code class="docutils literal notranslate"><span class="pre">ExecJS.node</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.post"><code class="docutils literal notranslate"><span class="pre">ExecJS.post</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.run"><code class="docutils literal notranslate"><span class="pre">ExecJS.run</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jssupport.execjs.ExecJS.setup"><code class="docutils literal notranslate"><span class="pre">ExecJS.setup</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#jssupport.execjs.Partial"><code class="docutils literal notranslate"><span class="pre">Partial</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="jsdom.html">Mocking a Dom Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="jsjson.html">Parsing Javascript Dictionary</a></li>
 </ul>
@@ -83,15 +102,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-jssupport.execjs">
-<span id="execute-javascripts"></span><h1>Execute JavaScripts<a class="headerlink" href="#module-jssupport.execjs" title="Permalink to this heading"></a></h1>
+  <section id="execute-javascripts">
+<h1>Execute JavaScripts<a class="headerlink" href="#execute-javascripts" title="Permalink to this heading"></a></h1>
 <p>Offers a class to execute js by communicating with subprocess.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>On win32 platform, importing this module will change asyncio event loop policy to
 <a class="reference external" href="https://docs.python.org/3/library/asyncio-policy.html#asyncio.WindowsProactorEventLoopPolicy" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.WindowsProactorEventLoopPolicy</span></code></a>!</p>
 </div>
-<dl class="py class">
+<span class="target" id="module-jssupport.execjs"></span><dl class="py class">
 <dt class="sig sig-object py" id="jssupport.execjs.ExecJS">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jssupport.execjs.</span></span><span class="sig-name descname"><span class="pre">ExecJS</span></span><a class="headerlink" href="#jssupport.execjs.ExecJS" title="Permalink to this definition"></a></dt>
 <dd><p>Execute javascript in such order:</p>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UpLogin Types &mdash; aioqzone 0.9.4a4.dev2 documentation</title>
+  <title>UpLogin Types &mdash; aioqzone 0.9.5.dev1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -50,7 +51,22 @@
 <li class="toctree-l3"><a class="reference internal" href="captcha/captcha.html">Captcha and TcaptchaSession</a></li>
 <li class="toctree-l3"><a class="reference internal" href="captcha/jigsaw.html">Solving Jigsaw-Like Tcaptcha</a></li>
 <li class="toctree-l3"><a class="reference internal" href="login.html">UpLogin and UpSession</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">UpLogin Types</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">UpLogin Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.BgElemCfg"><code class="docutils literal notranslate"><span class="pre">BgElemCfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.CaptchaData"><code class="docutils literal notranslate"><span class="pre">CaptchaData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.CaptchaDisplay"><code class="docutils literal notranslate"><span class="pre">CaptchaDisplay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.CheckResp"><code class="docutils literal notranslate"><span class="pre">CheckResp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.CommonCaptchaConf"><code class="docutils literal notranslate"><span class="pre">CommonCaptchaConf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.FgBindingCfg"><code class="docutils literal notranslate"><span class="pre">FgBindingCfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.FgElemCfg"><code class="docutils literal notranslate"><span class="pre">FgElemCfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.LoginResp"><code class="docutils literal notranslate"><span class="pre">LoginResp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.MoveCfg"><code class="docutils literal notranslate"><span class="pre">MoveCfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.PowCfg"><code class="docutils literal notranslate"><span class="pre">PowCfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.PrehandleResp"><code class="docutils literal notranslate"><span class="pre">PrehandleResp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.Sprite"><code class="docutils literal notranslate"><span class="pre">Sprite</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.up.type.VerifyResp"><code class="docutils literal notranslate"><span class="pre">VerifyResp</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../base.html">QQQR Bases</a></li>
@@ -92,10 +108,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-qqqr.up.type">
-<span id="uplogin-types"></span><h1>UpLogin Types<a class="headerlink" href="#module-qqqr.up.type" title="Permalink to this heading"></a></h1>
+  <section id="uplogin-types">
+<h1>UpLogin Types<a class="headerlink" href="#uplogin-types" title="Permalink to this heading"></a></h1>
 <p>Response validation in <cite>qqqr.up.captcha</cite></p>
-<dl class="py class pydantic_model">
+<span class="target" id="module-qqqr.up.type"></span><dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="qqqr.up.type.BgElemCfg">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.type.</span></span><span class="sig-name descname"><span class="pre">BgElemCfg</span></span><a class="headerlink" href="#qqqr.up.type.BgElemCfg" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">

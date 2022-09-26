@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Event and Hooks &mdash; aioqzone 0.9.4a4.dev2 documentation</title>
+  <title>Event and Hooks &mdash; aioqzone 0.9.5.dev1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -45,7 +46,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">QQQR</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Event-Hook System</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Event and Hooks</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Event and Hooks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.event.Emittable"><code class="docutils literal notranslate"><span class="pre">Emittable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.event.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.event.EventManager"><code class="docutils literal notranslate"><span class="pre">EventManager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qqqr.event.NullEvent"><code class="docutils literal notranslate"><span class="pre">NullEvent</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../qr/index.html">QRcode Login</a></li>
@@ -93,8 +100,8 @@
 <h1>Event and Hooks<a class="headerlink" href="#event-and-hooks" title="Permalink to this heading"></a></h1>
 <p>aioqzone has designed a simple hook management system. You may extend your own event, or just
 inherit a event and implement your hooks.</p>
-<span class="target" id="module-qqqr.event"></span><p>Define hooks that can trigger user actions.</p>
-<dl class="py class">
+<p>Define hooks that can trigger user actions.</p>
+<span class="target" id="module-qqqr.event"></span><dl class="py class">
 <dt class="sig sig-object py" id="qqqr.event.Emittable">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.event.</span></span><span class="sig-name descname"><span class="pre">Emittable</span></span><a class="headerlink" href="#qqqr.event.Emittable" title="Permalink to this definition"></a></dt>
 <dd><p>An object has some event to trigger.</p>

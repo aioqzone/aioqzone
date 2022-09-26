@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Response Models &mdash; aioqzone 0.9.4a4.dev2 documentation</title>
+  <title>Response Models &mdash; aioqzone 0.9.5.dev1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -47,7 +48,22 @@
 <li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Types</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="entities.html">Entities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="internal.html">Internal Types</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Response Models</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Response Models</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.CommentRep"><code class="docutils literal notranslate"><span class="pre">CommentRep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.FeedDetailRep"><code class="docutils literal notranslate"><span class="pre">FeedDetailRep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.FeedMoreAux"><code class="docutils literal notranslate"><span class="pre">FeedMoreAux</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.FeedMoreResp"><code class="docutils literal notranslate"><span class="pre">FeedMoreResp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.FeedRep"><code class="docutils literal notranslate"><span class="pre">FeedRep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.FeedsCount"><code class="docutils literal notranslate"><span class="pre">FeedsCount</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.FloatViewPhoto"><code class="docutils literal notranslate"><span class="pre">FloatViewPhoto</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.MsgListElm"><code class="docutils literal notranslate"><span class="pre">MsgListElm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.PicRep"><code class="docutils literal notranslate"><span class="pre">PicRep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.PublishResp"><code class="docutils literal notranslate"><span class="pre">PublishResp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.VideoInfo"><code class="docutils literal notranslate"><span class="pre">VideoInfo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.VideoInfo2"><code class="docutils literal notranslate"><span class="pre">VideoInfo2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.resp.VideoRep"><code class="docutils literal notranslate"><span class="pre">VideoRep</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -89,11 +105,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-aioqzone.type.resp">
-<span id="response-models"></span><h1>Response Models<a class="headerlink" href="#module-aioqzone.type.resp" title="Permalink to this heading"></a></h1>
+  <section id="response-models">
+<h1>Response Models<a class="headerlink" href="#response-models" title="Permalink to this heading"></a></h1>
 <p>This module defines types that represent responses from Qzone.
 These <cite>*Rep</cite> or <cite>*Resp</cite> classes are <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code> which can be used to validate responses.</p>
-<dl class="py class pydantic_model">
+<span class="target" id="module-aioqzone.type.resp"></span><dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.resp.CommentRep">
 <em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.resp.</span></span><span class="sig-name descname"><span class="pre">CommentRep</span></span><a class="headerlink" href="#aioqzone.type.resp.CommentRep" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
