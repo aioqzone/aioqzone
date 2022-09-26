@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.9.4a4.dev2"
+version = "0.9.5.dev2"
 description = "Python wrapper for Qzone web login and Qzone http api."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -13,13 +13,13 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    "Typing :: Typed"
+    "Typing :: Typed",
 ]
 
 packages = [
     { include = "aioqzone", from = "src" },
     { include = "jssupport", from = "src" },
-    { include = "qqqr", from = "src" }
+    { include = "qqqr", from = "src" },
 ]
 exclude = ["*.js"]
 
@@ -34,37 +34,38 @@ pytz = "^2022.1"
 lxml = "^4.9.1"
 cssselect = "^1.1.0"
 numpy = [
-    {version = "~1.21.6", python = ">=3.7,<3.8"},
-    {version = "^1.22.3", python = "^3.8"}
+    { version = "~1.21.6", python = ">=3.7,<3.8" },
+    { version = "^1.22.3", python = "^3.8" },
 ]
 opencv-python-headless = "^4.5.5"
-# extras: dev
-pre-commit = {version = "^2.17.0", optional = true}
-black = {version = "^22.1.0", optional = true}
-isort = {version = "^5.10.1", optional = true}
-# extras: doc
-Sphinx = {version = "^5.0.1", optional = true}
-autodoc-pydantic = {version = "^1.7.1", optional = true}
-sphinx-autodoc-typehints = {version = "<1.16.0", optional = true}
-sphinx-rtd-theme = {version = "^1.0.0", optional = true}
 rsa = "^4.8"
 
-[tool.poetry.dev-dependencies]
+
+# dependency groups
+[tool.poetry.group.test]
+optional = false
+
+[tool.poetry.group.test.dependencies]
 pytest = "^7.0.1"
 pytest-asyncio = "~0.19.0"
+pytest-mock = "^3.8.2"
 
-[tool.poetry.extras]
-dev = [
-    "pre-commit",
-    "black",
-    "isort"
-]
-doc = [
-    "Sphinx",
-    "autodoc-pydantic",
-    "sphinx-autodoc-typehints",
-    "sphinx-rtd-theme"
-]
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.17.0"
+black = "^22.1.0"
+isort = "^5.10.1"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+Sphinx = "^5.0.1"
+autodoc-pydantic = "^1.7.1"
+sphinx-autodoc-typehints = "<1.16.0"
+sphinx-rtd-theme = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -82,7 +83,6 @@ markers = [
 asyncio_mode = 'strict'
 log_cli = 1
 log_cli_level = 'WARNING'
-
 
 [tool.isort]
 profile = "black"

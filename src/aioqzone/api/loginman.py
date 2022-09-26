@@ -6,7 +6,8 @@ Users can inherit these managers and implement their own caching logic.
 import logging
 from enum import Enum
 from typing import Dict, List, Optional, Union
-from urllib.error import HTTPError
+
+from httpx import ConnectError, HTTPError
 
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
@@ -21,6 +22,10 @@ from ..exception import LoginError
 
 log = logging.getLogger(__name__)
 JsError = JsRuntimeError, JsImportError, NodeNotFoundError
+
+
+class _NextMethodInterrupt(RuntimeError):
+    pass
 
 
 class ConstLoginMan(Loginable):
@@ -48,33 +53,45 @@ class UPLoginMan(Loginable[UPEvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
-        :raises `httpx.HTTPError`: if error occurs in http transport.
+        :raises `._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
         :raises `SystemExit`: if unexpected error raised
+
+        :return: cookie dict
         """
         meth = LoginMethod.up
+        emit_hook = lambda c: self.add_hook_ref("hook", c)
         try:
             cookie = await self.uplogin.login()
-            self.add_hook_ref("hook", self.hook.LoginSuccess(meth))
+            emit_hook(self.hook.LoginSuccess(meth))
             self.client.cookies.update(cookie)  # optional
             return cookie
         except TencentLoginError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed(meth, e.msg))
             log.warning(str(e))
+            emit_hook(self.hook.LoginFailed(meth, e.msg))
             raise e
         except NotImplementedError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed(meth, "10009：需要手机验证"))
             log.warning(str(e))
+            emit_hook(self.hook.LoginFailed(meth, "10009：需要手机验证"))
             raise TencentLoginError(
                 StatusCode.NeedSmsVerify, "Dynamic code verify not implemented"
             )
         except JsError as e:
-            self.add_hook_ref("hook", self.hook.LoginFailed(meth, "JS调用出错"))
             log.error(str(e), exc_info=e)
+            emit_hook(self.hook.LoginFailed(meth, "JS调用出错"))
             raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha")
         except GeneratorExit as e:
-            log.warning("GeneratorExit captured, login cancelled.")
-            raise e
-        except:
+            log.warning("Generator Exit captured, continue.")
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise _NextMethodInterrupt from e
+        except ConnectError as e:
+            log.warning("Connection Error captured, continue.")
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise _NextMethodInterrupt from e
+        except HTTPError as e:
+            log.error("Unknown HTTP Error captured, continue.")
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise _NextMethodInterrupt from e
+        except BaseException as e:
             log.fatal("Unexpected error in QR login.", exc_info=True)
             try:
                 await self.hook.LoginFailed(meth, "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
@@ -96,9 +113,10 @@ class QRLoginMan(Loginable[QREvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.UserBreak`: qr polling task is canceled
-        :raises `httpx.HTTPError`: if error occurs in http transport.
-        :raises `TimeoutError`: qr polling task timeout
-        :raises `SystemExit`: if unexpected error raised when polling
+        :raises `._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
+        :raises `SystemExit`: on unexpected error raised when polling
+
+        :return: cookie dict
         """
         meth = LoginMethod.qr
         emit_hook = lambda c: self.add_hook_ref("hook", c)
@@ -113,12 +131,17 @@ class QRLoginMan(Loginable[QREvent]):
         except TimeoutError as e:
             log.warning(str(e))
             emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise e
+            raise _NextMethodInterrupt from e
         except KeyboardInterrupt as e:
             raise UserBreak from e
         except GeneratorExit as e:
-            log.warning("GeneratorExit captured, login cancelled.")
-            raise e
+            log.warning("Generator Exit captured, continue.")
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise _NextMethodInterrupt from e
+        except HTTPError as e:
+            log.error("Unknown HTTP Error captured, continue.")
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise _NextMethodInterrupt from e
         except:
             log.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
@@ -179,15 +202,20 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :return: cookie
+        :return: cookie dict
         """
         for c in self._order:
             try:
                 return await c._new_cookie()
-            except (TencentLoginError, TimeoutError, GeneratorExit, HTTPError) as e:
+            except (TencentLoginError, _NextMethodInterrupt) as e:
+                log.debug(f"Mixed loginman received {e.__class__.__name__}, continue.")
                 continue
-            # except (UserBreak, SystemExit, SystemError) as e:
-            #     raise e
+            except UserBreak as e:
+                log.debug("Mixed loginman received UserBreak, reraise.")
+                raise e
+            except SystemExit as e:
+                log.debug("Mixed loginman captured System Exit, reraise.")
+                raise e
 
         if self.strategy == "forbid":
             msg = "您可能被限制账密登陆. 扫码登陆仍然可行."

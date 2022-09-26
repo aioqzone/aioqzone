@@ -1,11 +1,15 @@
 import asyncio
 from os import environ as env
+from typing import Type
+from unittest import mock
 
 import pytest
 import pytest_asyncio
+from httpx import ConnectError, HTTPError
 
 import aioqzone.api.loginman as api
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
+from jssupport.exception import JsRuntimeError
 from qqqr.exception import TencentLoginError
 from qqqr.utils.net import ClientAdapter
 
@@ -60,6 +64,24 @@ async def up(client: ClientAdapter):
 
 @pytest.mark.incremental
 class TestUP:
+    @pytest.mark.parametrize(
+        "exc2r,exc2e",
+        [
+            (TencentLoginError(-3002, "mock"), TencentLoginError),
+            (NotImplementedError(), TencentLoginError),
+            (JsRuntimeError(-1, "node", b"mock"), TencentLoginError),
+            (GeneratorExit(), api._NextMethodInterrupt),
+            (ConnectError("[Errno 104] Connection reset by peer"), api._NextMethodInterrupt),
+            (HTTPError("mock"), api._NextMethodInterrupt),
+            (RuntimeError, SystemExit),
+        ],
+    )
+    async def test_exception(
+        self, up: api.UPLoginMan, exc2r: BaseException, exc2e: Type[BaseException]
+    ):
+        with pytest.raises(exc2e), mock.patch("qqqr.up.UpLogin.new", side_effect=exc2r):
+            await up.new_cookie()
+
     async def test_newcookie(self, up: api.UPLoginMan):
         try:
             cookie = await up.new_cookie()
@@ -89,6 +111,22 @@ async def qr(client: ClientAdapter):
 @pytest.mark.needuser
 @pytest.mark.incremental
 class TestQR:
+    @pytest.mark.parametrize(
+        "exc2r,exc2e",
+        [
+            (NotImplementedError(), SystemExit),
+            (TimeoutError(), api._NextMethodInterrupt),
+            (GeneratorExit(), api._NextMethodInterrupt),
+            (ConnectError("[Errno 104] Connection reset by peer"), api._NextMethodInterrupt),
+            (HTTPError("mock"), api._NextMethodInterrupt),
+        ],
+    )
+    async def test_exception(
+        self, qr: api.QRLoginMan, exc2r: BaseException, exc2e: Type[BaseException]
+    ):
+        with pytest.raises(exc2e), mock.patch("qqqr.qr.QrLogin.new", side_effect=exc2r):
+            await qr.new_cookie()
+
     async def test_newcookie(self, qr: api.QRLoginMan):
         try:
             cookie = await qr.new_cookie()
