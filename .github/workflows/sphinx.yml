@@ -27,7 +27,7 @@ jobs:
       # install your root project, if required
       #----------------------------------------------
       - name: Install library
-        run: poetry install -n -E doc
+        run: poetry install --with docs
       #----------------------------------------------
       #             Run sphinx-build
       #----------------------------------------------

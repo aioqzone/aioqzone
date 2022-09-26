@@ -1,4 +1,5 @@
 from subprocess import CalledProcessError
+from sys import stderr
 
 
 class JsRuntimeError(CalledProcessError):
@@ -8,7 +9,10 @@ class JsRuntimeError(CalledProcessError):
         super().__init__(returncode, cmd=cmd, stderr=stderr)
 
     def __str__(self) -> str:
-        return self.stderr
+        if isinstance(self.stderr, bytes):
+            return self.stderr.decode()
+        else:
+            return str(self.stderr)
 
 
 class NodeNotFoundError(FileNotFoundError):
