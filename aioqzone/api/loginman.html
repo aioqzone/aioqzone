@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Managers &mdash; aioqzone 0.9.5.dev2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="aioqzone Exceptions" href="../exception.html" />
+    <link rel="prev" title="Qzone API with Typing and Validation" href="dummy.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> aioqzone
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html">Qzone APIs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Login Managers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.QrStrategy"><code class="docutils literal notranslate"><span class="pre">QrStrategy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.UPLoginMan"><code class="docutils literal notranslate"><span class="pre">UPLoginMan</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.QRLoginMan"><code class="docutils literal notranslate"><span class="pre">QRLoginMan</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.MixedLoginMan"><code class="docutils literal notranslate"><span class="pre">MixedLoginMan</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../type/index.html">aioqzone Types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioqzone</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">aioqzone</a> &raquo;</li>
+      <li>Login Managers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/aioqzone/api/loginman.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="login-managers">
+<h1>Login Managers<a class="headerlink" href="#login-managers" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.QrStrategy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QrStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QrStrategy" title="Permalink to this definition"></a></dt>
+<dd><p>An enumeration.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.UPLoginMan">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">UPLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.UPLoginMan" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.QRLoginMan">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QRLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QRLoginMan" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.MixedLoginMan">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">MixedLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.MixedLoginMan" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dummy.html" class="btn btn-neutral float-left" title="Qzone API with Typing and Validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../exception.html" class="btn btn-neutral float-right" title="aioqzone Exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, aioqzone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
