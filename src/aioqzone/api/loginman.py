@@ -53,8 +53,10 @@ class UPLoginMan(Loginable[UPEvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
-        :raises `httpx.HTTPError`: if error occurs in http transport.
+        :raises `._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
         :raises `SystemExit`: if unexpected error raised
+
+        :return: cookie dict
         """
         meth = LoginMethod.up
         emit_hook = lambda c: self.add_hook_ref("hook", c)
@@ -111,9 +113,10 @@ class QRLoginMan(Loginable[QREvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :raises `qqqr.exception.UserBreak`: qr polling task is canceled
-        :raises `httpx.HTTPError`: if error occurs in http transport.
-        :raises `TimeoutError`: qr polling task timeout
-        :raises `SystemExit`: if unexpected error raised when polling
+        :raises `._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
+        :raises `SystemExit`: on unexpected error raised when polling
+
+        :return: cookie dict
         """
         meth = LoginMethod.qr
         emit_hook = lambda c: self.add_hook_ref("hook", c)
@@ -133,6 +136,7 @@ class QRLoginMan(Loginable[QREvent]):
             raise UserBreak from e
         except GeneratorExit as e:
             log.warning("Generator Exit captured, continue.")
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
         except HTTPError as e:
             log.error("Unknown HTTP Error captured, continue.")
@@ -198,7 +202,7 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
 
-        :return: cookie
+        :return: cookie dict
         """
         for c in self._order:
             try:
