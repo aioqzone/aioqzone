@@ -19,12 +19,13 @@ aioqzone provides python interface to
    aioqzone/index
    jssupport/index
    qqqr/index
-   *
+   reference
 
 .. toctree::
    :caption: Links
    :hidden:
 
+   Disclaimers <disclaimers>
    GitHub <https://github.com/aioqzone/aioqzone>
    PyPI <https://pypi.org/project/aioqzone>
    Contributing <https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md>

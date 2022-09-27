@@ -71,7 +71,7 @@ class TestUP:
             (NotImplementedError(), TencentLoginError),
             (JsRuntimeError(-1, "node", b"mock"), TencentLoginError),
             (GeneratorExit(), api._NextMethodInterrupt),
-            (ConnectError("[Errno 104] Connection reset by peer"), api._NextMethodInterrupt),
+            (ConnectError("mock", request=...), api._NextMethodInterrupt),  # type: ignore
             (HTTPError("mock"), api._NextMethodInterrupt),
             (RuntimeError, SystemExit),
         ],
@@ -117,7 +117,7 @@ class TestQR:
             (NotImplementedError(), SystemExit),
             (TimeoutError(), api._NextMethodInterrupt),
             (GeneratorExit(), api._NextMethodInterrupt),
-            (ConnectError("[Errno 104] Connection reset by peer"), api._NextMethodInterrupt),
+            (ConnectError("mock", request=...), api._NextMethodInterrupt),  # type: ignore
             (HTTPError("mock"), api._NextMethodInterrupt),
         ],
     )
