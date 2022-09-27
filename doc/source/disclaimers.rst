@@ -33,6 +33,7 @@ For Developers
 
 By developing packages or applications using aioqzone, any responsibility falls between you and your user.
 aioqzone developer and aioqzone community are not responsible for any potential loss happens on any account.
+
 It is recommended to inform your user what responsibility they should take in advance.
 
 ------------------------------
