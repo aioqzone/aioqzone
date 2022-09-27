@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login Managers &mdash; aioqzone 0.9.5.dev2 documentation</title>
+  <title>Login Managers &mdash; aioqzone 0.9.5.dev3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -45,10 +45,20 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="index.html">Qzone APIs</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Login Managers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.MixedLoginMan"><code class="docutils literal notranslate"><span class="pre">MixedLoginMan</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.api.loginman.MixedLoginMan._new_cookie"><code class="docutils literal notranslate"><span class="pre">MixedLoginMan._new_cookie()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.QRLoginMan"><code class="docutils literal notranslate"><span class="pre">QRLoginMan</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.api.loginman.QRLoginMan._new_cookie"><code class="docutils literal notranslate"><span class="pre">QRLoginMan._new_cookie()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.QrStrategy"><code class="docutils literal notranslate"><span class="pre">QrStrategy</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.UPLoginMan"><code class="docutils literal notranslate"><span class="pre">UPLoginMan</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.QRLoginMan"><code class="docutils literal notranslate"><span class="pre">QRLoginMan</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.MixedLoginMan"><code class="docutils literal notranslate"><span class="pre">MixedLoginMan</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.UPLoginMan"><code class="docutils literal notranslate"><span class="pre">UPLoginMan</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aioqzone.api.loginman.UPLoginMan._new_cookie"><code class="docutils literal notranslate"><span class="pre">UPLoginMan._new_cookie()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman._NextMethodInterrupt"><code class="docutils literal notranslate"><span class="pre">_NextMethodInterrupt</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
@@ -61,6 +71,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Links</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">Disclaimers</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -93,26 +104,102 @@
              
   <section id="login-managers">
 <h1>Login Managers<a class="headerlink" href="#login-managers" title="Permalink to this heading"></a></h1>
+<p>Collect some built-in login manager w/o caching.
+Users can inherit these managers and implement their own caching logic.</p>
+<span class="target" id="module-aioqzone.api.loginman"></span><dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.MixedLoginMan">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">MixedLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.MixedLoginMan" title="Permalink to this definition"></a></dt>
+<dd><p>A login manager that will try methods according to the given <a class="reference internal" href="#aioqzone.api.loginman.QrStrategy" title="aioqzone.api.loginman.QrStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">QrStrategy</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.MixedLoginMan._new_cookie">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.MixedLoginMan._new_cookie" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
+<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="(in Python v3.10)"><strong>SystemExit</strong></a> – unexcpected error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>cookie dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.QRLoginMan">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QRLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QRLoginMan" title="Permalink to this definition"></a></dt>
+<dd><p>Login manager for QR login.
+This manager may trigger <code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginSuccess()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginFailed()</span></code> hook.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.QRLoginMan._new_cookie">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QRLoginMan._new_cookie" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr polling task is canceled</p></li>
+<li><p><a class="reference internal" href="#aioqzone.api.loginman._NextMethodInterrupt" title="aioqzone.api.loginman._NextMethodInterrupt"><strong>_NextMethodInterrupt</strong></a> – on exceptions do not break the system, such as timeout, Http errors, etc.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="(in Python v3.10)"><strong>SystemExit</strong></a> – on unexpected error raised when polling</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>cookie dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.QrStrategy">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QrStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QrStrategy" title="Permalink to this definition"></a></dt>
-<dd><p>An enumeration.</p>
+<dd><p>Represents QR strategy.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.UPLoginMan">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">UPLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.UPLoginMan" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Login manager for username-password login.
+This manager may trigger <code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginSuccess()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginFailed()</span></code> hook.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aioqzone.api.loginman.UPLoginMan._new_cookie">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.UPLoginMan._new_cookie" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.TencentLoginError" title="qqqr.exception.TencentLoginError"><strong>qqqr.exception.TencentLoginError</strong></a> – login error when up login.</p></li>
+<li><p><a class="reference internal" href="#aioqzone.api.loginman._NextMethodInterrupt" title="aioqzone.api.loginman._NextMethodInterrupt"><strong>_NextMethodInterrupt</strong></a> – if acceptable errors occured, for example, http errors.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="(in Python v3.10)"><strong>SystemExit</strong></a> – if unexpected error raised</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>cookie dict</p>
+</dd>
+</dl>
+</dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="aioqzone.api.loginman.QRLoginMan">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QRLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QRLoginMan" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+</dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="aioqzone.api.loginman.MixedLoginMan">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">MixedLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.MixedLoginMan" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py exception">
+<dt class="sig sig-object py" id="aioqzone.api.loginman._NextMethodInterrupt">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">_NextMethodInterrupt</span></span><a class="headerlink" href="#aioqzone.api.loginman._NextMethodInterrupt" title="Permalink to this definition"></a></dt>
+<dd><p>Internal exception represents the condition that the login method is interrupted and the caller
+could choose the next login method or just to raise a <a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">LoginError</span></code></a>.</p>
+</dd></dl>
 
 </section>
 

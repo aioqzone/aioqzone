@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>References &mdash; aioqzone 0.9.5.dev2 documentation</title>
+  <title>References &mdash; aioqzone 0.9.5.dev3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/autodoc_pydantic.css" type="text/css" />
@@ -21,6 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Disclaimers" href="disclaimers.html" />
     <link rel="prev" title="Exceptions" href="qqqr/exception.html" /> 
 </head>
 
@@ -51,6 +52,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Links</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="disclaimers.html">Disclaimers</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -89,7 +91,7 @@
 <dt id="term-appid">appid<a class="headerlink" href="#term-appid" title="Permalink to this term"></a></dt><dd><p>Specifies where the feed is created. For example, the app id of “emotion” is 311,
 202 means shares from Wechat or other apps.</p>
 </dd>
-<dt id="term-fid">fid<a class="headerlink" href="#term-fid" title="Permalink to this term"></a></dt><dd><p>Means “feed id”. All “emotion” feed has a fid, but other app such as shares do not.
+<dt id="term-fid">fid<a class="headerlink" href="#term-fid" title="Permalink to this term"></a></dt><dd><p>Means “feed id”. All “emotion” feed has a <strong>unique</strong> fid, but other app such as shares do not.
 For those apps, their <cite>fid</cite> field might be a fixed string.</p>
 <p>In Qzone interface, <cite>fid</cite> is also named as <code class="docutils literal notranslate"><span class="pre">tid</span></code>, <code class="docutils literal notranslate"><span class="pre">feedkey</span></code>, etc.</p>
 </dd>
@@ -106,6 +108,7 @@ All feeds have this field. If not, generate a persudo one is easy.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="qqqr/exception.html" class="btn btn-neutral float-left" title="Exceptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="disclaimers.html" class="btn btn-neutral float-right" title="Disclaimers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
