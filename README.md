@@ -80,6 +80,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
 
 - [AGPL-3.0](LICENSE)
+- [Disclaimers](https://aioqzone.github.io/aioqzone/disclaimers.html)
 
 
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"

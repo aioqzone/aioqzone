@@ -25,6 +25,10 @@ JsError = JsRuntimeError, JsImportError, NodeNotFoundError
 
 
 class _NextMethodInterrupt(RuntimeError):
+    """Internal exception represents the condition that the login method is interrupted and the caller
+    could choose the next login method or just to raise a :exc:`.LoginError`.
+    """
+
     pass
 
 
@@ -40,6 +44,11 @@ class ConstLoginMan(Loginable):
 
 
 class UPLoginMan(Loginable[UPEvent]):
+    """Login manager for username-password login.
+    This manager may trigger :meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and
+    :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook.
+    """
+
     def __init__(self, client: ClientAdapter, uin: int, pwd: str) -> None:
         assert pwd
         super().__init__(uin)
@@ -52,8 +61,9 @@ class UPLoginMan(Loginable[UPEvent]):
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
+        :meta public:
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
-        :raises `._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
+        :raises `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
         :raises `SystemExit`: if unexpected error raised
 
         :return: cookie dict
@@ -85,10 +95,11 @@ class UPLoginMan(Loginable[UPEvent]):
             raise _NextMethodInterrupt from e
         except ConnectError as e:
             log.warning("Connection Error captured, continue.")
+            log.debug(e.request)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
         except HTTPError as e:
-            log.error("Unknown HTTP Error captured, continue.")
+            log.error("Unknown HTTP Error captured, continue.", exc_info=True)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
         except BaseException as e:
@@ -100,6 +111,11 @@ class UPLoginMan(Loginable[UPEvent]):
 
 
 class QRLoginMan(Loginable[QREvent]):
+    """Login manager for QR login.
+    This manager may trigger :meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and
+    :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook.
+    """
+
     def __init__(self, client: ClientAdapter, uin: int, refresh_time: int = 6) -> None:
         Loginable.__init__(self, uin)
         self.client = client
@@ -112,8 +128,9 @@ class QRLoginMan(Loginable[QREvent]):
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
+        :meta public:
         :raises `qqqr.exception.UserBreak`: qr polling task is canceled
-        :raises `._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
+        :raises `~aioqzone.api.loginman._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
         :raises `SystemExit`: on unexpected error raised when polling
 
         :return: cookie dict
@@ -138,8 +155,14 @@ class QRLoginMan(Loginable[QREvent]):
             log.warning("Generator Exit captured, continue.")
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
+        except ConnectError as e:
+            log.warning("Connection Error captured, continue.")
+            log.debug(e.request)
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise _NextMethodInterrupt from e
         except HTTPError as e:
-            log.error("Unknown HTTP Error captured, continue.")
+            log.error("Unknown HTTP Error captured, continue.", exc_info=True)
+            log.debug(e.request)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
         except:
@@ -155,6 +178,8 @@ class QRLoginMan(Loginable[QREvent]):
 
 
 class QrStrategy(str, Enum):
+    """Represents QR strategy."""
+
     force = "force"
     prefer = "prefer"
     allow = "allow"
@@ -170,6 +195,8 @@ class MixedLoginEvent(QREvent, UPEvent):
 
 
 class MixedLoginMan(Loginable[MixedLoginEvent]):
+    """A login manager that will try methods according to the given :class:`.QrStrategy`."""
+
     def __init__(
         self,
         client: ClientAdapter,
@@ -198,6 +225,7 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
+        :meta public:
         :raises `qqqr.exception.UserBreak`: qr login canceled
         :raises `aioqzone.exception.LoginError`: not logined
         :raises `SystemExit`: unexcpected error
@@ -218,10 +246,10 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
                 raise e
 
         if self.strategy == "forbid":
-            msg = "您可能被限制账密登陆. 扫码登陆仍然可行."
+            hint = "您可能被限制账密登陆. 扫码登陆仍然可行."
         elif self.strategy != "force":
-            msg = "您可能已被限制登陆."
+            hint = "您可能已被限制登陆."
         else:
-            msg = "你在睡觉！"
+            hint = "你在睡觉！"
 
-        raise LoginError(msg, self.strategy)
+        raise LoginError(hint, self.strategy)

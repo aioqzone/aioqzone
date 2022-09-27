@@ -41,7 +41,7 @@ __在做了:__
 - `jssupport.jsjson.AstLoader` 不需要借助其他进程；
 - 要使用 `jssupport.execjs` 和 `jssupport.jsjson.NodeLoader`，您（至少）需要安装 `Node.js` >= v14；
 - 要使用 `jssupport.jsdom`，您需要安装 `jsdom` 和 `canvas` 两个 npm 包。
-- 验证码部分需要使用 `canvas`，因此您需要正确配置运行环境内的 font config. 前往 [#45](https://github.com/aioqzone/aioqzone/issues/45) 查看详情.
+- 验证码部分需要使用 `canvas`，因此您需要正确配置运行环境内的 font config ([#45](https://github.com/aioqzone/aioqzone/issues/45)).
 
 ## 包描述
 
@@ -79,6 +79,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
 
 - aioqzone 以 [AGPL-3.0](LICENSE) 开源.
+- [免责声明](https://aioqzone.github.io/aioqzone/disclaimers_zh-cn.html)
 
 
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"

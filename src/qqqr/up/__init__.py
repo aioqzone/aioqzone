@@ -1,3 +1,4 @@
+import logging
 import re
 from os import environ as env
 from random import choice, random
@@ -19,7 +20,7 @@ CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
 LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_login_2.js"
 
-
+log = logging.getLogger(__name__)
 UseEncoder = (
     TeaEncoder if env.get("AIOQZONE_PWDENCODER", "").strip().lower() == "python" else NodeEncoder
 )
@@ -195,6 +196,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         resp = LoginResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
         if resp.code == StatusCode.NeedSmsVerify:
             sess.sms_ticket = response.cookies.get("pt_sms_ticket") or ""
+        log.debug(resp)
         return resp
 
     async def login(self):

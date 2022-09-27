@@ -1,9 +1,8 @@
 import asyncio
+import logging
 import re
 from dataclasses import dataclass
 from random import random
-
-import httpx
 
 from qqqr.qr.type import PollResp
 
@@ -14,6 +13,8 @@ from ..event.login import QrEvent
 from ..exception import UserBreak
 from ..utils.daug import du
 from ..utils.encrypt import hash33
+
+log = logging.getLogger(__name__)
 
 SHOW_QR = "https://ssl.ptlogin2.qq.com/ptqrshow"
 POLL_QR = "https://ssl.ptlogin2.qq.com/ptqrlogin"
@@ -90,7 +91,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
             rl = re.findall(r"'(.*?)'[,\)]", r.text)
 
         resp = PollResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
-
+        log.debug(resp)
         return resp
 
     async def _loop(

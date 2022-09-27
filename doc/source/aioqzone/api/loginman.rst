@@ -3,14 +3,5 @@ Login Managers
 
 .. currentmodule:: aioqzone.api.loginman
 
-.. autoclass:: QrStrategy
-    :members:
-
-.. autoclass:: UPLoginMan
-    :members:
-
-.. autoclass:: QRLoginMan
-    :members:
-
-.. autoclass:: MixedLoginMan
-    :members:
+.. automodule:: aioqzone.api.loginman
+    :members: _NextMethodInterrupt, QrStrategy, UPLoginMan, QRLoginMan, MixedLoginMan
