@@ -18,7 +18,7 @@ from qqqr.up import UpLogin
 from qqqr.utils.net import ClientAdapter
 
 from ..event.login import Loginable, LoginMethod, QREvent, UPEvent
-from ..exception import LoginError
+from ..exception import LoginError, SkipLoginInterrupt
 
 log = logging.getLogger(__name__)
 JsError = JsRuntimeError, JsImportError, NodeNotFoundError
@@ -226,24 +226,33 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises `qqqr.exception.UserBreak`: if qr login is canceled and no succeeding method exist and success.
+        :raises `aioqzone.exception.SkipLoginInterrupt`: if all login methods are removed by subclasses.
+        :raises `aioqzone.exception.LoginError`: if all login methods failed.
+        :raises `SystemExit`: if unexcpected error occured in any login method. Succeeding method will not be used.
 
         :return: cookie dict
         """
-        for c in self._order:
+        if not self._order:
+            raise SkipLoginInterrupt
+        user_break = None
+
+        for i, c in enumerate(self._order):
             try:
                 return await c._new_cookie()
             except (TencentLoginError, _NextMethodInterrupt) as e:
-                log.debug(f"Mixed loginman received {e.__class__.__name__}, continue.")
+                excname = e.__class__.__name__
+                log.debug(f"Mixed loginman received {excname}, continue.")
                 continue
             except UserBreak as e:
-                log.debug("Mixed loginman received UserBreak, reraise.")
-                raise e
+                user_break = e
+                log.debug("Mixed loginman received UserBreak, continue.")
             except SystemExit as e:
                 log.debug("Mixed loginman captured System Exit, reraise.")
                 raise e
+
+        if user_break:
+            raise UserBreak from user_break
 
         if self.strategy == "forbid":
             hint = "您可能被限制账密登陆. 扫码登陆仍然可行."

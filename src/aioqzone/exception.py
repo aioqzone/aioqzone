@@ -35,3 +35,9 @@ class CorruptError(ValueError):
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
+
+
+class SkipLoginInterrupt(RuntimeError):
+    """Login is skipped as intended."""
+
+    pass
