@@ -104,8 +104,9 @@ class UPLoginMan(Loginable[UPEvent]):
             raise _NextMethodInterrupt from e
         except BaseException as e:
             log.fatal("Unexpected error in QR login.", exc_info=True)
+            msg = "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
             try:
-                await self.hook.LoginFailed(meth, "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
+                emit_hook(self.hook.LoginFailed(meth, msg))
             finally:
                 exit(1)
 
@@ -150,6 +151,7 @@ class QRLoginMan(Loginable[QREvent]):
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
         except KeyboardInterrupt as e:
+            emit_hook(self.hook.LoginFailed(meth, "用户取消了登录"))
             raise UserBreak from e
         except GeneratorExit as e:
             log.warning("Generator Exit captured, continue.")
@@ -169,7 +171,7 @@ class QRLoginMan(Loginable[QREvent]):
             log.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
             try:
-                await self.hook.LoginFailed(meth, msg)
+                emit_hook(self.hook.LoginFailed(meth, msg))
             finally:
                 exit(1)
         finally:
@@ -216,6 +218,11 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
         if strategy == QrStrategy.prefer:
             self._order = self._order[::-1]
 
+        # use a unified task store
+        self._tasks = self._order[0]._tasks
+        for i in self._order:
+            i._tasks = self._tasks
+
     def register_hook(self, hook: Union[MixedLoginEvent, QrEvent, UpEvent]):
         for c in self._order:
             if isinstance(c, QRLoginMan) and isinstance(hook, QREvent):
@@ -243,7 +250,6 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
             except (TencentLoginError, _NextMethodInterrupt) as e:
                 excname = e.__class__.__name__
                 log.debug(f"Mixed loginman received {excname}, continue.")
-                continue
             except UserBreak as e:
                 user_break = e
                 log.debug("Mixed loginman received UserBreak, continue.")
