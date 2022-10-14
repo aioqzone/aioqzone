@@ -1,66 +1,65 @@
 # aioqzone
 
-aioqzone is a python package handling Qzone web login and wrapping some common Qzone Http apis.
+aioqzone封装了一些Qzone接口。
 
 [![python](https://img.shields.io/pypi/pyversions/aioqzone?logo=python&logoColor=white)][home]
 [![QQQR](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml)
 [![version](https://img.shields.io/pypi/v/aioqzone?logo=python)][pypi]
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-[简体中文](https://github.com/aioqzone/aioqzone/blob/beta/README_zh-cn.md)
+[English](README_en.md)
 
-## Features
+## 功能和特点
 
-### Qzone Feature
+### Qzone 功能
 
-- [x] QR login
-- [x] password login (limited)
-- [x] solve captcha
-- [ ] pass network environment verification
-- [x] get complete html feeds
-- [x] get feed details
-- [x] get Qzone album
-- [x] like/unlike app
-- [x] publish/update/delete text feeds
-- [ ] comment
+- [x] 二维码登录
+- [x] 密码登录 (受限)
+- [x] 计算验证码答案
+- [ ] 通过网络环境检测
+- [x] 爬取HTML说说
+- [x] 爬取说说详细内容
+- [x] 爬取空间相册
+- [x] 点赞/取消赞
+- [x] 发布/修改/删除说说
+- [ ] 评论相关
 
-### Why using this package?
+### 为什么选择 aioqzone
 
-- [x] full ide typing support (typing)
-- [x] api response validation (pydantic)
-- [x] async design
-- [x] complete infrastructure to ease your own develop
-- [x] [doc support](https://aioqzone.github.io/aioqzone)
+- [x] 完整的 IDE 类型支持 (typing)
+- [x] API 结果类型验证 (pydantic)
+- [x] 异步设计
+- [x] 易于二次开发
+- [x] [文档支持](https://aioqzone.github.io/aioqzone)
 
-__Working On:__
+__在做了:__
 
-- [ ] test coverage
+- [ ] 完善的测试覆盖
 
-## Node Dependencies
+## node 依赖
 
-- `jssupport.jsjson.AstLoader` needn't outside processes.
-- To use `jssupport.execjs` and `jssupport.jsjson.NodeLoader`, you need to have `Node.js` >= v14 installed.
-- To use  `jssupport.jsdom`, you need to have npm packages `jsdom` and `canvas` to be installed.
-- Since `canvas` is used during passing captcha, you may need to config your font config properly. See [#45](https://github.com/aioqzone/aioqzone/issues/45) for details.
+- `jssupport.jsjson.AstLoader` 不需要借助其他进程；
+- 要使用 `jssupport.execjs` 和 `jssupport.jsjson.NodeLoader`，您（至少）需要安装 `Node.js` >= v14；
+- 要使用 `jssupport.jsdom`，您需要安装 `jsdom` 和 `canvas` 两个 npm 包。
+- 验证码部分需要使用 `canvas`，因此您需要正确配置运行环境内的 font config ([#45](https://github.com/aioqzone/aioqzone/issues/45)).
 
-## Description
+## 包描述
 
-|package    |brief description  |
+|包名    |简述  |
 |-----------|-------------------|
-|aioqzone   |qzone api wrapper  |
-|jssupport  |communicate with node|
-|qqqr       |qzone web login    |
+|aioqzone   |封装Qzone API  |
+|jssupport  |执行JS            |
+|qqqr       |网页登录    |
 
-## Examples
+## 例子
 
-You can look for these repos for examples in practice.
+这些仓库提供了一些 aioqzone 的实际使用示例。
 
-### aioqzone plugins
+### aioqzone 的插件们
 
-- [aioqzone-feed][aioqzone-feed]: aioqzone plugin providing higher level api for processing feed
+- [aioqzone-feed][aioqzone-feed]: 提供了操作 feed 的简单接口
 
-
-## License
+## 许可证
 
 ```
 Copyright (C) 2022 aioqzone.
@@ -79,8 +78,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
 
-- [AGPL-3.0](LICENSE)
-- [Disclaimers](https://aioqzone.github.io/aioqzone/disclaimers.html)
+- aioqzone 以 [AGPL-3.0](LICENSE) 开源.
+- [免责声明](https://aioqzone.github.io/aioqzone/disclaimers_zh-cn.html)
 
 
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
