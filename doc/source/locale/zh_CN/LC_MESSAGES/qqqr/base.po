@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/qqqr/base.rst:2
+msgid "QQQR Bases"
+msgstr ""
+
+#: of qqqr.base.LoginBase.login:1
+msgid "Block until cookie is received."
+msgstr ""
+
+#: of qqqr.base.LoginBase.login qqqr.base.LoginBase.new
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.base.LoginBase.login:4
+msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
+msgstr ""
+
+#: of qqqr.base.LoginBase.new:1
+msgid "Create a new :class:`LoginSession`."
+msgstr ""
+
+#: of qqqr.base.LoginSession:1
+msgid "A LoginSession collects all data generated or received during login."
+msgstr ""
+
+#: ../../../docstring of qqqr.base.LoginSession.login_url:1
+msgid "GET this login url to get cookies."
+msgstr ""
+
+#: ../../../docstring of qqqr.base.LoginSession.logined:1
+msgid "whether this session is logined."
+msgstr ""
+
+#~ msgid "Return type"
+#~ msgstr ""

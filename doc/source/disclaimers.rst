@@ -1,8 +1,6 @@
 Disclaimers
 ==============================
 
-:doc:`简体中文 <disclaimers_zh-cn>`
-
 .. glossary::
 
     aioqzone application

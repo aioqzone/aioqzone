@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/qqqr/event/hook.rst:2
+msgid "Event and Hooks"
+msgstr "事件与回调"
+
+#: ../../source/qqqr/event/hook.rst:4
+msgid ""
+"aioqzone has designed a simple hook management system. You may extend "
+"your own event, or just inherit a event and implement your hooks."
+msgstr ""
+
+#: of qqqr.event:1
+msgid "Define hooks that can trigger user actions."
+msgstr ""
+
+#: of qqqr.event.Emittable:1
+msgid "An object has some event to trigger."
+msgstr ""
+
+#: of qqqr.event.Emittable.clear:1
+msgid "Clear the given task sets"
+msgstr ""
+
+#: of qqqr.event.Emittable.clear qqqr.event.Emittable.wait
+msgid "参数"
+msgstr ""
+
+#: of qqqr.event.Emittable.clear:4
+msgid "task class names"
+msgstr ""
+
+#: of qqqr.event.Emittable.clear:6
+msgid ""
+"Cancel the task if a set is not empty, defaults to True. Else will just "
+"clear the ref."
+msgstr ""
+
+#: of qqqr.event.Emittable.wait:1
+msgid "Wait for all task in the specific task set(s)."
+msgstr ""
+
+#: of qqqr.event.Emittable.wait:4
+msgid "timeout, defaults to None"
+msgstr ""
+
+#: of qqqr.event.Emittable.wait qqqr.event.EventManager.sub_of
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.event.Emittable.wait:6
+msgid ""
+":py:data:`~typing.Tuple`\\[:py:class:`~typing.Set`\\[:py:class:`~_asyncio.Task`],"
+" :py:class:`~typing.Set`\\[:py:class:`~_asyncio.Task`]]"
+msgstr ""
+
+#: of qqqr.event.Emittable.wait
+msgid "返回"
+msgstr ""
+
+#: of qqqr.event.Emittable.wait:7
+msgid "done, pending"
+msgstr ""
+
+#: of qqqr.event.Emittable.wait:10
+msgid ""
+"If `timeout` is None, this method will loop until all tasks in the set(s)"
+" are done. That means if other tasks are added during awaiting, the added"
+" task will be waited as well."
+msgstr ""
+
+#: of qqqr.event.Emittable.wait:13
+msgid ":meth:`asyncio.wait`"
+msgstr ""
+
+#: of qqqr.event.Event:1
+msgid "Base class for event system."
+msgstr ""
+
+#: of qqqr.event.EventManager:1
+msgid "EventManager is a convenient way to create/trace/manage friend classes."
+msgstr ""
+
+#: of qqqr.event.EventManager.sub_of:1
+msgid ""
+"Use this method to get current inheritence from an ancestor which was "
+"given to the factory."
+msgstr ""
+
+#: of qqqr.event.EventManager.sub_of:10
+msgid ":py:class:`~typing.Type`\\[\\~Evt]"
+msgstr ""
+
+#: of qqqr.event.NullEvent:1
+msgid "For debugging"
+msgstr ""
+
+#~ msgid "Parameters"
+#~ msgstr ""
+
+#~ msgid "Return type"
+#~ msgstr ""
+
+#~ msgid "Returns"
+#~ msgstr ""

@@ -1,0 +1,86 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/jssupport/jsdom.rst:2
+msgid "Mocking a Dom Environment"
+msgstr "伪装一个 Dom 环境"
+
+#: jssupport.jsdom.JSDOM:1 of
+msgid ""
+"JSDOM class provides a complete environment to encounter detection based "
+"on collecting runtime environment information."
+msgstr ""
+
+#: jssupport.jsdom.JSDOM:4 of
+msgid "requires :js:mod:`jsdom` to be installed."
+msgstr ""
+
+#: jssupport.jsdom.JSDOM.add_eval:1 of
+msgid "Cache this script into queue. Scripts will be called in order."
+msgstr ""
+
+#: jssupport.jsdom.JSDOM.add_eval jssupport.jsdom.JSDOM.check_jsdom
+#: jssupport.jsdom.JSDOM.eval of
+msgid "返回"
+msgstr ""
+
+#: jssupport.jsdom.JSDOM.add_eval:3 of
+msgid "None"
+msgstr ""
+
+#: jssupport.jsdom.JSDOM.check_all:1 of
+msgid "Run all checks to see if the environment is ready to run."
+msgstr ""
+
+#: jssupport.jsdom.JSDOM.check_jsdom:1 of
+msgid "Check if :js:mod:`jsdom` is installed."
+msgstr ""
+
+#: jssupport.jsdom.JSDOM.check_jsdom:3 of
+msgid "True if :js:mod:`jsdom` can be imported. Otherwise False."
+msgstr ""
+
+#: jssupport.jsdom.JSDOM.eval:1 of
+msgid "Eval a script(expression) throught :js:meth:`window.eval`."
+msgstr ""
+
+#: jssupport.jsdom.JSDOM.eval:3 of
+msgid "script(expression) result, if any."
+msgstr ""
+
+#: ../../../docstring jssupport.jsdom.JSDOM.post:1 of
+msgid ""
+"Expressions executed after :obj:`.run`. Will not be cleared after "
+"executing."
+msgstr ""
+
+#: ../../../docstring jssupport.jsdom.JSDOM.run:1 of
+msgid ""
+"Expressions to be executed, after :obj:`.setup` but before :obj:`.post`. "
+"Will be cleared after executing."
+msgstr ""
+
+#: ../../../docstring jssupport.jsdom.JSDOM.setup:1 of
+msgid ""
+"Expressions executed before :obj:`.run`. Will not be cleared after "
+"executing."
+msgstr ""
+
+#~ msgid "Returns"
+#~ msgstr ""

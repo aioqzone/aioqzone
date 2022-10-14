@@ -34,7 +34,7 @@ jobs:
           ref: beta
       - name: Get beta SHA
         id: sha
-        run: echo "::set-output name=sha::$(git rev-parse --short HEAD)"
+        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}

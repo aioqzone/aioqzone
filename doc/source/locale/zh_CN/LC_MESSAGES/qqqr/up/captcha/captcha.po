@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/qqqr/up/captcha/captcha.rst:2
+msgid "Captcha and TcaptchaSession"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.base64_ua:1
+msgid "The base64_ua function encodes the User-Agent header in base64."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.base64_ua
+#: qqqr.up.captcha.Captcha.get_captcha_problem qqqr.up.captcha.Captcha.get_tdc
+#: qqqr.up.captcha.Captcha.new qqqr.up.captcha.Captcha.solve_captcha
+#: qqqr.up.captcha.TcaptchaSession.solve_workload
+msgid "返回"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.base64_ua:3
+msgid "A string containing the base64 encoded user agent"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.get_captcha_problem:1
+msgid ""
+"The get_captcha_problem function is a coroutine that accepts a "
+"TcaptchaSession object as an argument. It then uses the session to make "
+"an HTTP GET request to the captcha images (the problem). The images will "
+"be stored in the given session."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.get_captcha_problem
+#: qqqr.up.captcha.Captcha.get_tdc qqqr.up.captcha.Captcha.solve_captcha
+#: qqqr.up.captcha.TcaptchaSession.solve_workload
+msgid "参数"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.get_captcha_problem:6
+#: qqqr.up.captcha.Captcha.get_tdc:4
+msgid "captcha session"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.get_captcha_problem:7
+#: qqqr.up.captcha.Captcha.get_tdc:7 qqqr.up.captcha.Captcha.solve_captcha:10
+#: qqqr.up.captcha.TcaptchaSession.solve_workload:7
+msgid "None"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.get_tdc:1
+msgid ""
+"The get_tdc function is a coroutine that sets an instance of the "
+":class:`TDC` class to `sess`."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.get_tdc:6
+msgid ""
+"Specify the type of :class:`TDC` instance to be returned, default as "
+":class:`TDC`."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.new:1
+msgid "``prehandle``. Call this method to generate a new verify session."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.new:3
+msgid "a tcaptcha session"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.new:1
+msgid "alias of :meth:`.new`"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.solve_captcha:1
+msgid ""
+"The solve_captcha function solves the captcha problem. If captcha images "
+"is not set, it will call :meth:`.get_captcha_problem` firstly."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.solve_captcha:4
+msgid ""
+"It then solve the captcha as that in :class:`.Jigsaw`. The answer is "
+"saved into `sess`."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.solve_captcha:6
+msgid ""
+"This function will also call :meth:`TDC.set_data` to imitate human "
+"behavior when solving captcha."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.solve_captcha:9
+msgid "Store the information of the current session"
+msgstr ""
+
+#: of qqqr.up.captcha.TcaptchaSession.solve_workload:1
+msgid ""
+"The solve_workload function solves the workload from Tcaptcha: It solves "
+"md5(:obj:`PowCfg.prefix` + str(?)) == :obj:`PowCfg.md5`. The result and "
+"the calculating duration will be saved into this session."
+msgstr ""
+
+#: of qqqr.up.captcha.TcaptchaSession.solve_workload:6
+msgid "Calculating timeout, default as 30 seconds."
+msgstr ""
+
+#~ msgid "Returns"
+#~ msgstr ""
+
+#~ msgid "Parameters"
+#~ msgstr ""

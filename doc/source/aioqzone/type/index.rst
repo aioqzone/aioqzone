@@ -1,5 +1,5 @@
-aioqzone Types
-==============
+aioqzone Models
+====================
 
 .. automodule:: aioqzone.type
 
