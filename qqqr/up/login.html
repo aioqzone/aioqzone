@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="zh-CN" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UpLogin and UpSession &mdash; aioqzone 0.9.5.dev3 documentation</title>
+  <title>UpLogin and UpSession &mdash; aioqzone 0.9.7.dev1 文档</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/penguin-blob.webp"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -18,9 +19,10 @@
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
     <link rel="next" title="UpLogin Types" href="type.html" />
     <link rel="prev" title="Solving Jigsaw-Like Tcaptcha" href="captcha/jigsaw.html" /> 
 </head>
@@ -31,23 +33,24 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> aioqzone
+            <img src="../../_static/penguin-blob.webp" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="在文档中搜索" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../aioqzone/index.html">aioqzone</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">QQQR</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../event/index.html">aioqzone Event-Hook System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../qr/index.html">QRcode Login</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">Uin-Password Login</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../event/index.html">aioqzone 事件-回调系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../qr/index.html">二维码登录</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">用户名-密码登录</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="captcha/captcha.html">Captcha and TcaptchaSession</a></li>
 <li class="toctree-l3"><a class="reference internal" href="captcha/jigsaw.html">Solving Jigsaw-Like Tcaptcha</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">UpLogin and UpSession</a><ul>
@@ -59,14 +62,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../base.html">QQQR Bases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../exception.html">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">QQQR Exceptions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<p class="caption" role="heading"><span class="caption-text">相关链接</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">Disclaimers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">免责声明</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -87,10 +90,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">QQQR</a> &raquo;</li>
-          <li><a href="index.html">Uin-Password Login</a> &raquo;</li>
+          <li><a href="index.html">用户名-密码登录</a> &raquo;</li>
       <li>UpLogin and UpSession</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/qqqr/up/login.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/qqqr/up/login.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -99,20 +102,20 @@
            <div itemprop="articleBody">
              
   <section id="uplogin-and-upsession">
-<h1>UpLogin and UpSession<a class="headerlink" href="#uplogin-and-upsession" title="Permalink to this heading"></a></h1>
+<h1>UpLogin and UpSession<a class="headerlink" href="#uplogin-and-upsession" title="此标题的永久链接"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="qqqr.up.UpLogin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.</span></span><span class="sig-name descname"><span class="pre">UpLogin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.</span></span><span class="sig-name descname"><span class="pre">UpLogin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin" title="永久链接至目标"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="qqqr.up.UpLogin.captcha">
-<span class="sig-name descname"><span class="pre">captcha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.captcha" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">captcha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.captcha" title="永久链接至目标"></a></dt>
 <dd><p>The captcha function is used to build and cache a <code class="xref py py-class docutils literal notranslate"><span class="pre">Captcha</span></code> instance.
 It takes in a string, which is the session id got from <a class="reference internal" href="#qqqr.up.UpLogin.new" title="qqqr.up.UpLogin.new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new()</span></code></a>, and returns the <code class="xref py py-class docutils literal notranslate"><span class="pre">Captcha</span></code> instance.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Pass the session id to the captcha function</p>
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><p><strong>sid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Pass the session id to the captcha function</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">返回</dt>
 <dd class="field-even"><p>An instance of the captcha class</p>
 </dd>
 </dl>
@@ -120,26 +123,26 @@ It takes in a string, which is the session id got from <a class="reference inter
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="qqqr.up.UpLogin.encode_cls">
-<span class="sig-name descname"><span class="pre">encode_cls</span></span><a class="headerlink" href="#qqqr.up.UpLogin.encode_cls" title="Permalink to this definition"></a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">NodeEncoder</span></code></p>
+<span class="sig-name descname"><span class="pre">encode_cls</span></span><a class="headerlink" href="#qqqr.up.UpLogin.encode_cls" title="永久链接至目标"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeEncoder</span></code> 的别名</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qqqr.up.UpLogin.login">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.login" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.login" title="永久链接至目标"></a></dt>
 <dd><p>Block until cookie is received.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qqqr.up.UpLogin.new">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.new" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.new" title="永久链接至目标"></a></dt>
 <dd><p>Create a <a class="reference internal" href="#qqqr.up.UpSession" title="qqqr.up.UpSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpSession</span></code></a>. This will call <cite>check</cite> api of Qzone, and receive result
 about whether this login needs a captcha, sms verification, etc.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">抛出</dt>
 <dd class="field-odd"><p><strong>httpx.HTTPStatusError</strong> – </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">返回</dt>
 <dd class="field-even"><p>a up login session</p>
 </dd>
 </dl>
@@ -147,14 +150,14 @@ about whether this login needs a captcha, sms verification, etc.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qqqr.up.UpLogin.passVC">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">passVC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.passVC" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">passVC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.passVC" title="永久链接至目标"></a></dt>
 <dd><p>The passVC function is used to pass the verification tcaptcha.
 It is called when <a class="reference internal" href="#qqqr.up.UpLogin.try_login" title="qqqr.up.UpLogin.try_login"><code class="xref py py-meth docutils literal notranslate"><span class="pre">try_login()</span></code></a> returns a <code class="xref py py-obj docutils literal notranslate"><span class="pre">StatusCode.NeedCaptcha</span></code> code.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">参数</dt>
 <dd class="field-odd"><p><strong>sess</strong> (<a class="reference internal" href="#qqqr.up.UpSession" title="qqqr.up.UpSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpSession</span></code></a>) – the session object</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">返回</dt>
 <dd class="field-even"><p>The session with <code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_rst</span></code> is set.</p>
 </dd>
 </dl>
@@ -162,10 +165,10 @@ It is called when <a class="reference internal" href="#qqqr.up.UpLogin.try_login
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qqqr.up.UpLogin.send_sms_code">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send_sms_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.send_sms_code" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send_sms_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.send_sms_code" title="永久链接至目标"></a></dt>
 <dd><p>Send verify sms (to get dynamic code)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">参数</dt>
 <dd class="field-odd"><p><strong>sess</strong> (<a class="reference internal" href="#qqqr.up.UpSession" title="qqqr.up.UpSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpSession</span></code></a>) – The up login session to send sms code</p>
 </dd>
 </dl>
@@ -173,14 +176,14 @@ It is called when <a class="reference internal" href="#qqqr.up.UpLogin.try_login
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qqqr.up.UpLogin.try_login">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">try_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.try_login" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">try_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpLogin.try_login" title="永久链接至目标"></a></dt>
 <dd><p>Check if current session meets the login condition.
 It takes a session object and returns response of this try.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">参数</dt>
 <dd class="field-odd"><p><strong>sess</strong> (<a class="reference internal" href="#qqqr.up.UpSession" title="qqqr.up.UpSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">UpSession</span></code></a>) – Store the session information</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">返回</dt>
 <dd class="field-even"><p>A login response</p>
 </dd>
 </dl>
@@ -190,7 +193,7 @@ It takes a session object and returns response of this try.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="qqqr.up.UpSession">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.</span></span><span class="sig-name descname"><span class="pre">UpSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_sig</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpSession" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.up.</span></span><span class="sig-name descname"><span class="pre">UpSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_sig</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.up.UpSession" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -199,19 +202,19 @@ It takes a session object and returns response of this try.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="captcha/jigsaw.html" class="btn btn-neutral float-left" title="Solving Jigsaw-Like Tcaptcha" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="type.html" class="btn btn-neutral float-right" title="UpLogin Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="captcha/jigsaw.html" class="btn btn-neutral float-left" title="Solving Jigsaw-Like Tcaptcha" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="type.html" class="btn btn-neutral float-right" title="UpLogin Types" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, aioqzone.</p>
+    <p>&#169; 版权所有 2022, aioqzone.</p>
   </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
    
 
 </footer>

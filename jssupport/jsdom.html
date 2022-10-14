@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="zh-CN" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mocking a Dom Environment &mdash; aioqzone 0.9.5.dev3 documentation</title>
+  <title>伪装一个 Dom 环境 &mdash; aioqzone 0.9.7.dev1 文档</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/autodoc_pydantic.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/penguin-blob.webp"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -18,11 +19,12 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/translations.js"></script>
     <script src="../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Parsing Javascript Dictionary" href="jsjson.html" />
-    <link rel="prev" title="Execute JavaScripts" href="execjs.html" /> 
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="解析 JavaScript 字典" href="jsjson.html" />
+    <link rel="prev" title="运行 JavaScripts" href="execjs.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,21 +33,22 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../index.html" class="icon icon-home"> aioqzone
+            <img src="../_static/penguin-blob.webp" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="在文档中搜索" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../aioqzone/index.html">aioqzone</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">jssupport</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="execjs.html">Execute JavaScripts</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Mocking a Dom Environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="execjs.html">运行 JavaScripts</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">伪装一个 Dom 环境</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#jssupport.jsdom.JSDOM"><code class="docutils literal notranslate"><span class="pre">JSDOM</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#jssupport.jsdom.JSDOM.add_eval"><code class="docutils literal notranslate"><span class="pre">JSDOM.add_eval()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#jssupport.jsdom.JSDOM.check_all"><code class="docutils literal notranslate"><span class="pre">JSDOM.check_all()</span></code></a></li>
@@ -58,15 +61,15 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="jsjson.html">Parsing Javascript Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsjson.html">解析 JavaScript 字典</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../qqqr/index.html">QQQR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference.html">References</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<p class="caption" role="heading"><span class="caption-text">相关链接</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../disclaimers.html">Disclaimers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimers.html">免责声明</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -87,9 +90,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">jssupport</a> &raquo;</li>
-      <li>Mocking a Dom Environment</li>
+      <li>伪装一个 Dom 环境</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/jssupport/jsdom.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/jssupport/jsdom.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -98,22 +101,22 @@
            <div itemprop="articleBody">
              
   <section id="module-jssupport.jsdom">
-<span id="mocking-a-dom-environment"></span><h1>Mocking a Dom Environment<a class="headerlink" href="#module-jssupport.jsdom" title="Permalink to this heading"></a></h1>
+<span id="mocking-a-dom-environment"></span><h1>伪装一个 Dom 环境<a class="headerlink" href="#module-jssupport.jsdom" title="此标题的永久链接"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="jssupport.jsdom.JSDOM">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jssupport.jsdom.</span></span><span class="sig-name descname"><span class="pre">JSDOM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ua</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">referrer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jssupport.jsdom.</span></span><span class="sig-name descname"><span class="pre">JSDOM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ua</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">referrer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM" title="永久链接至目标"></a></dt>
 <dd><p>JSDOM class provides a complete environment to encounter detection based on collecting
 runtime environment information.</p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="admonition-title">备注</p>
 <p>requires <code class="xref js js-mod docutils literal notranslate"><span class="pre">jsdom</span></code> to be installed.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="jssupport.jsdom.JSDOM.add_eval">
-<span class="sig-name descname"><span class="pre">add_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM.add_eval" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM.add_eval" title="永久链接至目标"></a></dt>
 <dd><p>Cache this script into queue. Scripts will be called in order.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">返回</dt>
 <dd class="field-odd"><p>None</p>
 </dd>
 </dl>
@@ -121,16 +124,16 @@ runtime environment information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jssupport.jsdom.JSDOM.check_all">
-<span class="sig-name descname"><span class="pre">check_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM.check_all" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">check_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM.check_all" title="永久链接至目标"></a></dt>
 <dd><p>Run all checks to see if the environment is ready to run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jssupport.jsdom.JSDOM.check_jsdom">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_jsdom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM.check_jsdom" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_jsdom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM.check_jsdom" title="永久链接至目标"></a></dt>
 <dd><p>Check if <code class="xref js js-mod docutils literal notranslate"><span class="pre">jsdom</span></code> is installed.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">返回</dt>
 <dd class="field-odd"><p>True if <code class="xref js js-mod docutils literal notranslate"><span class="pre">jsdom</span></code> can be imported. Otherwise False.</p>
 </dd>
 </dl>
@@ -138,10 +141,10 @@ runtime environment information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jssupport.jsdom.JSDOM.eval">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM.eval" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jssupport.jsdom.JSDOM.eval" title="永久链接至目标"></a></dt>
 <dd><p>Eval a script(expression) throught <code class="xref js js-meth docutils literal notranslate"><span class="pre">window.eval()</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">返回</dt>
 <dd class="field-odd"><p>script(expression) result, if any.</p>
 </dd>
 </dl>
@@ -149,21 +152,21 @@ runtime environment information.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jssupport.jsdom.JSDOM.post">
-<span class="sig-name descname"><span class="pre">post</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">JsExpr</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.jsdom.JSDOM.post" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">post</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">JsExpr</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.jsdom.JSDOM.post" title="永久链接至目标"></a></dt>
 <dd><p>Expressions executed after <a class="reference internal" href="#jssupport.jsdom.JSDOM.run" title="jssupport.jsdom.JSDOM.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>.
 Will not be cleared after executing.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jssupport.jsdom.JSDOM.run">
-<span class="sig-name descname"><span class="pre">run</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">JsExpr</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.jsdom.JSDOM.run" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">JsExpr</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.jsdom.JSDOM.run" title="永久链接至目标"></a></dt>
 <dd><p>Expressions to be executed, after <a class="reference internal" href="#jssupport.jsdom.JSDOM.setup" title="jssupport.jsdom.JSDOM.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a> but before <a class="reference internal" href="#jssupport.jsdom.JSDOM.post" title="jssupport.jsdom.JSDOM.post"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code></a>.
 Will be cleared after executing.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jssupport.jsdom.JSDOM.setup">
-<span class="sig-name descname"><span class="pre">setup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">JsExpr</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.jsdom.JSDOM.setup" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">JsExpr</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#jssupport.jsdom.JSDOM.setup" title="永久链接至目标"></a></dt>
 <dd><p>Expressions executed before <a class="reference internal" href="#jssupport.jsdom.JSDOM.run" title="jssupport.jsdom.JSDOM.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>.
 Will not be cleared after executing.</p>
 </dd></dl>
@@ -176,19 +179,19 @@ Will not be cleared after executing.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="execjs.html" class="btn btn-neutral float-left" title="Execute JavaScripts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="jsjson.html" class="btn btn-neutral float-right" title="Parsing Javascript Dictionary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="execjs.html" class="btn btn-neutral float-left" title="运行 JavaScripts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="jsjson.html" class="btn btn-neutral float-right" title="解析 JavaScript 字典" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, aioqzone.</p>
+    <p>&#169; 版权所有 2022, aioqzone.</p>
   </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
    
 
 </footer>

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="zh-CN" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Internal Types &mdash; aioqzone 0.9.5.dev3 documentation</title>
+  <title>Internal Types &mdash; aioqzone 0.9.7.dev1 文档</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/penguin-blob.webp"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -18,9 +19,10 @@
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
     <link rel="next" title="Response Models" href="resp.html" />
     <link rel="prev" title="Entities" href="entities.html" /> 
 </head>
@@ -31,22 +33,23 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> aioqzone
+            <img src="../../_static/penguin-blob.webp" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="在文档中搜索" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api/index.html">Qzone APIs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/loginman.html">Login Managers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Types</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api/loginman.html">登录管理器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone 异常</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Models</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="entities.html">Entities</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Internal Types</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.internal.AlbumData"><code class="docutils literal notranslate"><span class="pre">AlbumData</span></code></a></li>
@@ -63,9 +66,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<p class="caption" role="heading"><span class="caption-text">相关链接</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">Disclaimers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">免责声明</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -86,10 +89,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">aioqzone</a> &raquo;</li>
-          <li><a href="index.html">aioqzone Types</a> &raquo;</li>
+          <li><a href="index.html">aioqzone Models</a> &raquo;</li>
       <li>Internal Types</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/aioqzone/type/internal.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/aioqzone/type/internal.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -97,13 +100,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="internal-types">
-<h1>Internal Types<a class="headerlink" href="#internal-types" title="Permalink to this heading"></a></h1>
+  <section id="module-aioqzone.type.internal">
+<span id="internal-types"></span><h1>Internal Types<a class="headerlink" href="#module-aioqzone.type.internal" title="此标题的永久链接"></a></h1>
 <p>This module defines types that are used internally by aioqzone and its plugins.
 These types are not designed to represent responses from Qzone.</p>
-<span class="target" id="module-aioqzone.type.internal"></span><dl class="py class pydantic_model">
+<dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.internal.AlbumData">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.internal.</span></span><span class="sig-name descname"><span class="pre">AlbumData</span></span><a class="headerlink" href="#aioqzone.type.internal.AlbumData" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.internal.</span></span><span class="sig-name descname"><span class="pre">AlbumData</span></span><a class="headerlink" href="#aioqzone.type.internal.AlbumData" title="永久链接至目标"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
@@ -115,24 +118,24 @@ These types are not designed to represent responses from Qzone.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.AlbumData.hostuin">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hostuin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.AlbumData.hostuin" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hostuin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.AlbumData.hostuin" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.AlbumData.pickey">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pickey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.AlbumData.pickey" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pickey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.AlbumData.pickey" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.AlbumData.topicid">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">topicid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.AlbumData.topicid" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">topicid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.AlbumData.topicid" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.internal.</span></span><span class="sig-name descname"><span class="pre">LikeData</span></span><a class="headerlink" href="#aioqzone.type.internal.LikeData" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.internal.</span></span><span class="sig-name descname"><span class="pre">LikeData</span></span><a class="headerlink" href="#aioqzone.type.internal.LikeData" title="永久链接至目标"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
@@ -147,57 +150,57 @@ These types are not designed to represent responses from Qzone.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData.abstime">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.abstime" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abstime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.abstime" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData.appid">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">appid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.appid" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">appid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.appid" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData.curkey">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curkey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.curkey" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curkey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.curkey" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData.fid">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.fid" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.fid" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData.typeid">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">typeid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.typeid" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">typeid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.typeid" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData.unikey">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unikey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.unikey" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unikey</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><span class="pre">str</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.internal.LikeData.unikey" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData.persudo_curkey">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persudo_curkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abstime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.LikeData.persudo_curkey" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persudo_curkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abstime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.LikeData.persudo_curkey" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.type.internal.LikeData.persudo_unikey">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persudo_unikey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">appid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.LikeData.persudo_unikey" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persudo_unikey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">appid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.LikeData.persudo_unikey" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.type.internal.PersudoCurkey">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.internal.</span></span><span class="sig-name descname"><span class="pre">PersudoCurkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abstime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.PersudoCurkey" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.internal.</span></span><span class="sig-name descname"><span class="pre">PersudoCurkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abstime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.PersudoCurkey" title="永久链接至目标"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.type.internal.PersudoCurkey.build">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abstime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.PersudoCurkey.build" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abstime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.PersudoCurkey.build" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.type.internal.PersudoCurkey.from_str">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curkey</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.PersudoCurkey.from_str" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curkey</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.type.internal.PersudoCurkey.from_str" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -208,19 +211,19 @@ These types are not designed to represent responses from Qzone.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="entities.html" class="btn btn-neutral float-left" title="Entities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="resp.html" class="btn btn-neutral float-right" title="Response Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="entities.html" class="btn btn-neutral float-left" title="Entities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="resp.html" class="btn btn-neutral float-right" title="Response Models" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, aioqzone.</p>
+    <p>&#169; 版权所有 2022, aioqzone.</p>
   </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
    
 
 </footer>

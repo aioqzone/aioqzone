@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="zh-CN" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aioqzone Exceptions &mdash; aioqzone 0.9.5.dev3 documentation</title>
+  <title>aioqzone 异常 &mdash; aioqzone 0.9.7.dev1 文档</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/autodoc_pydantic.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/penguin-blob.webp"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -18,11 +19,12 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/translations.js"></script>
     <script src="../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="aioqzone Types" href="type/index.html" />
-    <link rel="prev" title="Login Managers" href="api/loginman.html" /> 
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="aioqzone Models" href="type/index.html" />
+    <link rel="prev" title="登录管理器" href="api/loginman.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,39 +33,41 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../index.html" class="icon icon-home"> aioqzone
+            <img src="../_static/penguin-blob.webp" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="在文档中搜索" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">aioqzone</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api/index.html">Qzone APIs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/loginman.html">Login Managers</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">aioqzone Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/loginman.html">登录管理器</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aioqzone 异常</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aioqzone.exception.CorruptError"><code class="docutils literal notranslate"><span class="pre">CorruptError</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aioqzone.exception.LoginError"><code class="docutils literal notranslate"><span class="pre">LoginError</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#aioqzone.exception.QzoneError"><code class="docutils literal notranslate"><span class="pre">QzoneError</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#aioqzone.exception.QzoneError.msg"><code class="docutils literal notranslate"><span class="pre">QzoneError.msg</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#aioqzone.exception.SkipLoginInterrupt"><code class="docutils literal notranslate"><span class="pre">SkipLoginInterrupt</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="type/index.html">aioqzone Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type/index.html">aioqzone Models</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../jssupport/index.html">jssupport</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../qqqr/index.html">QQQR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference.html">References</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<p class="caption" role="heading"><span class="caption-text">相关链接</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../disclaimers.html">Disclaimers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimers.html">免责声明</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -84,9 +88,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">aioqzone</a> &raquo;</li>
-      <li>aioqzone Exceptions</li>
+      <li>aioqzone 异常</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/aioqzone/exception.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/aioqzone/exception.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -95,28 +99,34 @@
            <div itemprop="articleBody">
              
   <section id="module-aioqzone.exception">
-<span id="aioqzone-exceptions"></span><h1>aioqzone Exceptions<a class="headerlink" href="#module-aioqzone.exception" title="Permalink to this heading"></a></h1>
+<span id="aioqzone-exceptions"></span><h1>aioqzone 异常<a class="headerlink" href="#module-aioqzone.exception" title="此标题的永久链接"></a></h1>
 <dl class="py exception">
 <dt class="sig sig-object py" id="aioqzone.exception.CorruptError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">CorruptError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.CorruptError" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">CorruptError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.CorruptError" title="永久链接至目标"></a></dt>
 <dd><p>Data corrupted in transfer.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="aioqzone.exception.LoginError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">LoginError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.LoginError" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">LoginError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.LoginError" title="永久链接至目标"></a></dt>
 <dd><p>Login failed for some reasons.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="aioqzone.exception.QzoneError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">QzoneError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.QzoneError" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">QzoneError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.exception.QzoneError" title="永久链接至目标"></a></dt>
 <dd><p>HTTP OK, but Qzone returns an error code.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="aioqzone.exception.QzoneError.msg">
-<span class="sig-name descname"><span class="pre">msg</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'unknown'</span></em><a class="headerlink" href="#aioqzone.exception.QzoneError.msg" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">msg</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'unknown'</span></em><a class="headerlink" href="#aioqzone.exception.QzoneError.msg" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="aioqzone.exception.SkipLoginInterrupt">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.exception.</span></span><span class="sig-name descname"><span class="pre">SkipLoginInterrupt</span></span><a class="headerlink" href="#aioqzone.exception.SkipLoginInterrupt" title="永久链接至目标"></a></dt>
+<dd><p>Login is skipped as intended.</p>
 </dd></dl>
 
 </section>
@@ -125,19 +135,19 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="api/loginman.html" class="btn btn-neutral float-left" title="Login Managers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="type/index.html" class="btn btn-neutral float-right" title="aioqzone Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api/loginman.html" class="btn btn-neutral float-left" title="登录管理器" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="type/index.html" class="btn btn-neutral float-right" title="aioqzone Models" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, aioqzone.</p>
+    <p>&#169; 版权所有 2022, aioqzone.</p>
   </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
    
 
 </footer>

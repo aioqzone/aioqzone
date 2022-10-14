@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="zh-CN" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>aioqzone Types &mdash; aioqzone 0.9.5.dev3 documentation</title>
+  <title>aioqzone Models &mdash; aioqzone 0.9.7.dev1 文档</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/penguin-blob.webp"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -18,11 +19,12 @@
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
     <link rel="next" title="Entities" href="entities.html" />
-    <link rel="prev" title="aioqzone Exceptions" href="../exception.html" /> 
+    <link rel="prev" title="aioqzone 异常" href="../exception.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,22 +33,23 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> aioqzone
+            <img src="../../_static/penguin-blob.webp" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="在文档中搜索" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api/index.html">Qzone APIs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/loginman.html">Login Managers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">aioqzone Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/loginman.html">登录管理器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone 异常</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">aioqzone Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="entities.html">Entities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="internal.html">Internal Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="resp.html">Response Models</a></li>
@@ -58,9 +61,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<p class="caption" role="heading"><span class="caption-text">相关链接</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">Disclaimers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">免责声明</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -81,9 +84,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">aioqzone</a> &raquo;</li>
-      <li>aioqzone Types</li>
+      <li>aioqzone Models</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/aioqzone/type/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/aioqzone/type/index.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -91,11 +94,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="aioqzone-types">
-<h1>aioqzone Types<a class="headerlink" href="#aioqzone-types" title="Permalink to this heading"></a></h1>
+  <section id="module-aioqzone.type">
+<span id="aioqzone-models"></span><h1>aioqzone Models<a class="headerlink" href="#module-aioqzone.type" title="此标题的永久链接"></a></h1>
 <p>aioqzone typing system. Aims at making full use of pydantic type-validation
 and python typing support after py36.</p>
-<span class="target" id="module-aioqzone.type"></span><div class="toctree-wrapper compound">
+<div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="entities.html">Entities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="internal.html">Internal Types</a></li>
@@ -108,19 +111,19 @@ and python typing support after py36.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../exception.html" class="btn btn-neutral float-left" title="aioqzone Exceptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="entities.html" class="btn btn-neutral float-right" title="Entities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../exception.html" class="btn btn-neutral float-left" title="aioqzone 异常" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="entities.html" class="btn btn-neutral float-right" title="Entities" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, aioqzone.</p>
+    <p>&#169; 版权所有 2022, aioqzone.</p>
   </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
    
 
 </footer>

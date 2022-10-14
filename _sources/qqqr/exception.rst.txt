@@ -1,5 +1,5 @@
-Exceptions
-=============
+QQQR Exceptions
+=====================
 
 .. automodule:: qqqr.exception
     :members:

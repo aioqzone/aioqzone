@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="zh-CN" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login Managers &mdash; aioqzone 0.9.5.dev3 documentation</title>
+  <title>登录管理器 &mdash; aioqzone 0.9.7.dev1 文档</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/penguin-blob.webp"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -18,11 +19,12 @@
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="aioqzone Exceptions" href="../exception.html" />
-    <link rel="prev" title="Qzone API with Typing and Validation" href="dummy.html" /> 
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="aioqzone 异常" href="../exception.html" />
+    <link rel="prev" title="带有类型和验证的 Qzone API" href="dummy.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,20 +33,21 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> aioqzone
+            <img src="../../_static/penguin-blob.webp" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="在文档中搜索" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="index.html">Qzone APIs</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Login Managers</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">登录管理器</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman.MixedLoginMan"><code class="docutils literal notranslate"><span class="pre">MixedLoginMan</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#aioqzone.api.loginman.MixedLoginMan._new_cookie"><code class="docutils literal notranslate"><span class="pre">MixedLoginMan._new_cookie()</span></code></a></li>
 </ul>
@@ -61,17 +64,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#aioqzone.api.loginman._NextMethodInterrupt"><code class="docutils literal notranslate"><span class="pre">_NextMethodInterrupt</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../type/index.html">aioqzone Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone 异常</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../type/index.html">aioqzone Models</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../jssupport/index.html">jssupport</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<p class="caption" role="heading"><span class="caption-text">相关链接</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">Disclaimers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">免责声明</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -92,9 +95,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">aioqzone</a> &raquo;</li>
-      <li>Login Managers</li>
+      <li>登录管理器</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/aioqzone/api/loginman.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/aioqzone/api/loginman.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -102,29 +105,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="login-managers">
-<h1>Login Managers<a class="headerlink" href="#login-managers" title="Permalink to this heading"></a></h1>
+  <section id="module-aioqzone.api.loginman">
+<span id="login-managers"></span><h1>登录管理器<a class="headerlink" href="#module-aioqzone.api.loginman" title="此标题的永久链接"></a></h1>
 <p>Collect some built-in login manager w/o caching.
 Users can inherit these managers and implement their own caching logic.</p>
-<span class="target" id="module-aioqzone.api.loginman"></span><dl class="py class">
+<dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.MixedLoginMan">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">MixedLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.MixedLoginMan" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">MixedLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.MixedLoginMan" title="永久链接至目标"></a></dt>
 <dd><p>A login manager that will try methods according to the given <a class="reference internal" href="#aioqzone.api.loginman.QrStrategy" title="aioqzone.api.loginman.QrStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">QrStrategy</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.MixedLoginMan._new_cookie">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.MixedLoginMan._new_cookie" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.MixedLoginMan._new_cookie" title="永久链接至目标"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">抛出</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="(in Python v3.10)"><strong>SystemExit</strong></a> – unexcpected error</p></li>
+<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – if qr login is canceled and no succeeding method exist and success.</p></li>
+<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.SkipLoginInterrupt" title="aioqzone.exception.SkipLoginInterrupt"><strong>aioqzone.exception.SkipLoginInterrupt</strong></a> – if all login methods are removed by subclasses.</p></li>
+<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – if all login methods failed.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – if unexcpected error occured in any login method. Succeeding method will not be used.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">返回</dt>
 <dd class="field-odd"><p>cookie dict</p>
 </dd>
 </dl>
@@ -134,25 +138,25 @@ Users can inherit these managers and implement their own caching logic.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.QRLoginMan">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QRLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QRLoginMan" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QRLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QRLoginMan" title="永久链接至目标"></a></dt>
 <dd><p>Login manager for QR login.
 This manager may trigger <code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginSuccess()</span></code> and
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginFailed()</span></code> hook.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.QRLoginMan._new_cookie">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QRLoginMan._new_cookie" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QRLoginMan._new_cookie" title="永久链接至目标"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">抛出</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr polling task is canceled</p></li>
 <li><p><a class="reference internal" href="#aioqzone.api.loginman._NextMethodInterrupt" title="aioqzone.api.loginman._NextMethodInterrupt"><strong>_NextMethodInterrupt</strong></a> – on exceptions do not break the system, such as timeout, Http errors, etc.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="(in Python v3.10)"><strong>SystemExit</strong></a> – on unexpected error raised when polling</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – on unexpected error raised when polling</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">返回</dt>
 <dd class="field-odd"><p>cookie dict</p>
 </dd>
 </dl>
@@ -162,31 +166,31 @@ This manager may trigger <code class="xref py py-meth docutils literal notransla
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.QrStrategy">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QrStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QrStrategy" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">QrStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.QrStrategy" title="永久链接至目标"></a></dt>
 <dd><p>Represents QR strategy.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.UPLoginMan">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">UPLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.UPLoginMan" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">UPLoginMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.UPLoginMan" title="永久链接至目标"></a></dt>
 <dd><p>Login manager for username-password login.
 This manager may trigger <code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginSuccess()</span></code> and
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">LoginFailed()</span></code> hook.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="aioqzone.api.loginman.UPLoginMan._new_cookie">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.UPLoginMan._new_cookie" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_new_cookie</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aioqzone.api.loginman.UPLoginMan._new_cookie" title="永久链接至目标"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">抛出</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.TencentLoginError" title="qqqr.exception.TencentLoginError"><strong>qqqr.exception.TencentLoginError</strong></a> – login error when up login.</p></li>
 <li><p><a class="reference internal" href="#aioqzone.api.loginman._NextMethodInterrupt" title="aioqzone.api.loginman._NextMethodInterrupt"><strong>_NextMethodInterrupt</strong></a> – if acceptable errors occured, for example, http errors.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="(in Python v3.10)"><strong>SystemExit</strong></a> – if unexpected error raised</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – if unexpected error raised</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">返回</dt>
 <dd class="field-odd"><p>cookie dict</p>
 </dd>
 </dl>
@@ -196,7 +200,7 @@ This manager may trigger <code class="xref py py-meth docutils literal notransla
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="aioqzone.api.loginman._NextMethodInterrupt">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">_NextMethodInterrupt</span></span><a class="headerlink" href="#aioqzone.api.loginman._NextMethodInterrupt" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.api.loginman.</span></span><span class="sig-name descname"><span class="pre">_NextMethodInterrupt</span></span><a class="headerlink" href="#aioqzone.api.loginman._NextMethodInterrupt" title="永久链接至目标"></a></dt>
 <dd><p>Internal exception represents the condition that the login method is interrupted and the caller
 could choose the next login method or just to raise a <a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">LoginError</span></code></a>.</p>
 </dd></dl>
@@ -207,19 +211,19 @@ could choose the next login method or just to raise a <a class="reference intern
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="dummy.html" class="btn btn-neutral float-left" title="Qzone API with Typing and Validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../exception.html" class="btn btn-neutral float-right" title="aioqzone Exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dummy.html" class="btn btn-neutral float-left" title="带有类型和验证的 Qzone API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../exception.html" class="btn btn-neutral float-right" title="aioqzone 异常" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, aioqzone.</p>
+    <p>&#169; 版权所有 2022, aioqzone.</p>
   </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
    
 
 </footer>

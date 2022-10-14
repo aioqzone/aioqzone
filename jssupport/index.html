@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="zh-CN" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jssupport &mdash; aioqzone 0.9.5.dev3 documentation</title>
+  <title>jssupport &mdash; aioqzone 0.9.7.dev1 文档</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/autodoc_pydantic.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/penguin-blob.webp"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -18,10 +19,11 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/translations.js"></script>
     <script src="../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Execute JavaScripts" href="execjs.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="运行 JavaScripts" href="execjs.html" />
     <link rel="prev" title="Response Models" href="../aioqzone/type/resp.html" /> 
 </head>
 
@@ -31,30 +33,31 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../index.html" class="icon icon-home"> aioqzone
+            <img src="../_static/penguin-blob.webp" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="在文档中搜索" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../aioqzone/index.html">aioqzone</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">jssupport</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="execjs.html">Execute JavaScripts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jsdom.html">Mocking a Dom Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jsjson.html">Parsing Javascript Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="execjs.html">运行 JavaScripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsdom.html">伪装一个 Dom 环境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsjson.html">解析 JavaScript 字典</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../qqqr/index.html">QQQR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference.html">References</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<p class="caption" role="heading"><span class="caption-text">相关链接</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../disclaimers.html">Disclaimers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimers.html">免责声明</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -76,7 +79,7 @@
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
       <li>jssupport</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/jssupport/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/jssupport/index.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -85,19 +88,19 @@
            <div itemprop="articleBody">
              
   <section id="jssupport">
-<h1>jssupport<a class="headerlink" href="#jssupport" title="Permalink to this heading"></a></h1>
+<h1>jssupport<a class="headerlink" href="#jssupport" title="此标题的永久链接"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="execjs.html">Execute JavaScripts</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="execjs.html">运行 JavaScripts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="execjs.html#jssupport.execjs.ExecJS"><code class="docutils literal notranslate"><span class="pre">ExecJS</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="execjs.html#jssupport.execjs.Partial"><code class="docutils literal notranslate"><span class="pre">Partial</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="jsdom.html">Mocking a Dom Environment</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="jsdom.html">伪装一个 Dom 环境</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="jsdom.html#jssupport.jsdom.JSDOM"><code class="docutils literal notranslate"><span class="pre">JSDOM</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="jsjson.html">Parsing Javascript Dictionary</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="jsjson.html">解析 JavaScript 字典</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="jsjson.html#jssupport.jsjson.AstLoader"><code class="docutils literal notranslate"><span class="pre">AstLoader</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="jsjson.html#jssupport.jsjson.NodeLoader"><code class="docutils literal notranslate"><span class="pre">NodeLoader</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="jsjson.html#jssupport.jsjson.json_loads"><code class="docutils literal notranslate"><span class="pre">json_loads()</span></code></a></li>
@@ -111,19 +114,19 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../aioqzone/type/resp.html" class="btn btn-neutral float-left" title="Response Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="execjs.html" class="btn btn-neutral float-right" title="Execute JavaScripts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../aioqzone/type/resp.html" class="btn btn-neutral float-left" title="Response Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="execjs.html" class="btn btn-neutral float-right" title="运行 JavaScripts" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, aioqzone.</p>
+    <p>&#169; 版权所有 2022, aioqzone.</p>
   </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
    
 
 </footer>

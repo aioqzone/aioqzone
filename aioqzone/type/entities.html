@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="zh-CN" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Entities &mdash; aioqzone 0.9.5.dev3 documentation</title>
+  <title>Entities &mdash; aioqzone 0.9.7.dev1 文档</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/penguin-blob.webp"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -18,11 +19,12 @@
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
     <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
     <link rel="next" title="Internal Types" href="internal.html" />
-    <link rel="prev" title="aioqzone Types" href="index.html" /> 
+    <link rel="prev" title="aioqzone Models" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,22 +33,23 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../../index.html" class="icon icon-home"> aioqzone
+            <img src="../../_static/penguin-blob.webp" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="在文档中搜索" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Packages</span></p>
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">aioqzone</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api/index.html">Qzone APIs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/loginman.html">Login Managers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone Exceptions</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Types</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api/loginman.html">登录管理器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../exception.html">aioqzone 异常</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">aioqzone Models</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Entities</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.entity.AtEntity"><code class="docutils literal notranslate"><span class="pre">AtEntity</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#aioqzone.type.entity.ConEntity"><code class="docutils literal notranslate"><span class="pre">ConEntity</span></code></a></li>
@@ -67,9 +70,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../qqqr/index.html">QQQR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<p class="caption" role="heading"><span class="caption-text">相关链接</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">Disclaimers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../disclaimers.html">免责声明</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone">GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/aioqzone">PyPI</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/aioqzone/aioqzone/blob/beta/CONTRIBUTING.md">Contributing</a></li>
@@ -90,10 +93,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">aioqzone</a> &raquo;</li>
-          <li><a href="index.html">aioqzone Types</a> &raquo;</li>
+          <li><a href="index.html">aioqzone Models</a> &raquo;</li>
       <li>Entities</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/aioqzone/type/entities.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/aioqzone/type/entities.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -101,16 +104,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="entities">
-<h1>Entities<a class="headerlink" href="#entities" title="Permalink to this heading"></a></h1>
+  <section id="module-aioqzone.type.entity">
+<span id="entities"></span><h1>Entities<a class="headerlink" href="#module-aioqzone.type.entity" title="此标题的永久链接"></a></h1>
 <p>This module defines feed text entities. Entities take place of “contents” since this simplifies
 and details the works of rich-text stringify.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.5.0.dev0.</span></p>
+<p><span class="versionmodified added">在 0.5.0.dev0 版本加入.</span></p>
 </div>
-<span class="target" id="module-aioqzone.type.entity"></span><dl class="py class pydantic_model">
+<dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.AtEntity">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">AtEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.AtEntity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">AtEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.AtEntity" title="永久链接至目标"></a></dt>
 <dd><p>At, type=0. like: <code class="docutils literal notranslate"><span class="pre">&#64;bot</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
@@ -123,25 +126,25 @@ and details the works of rich-text stringify.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.AtEntity.nick">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nick</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.nick" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nick</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.nick" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.AtEntity.type">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.type" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.type" title="永久链接至目标"></a></dt>
 <dd><p>Official qzone type is positive. Our self-defined entities will have a negative type.</p>
 </dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.AtEntity.uin">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.uin" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.AtEntity.uin" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.ConEntity">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">ConEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.ConEntity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">ConEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.ConEntity" title="永久链接至目标"></a></dt>
 <dd><p>Base class for all content entities. All entities has a #type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
@@ -152,7 +155,7 @@ and details the works of rich-text stringify.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.ConEntity.type">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.ConEntity.type" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.ConEntity.type" title="永久链接至目标"></a></dt>
 <dd><p>Official qzone type is positive. Our self-defined entities will have a negative type.</p>
 </dd></dl>
 
@@ -160,7 +163,7 @@ and details the works of rich-text stringify.</p>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.EmEntity">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">EmEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.EmEntity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">EmEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.EmEntity" title="永久链接至目标"></a></dt>
 <dd><p>Emoji, type=-1. like: <code class="docutils literal notranslate"><span class="pre">[em]e100[/em]</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
@@ -172,12 +175,12 @@ and details the works of rich-text stringify.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.EmEntity.eid">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.EmEntity.eid" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#aioqzone.type.entity.EmEntity.eid" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.EmEntity.type">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#aioqzone.type.entity.EmEntity.type" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#aioqzone.type.entity.EmEntity.type" title="永久链接至目标"></a></dt>
 <dd><p>Official qzone type is positive. Our self-defined entities will have a negative type.</p>
 </dd></dl>
 
@@ -185,7 +188,7 @@ and details the works of rich-text stringify.</p>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.HasConEntity">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">HasConEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.HasConEntity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">HasConEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.HasConEntity" title="永久链接至目标"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
@@ -195,14 +198,14 @@ and details the works of rich-text stringify.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.HasConEntity.entities">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entities</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.entity.AtEntity" title="aioqzone.type.entity.AtEntity"><span class="pre">AtEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.entity.TextEntity" title="aioqzone.type.entity.TextEntity"><span class="pre">TextEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'conlist')</span></em><a class="headerlink" href="#aioqzone.type.entity.HasConEntity.entities" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entities</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="（在 Python v3.10）"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="（在 Python v3.10）"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="（在 Python v3.10）"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#aioqzone.type.entity.AtEntity" title="aioqzone.type.entity.AtEntity"><span class="pre">AtEntity</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#aioqzone.type.entity.TextEntity" title="aioqzone.type.entity.TextEntity"><span class="pre">TextEntity</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"> <span class="pre">(alias</span> <span class="pre">'conlist')</span></em><a class="headerlink" href="#aioqzone.type.entity.HasConEntity.entities" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.HasContent">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">HasContent</span></span><a class="headerlink" href="#aioqzone.type.entity.HasContent" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">HasContent</span></span><a class="headerlink" href="#aioqzone.type.entity.HasContent" title="永久链接至目标"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
 <dd class="field-odd"><ul class="simple">
@@ -212,21 +215,21 @@ and details the works of rich-text stringify.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.HasContent.content">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.HasContent.content" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.HasContent.content" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="aioqzone.type.entity.RespEntities">
-<span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">RespEntities</span></span><a class="headerlink" href="#aioqzone.type.entity.RespEntities" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">RespEntities</span></span><a class="headerlink" href="#aioqzone.type.entity.RespEntities" title="永久链接至目标"></a></dt>
 <dd><p>Entities that occurs in Qzone responses.</p>
-<p>alias of <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#aioqzone.type.entity.AtEntity" title="aioqzone.type.entity.AtEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">AtEntity</span></code></a>, <a class="reference internal" href="#aioqzone.type.entity.TextEntity" title="aioqzone.type.entity.TextEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextEntity</span></code></a>]</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="（在 Python v3.10）"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#aioqzone.type.entity.AtEntity" title="aioqzone.type.entity.AtEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">AtEntity</span></code></a>, <a class="reference internal" href="#aioqzone.type.entity.TextEntity" title="aioqzone.type.entity.TextEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextEntity</span></code></a>] 的别名</p>
 </dd></dl>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="aioqzone.type.entity.TextEntity">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">TextEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.TextEntity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aioqzone.type.entity.</span></span><span class="sig-name descname"><span class="pre">TextEntity</span></span><a class="headerlink" href="#aioqzone.type.entity.TextEntity" title="永久链接至目标"></a></dt>
 <dd><p>Text, type=2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields</dt>
@@ -238,12 +241,12 @@ and details the works of rich-text stringify.</p>
 </dl>
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.TextEntity.con">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.TextEntity.con" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">con</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#aioqzone.type.entity.TextEntity.con" title="永久链接至目标"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="aioqzone.type.entity.TextEntity.type">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#aioqzone.type.entity.TextEntity.type" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#aioqzone.type.entity.TextEntity.type" title="永久链接至目标"></a></dt>
 <dd><p>Official qzone type is positive. Our self-defined entities will have a negative type.</p>
 </dd></dl>
 
@@ -255,19 +258,19 @@ and details the works of rich-text stringify.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="aioqzone Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="internal.html" class="btn btn-neutral float-right" title="Internal Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="aioqzone Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="internal.html" class="btn btn-neutral float-right" title="Internal Types" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, aioqzone.</p>
+    <p>&#169; 版权所有 2022, aioqzone.</p>
   </div>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
    
 
 </footer>
