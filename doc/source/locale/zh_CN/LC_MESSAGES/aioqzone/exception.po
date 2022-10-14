@@ -1,0 +1,38 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:13+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/aioqzone/exception.rst:2
+msgid "aioqzone Exceptions"
+msgstr "aioqzone 异常"
+
+#: aioqzone.exception.CorruptError:1 of
+msgid "Data corrupted in transfer."
+msgstr ""
+
+#: aioqzone.exception.LoginError:1 of
+msgid "Login failed for some reasons."
+msgstr ""
+
+#: aioqzone.exception.QzoneError:1 of
+msgid "HTTP OK, but Qzone returns an error code."
+msgstr ""
+
+#: aioqzone.exception.SkipLoginInterrupt:1 of
+msgid "Login is skipped as intended."
+msgstr ""

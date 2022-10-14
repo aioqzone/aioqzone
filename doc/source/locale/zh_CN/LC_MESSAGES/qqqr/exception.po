@@ -1,0 +1,33 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-14 13:32+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/qqqr/exception.rst:2
+#, fuzzy
+msgid "QQQR Exceptions"
+msgstr "QQQR 异常"
+
+#: of qqqr.exception.TencentLoginError:1
+msgid ""
+"This exception represents an error that occured in Qzone login, with at "
+"least an error code."
+msgstr "这个异常表示 Qzone 登录期间发生了一个错误。此异常至少包含一个来自 Qzone 的错误码。"
+
+#: of qqqr.exception.UserBreak:1
+msgid "This exception should be raised when user cancel the login spontaneously."
+msgstr "这个异常应当在用户主动停止 Qzone 登录时被抛出。"

@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/qqqr/qr/login.rst:2
+msgid "QrLogin and QrSession"
+msgstr ""
+
+#: of qqqr.qr.QrLogin.login:1
+msgid "Block until cookie is received."
+msgstr ""
+
+#: of qqqr.qr.QrLogin.new:1
+msgid "Create a new :class:`LoginSession`."
+msgstr ""
+
+#: of qqqr.qr.QrLogin.new qqqr.qr.QrLogin.poll
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.qr.QrLogin.new:4
+msgid ":py:class:`~qqqr.qr.QrSession`"
+msgstr ""
+
+#: of qqqr.qr.QrLogin.poll:1
+msgid "Poll QR status."
+msgstr ""
+
+#: of qqqr.qr.QrLogin.poll
+msgid "抛出"
+msgstr ""
+
+#: of qqqr.qr.QrLogin.poll:3
+msgid "if response status code != 200"
+msgstr ""
+
+#: of qqqr.qr.QrLogin.poll:5
+msgid ":py:class:`~qqqr.qr.type.PollResp`"
+msgstr ""
+
+#: of qqqr.qr.QrLogin.poll
+msgid "返回"
+msgstr ""
+
+#: of qqqr.qr.QrLogin.poll:6
+msgid "a poll response object"
+msgstr ""
+
+#~ msgid "Return type"
+#~ msgstr ""
+
+#~ msgid "Raises"
+#~ msgstr ""
+
+#~ msgid "Returns"
+#~ msgstr ""

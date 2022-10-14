@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:47+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/index.rst:14
+msgid "Catagories"
+msgstr "目录"
+
+#: ../../source/index.rst:24
+msgid "Disclaimers"
+msgstr "免责声明"
+
+#: ../../source/index.rst:24
+msgid "GitHub"
+msgstr ""
+
+#: ../../source/index.rst:24
+msgid "PyPI"
+msgstr ""
+
+#: ../../source/index.rst:24
+msgid "Contributing"
+msgstr ""
+
+#: ../../source/index.rst:24
+msgid "Links"
+msgstr "相关链接"
+
+#: ../../source/index.rst:7
+msgid "Welcome to aioqzone's documentation!"
+msgstr ""
+
+#: ../../source/index.rst:9
+msgid "aioqzone provides python interface to"
+msgstr "aioqzone 提供了 Python 接口以便"
+
+#: ../../source/index.rst:11
+msgid "login into Qzone"
+msgstr "登录到 Qzone"
+
+#: ../../source/index.rst:12
+msgid "calling Qzone HTTP interface"
+msgstr "调用 Qzone HTTP 接口"
+
+#: ../../source/index.rst:35
+msgid "Indices and tables"
+msgstr ""
+
+#: ../../source/index.rst:37
+msgid ":ref:`genindex`"
+msgstr ""
+
+#: ../../source/index.rst:38
+msgid ":ref:`modindex`"
+msgstr ""
+
+#: ../../source/index.rst:39
+msgid ":ref:`search`"
+msgstr ""

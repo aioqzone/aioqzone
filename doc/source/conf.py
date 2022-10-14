@@ -46,6 +46,10 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# internationalization
+language = "zh_CN"
+locale_dirs = ["locale/"]
+gettext_compact = False
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -53,6 +57,8 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = "sphinx_rtd_theme"
+html_logo = "./_static/penguin-blob.webp"
+html_favicon = html_logo
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

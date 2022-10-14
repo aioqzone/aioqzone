@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/qqqr/up/login.rst:2
+msgid "UpLogin and UpSession"
+msgstr ""
+
+#: of qqqr.up.UpLogin.captcha:1
+msgid ""
+"The captcha function is used to build and cache a :class:`Captcha` "
+"instance. It takes in a string, which is the session id got from "
+":meth:`.new`, and returns the :class:`Captcha` instance."
+msgstr ""
+
+#: of qqqr.up.UpLogin.captcha qqqr.up.UpLogin.passVC
+#: qqqr.up.UpLogin.send_sms_code qqqr.up.UpLogin.try_login
+msgid "参数"
+msgstr ""
+
+#: of qqqr.up.UpLogin.captcha:6
+msgid "Pass the session id to the captcha function"
+msgstr ""
+
+#: of qqqr.up.UpLogin.captcha qqqr.up.UpLogin.new qqqr.up.UpLogin.passVC
+#: qqqr.up.UpLogin.try_login
+msgid "返回"
+msgstr ""
+
+#: of qqqr.up.UpLogin.captcha:7
+msgid "An instance of the captcha class"
+msgstr ""
+
+#: of qqqr.up.UpLogin.login:1
+msgid "Block until cookie is received."
+msgstr ""
+
+#: of qqqr.up.UpLogin.new:1
+msgid ""
+"Create a :class:`UpSession`. This will call `check` api of Qzone, and "
+"receive result about whether this login needs a captcha, sms "
+"verification, etc."
+msgstr ""
+
+#: of qqqr.up.UpLogin.new
+msgid "抛出"
+msgstr ""
+
+#: of qqqr.up.UpLogin.new:6
+msgid "a up login session"
+msgstr ""
+
+#: of qqqr.up.UpLogin.passVC:1
+msgid ""
+"The passVC function is used to pass the verification tcaptcha. It is "
+"called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` "
+"code."
+msgstr ""
+
+#: of qqqr.up.UpLogin.passVC:5
+msgid "the session object"
+msgstr ""
+
+#: of qqqr.up.UpLogin.passVC:6
+msgid "The session with :obj:`~UpSession.verify_rst` is set."
+msgstr ""
+
+#: of qqqr.up.UpLogin.send_sms_code:1
+msgid "Send verify sms (to get dynamic code)"
+msgstr ""
+
+#: of qqqr.up.UpLogin.send_sms_code:4
+msgid "The up login session to send sms code"
+msgstr ""
+
+#: of qqqr.up.UpLogin.try_login:1
+msgid ""
+"Check if current session meets the login condition. It takes a session "
+"object and returns response of this try."
+msgstr ""
+
+#: of qqqr.up.UpLogin.try_login:5
+msgid "Store the session information"
+msgstr ""
+
+#: of qqqr.up.UpLogin.try_login:6
+msgid "A login response"
+msgstr ""
+
+#~ msgid "Parameters"
+#~ msgstr ""
+
+#~ msgid "Returns"
+#~ msgstr ""
+
+#~ msgid "Raises"
+#~ msgstr ""

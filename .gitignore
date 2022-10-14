@@ -18,6 +18,7 @@ tmp
 # build, metadata and distributions
 /dist
 /build
+/doc/source/locale/**/*.mo
 *.egg-info
 
 # useless documents

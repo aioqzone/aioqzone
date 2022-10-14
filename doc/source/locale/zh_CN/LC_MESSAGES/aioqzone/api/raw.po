@@ -1,0 +1,479 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/aioqzone/api/raw.rst:2
+msgid "Qzone API"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi:1 of
+msgid "Just a wrapper for Qzone http interface. No type validating."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:1 of
+msgid "Delete a feed."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail
+#: aioqzone.api.raw.QzoneApi.emotion_msglist
+#: aioqzone.api.raw.QzoneApi.emotion_publish
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds
+#: aioqzone.api.raw.QzoneApi.emotion_update
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list
+#: aioqzone.api.raw.QzoneApi.like_app of
+msgid "参数"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:4 of
+msgid "feed id, named tid, feedkey, etc."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:6 of
+msgid "feed create time. `now` in :meth:`.emotion_publish` result dict."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:8 of
+msgid "appid"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:10
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:6 of
+msgid "typeid"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:12
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:8 of
+msgid "topic id, got from html"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:14
+#: aioqzone.api.raw.QzoneApi.emotion_update:8 of
+msgid "host uin, defaults to None, means current logined user."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail
+#: aioqzone.api.raw.QzoneApi.emotion_msglist
+#: aioqzone.api.raw.QzoneApi.emotion_publish
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds
+#: aioqzone.api.raw.QzoneApi.emotion_update
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list
+#: aioqzone.api.raw.QzoneApi.get_feeds_count aioqzone.api.raw.QzoneApi.like_app
+#: of
+msgid "抛出"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:16
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:10
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:8
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:10
+#: aioqzone.api.raw.QzoneApi.emotion_publish:8
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:12
+#: aioqzone.api.raw.QzoneApi.emotion_update:10
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:16
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:8
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:3
+#: aioqzone.api.raw.QzoneApi.like_app:8 of
+msgid "error http response code"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:17
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:11
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:9
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:11
+#: aioqzone.api.raw.QzoneApi.emotion_publish:9
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:13
+#: aioqzone.api.raw.QzoneApi.emotion_update:11
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:17
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:9
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:4 of
+msgid "error qzone response code"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:18
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:12
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:10
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:12
+#: aioqzone.api.raw.QzoneApi.emotion_publish:10
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:14
+#: aioqzone.api.raw.QzoneApi.emotion_update:12
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:18
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:10
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:5
+#: aioqzone.api.raw.QzoneApi.like_app:9 of
+msgid "qr login canceled"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:19
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:13
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:11
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:13
+#: aioqzone.api.raw.QzoneApi.emotion_publish:11
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:15
+#: aioqzone.api.raw.QzoneApi.emotion_update:13
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:19
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:11
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:6
+#: aioqzone.api.raw.QzoneApi.like_app:10 of
+msgid "not logined"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:20
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:14
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:12
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:14
+#: aioqzone.api.raw.QzoneApi.emotion_publish:12
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:16
+#: aioqzone.api.raw.QzoneApi.emotion_update:14
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:20
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:12
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:7
+#: aioqzone.api.raw.QzoneApi.like_app:11 of
+msgid "unexcpected error"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail
+#: aioqzone.api.raw.QzoneApi.emotion_msglist
+#: aioqzone.api.raw.QzoneApi.emotion_publish
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds
+#: aioqzone.api.raw.QzoneApi.emotion_update
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list
+#: aioqzone.api.raw.QzoneApi.get_feeds_count aioqzone.api.raw.QzoneApi.like_app
+#: of
+msgid "返回类型"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:22 of
+msgid ""
+":py:data:`~typing.Optional`\\[:py:class:`~typing.Dict`\\[:py:class:`str`,"
+" :py:data:`~typing.Union`\\[:py:class:`bool`, :py:class:`int`, "
+":py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:data:`~typing.Union`\\[:py:class:`bool`, "
+":py:class:`int`, :py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:class:`~typing.ForwardRef`], "
+":py:class:`~typing.List`\\[:py:class:`~typing.ForwardRef`]]], "
+":py:class:`~typing.List`\\[:py:data:`~typing.Union`\\[:py:class:`bool`, "
+":py:class:`int`, :py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:class:`~typing.ForwardRef`], "
+":py:class:`~typing.List`\\[:py:class:`~typing.ForwardRef`]]]]]]"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail
+#: aioqzone.api.raw.QzoneApi.emotion_msglist
+#: aioqzone.api.raw.QzoneApi.emotion_publish
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds
+#: aioqzone.api.raw.QzoneApi.emotion_update
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list
+#: aioqzone.api.raw.QzoneApi.get_feeds_count aioqzone.api.raw.QzoneApi.like_app
+#: of
+msgid "返回"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_delete:23 of
+msgid "qzone response as is, usually nothing meaningful."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:1 of
+msgid "Get complete html of a given feed"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:4
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:4 of
+msgid "uin"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:6 of
+msgid "feed id"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:8 of
+msgid "feedstype in html"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:16
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:14
+#: aioqzone.api.raw.QzoneApi.emotion_publish:14
+#: aioqzone.api.raw.QzoneApi.emotion_update:16
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:22
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:15 of
+msgid ""
+":py:class:`~typing.Dict`\\[:py:class:`str`, "
+":py:data:`~typing.Union`\\[:py:class:`bool`, :py:class:`int`, "
+":py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:data:`~typing.Union`\\[:py:class:`bool`, "
+":py:class:`int`, :py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:class:`~typing.ForwardRef`], "
+":py:class:`~typing.List`\\[:py:class:`~typing.ForwardRef`]]], "
+":py:class:`~typing.List`\\[:py:data:`~typing.Union`\\[:py:class:`bool`, "
+":py:class:`int`, :py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:class:`~typing.ForwardRef`], "
+":py:class:`~typing.List`\\[:py:class:`~typing.ForwardRef`]]]]]"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_getcomments:17 of
+msgid "response dict"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:1 of
+msgid "Get detail of a given msg."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:4
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:10 of
+msgid "owner uin"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:6 of
+msgid "feed id, named fid, tid or feedkey"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:15 of
+msgid "a dict reps the feed in detail"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msgdetail:17 of
+msgid "share msg is not support, i.e. `appid=311`"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:1 of
+msgid "Get msg(feed?) list of a user."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:6 of
+msgid "number, defaults to 20"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:8 of
+msgid "start position, defaults to 0"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:16 of
+msgid ""
+":py:class:`~typing.List`\\[:py:class:`~typing.Dict`\\[:py:class:`str`, "
+":py:data:`~typing.Union`\\[:py:class:`bool`, :py:class:`int`, "
+":py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:data:`~typing.Union`\\[:py:class:`bool`, "
+":py:class:`int`, :py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:class:`~typing.ForwardRef`], "
+":py:class:`~typing.List`\\[:py:class:`~typing.ForwardRef`]]], "
+":py:class:`~typing.List`\\[:py:data:`~typing.Union`\\[:py:class:`bool`, "
+":py:class:`int`, :py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+":py:class:`int`], :py:class:`~typing.ForwardRef`], "
+":py:class:`~typing.List`\\[:py:class:`~typing.ForwardRef`]]]]]]"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_msglist:17 of
+msgid "a list of messages"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_publish:1 of
+msgid "Publish a feed. appid=311."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_publish:4 of
+msgid "text content."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_publish:6 of
+msgid "feed access right, defaults to 0 (Not used till now)"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_publish:15 of
+msgid "qzone response as is, containing feed html and fid."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_publish:18
+#: aioqzone.api.raw.QzoneApi.emotion_update:20 of
+msgid "This api is under development. It has basic functions only."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:1 of
+msgid "Reply (comment) a feed. Rich types are not supported now."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:4 of
+msgid "the comment string."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:18 of
+msgid ":py:class:`str`"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:19 of
+msgid "new feed html"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_re_feeds:23 of
+msgid "`.emotion_getcomments`"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_update:1 of
+msgid "Update content of a feed."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_update:4 of
+msgid "feed id, named feedkey, tid, etc."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_update:6 of
+msgid "new content in text."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.emotion_update:17 of
+msgid "qzone response as is."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:1 of
+msgid ""
+"return a dict with ``main`` and ``data`` field. ``main`` field contains "
+"some auxiliary information, while data is a list of dict, each dict "
+"represents one feed."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:6 of
+msgid "#page >= 0"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:8 of
+msgid "feed count, max as 10, defaults to 10."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:10 of
+msgid "`!main.externparam` field in last response"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:12 of
+msgid "`!main.daylist` field in last response"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:14 of
+msgid "`!main.uinlist` field in last response"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:23 of
+msgid "feed attributes and html feed"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.feeds3_html_more:27 of
+msgid ""
+"let `count` <= 10; Use external string directly and remove "
+"`FeedsMoreTransaction`."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:1 of
+msgid "Get detail of an album, including raw image url."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:4 of
+msgid "Necessary album data"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:6 of
+msgid "pic num"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:13 of
+msgid "maybe data is corruptted"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:16 of
+msgid "album details"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.floatview_photo_list:19 of
+msgid ""
+"This api is a 'slow' api, means it always returns an error code, "
+"requesting a retry a moment later. Use :meth:`.emotion_msgdetail` to get "
+"raw photo/video in a feed."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:1 of
+msgid "Get feeds update count (new feeds, new photos, new comments, etc)"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:9 of
+msgid ""
+":py:class:`~typing.Dict`\\[:py:class:`str`, "
+":py:data:`~typing.Union`\\[:py:class:`int`, :py:class:`list`]]"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:10 of
+msgid "update counts"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.get_feeds_count:13 of
+msgid ""
+"This api is also the 'keep-alive' signal to avoid cookie from expiring. "
+"Call this api every 300s can help keep cookie alive."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.like_app:1 of
+msgid "Like or unlike a feed."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.like_app:4 of
+msgid "Necessary data for like/unlike"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.like_app:6 of
+msgid "True as like, False as unlike, defaults to True."
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.like_app:13 of
+msgid ":py:class:`bool`"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.like_app:14 of
+msgid "success flag"
+msgstr ""
+
+#: aioqzone.api.raw.QzoneApi.like_app:16 of
+msgid "not a @noexcept method."
+msgstr ""
+
+#~ msgid "Parameters"
+#~ msgstr ""
+
+#~ msgid "Raises"
+#~ msgstr ""
+
+#~ msgid "Return type"
+#~ msgstr ""
+
+#~ msgid "Returns"
+#~ msgstr ""

@@ -13,7 +13,7 @@ aioqzone provides python interface to
 
 .. toctree::
    :maxdepth: 2
-   :caption: Packages
+   :caption: Catagories
    :glob:
 
    aioqzone/index

@@ -1,0 +1,171 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/disclaimers.rst:2
+msgid "Disclaimers"
+msgstr "免责声明"
+
+#: ../../source/disclaimers.rst:5
+msgid "aioqzone application"
+msgstr "aioqzone 应用程序"
+
+#: ../../source/disclaimers.rst:7
+msgid ""
+"means applications or services developed by aioqzone or packages using "
+"aioqzone."
+msgstr "使用 aioqzone 或使用基于 aioqzone 开发的包或库的脚本、可执行程序或服务。"
+
+#: ../../source/disclaimers.rst:8
+msgid "user"
+msgstr "用户"
+
+#: ../../source/disclaimers.rst:10
+msgid "means people who uses an aioqzone application."
+msgstr "aioqzone 程序的使用者。"
+
+#: ../../source/disclaimers.rst:11
+msgid "downstream developer"
+msgstr "下游开发者"
+
+#: ../../source/disclaimers.rst:13
+msgid "developer of the application/service you are using directly."
+msgstr "您使用的 aioqzone 程序的直接开发者。"
+
+#: ../../source/disclaimers.rst:15
+msgid ""
+"aioqzone developer(s) and aioqzone community are not responsible for "
+"anything that may happen to your account by using aioqzone, packages "
+"using aioqzone or application developed by these packages."
+msgstr "aioqzone 开发者以及 aioqzone 社区不对任何账号异常、账号损失负责。"
+
+#: ../../source/disclaimers.rst:20
+msgid "For Developers"
+msgstr "对下游开发者"
+
+#: ../../source/disclaimers.rst:22
+msgid ""
+"You MUST open source ANY code that will be distributed to users and USES "
+"aioqzone."
+msgstr "你 **必须** 开源任何将分发至用户的 **使用** aioqzone 的代码。"
+
+#: ../../source/disclaimers.rst:23
+msgid ""
+"You MUST NOT distribute edit version without security review from "
+"aioqzone community."
+msgstr "你 **不能** 分发未经 aioqzone 社区安全审查的 aioqzone 修改版本。"
+
+#: ../../source/disclaimers.rst:24
+msgid ""
+"You MUST install aioqzone and packages using aioqzone from credible "
+"sources."
+msgstr "你 **必须** 从可信的来源安装 aioqzone 和使用 aioqzone 的包。"
+
+#: ../../source/disclaimers.rst:25
+msgid ""
+"You MUST inform your users in detail what operation you will conduct "
+"using their cookies."
+msgstr "你 **必须** 将获取到的 cookie 的用途详细地告知你的用户。"
+
+#: ../../source/disclaimers.rst:26
+msgid ""
+"You MUST NOT use or store cookies before you've got explicit warrant from"
+" the corresponding user."
+msgstr "你 **不能** 在未经用户明确授权的情况下使用和存储他们的 cookie。"
+
+#: ../../source/disclaimers.rst:27
+msgid ""
+"You MUST NOT transfer or expose user's cookie to any other place except "
+"for Qzone server."
+msgstr "你 **不能** 将用户的 cookie 传输或暴露给除了 QQ空间服务之外的任何第三方。"
+
+#: ../../source/disclaimers.rst:28
+msgid "You SHOULD advice your user to review your code."
+msgstr "你应当建议你的用户审查你的程序源码。"
+
+#: ../../source/disclaimers.rst:29
+msgid ""
+"Your distribution MUST include this file or link to this file in a user-"
+"reachable place."
+msgstr "你分发的代码 **必须** 包含一份此文件的拷贝，或者在用户可见处添加此文件的链接。"
+
+#: ../../source/disclaimers.rst:30
+msgid ""
+"You MUST follow ``AGPL-3.0`` license if it has no conflict with items "
+"listed above."
+msgstr "在与上述条目没有冲突的情况下，你还应当遵循 ``AGPL-3.0`` 开源协议。"
+
+#: ../../source/disclaimers.rst:32
+msgid ""
+"By developing packages or applications using aioqzone, any responsibility"
+" falls between you and your user. aioqzone developer and aioqzone "
+"community are not responsible for any potential loss happens on any "
+"account."
+msgstr "作为下游开发者，您已知悉，任何责任由您（开发者）和您的用户承担。aioqzone 开发者以及 aioqzone 社区不对任何潜在的账号损失负责。"
+
+#: ../../source/disclaimers.rst:35
+msgid ""
+"It is recommended to inform your user what responsibility they should "
+"take in advance."
+msgstr "建议您应该事先与您的用户就账户安全做出责任说明和划分。"
+
+#: ../../source/disclaimers.rst:39
+msgid "For Users"
+msgstr "对用户"
+
+#: ../../source/disclaimers.rst:41
+msgid "You SHOULD NOT use aioqzone application from uncredible source."
+msgstr "你不应当使用来自不受信任来源的 aioqzone 程序。"
+
+#: ../../source/disclaimers.rst:42
+msgid "You SHOULD NOT use closed-source aioqzone application."
+msgstr "你不应当使用闭源的 aioqzone 程序。"
+
+#: ../../source/disclaimers.rst:43
+msgid ""
+"You SHOULD NOT use aioqzone application which is not open sourced under "
+"``AGPL-3.0`` or later versions."
+msgstr "你不应当使用非 ``AGPL-3.0`` 或更高版本开源的 aioqzone 程序。"
+
+#: ../../source/disclaimers.rst:44
+msgid ""
+"You SHOULD NOT use aioqzone application that do not ask warrant from you "
+"to use your cookie."
+msgstr "你不应当使用未经你的明确授权就使用或存储你的 cookie 的 aioqzone 程序。"
+
+#: ../../source/disclaimers.rst:45
+msgid "You MUST take care of the security of your own account."
+msgstr "你 **必须** 注意你的账户安全。"
+
+#: ../../source/disclaimers.rst:46
+msgid ""
+"You have the right to ask the developer for details about how they use "
+"your cookies."
+msgstr "你有权要求开发者对如何使用 cookie 做出详细解释。"
+
+#: ../../source/disclaimers.rst:48
+msgid ""
+"By using aioqzone applications, any responsibility falls between you and "
+"the downstream developer. aioqzone developer and aioqzone community are "
+"not responsible for any potential loss happens on your account."
+msgstr ""
+"作为 aioqzone 程序的用户，您已知悉，任何责任由您（用户）和下游开发者承担。aioqzone 开发者以及 aioqzone "
+"社区不对任何潜在的账号损失负责。"
+
+#~ msgid ":doc:`简体中文 <disclaimers_zh-cn>`"
+#~ msgstr ""

@@ -1,0 +1,140 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/aioqzone/api/loginman.rst:2
+msgid "Login Managers"
+msgstr "登录管理器"
+
+#: aioqzone.api.loginman:1 of
+msgid ""
+"Collect some built-in login manager w/o caching. Users can inherit these "
+"managers and implement their own caching logic."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan:1 of
+msgid ""
+"A login manager that will try methods according to the given "
+":class:`.QrStrategy`."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie
+#: aioqzone.api.loginman.QRLoginMan._new_cookie
+#: aioqzone.api.loginman.UPLoginMan._new_cookie of
+msgid "抛出"
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:2 of
+msgid "if qr login is canceled and no succeeding method exist and success."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:3 of
+msgid "if all login methods are removed by subclasses."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:4 of
+msgid "if all login methods failed."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:5 of
+msgid ""
+"if unexcpected error occured in any login method. Succeeding method will "
+"not be used."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie
+#: aioqzone.api.loginman.QRLoginMan._new_cookie
+#: aioqzone.api.loginman.UPLoginMan._new_cookie of
+msgid "返回类型"
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:7
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:6
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:6 of
+msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie
+#: aioqzone.api.loginman.QRLoginMan._new_cookie
+#: aioqzone.api.loginman.UPLoginMan._new_cookie of
+msgid "返回"
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:8
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:7
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:7 of
+msgid "cookie dict"
+msgstr ""
+
+#: aioqzone.api.loginman.QRLoginMan:1 of
+msgid ""
+"Login manager for QR login. This manager may trigger "
+":meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and "
+":meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook."
+msgstr ""
+
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:2 of
+msgid "qr polling task is canceled"
+msgstr ""
+
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:3 of
+msgid "on exceptions do not break the system, such as timeout, Http errors, etc."
+msgstr ""
+
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:4 of
+msgid "on unexpected error raised when polling"
+msgstr ""
+
+#: aioqzone.api.loginman.QrStrategy:1 of
+msgid "Represents QR strategy."
+msgstr ""
+
+#: aioqzone.api.loginman.UPLoginMan:1 of
+msgid ""
+"Login manager for username-password login. This manager may trigger "
+":meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and "
+":meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook."
+msgstr ""
+
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:2 of
+msgid "login error when up login."
+msgstr ""
+
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:3 of
+msgid "if acceptable errors occured, for example, http errors."
+msgstr ""
+
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:4 of
+msgid "if unexpected error raised"
+msgstr ""
+
+#: aioqzone.api.loginman._NextMethodInterrupt:1 of
+msgid ""
+"Internal exception represents the condition that the login method is "
+"interrupted and the caller could choose the next login method or just to "
+"raise a :exc:`.LoginError`."
+msgstr ""
+
+#~ msgid "Raises"
+#~ msgstr ""
+
+#~ msgid "Return type"
+#~ msgstr ""
+
+#~ msgid "Returns"
+#~ msgstr ""
