@@ -253,7 +253,7 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
             raise SkipLoginInterrupt
         user_break = None
 
-        for i, c in enumerate(self._order):
+        for c in self.ordered_methods():
             try:
                 return await c._new_cookie()
             except (TencentLoginError, _NextMethodInterrupt) as e:
