@@ -218,6 +218,9 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
                 if isinstance(self.hook, NullEvent):
                     # fast return so we won't always request smscode which may risk test account.
                     raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
+                if self.hook.GetSmsCode.__qualname__ == UpEvent.GetSmsCode.__qualname__:
+                    # TODO: bad condition
+                    raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 await self.send_sms_code(sess)
                 sess.sms_code = await self.hook.GetSmsCode(resp.msg, resp.nickname)
                 if sess.sms_code is None:

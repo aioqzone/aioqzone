@@ -16,6 +16,7 @@ repos:
         entry: poetry check
         pass_filenames: false
         language: system
+        files: pyproject.toml
       - id: poetry
         name: poetry lock
         entry: poetry lock -v
@@ -26,16 +27,19 @@ repos:
         entry: poetry run isort .
         pass_filenames: false
         language: system
+        types: [python]
       - id: black
         name: Black
         entry: poetry run black .
         pass_filenames: false
         language: system
+        types: [python]
       - id: pytest
         name: pytest-check
         entry: poetry run pytest -m "not needuser and not upstream" test
         language: system
         pass_filenames: false
         always_run: true
+        types: [python, toml]
 default_language_version:
   python: python3
