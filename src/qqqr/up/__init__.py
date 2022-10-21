@@ -147,7 +147,8 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         ) as r:
             rl = re.findall(r"'(.*?)'[,\)]", r.text)
         # ptui_sendSMS_CB('10012', '短信发送成功！')
-        assert int(rl[0]) == 10012, rl[1]
+        if int(rl[0]) != 10012:
+            raise TencentLoginError(sess.code, rl[1])
 
     async def try_login(self, sess: UpSession):
         """
