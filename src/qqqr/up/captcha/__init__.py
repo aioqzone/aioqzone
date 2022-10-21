@@ -10,6 +10,8 @@ from typing import List, Type, TypeVar
 
 from httpx import URL
 
+from ...constant import StatusCode
+from ...exception import TencentLoginError
 from ...utils.daug import du
 from ...utils.iter import first
 from ...utils.net import ClientAdapter
@@ -272,5 +274,5 @@ class Captcha:
             r = VerifyResp.parse_raw(r.text)
 
         if r.code:
-            raise RuntimeError(f"Code {r.code}: {r.errMessage}")
+            raise TencentLoginError(StatusCode.NeedCaptcha, r.errMessage, subcode=r.code)
         return r

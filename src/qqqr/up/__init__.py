@@ -7,7 +7,7 @@ from typing import List, Optional, Type
 
 from ..base import LoginBase, LoginSession
 from ..constant import StatusCode
-from ..event import Emittable
+from ..event import Emittable, NullEvent
 from ..event.login import UpEvent
 from ..exception import TencentLoginError
 from ..type import APPID, PT_QR_APP, Proxy
@@ -147,7 +147,8 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         ) as r:
             rl = re.findall(r"'(.*?)'[,\)]", r.text)
         # ptui_sendSMS_CB('10012', '短信发送成功！')
-        assert int(rl[0]) == 10012, rl[1]
+        if int(rl[0]) != 10012:
+            raise TencentLoginError(sess.pastcode, rl[1])
 
     async def try_login(self, sess: UpSession):
         """
@@ -213,7 +214,13 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
                 return await self._get_login_url(sess)
             elif resp.code == StatusCode.NeedSmsVerify:
                 if pastcode == StatusCode.NeedSmsVerify:
-                    raise TencentLoginError(resp.code, "")
+                    raise TencentLoginError(resp.code, "重复要求动态验证码")
+                if isinstance(self.hook, NullEvent):
+                    # fast return so we won't always request smscode which may risk test account.
+                    raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
+                if self.hook.GetSmsCode.__qualname__ == UpEvent.GetSmsCode.__qualname__:
+                    # TODO: bad condition
+                    raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 await self.send_sms_code(sess)
                 sess.sms_code = await self.hook.GetSmsCode(resp.msg, resp.nickname)
                 if sess.sms_code is None:

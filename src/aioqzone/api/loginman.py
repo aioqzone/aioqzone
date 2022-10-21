@@ -102,8 +102,8 @@ class UPLoginMan(Loginable[UPEvent]):
             log.error("Unknown HTTP Error captured, continue.", exc_info=True)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
-        except BaseException as e:
-            log.fatal("Unexpected error in QR login.", exc_info=True)
+        except:
+            log.fatal("密码登录抛出未捕获的异常.", exc_info=True)
             msg = "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
             try:
                 emit_hook(self.hook.LoginFailed(meth, msg))
@@ -230,6 +230,15 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
             if isinstance(c, UPLoginMan) and isinstance(hook, UPEvent):
                 c.register_hook(hook)
 
+    def ordered_methods(self) -> List[Loginable]:
+        """Subclasses can inherit this method to choose a subset of `._order` according to its own policy.
+
+        :return: a subset of `._order`.
+
+        .. versionadded:: 0.9.8.dev1
+        """
+        return self._order
+
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
@@ -244,7 +253,7 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
             raise SkipLoginInterrupt
         user_break = None
 
-        for i, c in enumerate(self._order):
+        for c in self.ordered_methods():
             try:
                 return await c._new_cookie()
             except (TencentLoginError, _NextMethodInterrupt) as e:
