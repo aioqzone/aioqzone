@@ -5,6 +5,7 @@ import pytest_asyncio
 
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.event.login import QrEvent
+from qqqr.exception import HookError
 from qqqr.qr import QrLogin, QrSession
 from qqqr.utils.net import ClientAdapter
 
@@ -39,6 +40,31 @@ async def login(client: ClientAdapter):
     yield login
 
 
+@pytest_asyncio.fixture
+async def trouble_hook(client: ClientAdapter):
+    login = QrLogin(client, QzoneAppid, QzoneProxy)
+
+    class trouble(QrEvent):
+        def __init__(self) -> None:
+            super().__init__()
+            self._cancel = asyncio.Event()
+            self._refresh = asyncio.Event()
+
+        def QrFetched(self, png: bytes, times: int):
+            raise RuntimeError
+
+        @property
+        def cancel_flag(self) -> asyncio.Event:
+            return self._cancel
+
+        @property
+        def refresh_flag(self) -> asyncio.Event:
+            return self._refresh
+
+    login.register_hook(trouble())
+    yield login
+
+
 @pytest_asyncio.fixture(scope="class")
 async def qrsess(login: QrLogin):
     yield await login.new()
@@ -52,6 +78,10 @@ class TestProcedure:
         poll = await login.poll(qrsess)
         assert poll
         assert poll.code == StatusCode.Waiting
+
+    async def test_guard(self, trouble_hook: QrLogin):
+        with pytest.raises(HookError):
+            cookie = await trouble_hook.login()
 
 
 @pytest.mark.needuser

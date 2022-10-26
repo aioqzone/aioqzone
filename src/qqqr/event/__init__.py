@@ -7,6 +7,7 @@ from collections import defaultdict
 from itertools import chain
 from typing import (
     Any,
+    Awaitable,
     Callable,
     Coroutine,
     Dict,
@@ -19,7 +20,9 @@ from typing import (
     TypeVar,
 )
 
-from typing_extensions import Self
+from typing_extensions import ParamSpec
+
+from qqqr.exception import HookError
 
 
 class Event:
@@ -30,6 +33,7 @@ class Event:
 
 Evt = TypeVar("Evt", bound=Event)
 T = TypeVar("T")
+P = ParamSpec("P")
 
 
 class NullEvent(Event):
@@ -182,3 +186,13 @@ class EventManager:
                 continue
             self.__orig_bases__[k] = sub_func(k)
         self.__updated = True
+
+
+def hook_guard(hook: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
+    async def guard_wrapper(*args: P.args, **kwds: P.kwargs) -> T:
+        try:
+            return await hook(*args, **kwds)
+        except BaseException as e:
+            raise HookError(hook) from e
+
+    return guard_wrapper

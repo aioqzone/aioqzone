@@ -39,7 +39,6 @@ repos:
         entry: poetry run pytest -m "not needuser and not upstream" test
         language: system
         pass_filenames: false
-        always_run: true
         types: [python, toml]
 default_language_version:
   python: python3

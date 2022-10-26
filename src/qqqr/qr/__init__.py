@@ -8,7 +8,7 @@ from qqqr.qr.type import PollResp
 
 from ..base import LoginBase, LoginSession
 from ..constant import StatusCode
-from ..event import Emittable
+from ..event import Emittable, hook_guard
 from ..event.login import QrEvent
 from ..exception import UserBreak
 from ..utils.daug import du
@@ -101,13 +101,14 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
         polling_freq: float = 3,
     ):
         expired = 0
+        send_qr = hook_guard(self.hook.QrFetched)
         refresh_flag = self.hook.refresh_flag
         cancel_flag = self.hook.cancel_flag
         sess = await self.new()
 
         while expired < refresh_times:
-            await self.hook.QrFetched(sess.current_qr.png, expired)
-            # future.set_exception(UserBreak)
+            await send_qr(sess.current_qr.png, expired)
+
             while not refresh_flag.is_set():
                 if cancel_flag.is_set():
                     raise UserBreak

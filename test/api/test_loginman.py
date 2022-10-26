@@ -11,7 +11,8 @@ import aioqzone.api.loginman as api
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from aioqzone.exception import LoginError
 from jssupport.exception import JsRuntimeError
-from qqqr.exception import TencentLoginError, UserBreak
+from qqqr.event.login import QrEvent, UpEvent
+from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.utils.net import ClientAdapter
 
 from . import showqr
@@ -78,6 +79,7 @@ class TestUP:
             (GeneratorExit(), api._NextMethodInterrupt),
             (ConnectError("mock", request=_fake_request), api._NextMethodInterrupt),
             (_fake_http_error, api._NextMethodInterrupt),
+            (HookError(UpEvent.GetSmsCode), HookError),
             (RuntimeError, SystemExit),
         ],
     )
@@ -124,6 +126,7 @@ class TestQR:
             (GeneratorExit(), api._NextMethodInterrupt),
             (ConnectError("mock", request=_fake_request), api._NextMethodInterrupt),
             (_fake_http_error, api._NextMethodInterrupt),
+            (HookError(QrEvent.QrFetched), HookError),
         ],
     )
     async def test_exception(
@@ -178,19 +181,15 @@ class MixFailureRecord(api.MixedLoginEvent):
 
 mixed_loginman_exc_test_param = [
     ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, "allow", ["up", "qr"]),
-    ((TencentLoginError(20003, "mock"), TimeoutError()), LoginError, "allow", ["up", "qr"]),
+    ((HookError(UpEvent.GetSmsCode), TimeoutError()), LoginError, "allow", ["up", "qr"]),
     ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, "allow", ["up", "qr"]),
     ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, "allow", ["up", "qr"]),
     ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, "allow", ["up", "qr"]),
     #
     ((SystemExit(), UserBreak()), SystemExit, "allow", ["up"]),
-    ((SystemExit(), TimeoutError()), SystemExit, "allow", ["up"]),
-    ((SystemExit(), GeneratorExit()), SystemExit, "allow", ["up"]),
-    ((SystemExit(), _fake_http_error), SystemExit, "allow", ["up"]),
-    ((SystemExit(), SystemExit()), SystemExit, "allow", ["up"]),
     #
     ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, "prefer", ["qr", "up"]),
-    ((TencentLoginError(20003, "mock"), TimeoutError()), LoginError, "prefer", ["qr", "up"]),
+    ((HookError(UpEvent.GetSmsCode), TimeoutError()), LoginError, "prefer", ["qr", "up"]),
     ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, "prefer", ["qr", "up"]),
     ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, "prefer", ["qr", "up"]),
     ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, "prefer", ["qr"]),
