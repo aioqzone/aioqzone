@@ -1,3 +1,6 @@
+from typing import Callable
+
+
 class TencentLoginError(RuntimeError):
     """This exception represents an error that occured in Qzone login,
     with at least an error code."""
@@ -18,3 +21,12 @@ class UserBreak(KeyboardInterrupt):
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
+
+
+class HookError(RuntimeError):
+    """Once we await a hook, we expect that if the hook is broken, it will not mess up our
+    own error handling. It is convenient to wrap an exception raise from hooks with this error.
+    """
+
+    def __init__(self, hook: Callable) -> None:
+        super().__init__(f"Error in hook: {hook.__qualname__}")

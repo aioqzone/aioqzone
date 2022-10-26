@@ -7,7 +7,7 @@ from typing import List, Optional, Type
 
 from ..base import LoginBase, LoginSession
 from ..constant import StatusCode
-from ..event import Emittable, NullEvent
+from ..event import Emittable, NullEvent, hook_guard
 from ..event.login import UpEvent
 from ..exception import TencentLoginError
 from ..type import APPID, PT_QR_APP, Proxy
@@ -222,7 +222,8 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
                     # TODO: bad condition
                     raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 await self.send_sms_code(sess)
-                sess.sms_code = await self.hook.GetSmsCode(resp.msg, resp.nickname)
+                get_sms_code = hook_guard(self.hook.GetSmsCode)
+                sess.sms_code = await get_sms_code(resp.msg, resp.nickname)
                 if sess.sms_code is None:
                     raise TencentLoginError(resp.code, "未获得动态验证码")
             else:

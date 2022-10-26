@@ -12,7 +12,7 @@ from httpx import ConnectError, HTTPError
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.event.login import QrEvent, UpEvent
-from qqqr.exception import TencentLoginError, UserBreak
+from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.up import UpLogin
 from qqqr.utils.net import ClientAdapter
@@ -64,6 +64,7 @@ class UPLoginMan(Loginable[UPEvent]):
         :meta public:
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
         :raises `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
+        :raises: `qqqr.exception.HookError`: an error is raised from hook
         :raises `SystemExit`: if unexpected error raised
 
         :return: cookie dict
@@ -102,6 +103,10 @@ class UPLoginMan(Loginable[UPEvent]):
             log.error("Unknown HTTP Error captured, continue.", exc_info=True)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
+        except HookError as e:
+            log.error(str(e))
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise e
         except:
             log.fatal("密码登录抛出未捕获的异常.", exc_info=True)
             msg = "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
@@ -132,6 +137,7 @@ class QRLoginMan(Loginable[QREvent]):
         :meta public:
         :raises `qqqr.exception.UserBreak`: qr polling task is canceled
         :raises `~aioqzone.api.loginman._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
+        :raises: `qqqr.exception.HookError`: an error is raised from hook
         :raises `SystemExit`: on unexpected error raised when polling
 
         :return: cookie dict
@@ -167,6 +173,10 @@ class QRLoginMan(Loginable[QREvent]):
             log.debug(e.request)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
+        except HookError as e:
+            log.error(str(e))
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise e
         except:
             log.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
@@ -256,7 +266,7 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
         for c in self.ordered_methods():
             try:
                 return await c._new_cookie()
-            except (TencentLoginError, _NextMethodInterrupt) as e:
+            except (TencentLoginError, _NextMethodInterrupt, HookError) as e:
                 excname = e.__class__.__name__
                 log.debug(f"Mixed loginman received {excname}, continue.")
             except UserBreak as e:
