@@ -29,4 +29,5 @@ class HookError(RuntimeError):
     """
 
     def __init__(self, hook: Callable) -> None:
+        self.hook = hook
         super().__init__(f"Error in hook: {hook.__qualname__}")
