@@ -223,7 +223,7 @@ class QzoneApi:
         async def retry_closure():
             async with await self.aget(const.feeds3_html_more, du(default, query)) as r:
                 r.raise_for_status()
-                rtext = "".join([i async for i in r.aiter_text()])
+                rtext = r.text
 
             return self._rtext_handler(rtext)
 
@@ -275,7 +275,7 @@ class QzoneApi:
         async def retry_closure():
             async with await self.apost(const.emotion_getcomments, data=du(default, body)) as r:
                 r.raise_for_status()
-                rtext = "".join([i async for i in r.aiter_text()])
+                rtext = r.text
 
             return self._rtext_handler(rtext)
 
@@ -505,7 +505,7 @@ class QzoneApi:
                 const.emotion_msglist, du(param, add) if pos else param
             ) as r:
                 r.raise_for_status()
-                rtext = "".join([i async for i in r.aiter_text()])
+                rtext = r.text
             return self._rtext_handler(rtext)
 
         data = await retry_closure()
