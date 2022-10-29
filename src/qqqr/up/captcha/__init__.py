@@ -182,7 +182,7 @@ class Captcha:
 
         async with await self.client.get(js_url) as r:
             r.raise_for_status()
-            tdc.load_vm("".join([i async for i in r.aiter_text()]))
+            tdc.load_vm(r.text)
 
         sess.set_js_env(tdc)
 
@@ -199,7 +199,7 @@ class Captcha:
         async def r(url):
             async with await self.client.get(url) as r:
                 r.raise_for_status()
-                return b"".join([i async for i in r.aiter_bytes()])
+                return r.content
 
         for i in await asyncio.gather(*(r(i) for i in sess.cdn_urls)):
             sess.cdn_imgs.append(i)
