@@ -98,7 +98,7 @@ class Emittable(Generic[Evt]):
 
         .. seealso:: :meth:`asyncio.wait`
         """
-        s = set()
+        s: Set[asyncio.Task] = set()
         for i in hook_cls:
             s.update(self._tasks[i])
         if not s:

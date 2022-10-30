@@ -79,6 +79,9 @@ class QzoneApi:
         1. `aioqzone.exception.QzoneError` code -3000 or -4002
         2. HTTP response code 403
 
+        :meta public:
+        :param func: decorated callable
+
         .. note:: Decorate code as less as possible
         .. warning:: Do NOT modify args in the wrapped code.
         """
@@ -88,6 +91,7 @@ class QzoneApi:
             """
             :raises `qqqr.exception.UserBreak`: qr login canceled
             :raises `aioqzone.exception.LoginError`: not logined
+            :raises `qqqr.exception.HookError`: if hooks raises an error
             :raises `SystemExit`: unexcpected error
             """
             try:
@@ -387,6 +391,8 @@ class QzoneApi:
             return True
         except QzoneError as e:
             logger.warning(f"Error in dolike/unlike. {e}")
+            if e.rdict:
+                logger.debug(e.rdict)
             return False
         except HTTPStatusError as e:
             logger.error("Error in dolike/unlike.", exc_info=e)
