@@ -4,6 +4,7 @@ Define hooks that can trigger user actions.
 
 import asyncio
 from collections import defaultdict
+from functools import wraps
 from itertools import chain
 from typing import (
     Any,
@@ -98,7 +99,7 @@ class Emittable(Generic[Evt]):
 
         .. seealso:: :meth:`asyncio.wait`
         """
-        s = set()
+        s: Set[asyncio.Task] = set()
         for i in hook_cls:
             s.update(self._tasks[i])
         if not s:
@@ -189,6 +190,7 @@ class EventManager:
 
 
 def hook_guard(hook: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
+    @wraps(hook)
     async def guard_wrapper(*args: P.args, **kwds: P.kwargs) -> T:
         try:
             return await hook(*args, **kwds)

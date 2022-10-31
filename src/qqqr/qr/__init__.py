@@ -100,6 +100,19 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
         refresh_times: int = 6,
         polling_freq: float = 3,
     ):
+        """Loop until cookie is returned or max `refresh_times` exceeds.
+        - This method will emit :meth:`QrEvent.QrFetched` event if a new qrcode is fetched.
+        - If qr is not scanned after `refresh_times`, it will raise :exc:`asyncio.TimeoutError`.
+        - If :obj:`QrEvent.refresh_flag` is set, it will refresh qrcode at once without increasing expire counter.
+        - If :obj:`QrEvent.cancel_flag` is set, it will raise :exc:`UserBreak` before next polling.
+
+        :meta public:
+        :param refresh_times: max qr expire times.
+        :param polling_freq: interval between two status polling, in seconds, default as 3.
+
+        :raise `asyncio.TimeoutError`: if qr is not scanned after `refresh_times` expires.
+        :raise `UserBreak`: if :obj:`QrEvent.cancel_flag` is set.
+        """
         expired = 0
         send_qr = hook_guard(self.hook.QrFetched)
         refresh_flag = self.hook.refresh_flag
@@ -107,6 +120,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
         sess = await self.new()
 
         while expired < refresh_times:
+            # BUG: should we omit HookError here?
             await send_qr(sess.current_qr.png, expired)
 
             while not refresh_flag.is_set():
@@ -120,12 +134,14 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
                 elif stat.code == StatusCode.Authenticated:
                     sess.login_url = str(stat.url)
                     return await self._get_login_url(sess)
+
             sess.new_qr(await self.show())
             refresh_flag.clear()
 
-        raise TimeoutError
+        raise asyncio.TimeoutError
 
     async def login(self, refresh_time: int = 6, polling_freq: float = 3):
+        """.. seealso:: :meth:`._loop`"""
         try:
             return await self._loop(refresh_times=refresh_time, polling_freq=polling_freq)
         except (KeyboardInterrupt, asyncio.CancelledError) as e:

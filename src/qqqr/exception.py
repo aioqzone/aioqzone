@@ -2,14 +2,19 @@ from typing import Callable
 
 
 class TencentLoginError(RuntimeError):
-    """This exception represents an error that occured in Qzone login,
+    """This exception represents that an error occured in Qzone **login**,
     with at least an error code."""
 
-    def __init__(self, code: int, msg: str, *args: object, subcode: int = ...) -> None:
+    def __init__(
+        self,
+        code: int,
+        msg: str,
+        *args: object,
+        subcode: int = ...,
+    ) -> None:
         self.code = code
         self.msg = msg
-        if subcode != ...:
-            self.subcode = subcode
+        self.subcode = subcode
         super().__init__(*args)
 
     def __str__(self) -> str:
@@ -17,7 +22,7 @@ class TencentLoginError(RuntimeError):
 
 
 class UserBreak(KeyboardInterrupt):
-    """This exception should be raised when user cancel the login spontaneously."""
+    """Represents that user cancels the login spontaneously."""
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
@@ -26,6 +31,22 @@ class UserBreak(KeyboardInterrupt):
 class HookError(RuntimeError):
     """Once we await a hook, we expect that if the hook is broken, it will not mess up our
     own error handling. It is convenient to wrap an exception raise from hooks with this error.
+
+    If the caller catches a `HookError`, it is recommended to omit the error. If something is broken
+    by the hook, or something must be retrieved by the hook is not available, then it is recommended to
+    reraise the exception.
+
+    Omit the error if you can:
+    >>> try:
+    >>>     await hook_guard(inform_user)('hello')
+    >>> except HookError as e:
+    >>>     log.error("Hook raises an error", exc_info=e.__cause__) # do not reraise
+
+    Reraise only when you have to:
+    >>> try:
+    >>>     need_input(await hook_guard(read_from_user)())
+    >>> except HookError as e:
+    >>>     raise e
     """
 
     def __init__(self, hook: Callable) -> None:

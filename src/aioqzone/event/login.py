@@ -50,7 +50,12 @@ class UPEvent(LoginEvent, _upevt):
 
 
 class Loginable(ABC, Emittable[LgEvt]):
+    """Abstract class represents a login manager.
+    It is a :class:`Emittable` class which can emit :class:`LoginEvent`.
+    """
+
     last_login: float = 0
+    """Last login time stamp. 0 represents no login since created."""
 
     def __init__(self, uin: int) -> None:
         super().__init__()
@@ -59,30 +64,38 @@ class Loginable(ABC, Emittable[LgEvt]):
         self.lock = asyncio.Lock()
 
     @property
-    def cookie(self) -> Dict[str, str]:  # type: ignore
-        """Get cookie in any way. Allow cached result.
+    def cookie(self) -> Dict[str, str]:
+        """Get a cookie dict using any method. Allows cached cookie.
 
-        Returns:
-            int: cookie. Cached cookie is preferable.
+        :return: cookie. Cached cookie is preferable.
         """
         return self._cookie
 
     @abstractmethod
     async def _new_cookie(self) -> Dict[str, str]:
+        """Subclasses *must* implement this method to return a cookie dict.
+
+        :meta public:
+        :return: cookie dict
+        """
         return
 
     async def new_cookie(self):
-        """Get a new cookie. Means, cached cookie is not allowed.
+        """Get a new cookie dict, which means cached cookie is not allowed.
+        Generally, this will trigger a login.
 
-        Returns:
-            int: cookie. Shouldn't be a cached one.
+        This method uses :class:`asyncio.Lock` to ensure that only one request can trigger
+        an actual login at the same time, other requests will block until the first is complete
+        and share the cookie from this single login.
+
+        :return: cookie. Shouldn't be a cached one.
         """
         if self.lock.locked():
-            # if there is coro. updating cookie, then wait for its result.
+            # if there is other requests trying to update cookie, reuse the result.
             async with self.lock:
                 return self.cookie
         else:
-            # let the first coro. get result from Qzone.
+            # let the first request get result from Qzone.
             async with self.lock:
                 self._cookie = await self._new_cookie()
                 self.last_login = time()
@@ -90,10 +103,12 @@ class Loginable(ABC, Emittable[LgEvt]):
 
     @property
     def gtk(self) -> int:
-        """cal gtk from pskey.
+        """Calculate ``gtk`` using ``pskey`` filed in the cookie.
 
-        Returns:
-            int: gtk. NOTE: 0 denotes no-login.
+        :return: gtk
+
+        .. note:: ``0`` denotes no existing login.
+        .. seealso:: :meth:`qqqr.utils.encrypt.gtk`
         """
         pskey = self.cookie.get("p_skey")
         if pskey is None:

@@ -6,7 +6,7 @@ import logging
 from functools import wraps
 from random import randint, random
 from typing import Callable, Dict, List, Optional, Tuple, Union, cast
-from urllib.parse import parse_qs, quote, unquote
+from urllib.parse import parse_qs
 
 from httpx import HTTPStatusError
 
@@ -76,19 +76,30 @@ class QzoneApi:
         """A decorator which will relogin and retry given func if cookie expired.
 
         'cookie expired' is indicated by:
-        1. `aioqzone.exception.QzoneError` code -3000 or -4002
-        2. HTTP response code 403
+
+        - `aioqzone.exception.QzoneError` code -3000 or -4002
+        - HTTP response code 403
+
+        :meta public:
+        :param func: a callable, which should be rerun after login expired and relogin.
 
         .. note:: Decorate code as less as possible
-        .. warning:: Do NOT modify args in the wrapped code.
+        .. warning::
+
+                You *SHOULD* **NOT** wrap a function with mutable input. If you change the mutable
+                var in the first attempt, in the second attempt the var saves the changed value.
         """
 
         @wraps(func)
         async def relogin_wrapper(*args, **kwds):
             """
-            :raises `qqqr.exception.UserBreak`: qr login canceled
-            :raises `aioqzone.exception.LoginError`: not logined
-            :raises `SystemExit`: unexcpected error
+            This wrapper will call :meth:`aioqzone.event.login.Loginable.new_cookie` if the wrapped
+            function raises an error indicating that a new login is required.
+
+            The exceptions this wrapper may raise depends on the login manager you passed in.
+            Any exceptions irrelevent to "login needed" will be passed through w/o any change.
+
+            :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
             """
             try:
                 return await func(*args, **kwds)
@@ -112,18 +123,15 @@ class QzoneApi:
         errno_key: Tuple[str, ...] = ("code", "err"),
         msg_key: Tuple[str, ...] = ("msg", "message"),
     ) -> StrDict:
-        """Deal with rtext from Qzone api response, returns parsed json dict.
-        Inner used only.
+        """Handles the response text recieved from Qzone API, returns the parsed json dict.
 
+        :meta public:
         :param rtext: response text
         :param cb: The text is to be parsed by callback_regex, defaults to True.
         :param errno_key: Error # key, defaults to ('code', 'err').
         :param msg_key: Error message key, defaults to ('msg', 'message').
 
         :raises `aioqzone.exception.QzoneError`: if errno != 0
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
 
         :return: json response
         """
@@ -135,7 +143,7 @@ class QzoneApi:
         assert isinstance(r, dict)
 
         err = next(filter(lambda i: i is not None, (r.get(i) for i in errno_key)), None)
-        assert err is not None
+        assert err is not None, f"no {errno_key} in {r.keys()}"
         assert isinstance(err, (int, str))
         err = int(err)
 
@@ -168,9 +176,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: feed attributes and html feed
 
@@ -246,9 +252,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: response dict
         """
@@ -289,11 +293,9 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
-        :return: a dict reps the feed in detail
+        :return: a dict represents the feed in detail.
 
         .. note:: share msg is not support, i.e. `appid=311`
         """
@@ -323,9 +325,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: update counts
 
@@ -351,9 +351,7 @@ class QzoneApi:
         :param like: True as like, False as unlike, defaults to True.
 
         :raises `httpx.HTTPStatusError`: error http response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: success flag
 
@@ -387,15 +385,12 @@ class QzoneApi:
             return True
         except QzoneError as e:
             logger.warning(f"Error in dolike/unlike. {e}")
+            if e.rdict:
+                logger.debug(e.rdict)
             return False
-        except HTTPStatusError as e:
-            logger.error("Error in dolike/unlike.", exc_info=e)
-            raise e
-        except SystemExit as e:
-            raise e  # pass through SystemExit
-        except BaseException as e:
-            logger.fatal("Uncaught Exception in dolike/unlike!", exc_info=True)
-            exit(1)
+        except HTTPStatusError:
+            logger.error("Error in dolike/unlike.", exc_info=True)
+            raise
 
     async def floatview_photo_list(self, album: AlbumData, num: int) -> StrDict:
         """Get detail of an album, including raw image url.
@@ -405,9 +400,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
         :raises `aioqzone.exception.CorruptError`: maybe data is corruptted
 
         :return: album details
@@ -471,9 +464,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: a list of messages
 
@@ -519,9 +510,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: qzone response as is, containing feed html and fid.
 
@@ -577,9 +566,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: qzone response as is, usually nothing meaningful.
 
@@ -609,7 +596,7 @@ class QzoneApi:
         return await retry_closure()
 
     async def emotion_update(self, fid: str, content: str, uin: Optional[int] = None) -> StrDict:
-        """Update content of a feed.
+        """Update the content of a feed.
 
         :param fid: feed id, named feedkey, tid, etc.
         :param content: new content in text.
@@ -617,9 +604,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: qzone response as is.
 
@@ -675,9 +660,7 @@ class QzoneApi:
 
         :raises `httpx.HTTPStatusError`: error http response code
         :raises `aioqzone.exception.QzoneError`: error qzone response code
-        :raises `qqqr.exception.UserBreak`: qr login canceled
-        :raises `aioqzone.exception.LoginError`: not logined
-        :raises `SystemExit`: unexcpected error
+        :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: new feed html
 
