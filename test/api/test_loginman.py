@@ -181,7 +181,7 @@ class MixFailureRecord(api.MixedLoginEvent):
 
 mixed_loginman_exc_test_param = [
     ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, "allow", ["up", "qr"]),
-    ((HookError(UpEvent.GetSmsCode), TimeoutError()), LoginError, "allow", ["up", "qr"]),
+    ((HookError(UpEvent.GetSmsCode), asyncio.TimeoutError()), LoginError, "allow", ["up", "qr"]),
     ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, "allow", ["up", "qr"]),
     ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, "allow", ["up", "qr"]),
     ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, "allow", ["up", "qr"]),
@@ -189,13 +189,13 @@ mixed_loginman_exc_test_param = [
     ((SystemExit(), UserBreak()), SystemExit, "allow", ["up"]),
     #
     ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, "prefer", ["qr", "up"]),
-    ((HookError(UpEvent.GetSmsCode), TimeoutError()), LoginError, "prefer", ["qr", "up"]),
+    ((HookError(UpEvent.GetSmsCode), asyncio.TimeoutError()), LoginError, "prefer", ["qr", "up"]),
     ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, "prefer", ["qr", "up"]),
     ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, "prefer", ["qr", "up"]),
     ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, "prefer", ["qr"]),
     #
     ((SystemExit(), UserBreak()), SystemExit, "prefer", ["qr", "up"]),
-    ((SystemExit(), TimeoutError()), SystemExit, "prefer", ["qr", "up"]),
+    ((SystemExit(), asyncio.TimeoutError()), SystemExit, "prefer", ["qr", "up"]),
     ((SystemExit(), GeneratorExit()), SystemExit, "prefer", ["qr", "up"]),
     ((SystemExit(), _fake_http_error), SystemExit, "prefer", ["qr", "up"]),
     ((SystemExit(), SystemExit()), SystemExit, "prefer", ["qr"]),
