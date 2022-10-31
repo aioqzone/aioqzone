@@ -122,7 +122,7 @@ class TestQR:
         "exc2r,exc2e",
         [
             (NotImplementedError(), SystemExit),
-            (TimeoutError(), api._NextMethodInterrupt),
+            (asyncio.TimeoutError(), api._NextMethodInterrupt),
             (GeneratorExit(), api._NextMethodInterrupt),
             (ConnectError("mock", request=_fake_request), api._NextMethodInterrupt),
             (_fake_http_error, api._NextMethodInterrupt),

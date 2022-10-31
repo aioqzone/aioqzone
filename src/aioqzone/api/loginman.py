@@ -3,6 +3,7 @@ Collect some built-in login manager w/o caching.
 Users can inherit these managers and implement their own caching logic.
 """
 
+import asyncio
 import logging
 from enum import Enum
 from typing import Dict, List, Optional, Union
@@ -64,7 +65,6 @@ class UPLoginMan(Loginable[UPEvent]):
         :meta public:
         :raises `qqqr.exception.TencentLoginError`: login error when up login.
         :raises `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
-        :raises: `qqqr.exception.HookError`: an error is raised from hook
         :raises `SystemExit`: if unexpected error raised
 
         :return: cookie dict
@@ -152,7 +152,7 @@ class QRLoginMan(Loginable[QREvent]):
             emit_hook(self.hook.LoginSuccess(meth))
             self.client.cookies.update(cookie)
             return cookie
-        except TimeoutError as e:
+        except asyncio.TimeoutError as e:
             log.warning(str(e))
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
