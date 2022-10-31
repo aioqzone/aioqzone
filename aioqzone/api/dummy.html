@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>带有类型和验证的 Qzone API &mdash; aioqzone 0.9.7.dev1 文档</title>
+  <title>带有类型和验证的 Qzone API &mdash; aioqzone 0.9.10.dev1 文档</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -112,25 +112,25 @@ just a basic type if not needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>uin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – uin</p></li>
-<li><p><strong>tid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – feed id</p></li>
-<li><p><strong>feedstype</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – feedstype in html</p></li>
+<li><p><strong>uin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – uin</p></li>
+<li><p><strong>tid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – feed id</p></li>
+<li><p><strong>feedstype</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – feedstype in html</p></li>
 </ul>
 </dd>
 <dt class="field-even">抛出</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>httpx.HTTPStatusError</strong> – error http response code</p></li>
 <li><p><a class="reference internal" href="../exception.html#aioqzone.exception.QzoneError" title="aioqzone.exception.QzoneError"><strong>aioqzone.exception.QzoneError</strong></a> – error qzone response code</p></li>
-<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – unexcpected error</p></li>
 </ul>
 </dd>
-<dt class="field-odd">返回类型</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p>All error that may be raised from <code class="xref py py-meth docutils literal notranslate"><span class="pre">login.new_cookie()</span></code>, which depends on the login manager you passed in.</p>
 </dd>
-<dt class="field-even">返回</dt>
-<dd class="field-even"><p>response dict</p>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p>response dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -142,24 +142,24 @@ just a basic type if not needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>owner</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – owner uin</p></li>
-<li><p><strong>fid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – feed id, named fid, tid or feedkey</p></li>
+<li><p><strong>owner</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – owner uin</p></li>
+<li><p><strong>fid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – feed id, named fid, tid or feedkey</p></li>
 </ul>
 </dd>
 <dt class="field-even">抛出</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>httpx.HTTPStatusError</strong> – error http response code</p></li>
 <li><p><a class="reference internal" href="../exception.html#aioqzone.exception.QzoneError" title="aioqzone.exception.QzoneError"><strong>aioqzone.exception.QzoneError</strong></a> – error qzone response code</p></li>
-<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – unexcpected error</p></li>
 </ul>
 </dd>
-<dt class="field-odd">返回类型</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedDetailRep" title="aioqzone.type.resp.FeedDetailRep"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedDetailRep</span></code></a></p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p>All error that may be raised from <code class="xref py py-meth docutils literal notranslate"><span class="pre">login.new_cookie()</span></code>, which depends on the login manager you passed in.</p>
 </dd>
-<dt class="field-even">返回</dt>
-<dd class="field-even"><p>a dict reps the feed in detail</p>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedDetailRep" title="aioqzone.type.resp.FeedDetailRep"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedDetailRep</span></code></a></p>
+</dd>
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p>a dict represents the feed in detail.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -175,25 +175,25 @@ just a basic type if not needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>uin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – uin</p></li>
-<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – number, defaults to 20</p></li>
-<li><p><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – start position, defaults to 0</p></li>
+<li><p><strong>uin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – uin</p></li>
+<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – number, defaults to 20</p></li>
+<li><p><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – start position, defaults to 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">抛出</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>httpx.HTTPStatusError</strong> – error http response code</p></li>
 <li><p><a class="reference internal" href="../exception.html#aioqzone.exception.QzoneError" title="aioqzone.exception.QzoneError"><strong>aioqzone.exception.QzoneError</strong></a> – error qzone response code</p></li>
-<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – unexcpected error</p></li>
 </ul>
 </dd>
-<dt class="field-odd">返回类型</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="../type/resp.html#aioqzone.type.resp.MsgListElm" title="aioqzone.type.resp.MsgListElm"><code class="xref py py-class docutils literal notranslate"><span class="pre">MsgListElm</span></code></a>]</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p>All error that may be raised from <code class="xref py py-meth docutils literal notranslate"><span class="pre">login.new_cookie()</span></code>, which depends on the login manager you passed in.</p>
 </dd>
-<dt class="field-even">返回</dt>
-<dd class="field-even"><p>a list of messages</p>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="../type/resp.html#aioqzone.type.resp.MsgListElm" title="aioqzone.type.resp.MsgListElm"><code class="xref py py-class docutils literal notranslate"><span class="pre">MsgListElm</span></code></a>]</p>
+</dd>
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p>a list of messages</p>
 </dd>
 </dl>
 <div class="versionadded">
@@ -208,24 +208,24 @@ just a basic type if not needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>content</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – text content.</p></li>
-<li><p><strong>right</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – feed access right, defaults to 0 (Not used till now)</p></li>
+<li><p><strong>content</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – text content.</p></li>
+<li><p><strong>right</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – feed access right, defaults to 0 (Not used till now)</p></li>
 </ul>
 </dd>
 <dt class="field-even">抛出</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>httpx.HTTPStatusError</strong> – error http response code</p></li>
 <li><p><a class="reference internal" href="../exception.html#aioqzone.exception.QzoneError" title="aioqzone.exception.QzoneError"><strong>aioqzone.exception.QzoneError</strong></a> – error qzone response code</p></li>
-<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – unexcpected error</p></li>
 </ul>
 </dd>
-<dt class="field-odd">返回类型</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.PublishResp" title="aioqzone.type.resp.PublishResp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublishResp</span></code></a></p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p>All error that may be raised from <code class="xref py py-meth docutils literal notranslate"><span class="pre">login.new_cookie()</span></code>, which depends on the login manager you passed in.</p>
 </dd>
-<dt class="field-even">返回</dt>
-<dd class="field-even"><p>qzone response as is, containing feed html and fid.</p>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.PublishResp" title="aioqzone.type.resp.PublishResp"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublishResp</span></code></a></p>
+</dd>
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p>qzone response as is, containing feed html and fid.</p>
 </dd>
 </dl>
 <div class="versionadded">
@@ -243,7 +243,7 @@ just a basic type if not needed.</p>
 <dd><p>This will call <a class="reference internal" href="raw.html#aioqzone.api.raw.QzoneApi.feeds3_html_more" title="aioqzone.api.raw.QzoneApi.feeds3_html_more"><code class="xref py py-meth docutils literal notranslate"><span class="pre">QzoneApi.feeds3_html_more()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>aux</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="（在 Python v3.10）"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreAux" title="aioqzone.type.resp.FeedMoreAux"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedMoreAux</span></code></a>]) – <a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreResp.aux" title="aioqzone.type.resp.FeedMoreResp.aux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aux</span></code></a> field of last return (pagenum - 1).</p>
+<dd class="field-odd"><p><strong>aux</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="（在 Python v3.11）"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreAux" title="aioqzone.type.resp.FeedMoreAux"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedMoreAux</span></code></a>]) – <a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreResp.aux" title="aioqzone.type.resp.FeedMoreResp.aux"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aux</span></code></a> field of last return (pagenum - 1).</p>
 </dd>
 <dt class="field-even">返回类型</dt>
 <dd class="field-even"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedMoreResp" title="aioqzone.type.resp.FeedMoreResp"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedMoreResp</span></code></a></p>
@@ -265,24 +265,24 @@ just a basic type if not needed.</p>
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>album</strong> (<a class="reference internal" href="../type/internal.html#aioqzone.type.internal.AlbumData" title="aioqzone.type.internal.AlbumData"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlbumData</span></code></a>) – Necessary album data</p></li>
-<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – pic num</p></li>
+<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – pic num</p></li>
 </ul>
 </dd>
 <dt class="field-even">抛出</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>httpx.HTTPStatusError</strong> – error http response code</p></li>
 <li><p><a class="reference internal" href="../exception.html#aioqzone.exception.QzoneError" title="aioqzone.exception.QzoneError"><strong>aioqzone.exception.QzoneError</strong></a> – error qzone response code</p></li>
-<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – unexcpected error</p></li>
 <li><p><a class="reference internal" href="../exception.html#aioqzone.exception.CorruptError" title="aioqzone.exception.CorruptError"><strong>aioqzone.exception.CorruptError</strong></a> – maybe data is corruptted</p></li>
 </ul>
 </dd>
-<dt class="field-odd">返回类型</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="（在 Python v3.10）"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FloatViewPhoto" title="aioqzone.type.resp.FloatViewPhoto"><code class="xref py py-class docutils literal notranslate"><span class="pre">FloatViewPhoto</span></code></a>]</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p>All error that may be raised from <code class="xref py py-meth docutils literal notranslate"><span class="pre">login.new_cookie()</span></code>, which depends on the login manager you passed in.</p>
 </dd>
-<dt class="field-even">返回</dt>
-<dd class="field-even"><p>album details</p>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FloatViewPhoto" title="aioqzone.type.resp.FloatViewPhoto"><code class="xref py py-class docutils literal notranslate"><span class="pre">FloatViewPhoto</span></code></a>]</p>
+</dd>
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p>album details</p>
 </dd>
 </dl>
 <div class="admonition warning">
@@ -302,16 +302,16 @@ a feed.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>httpx.HTTPStatusError</strong> – error http response code</p></li>
 <li><p><a class="reference internal" href="../exception.html#aioqzone.exception.QzoneError" title="aioqzone.exception.QzoneError"><strong>aioqzone.exception.QzoneError</strong></a> – error qzone response code</p></li>
-<li><p><a class="reference internal" href="../../qqqr/exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>qqqr.exception.UserBreak</strong></a> – qr login canceled</p></li>
-<li><p><a class="reference internal" href="../exception.html#aioqzone.exception.LoginError" title="aioqzone.exception.LoginError"><strong>aioqzone.exception.LoginError</strong></a> – not logined</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#SystemExit" title="（在 Python v3.10）"><strong>SystemExit</strong></a> – unexcpected error</p></li>
 </ul>
 </dd>
-<dt class="field-even">返回类型</dt>
-<dd class="field-even"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedsCount" title="aioqzone.type.resp.FeedsCount"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedsCount</span></code></a></p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p>All error that may be raised from <code class="xref py py-meth docutils literal notranslate"><span class="pre">login.new_cookie()</span></code>, which depends on the login manager you passed in.</p>
 </dd>
-<dt class="field-odd">返回</dt>
-<dd class="field-odd"><p>update counts</p>
+<dt class="field-odd">返回类型</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../type/resp.html#aioqzone.type.resp.FeedsCount" title="aioqzone.type.resp.FeedsCount"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeedsCount</span></code></a></p>
+</dd>
+<dt class="field-even">返回</dt>
+<dd class="field-even"><p>update counts</p>
 </dd>
 </dl>
 <div class="admonition note">

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QQQR Exceptions &mdash; aioqzone 0.9.7.dev1 文档</title>
+  <title>QQQR Exceptions &mdash; aioqzone 0.9.10.dev1 文档</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/autodoc_pydantic.css" type="text/css" />
@@ -53,6 +53,7 @@
 <li class="toctree-l2"><a class="reference internal" href="up/index.html">用户名-密码登录</a></li>
 <li class="toctree-l2"><a class="reference internal" href="base.html">QQQR Bases</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">QQQR Exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#qqqr.exception.HookError"><code class="docutils literal notranslate"><span class="pre">HookError</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#qqqr.exception.TencentLoginError"><code class="docutils literal notranslate"><span class="pre">TencentLoginError</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#qqqr.exception.UserBreak"><code class="docutils literal notranslate"><span class="pre">UserBreak</span></code></a></li>
 </ul>
@@ -97,15 +98,36 @@
   <section id="module-qqqr.exception">
 <span id="qqqr-exceptions"></span><h1>QQQR Exceptions<a class="headerlink" href="#module-qqqr.exception" title="此标题的永久链接"></a></h1>
 <dl class="py exception">
+<dt class="sig sig-object py" id="qqqr.exception.HookError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.exception.</span></span><span class="sig-name descname"><span class="pre">HookError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.exception.HookError" title="永久链接至目标"></a></dt>
+<dd><p>Once we await a hook, we expect that if the hook is broken, it will not mess up our
+own error handling. It is convenient to wrap an exception raise from hooks with this error.</p>
+<p>If the caller catches a <cite>HookError</cite>, it is recommended to omit the error. If something is broken
+by the hook, or something must be retrieved by the hook is not available, then it is recommended to
+reraise the exception.</p>
+<p>Omit the error if you can:
+&gt;&gt;&gt; try:
+&gt;&gt;&gt;     await hook_guard(inform_user)(‘hello’)
+&gt;&gt;&gt; except HookError as e:
+&gt;&gt;&gt;     log.error(“Hook raises an error”, exc_info=e.__cause__) # do not reraise</p>
+<p>Reraise only when you have to:
+&gt;&gt;&gt; try:
+&gt;&gt;&gt;     need_input(await hook_guard(read_from_user)())
+&gt;&gt;&gt; except HookError as e:
+&gt;&gt;&gt;     raise e</p>
+</dd></dl>
+
+<dl class="py exception">
 <dt class="sig sig-object py" id="qqqr.exception.TencentLoginError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.exception.</span></span><span class="sig-name descname"><span class="pre">TencentLoginError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.exception.TencentLoginError" title="永久链接至目标"></a></dt>
-<dd><p>这个异常表示 Qzone 登录期间发生了一个错误。此异常至少包含一个来自 Qzone 的错误码。</p>
+<dd><p>This exception represents that an error occured in Qzone <strong>login</strong>,
+with at least an error code.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="qqqr.exception.UserBreak">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.exception.</span></span><span class="sig-name descname"><span class="pre">UserBreak</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.exception.UserBreak" title="永久链接至目标"></a></dt>
-<dd><p>这个异常应当在用户主动停止 Qzone 登录时被抛出。</p>
+<dd><p>Represents that user cancels the login spontaneously.</p>
 </dd></dl>
 
 </section>

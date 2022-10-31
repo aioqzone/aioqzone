@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QrLogin and QrSession &mdash; aioqzone 0.9.7.dev1 文档</title>
+  <title>QrLogin and QrSession &mdash; aioqzone 0.9.10.dev1 文档</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/autodoc_pydantic.css" type="text/css" />
@@ -106,9 +106,36 @@
 <dt class="sig sig-object py" id="qqqr.qr.QrLogin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qqqr.qr.</span></span><span class="sig-name descname"><span class="pre">QrLogin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.qr.QrLogin" title="永久链接至目标"></a></dt>
 <dd><dl class="py method">
+<dt class="sig sig-object py" id="qqqr.qr.QrLogin._loop">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polling_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.qr.QrLogin._loop" title="永久链接至目标"></a></dt>
+<dd><p>Loop until cookie is returned or max <cite>refresh_times</cite> exceeds.
+- This method will emit <code class="xref py py-meth docutils literal notranslate"><span class="pre">QrEvent.QrFetched()</span></code> event if a new qrcode is fetched.
+- If qr is not scanned after <cite>refresh_times</cite>, it will raise <a class="reference external" href="https://docs.python.org/3/library/asyncio-exceptions.html#asyncio.TimeoutError" title="（在 Python v3.11）"><code class="xref py py-exc docutils literal notranslate"><span class="pre">asyncio.TimeoutError</span></code></a>.
+- If <code class="xref py py-obj docutils literal notranslate"><span class="pre">QrEvent.refresh_flag</span></code> is set, it will refresh qrcode at once without increasing expire counter.
+- If <code class="xref py py-obj docutils literal notranslate"><span class="pre">QrEvent.cancel_flag</span></code> is set, it will raise <code class="xref py py-exc docutils literal notranslate"><span class="pre">UserBreak</span></code> before next polling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>refresh_times</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – max qr expire times.</p></li>
+<li><p><strong>polling_freq</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="（在 Python v3.11）"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – interval between two status polling, in seconds, default as 3.</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/asyncio-exceptions.html#asyncio.TimeoutError" title="（在 Python v3.11）"><strong>asyncio.TimeoutError</strong></a> – if qr is not scanned after <cite>refresh_times</cite> expires.</p></li>
+<li><p><a class="reference internal" href="../exception.html#qqqr.exception.UserBreak" title="qqqr.exception.UserBreak"><strong>UserBreak</strong></a> – if <code class="xref py py-obj docutils literal notranslate"><span class="pre">QrEvent.cancel_flag</span></code> is set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="qqqr.qr.QrLogin.login">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polling_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qqqr.qr.QrLogin.login" title="永久链接至目标"></a></dt>
-<dd><p>Block until cookie is received.</p>
+<dd><div class="admonition seealso">
+<p class="admonition-title">参见</p>
+<p><a class="reference internal" href="#qqqr.qr.QrLogin._loop" title="qqqr.qr.QrLogin._loop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_loop()</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="py method">
