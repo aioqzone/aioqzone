@@ -7,7 +7,10 @@ aioqzone封装了一些Qzone接口。
 [![version](https://img.shields.io/pypi/v/aioqzone?logo=python)][pypi]
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-[English](README_en.md)
+[English](README_en.md) | 简体中文
+
+> 1. ⚠️ aioqzone 仍在开发阶段，任何功能和接口都有可能在未来的版本中发生变化。
+> 2. 🆘 **欢迎有意协助开发/维护的中文开发者**。不仅限于本仓库，[aioqzone][org] 所属的任何仓库都需要您的帮助。
 
 ## 功能和特点
 

@@ -7,7 +7,7 @@ aioqzone is a python package handling Qzone web login and wrapping some common Q
 [![version](https://img.shields.io/pypi/v/aioqzone?logo=python)][pypi]
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-[简体中文](README.md)
+English | [简体中文](README.md)
 
 ## Features
 

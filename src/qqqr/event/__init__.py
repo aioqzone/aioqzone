@@ -19,6 +19,7 @@ from typing import (
     Tuple,
     Type,
     TypeVar,
+    Union,
 )
 
 from typing_extensions import ParamSpec
@@ -55,13 +56,16 @@ class NullEvent(Event):
 class Emittable(Generic[Evt]):
     """An object has some event to trigger."""
 
-    hook: Evt = NullEvent()  # type: ignore
+    hook: Union[Evt, NullEvent] = NullEvent()
     _tasks: Dict[str, Set[asyncio.Task]]
     _loop: asyncio.AbstractEventLoop
 
     def __init__(self) -> None:
         self._tasks = defaultdict(set)
-        self._loop = asyncio.get_event_loop()
+        try:
+            self._loop = asyncio.get_running_loop()
+        except RuntimeError:
+            self._loop = asyncio.new_event_loop()
 
     @property
     def loop(self):
