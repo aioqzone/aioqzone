@@ -88,3 +88,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
 [aioqzone-feed]: https://github.com/aioqzone/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
 [pypi]: https://pypi.org/project/aioqzone
+[org]: https://github.com/aioqzone

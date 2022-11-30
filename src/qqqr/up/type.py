@@ -109,16 +109,18 @@ class CaptchaData(BaseModel):
 
 
 class PrehandleResp(BaseModel):
-    capclass: int
     captcha: CaptchaData = Field(alias="data", default=None)
-    log_js: str = ""
-    randstr: str
     sess: str
-    sid: str
-    src_1: str
-    src_2: str
-    src_3: str
-    state: int
-    subcapclass: int
-    ticket: str
-    uip: str  # ipv6
+
+    capclass: int = 0
+    log_js: str = ""
+    randstr: str = ""
+    sid: str = ""
+    src_1: str = ""
+    src_2: str = ""
+    src_3: str = ""
+    state: int = 0
+    subcapclass: int = 0
+    ticket: str = ""
+    uip: str = ""
+    """ipv6"""
