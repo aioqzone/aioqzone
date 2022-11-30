@@ -9,6 +9,8 @@ aioqzone is a python package handling Qzone web login and wrapping some common Q
 
 English | [简体中文](README.md)
 
+> aioqzone is under active development. Any functionality and interface may be changed.
+
 ## Features
 
 ### Qzone Feature
