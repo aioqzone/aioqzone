@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"POT-Creation-Date: 2022-12-14 10:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/qqqr/base.rst:2
 msgid "QQQR Bases"
@@ -35,6 +35,12 @@ msgstr ""
 
 #: of qqqr.base.LoginBase.new:1
 msgid "Create a new :class:`LoginSession`."
+msgstr ""
+
+#: of qqqr.base.LoginBase.new:4
+msgid ""
+":py:class:`~typing.TypeVar`\\(``_S``, bound= "
+":py:class:`~qqqr.base.LoginSession`)"
 msgstr ""
 
 #: of qqqr.base.LoginSession:1

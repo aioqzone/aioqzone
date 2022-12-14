@@ -8,21 +8,56 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"POT-Creation-Date: 2022-12-14 10:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/qqqr/qr/login.rst:2
 msgid "QrLogin and QrSession"
 msgstr ""
 
+#: of qqqr.qr.QrLogin._loop:1
+msgid ""
+"Loop until cookie is returned or max `refresh_times` exceeds. - This "
+"method will emit :meth:`QrEvent.QrFetched` event if a new qrcode is "
+"fetched. - If qr is not scanned after `refresh_times`, it will raise "
+":exc:`asyncio.TimeoutError`. - If :obj:`QrEvent.refresh_flag` is set, it "
+"will refresh qrcode at once without increasing expire counter. - If "
+":obj:`QrEvent.cancel_flag` is set, it will raise :exc:`UserBreak` before "
+"next polling."
+msgstr ""
+
+#: of qqqr.qr.QrLogin._loop
+msgid "参数"
+msgstr ""
+
+#: of qqqr.qr.QrLogin._loop:9
+msgid "max qr expire times."
+msgstr ""
+
+#: of qqqr.qr.QrLogin._loop:11
+msgid "interval between two status polling, in seconds, default as 3."
+msgstr ""
+
+#: of qqqr.qr.QrLogin._loop qqqr.qr.QrLogin.poll
+msgid "抛出"
+msgstr ""
+
+#: of qqqr.qr.QrLogin._loop:13
+msgid "if qr is not scanned after `refresh_times` expires."
+msgstr ""
+
+#: of qqqr.qr.QrLogin._loop:14
+msgid "if :obj:`QrEvent.cancel_flag` is set."
+msgstr ""
+
 #: of qqqr.qr.QrLogin.login:1
-msgid "Block until cookie is received."
+msgid ":meth:`._loop`"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.new:1
@@ -39,10 +74,6 @@ msgstr ""
 
 #: of qqqr.qr.QrLogin.poll:1
 msgid "Poll QR status."
-msgstr ""
-
-#: of qqqr.qr.QrLogin.poll
-msgid "抛出"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.poll:3
@@ -68,4 +99,7 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Returns"
+#~ msgstr ""
+
+#~ msgid "Block until cookie is received."
 #~ msgstr ""

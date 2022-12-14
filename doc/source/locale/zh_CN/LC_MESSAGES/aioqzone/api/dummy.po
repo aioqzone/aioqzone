@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"POT-Creation-Date: 2022-12-14 10:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/aioqzone/api/dummy.rst:2
 msgid "Qzone API with Typing and Validation"
@@ -81,31 +81,24 @@ msgstr ""
 msgid "error qzone response code"
 msgstr ""
 
+#: aioqzone.api.DummyQapi.emotion_getcomments
+#: aioqzone.api.DummyQapi.emotion_msgdetail
+#: aioqzone.api.DummyQapi.emotion_msglist
+#: aioqzone.api.DummyQapi.emotion_publish
+#: aioqzone.api.DummyQapi.floatview_photo_list
+#: aioqzone.api.DummyQapi.get_feeds_count of
+msgid "raises"
+msgstr ""
+
 #: aioqzone.api.DummyQapi.emotion_getcomments:12
 #: aioqzone.api.DummyQapi.emotion_msgdetail:10
 #: aioqzone.api.DummyQapi.emotion_msglist:12
 #: aioqzone.api.DummyQapi.emotion_publish:10
 #: aioqzone.api.DummyQapi.floatview_photo_list:10
 #: aioqzone.api.DummyQapi.get_feeds_count:5 of
-msgid "qr login canceled"
-msgstr ""
-
-#: aioqzone.api.DummyQapi.emotion_getcomments:13
-#: aioqzone.api.DummyQapi.emotion_msgdetail:11
-#: aioqzone.api.DummyQapi.emotion_msglist:13
-#: aioqzone.api.DummyQapi.emotion_publish:11
-#: aioqzone.api.DummyQapi.floatview_photo_list:11
-#: aioqzone.api.DummyQapi.get_feeds_count:6 of
-msgid "not logined"
-msgstr ""
-
-#: aioqzone.api.DummyQapi.emotion_getcomments:14
-#: aioqzone.api.DummyQapi.emotion_msgdetail:12
-#: aioqzone.api.DummyQapi.emotion_msglist:14
-#: aioqzone.api.DummyQapi.emotion_publish:12
-#: aioqzone.api.DummyQapi.floatview_photo_list:12
-#: aioqzone.api.DummyQapi.get_feeds_count:7 of
-msgid "unexcpected error"
+msgid ""
+"All error that may be raised from :meth:`.login.new_cookie`, which "
+"depends on the login manager you passed in."
 msgstr ""
 
 #: aioqzone.api.DummyQapi.emotion_getcomments
@@ -118,7 +111,7 @@ msgstr ""
 msgid "返回类型"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_getcomments:16 of
+#: aioqzone.api.DummyQapi.emotion_getcomments:14 of
 msgid ":py:class:`str`"
 msgstr ""
 
@@ -132,7 +125,7 @@ msgstr ""
 msgid "返回"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_getcomments:17 of
+#: aioqzone.api.DummyQapi.emotion_getcomments:15 of
 msgid "response dict"
 msgstr ""
 
@@ -148,15 +141,15 @@ msgstr ""
 msgid "feed id, named fid, tid or feedkey"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_msgdetail:14 of
+#: aioqzone.api.DummyQapi.emotion_msgdetail:12 of
 msgid ":py:class:`~aioqzone.type.resp.FeedDetailRep`"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_msgdetail:15 of
-msgid "a dict reps the feed in detail"
+#: aioqzone.api.DummyQapi.emotion_msgdetail:13 of
+msgid "a dict represents the feed in detail."
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_msgdetail:17 of
+#: aioqzone.api.DummyQapi.emotion_msgdetail:15 of
 msgid "share msg is not support, i.e. `appid=311`"
 msgstr ""
 
@@ -172,11 +165,11 @@ msgstr ""
 msgid "start position, defaults to 0"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_msglist:16 of
+#: aioqzone.api.DummyQapi.emotion_msglist:14 of
 msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.type.resp.MsgListElm`]"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_msglist:17 of
+#: aioqzone.api.DummyQapi.emotion_msglist:15 of
 msgid "a list of messages"
 msgstr ""
 
@@ -192,15 +185,15 @@ msgstr ""
 msgid "feed access right, defaults to 0 (Not used till now)"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_publish:14 of
+#: aioqzone.api.DummyQapi.emotion_publish:12 of
 msgid ":py:class:`~aioqzone.type.resp.PublishResp`"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_publish:15 of
+#: aioqzone.api.DummyQapi.emotion_publish:13 of
 msgid "qzone response as is, containing feed html and fid."
 msgstr ""
 
-#: aioqzone.api.DummyQapi.emotion_publish:18 of
+#: aioqzone.api.DummyQapi.emotion_publish:16 of
 msgid "This api is under development. It has basic functions only."
 msgstr ""
 
@@ -238,19 +231,19 @@ msgstr ""
 msgid "pic num"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.floatview_photo_list:13 of
+#: aioqzone.api.DummyQapi.floatview_photo_list:11 of
 msgid "maybe data is corruptted"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.floatview_photo_list:15 of
+#: aioqzone.api.DummyQapi.floatview_photo_list:13 of
 msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.type.resp.FloatViewPhoto`]"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.floatview_photo_list:16 of
+#: aioqzone.api.DummyQapi.floatview_photo_list:14 of
 msgid "album details"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.floatview_photo_list:19 of
+#: aioqzone.api.DummyQapi.floatview_photo_list:17 of
 msgid ""
 "This api is a 'slow' api, means it always returns an error code, "
 "requesting a retry a moment later. Use :meth:`.emotion_msgdetail` to get "
@@ -261,15 +254,15 @@ msgstr ""
 msgid "Get feeds update count (new feeds, new photos, new comments, etc)"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.get_feeds_count:9 of
+#: aioqzone.api.DummyQapi.get_feeds_count:7 of
 msgid ":py:class:`~aioqzone.type.resp.FeedsCount`"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.get_feeds_count:10 of
+#: aioqzone.api.DummyQapi.get_feeds_count:8 of
 msgid "update counts"
 msgstr ""
 
-#: aioqzone.api.DummyQapi.get_feeds_count:13 of
+#: aioqzone.api.DummyQapi.get_feeds_count:11 of
 msgid ""
 "This api is also the 'keep-alive' signal to avoid cookie from expiring. "
 "Call this api every 300s can help keep cookie alive."
@@ -285,4 +278,16 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Returns"
+#~ msgstr ""
+
+#~ msgid "qr login canceled"
+#~ msgstr ""
+
+#~ msgid "not logined"
+#~ msgstr ""
+
+#~ msgid "unexcpected error"
+#~ msgstr ""
+
+#~ msgid "a dict reps the feed in detail"
 #~ msgstr ""

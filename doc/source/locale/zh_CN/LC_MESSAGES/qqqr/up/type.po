@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:13+0800\n"
+"POT-Creation-Date: 2022-12-14 10:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/qqqr/up/type.rst:2
 msgid "UpLogin Types"
@@ -42,13 +42,13 @@ msgstr ""
 msgid ":py:obj:`init_pos (List[int]) <qqqr.up.type.BgElemCfg.init_pos>`"
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.BgElemCfg.img_url:1
+#: ../../../docstring of qqqr.up.type.BgElemCfg.img_url:1
 msgid ""
 "relative url to get jigsaw puzzle image (background with dimmed piece "
 "shape)."
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.BgElemCfg.init_pos:1
+#: ../../../docstring of qqqr.up.type.BgElemCfg.init_pos:1
 #: qqqr.up.type.Sprite.init_pos:1
 msgid "sprite init position on captcha (x, y)"
 msgstr ""
@@ -85,15 +85,15 @@ msgid ""
 "<qqqr.up.type.CaptchaDisplay.sprites>`"
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.CaptchaDisplay.bg:1
+#: ../../../docstring of qqqr.up.type.CaptchaDisplay.bg:1
 msgid "Background (puzzle)"
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.CaptchaDisplay.sprite_url:1
+#: ../../../docstring of qqqr.up.type.CaptchaDisplay.sprite_url:1
 msgid "relative url to get jigsaw piece (and handle) image."
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.CaptchaDisplay.sprites:1
+#: ../../../docstring of qqqr.up.type.CaptchaDisplay.sprites:1
 msgid "Foreground sprites"
 msgstr ""
 
@@ -125,7 +125,7 @@ msgstr ""
 msgid ":py:obj:`verifysession (str) <qqqr.up.type.CheckResp.verifysession>`"
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.CheckResp.code:1
+#: ../../../docstring of qqqr.up.type.CheckResp.code:1
 msgid "code = 0/2/3 hideVC; code = 1 showVC"
 msgstr ""
 
@@ -139,11 +139,11 @@ msgstr ""
 msgid ":py:obj:`tdc_path (str) <qqqr.up.type.CommonCaptchaConf.tdc_path>`"
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.CommonCaptchaConf.pow_cfg:1
+#: ../../../docstring of qqqr.up.type.CommonCaptchaConf.pow_cfg:1
 msgid "Ians, duration = match_md5(pow_cfg)"
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.CommonCaptchaConf.tdc_path:1
+#: ../../../docstring of qqqr.up.type.CommonCaptchaConf.tdc_path:1
 msgid "relative path to get tdc.js"
 msgstr ""
 
@@ -265,6 +265,10 @@ msgstr ""
 msgid ":py:obj:`uip (str) <qqqr.up.type.PrehandleResp.uip>`"
 msgstr ""
 
+#: ../../../docstring of qqqr.up.type.PrehandleResp.uip:1
+msgid "ipv6"
+msgstr ""
+
 #: of qqqr.up.type.Sprite:1
 msgid "Represents a sprite from a source material."
 msgstr ""
@@ -281,11 +285,11 @@ msgstr ""
 msgid ":py:obj:`sprite_pos (List[int]) <qqqr.up.type.Sprite.sprite_pos>`"
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.Sprite.size_2d:1
+#: ../../../docstring of qqqr.up.type.Sprite.size_2d:1
 msgid "sprite size (w, h)"
 msgstr ""
 
-#: ../../docstring of qqqr.up.type.Sprite.sprite_pos:1
+#: ../../../docstring of qqqr.up.type.Sprite.sprite_pos:1
 msgid "sprite position on material (x, y)"
 msgstr ""
 

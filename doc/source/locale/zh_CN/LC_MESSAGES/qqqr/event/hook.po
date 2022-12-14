@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"POT-Creation-Date: 2022-12-14 10:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/qqqr/event/hook.rst:2
 msgid "Event and Hooks"
@@ -105,7 +105,9 @@ msgid ""
 msgstr ""
 
 #: of qqqr.event.EventManager.sub_of:10
-msgid ":py:class:`~typing.Type`\\[\\~Evt]"
+msgid ""
+":py:class:`~typing.Type`\\[:py:class:`~typing.TypeVar`\\(``Evt``, bound= "
+":py:class:`~qqqr.event.Event`)]"
 msgstr ""
 
 #: of qqqr.event.NullEvent:1
@@ -119,4 +121,7 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Returns"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.Type`\\[\\~Evt]"
 #~ msgstr ""
