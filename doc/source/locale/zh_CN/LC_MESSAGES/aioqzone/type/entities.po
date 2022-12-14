@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:13+0800\n"
+"POT-Creation-Date: 2022-12-14 10:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/aioqzone/type/entities.rst:2
 msgid "Entities"
@@ -30,6 +30,12 @@ msgstr ""
 
 #: aioqzone.type.entity.AtEntity:1 of
 msgid "At, type=0. like: ``@bot``"
+msgstr ""
+
+#: aioqzone.type.entity.AtEntity:3 of
+msgid ""
+"Two objects of this class are considered equal, if their :obj:`uin` is "
+"equal."
 msgstr ""
 
 #: aioqzone.type.entity.AtEntity aioqzone.type.entity.ConEntity
@@ -50,7 +56,7 @@ msgstr ""
 msgid ":py:obj:`uin (int) <aioqzone.type.entity.AtEntity.uin>`"
 msgstr ""
 
-#: ../../docstring aioqzone.type.entity.AtEntity.type:1
+#: ../../../docstring aioqzone.type.entity.AtEntity.type:1
 #: aioqzone.type.entity.ConEntity.type:1 aioqzone.type.entity.EmEntity.type:1
 #: aioqzone.type.entity.TextEntity.type:1 of
 msgid ""
@@ -59,7 +65,9 @@ msgid ""
 msgstr ""
 
 #: aioqzone.type.entity.ConEntity:1 of
-msgid "Base class for all content entities. All entities has a #type."
+msgid ""
+"Base class for all content entities. All entities has a numeric "
+":obj:`type`."
 msgstr ""
 
 #: aioqzone.type.entity.ConEntity:1 of
@@ -68,6 +76,12 @@ msgstr ""
 
 #: aioqzone.type.entity.EmEntity:1 of
 msgid "Emoji, type=-1. like: ``[em]e100[/em]``"
+msgstr ""
+
+#: aioqzone.type.entity.EmEntity:3 of
+msgid ""
+"Two objects of this class are considered equal, if their :obj:`eid` is "
+"equal."
 msgstr ""
 
 #: aioqzone.type.entity.EmEntity:1 of
@@ -89,12 +103,18 @@ msgstr ""
 msgid ":py:obj:`content (str) <aioqzone.type.entity.HasContent.content>`"
 msgstr ""
 
-#: ../../docstring aioqzone.type.entity.RespEntities:1 of
+#: ../../../docstring aioqzone.type.entity.RespEntities:1 of
 msgid "Entities that occurs in Qzone responses."
 msgstr ""
 
 #: aioqzone.type.entity.TextEntity:1 of
 msgid "Text, type=2."
+msgstr ""
+
+#: aioqzone.type.entity.TextEntity:3 of
+msgid ""
+"Two objects of this class are considered equal, if their :obj:`con` is "
+"equal."
 msgstr ""
 
 #: aioqzone.type.entity.TextEntity:1 of
@@ -104,3 +124,6 @@ msgstr ""
 #: aioqzone.type.entity.TextEntity:1 of
 msgid ":py:obj:`type (int) <aioqzone.type.entity.TextEntity.type>`"
 msgstr ""
+
+#~ msgid "Base class for all content entities. All entities has a #type."
+#~ msgstr ""

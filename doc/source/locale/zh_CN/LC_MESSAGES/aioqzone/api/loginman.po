@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"POT-Creation-Date: 2022-12-14 10:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/aioqzone/api/loginman.rst:2
 msgid "Login Managers"
@@ -58,27 +58,43 @@ msgid ""
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan._new_cookie
+#: aioqzone.api.loginman.MixedLoginMan.ordered_methods
 #: aioqzone.api.loginman.QRLoginMan._new_cookie
 #: aioqzone.api.loginman.UPLoginMan._new_cookie of
 msgid "返回类型"
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan._new_cookie:7
-#: aioqzone.api.loginman.QRLoginMan._new_cookie:6
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:7
 #: aioqzone.api.loginman.UPLoginMan._new_cookie:6 of
 msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan._new_cookie
+#: aioqzone.api.loginman.MixedLoginMan.ordered_methods
 #: aioqzone.api.loginman.QRLoginMan._new_cookie
 #: aioqzone.api.loginman.UPLoginMan._new_cookie of
 msgid "返回"
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan._new_cookie:8
-#: aioqzone.api.loginman.QRLoginMan._new_cookie:7
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:8
 #: aioqzone.api.loginman.UPLoginMan._new_cookie:7 of
 msgid "cookie dict"
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan.ordered_methods:1 of
+msgid ""
+"Subclasses can inherit this method to choose a subset of `._order` "
+"according to its own policy."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan.ordered_methods:3 of
+msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.event.login.Loginable`]"
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan.ordered_methods:4 of
+msgid "a subset of `._order`."
 msgstr ""
 
 #: aioqzone.api.loginman.QRLoginMan:1 of
@@ -96,8 +112,16 @@ msgstr ""
 msgid "on exceptions do not break the system, such as timeout, Http errors, etc."
 msgstr ""
 
-#: aioqzone.api.loginman.QRLoginMan._new_cookie:4 of
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:5 of
 msgid "on unexpected error raised when polling"
+msgstr ""
+
+#: aioqzone.api.loginman.QRLoginMan._new_cookie of
+msgid "raises"
+msgstr ""
+
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:4 of
+msgid "`qqqr.exception.HookError`: an error is raised from hook"
 msgstr ""
 
 #: aioqzone.api.loginman.QrStrategy:1 of
