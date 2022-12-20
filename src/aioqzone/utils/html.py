@@ -65,6 +65,12 @@ class HtmlContent(BaseModel):
 
     @classmethod
     def from_html(cls, html: Union[HtmlElement, str], hostuin: int = 0):
+        """Construct a `HtmlContent` object from a html string or an `~lxml.html.HtmlElement`.
+
+        :param html: html string or an `~lxml.html.HtmlElement`
+        :param hostuin: used to specify :obj:`~AlbumData.hostuin` field in `.AlbumData`.
+        This is optional since you can modify the :obj:`album` field of the return val.
+        """
         root: HtmlElement = fromstring(html) if isinstance(html, str) else html
         mxsafe = lambda i: max(i, key=len) if i else HtmlElement()
         img_data = lambda a: {k[5:]: v for k, v in a.attrib.items() if k.startswith("data-")}
