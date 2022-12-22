@@ -9,11 +9,11 @@ Offers a class to execute js by communicating with subprocess.
 """
 
 import asyncio
+import sys
 from collections import defaultdict
 from functools import partial
 from itertools import chain
 from shutil import which
-from sys import platform
 from typing import List, Optional, Union
 
 from .exception import JsRuntimeError, NodeNotFoundError
@@ -88,7 +88,7 @@ class ExecJS:
         """On Windows, the default event loop :external+python:class:`asyncio.ProactorEventLoop` supports subprocesses,
         whereas :external+python:class:`asyncio.SelectorEventLoop` does not.
         """
-        if platform == "win32" and isinstance(
+        if sys.platform == "win32" and isinstance(
             asyncio.get_event_loop_policy(), asyncio.WindowsSelectorEventLoopPolicy
         ):
             return False
@@ -172,5 +172,5 @@ class ExecJS:
         return await self(prop)
 
 
-if platform == "win32":
+if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())

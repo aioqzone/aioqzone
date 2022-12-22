@@ -3,6 +3,7 @@ import base64
 import json
 import re
 from hashlib import md5
+from ipaddress import IPv4Address
 from math import floor
 from random import random
 from time import time
@@ -17,7 +18,7 @@ from ...utils.iter import first
 from ...utils.net import ClientAdapter
 from ..type import PrehandleResp, VerifyResp
 from .jigsaw import Jigsaw, imitate_drag
-from .vm import TDC
+from .vm import CollectEnv
 
 PREHANDLE_URL = "https://t.captcha.qq.com/cap_union_prehandle"
 SHOW_NEW_URL = "https://t.captcha.qq.com/cap_union_new_show"
@@ -27,7 +28,7 @@ time_ms = lambda: int(1e3 * time())
 """+new Date"""
 rnd6 = lambda: str(random())[2:8]
 
-_TDC_TY = TypeVar("_TDC_TY", bound=TDC)
+_TDC_TY = TypeVar("_TDC_TY", bound=CollectEnv)
 
 
 def hex_add(h: str, o: int):
@@ -56,7 +57,7 @@ class TcaptchaSession:
         self.cdn_imgs: List[bytes] = []
         self.piece_sprite = first(self.conf.render.sprites, lambda s: s.move_cfg)
 
-    def set_js_env(self, tdc: TDC):
+    def set_js_env(self, tdc: CollectEnv):
         self.tdc = tdc
 
     def solve_workload(self, *, timeout: float = 30.0):
@@ -146,6 +147,11 @@ class Captcha:
             "lang": "zh-CN",
             "sess": "",
             "fb": 1,
+            "aged": 0,
+            "enableAged": 0,
+            "elder_captcha": 0,
+            "login_appid": "",
+            "wb": 2,
         }
         data = {
             "aid": self.appid,
@@ -157,7 +163,7 @@ class Captcha:
             "subsid": 1,
             "callback": CALLBACK,
         }
-        async with await self.client.get(PREHANDLE_URL, params=du(const, data)) as r:
+        async with self.client.get(PREHANDLE_URL, params=du(const, data)) as r:
             r.raise_for_status()
             m = re.search(CALLBACK + r"\((\{.*\})\)", r.text)
 
@@ -165,10 +171,29 @@ class Captcha:
         r = PrehandleResp.parse_raw(m.group(1))
         return TcaptchaSession(r)
 
+    async def iframe(self):
+        """call this right after calling :meth:`.prehandle`"""
+        async with self.client.get("https://t.captcha.qq.com/template/drag_ele.html") as r:
+            return r.text
+
     prehandle = new
     """alias of :meth:`.new`"""
 
-    async def get_tdc(self, sess: TcaptchaSession, *, cls: Type[_TDC_TY] = TDC):
+    async def get_ipv4(self):
+        """Get the client's public IP(v4) address.
+
+        :return: ipv4 str, or empty str if all apis failed."""
+        for api in ["api.ipify.org", "v4.ident.me"]:
+            async with self.client.get("https://" + api) as r:
+                cand = r.text.strip()
+                try:
+                    IPv4Address(cand)
+                    return cand
+                except ValueError:
+                    continue
+        return ""
+
+    async def get_tdc(self, sess: TcaptchaSession, *, cls: Type[_TDC_TY] = CollectEnv):
         """
         The get_tdc function is a coroutine that sets an instance of the :class:`TDC` class to `sess`.
 
@@ -176,11 +201,15 @@ class Captcha:
         :param cls: Specify the type of :class:`TDC` instance to be returned, default as :class:`TDC`.
         :return: None
         """
-
         js_url = sess.tdx_js_url()
-        tdc = cls("", header=self.client.headers)
+        tdc = cls(
+            xlogin_url=self.xlogin_url,
+            ipv4=await self.get_ipv4(),
+            ua=self.client.headers["User-Agent"],
+            # iframe=await self.iframe(),
+        )
 
-        async with await self.client.get(js_url) as r:
+        async with self.client.get(js_url) as r:
             r.raise_for_status()
             tdc.load_vm(r.text)
 
@@ -197,7 +226,7 @@ class Captcha:
         """
 
         async def r(url):
-            async with await self.client.get(url) as r:
+            async with self.client.get(url) as r:
                 r.raise_for_status()
                 return r.content
 
@@ -232,15 +261,8 @@ class Captcha:
         jig = Jigsaw(*sess.cdn_imgs, piece_pos=piece_pos, top=sess.piece_sprite.init_pos[1])
         sess.set_captcha_answer(jig.left, jig.top)
 
-        sess.tdc.set_data(clientType=2)
-        sess.tdc.set_data(coordinate=[10, 24, 0.4103])
-        sess.tdc.set_data(
-            trycnt=1,
-            refreshcnt=0,
-            slideValue=imitate_drag(floor(jig.left * jig.rate)),
-            dragobj=1,
-        )
-        sess.tdc.set_data(ft="qf_7P_n_H")
+        xs, ys = imitate_drag(floor(50 * jig.rate), floor(jig.left * jig.rate), jig.top)
+        sess.tdc.add_run("simulate_slide", xs, ys)
 
     async def verify(self):
         sess = await self.new()
@@ -253,7 +275,6 @@ class Captcha:
         await self.solve_captcha(sess)
 
         collect = await sess.tdc.get_data()
-        tlg = len(collect)
 
         ans = dict(
             elem_id=1,
@@ -262,7 +283,7 @@ class Captcha:
         )
         data = {
             "collect": collect,
-            "tlg": tlg,
+            "tlg": len(collect),
             "eks": (await sess.tdc.get_info())["info"],
             "sess": sess.prehandle.sess,
             "ans": json.dumps(ans),
@@ -270,7 +291,7 @@ class Captcha:
             "pow_calc_time": sess.duration,
         }
         await asyncio.sleep(max(0, waitEnd - time()))
-        async with await self.client.post(VERIFY_URL, data=data) as r:
+        async with self.client.post(VERIFY_URL, data=data) as r:
             r = VerifyResp.parse_raw(r.text)
 
         if r.code:

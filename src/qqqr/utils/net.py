@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Dict, Union
+from typing import Awaitable, Dict, Union
 
 from httpx import URL, AsyncClient, HTTPStatusError, Response, Timeout
 
@@ -35,16 +35,19 @@ class ClientAdapter:
     __slots__ = ("client",)
 
     class RequestClosure:
-        __slots__ = ("response",)
+        __slots__ = ("response", "__async")
 
-        def __init__(self, response: Response) -> None:
-            self.response = response
+        def __init__(self, response: Awaitable[Response]) -> None:
+            self.__async = response
+            self.response = None
 
         async def __aenter__(self):
+            self.response = await self.__async
             return self.response
 
         async def __aexit__(self, *_):
-            await self.response.aclose()
+            if self.response:
+                await self.response.aclose()
 
     def __init__(self, client: AsyncClient) -> None:
         """
@@ -80,9 +83,9 @@ class ClientAdapter:
         return self.client.cookies
 
     @wraps(AsyncClient.get)
-    async def get(self, url: Union[URL, str], *args, **kwds):
-        return self.RequestClosure(await self.client.get(url, *args, **kwds))
+    def get(self, url: Union[URL, str], *args, **kwds):
+        return self.RequestClosure(self.client.get(url, *args, **kwds))
 
     @wraps(AsyncClient.get)
-    async def post(self, url: Union[URL, str], *args, **kwds):
-        return self.RequestClosure(await self.client.post(url, *args, **kwds))
+    def post(self, url: Union[URL, str], *args, **kwds):
+        return self.RequestClosure(self.client.post(url, *args, **kwds))
