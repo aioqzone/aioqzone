@@ -56,7 +56,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
             "daid": self.app.daid,
             "pt_3rd_aid": 0,
         }
-        async with await self.client.get(SHOW_QR, params=data) as r:
+        async with self.client.get(SHOW_QR, params=data) as r:
             return QR(r.content, r.cookies["qrsig"])
 
     async def poll(self, sess: QrSession) -> PollResp:
@@ -86,7 +86,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
             "daid": self.app.daid,
         }
 
-        async with await self.client.get(POLL_QR, params=du(data, const)) as r:
+        async with self.client.get(POLL_QR, params=du(data, const)) as r:
             r.raise_for_status()
             rl = re.findall(r"'(.*?)'[,\)]", r.text)
 

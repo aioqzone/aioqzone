@@ -33,12 +33,12 @@ class JSDOM(ExecJS):
     def __init__(self, *, src: str = "", ua: str = "", location: str = "", referrer: str = ""):
         super().__init__()
         src = src.replace("\n", " ")
-        pre_def = f"var src=`{src}`,ua='{ua}',url='{location}',referrer='{referrer}';\n"
+        pre_def = f"var src=`{src}`;\nvar ua='{ua}',url='{location}',referrer='{referrer}';\n"
         self.setup.append(pre_def)
         self.setup.append(self._windowjs())
 
     def _windowjs(self):
-        """Override this if you have other js files."""
+        """You may append to or override this method if you have other js files."""
 
         js = """
         const jsdom = require("jsdom");
@@ -49,7 +49,7 @@ class JSDOM(ExecJS):
             url: url,
             referrer: referrer,
             resources: resourceLoader,
-            runScripts: "outside-only",
+            runScripts: "dangerously",
         });
         dom.reconfigure({ windowTop: {} });
         window = dom.window;

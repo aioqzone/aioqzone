@@ -5,7 +5,7 @@ import pytest_asyncio
 
 from qqqr.constant import QzoneAppid, QzoneProxy
 from qqqr.up import UpLogin
-from qqqr.up.captcha import TDC, Captcha, TcaptchaSession
+from qqqr.up.captcha import Captcha, CollectEnv, TcaptchaSession
 from qqqr.up.captcha.jigsaw import imitate_drag
 from qqqr.up.captcha.vm import DecryptTDC
 from qqqr.utils.net import ClientAdapter
@@ -60,32 +60,27 @@ async def vm(captcha: Captcha, sess: TcaptchaSession):
 
 
 class TestVM:
-    async def testGetInfo(self, vm: TDC):
+    async def testGetInfo(self, vm: CollectEnv):
         d = await vm.get_info()
         assert d
         assert d["info"]
 
-    async def testCollectData(self, vm: TDC):
-        vm.set_data(clientType=2)
-        vm.set_data(coordinate=[10, 24, 0.4103])
-        vm.set_data(trycnt=1, refreshcnt=0, slideValue=imitate_drag(230), dragobj=1)
-        vm.set_data(ft="qf_7P_n_H")
+    async def testCollectData(self, vm: CollectEnv):
+        xs, ys = imitate_drag(21, 230, 50)
+        vm.add_run("simulate_slide", xs, ys)
         d = await vm.get_data()
         assert d
         assert len(d) > 200
 
-    async def testGetCookie(self, vm: TDC):
+    async def testGetCookie(self, vm: CollectEnv):
         cookie = await vm.get_cookie()
         assert "TDC_itoken" in cookie
 
 
 @pytest.mark.needuser
-async def test_decrypt(vm: TDC, captcha: Captcha, sess: TcaptchaSession):
-    vm.set_data(clientType=2)
-    vm.set_data(coordinate=[10, 24, 0.4103])
-    vm.set_data(trycnt=1, refreshcnt=0, slideValue=imitate_drag(230), dragobj=1)
-    vm.set_data(ft="qf_7P_n_H")
-
+async def test_decrypt(vm: CollectEnv, captcha: Captcha, sess: TcaptchaSession):
+    xs, ys = imitate_drag(21, 230, 50)
+    vm.add_run("simulate_slide", xs, ys)
     collect = await vm.get_data()
 
     await captcha.get_tdc(sess, cls=DecryptTDC)

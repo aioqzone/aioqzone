@@ -1,13 +1,13 @@
+from os import environ as env
 from pathlib import Path
-from random import choices, randint
 from typing import List, Tuple
 
 import cv2 as cv
 import numpy as np
 
-debug = False
+debug = bool(env.get("AIOQZONE_JIGSAW_DEBUG"))
 
-TC_OPERATION_WIDTH = 279
+TC_OPERATION_WIDTH = 280
 
 
 def frombytes(b, dtype="uint8", flags=cv.IMREAD_COLOR) -> np.ndarray:
@@ -143,7 +143,7 @@ class Jigsaw:
     @property
     def rate(self):
         # TODO: operation width / 680
-        return TC_OPERATION_WIDTH / 680
+        return TC_OPERATION_WIDTH / self.width
 
     @property
     def left(self) -> int:
@@ -184,7 +184,7 @@ class Jigsaw:
         return left
 
 
-def imitate_drag(x: int) -> List[List[int]]:
+def imitate_drag(x1: int, x2: int, y: int) -> Tuple[List[int], List[int]]:
     """
     The imitate_drag function simulates a drag event.
 
@@ -196,20 +196,19 @@ def imitate_drag(x: int) -> List[List[int]]:
     :return: A list of lists, where each sublist contains three elements: the x coordinate, y coordinate and time
     """
 
-    assert x < 300
+    assert 0 < x1 < x2 < 672
+    assert 0 < y
     # 244, 1247
-    t = randint(1200, 1300)
-    n = randint(50, 65)
-    X = lambda i: randint(1, max(2, i // 10)) if i < n - 15 else randint(6, 12)
-    Y = lambda: choices([-1, 1, 0], cum_weights=[0.1, 0.2, 1], k=1)[0]
-    T = lambda: randint(*choices(((65, 280), (6, 10)), cum_weights=(0.05, 1), k=1)[0])
-    xs = ts = 0
-    drag = []
-    for i in range(n):
-        xi, ti = X(i), T()
-        drag.append([xi, Y(), ti])
-        xs += xi
-        ts += ti
-    drag.append([max(1, x - xs), Y(), max(1, t - ts)])
-    drag.reverse()
-    return drag
+    n = np.random.randint(50, 65)
+    clean_x = np.linspace(x1, x2, n, dtype=np.int16)
+    noise_y = np.random.choice([y - 1, y + 1, y], (n,), replace=True, p=[0.1, 0.1, 0.8])
+
+    nx = np.zeros((n,), dtype=np.int16)
+    if n > 50:
+        nx[1:-50] = np.random.randint(-3, 3, (n - 51,), dtype=np.int16)
+    nx[-50:-20] = np.random.randint(-2, 2, (30,), dtype=np.int16)
+    nx[-20:-1] = np.random.randint(-1, 1, (19,), dtype=np.int16)
+
+    noise_x = clean_x + nx
+    noise_x.sort()
+    return noise_x.tolist(), noise_y.tolist()

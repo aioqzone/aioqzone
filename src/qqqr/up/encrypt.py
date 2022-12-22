@@ -25,7 +25,7 @@ class PasswdEncoder(ABC):
         return await self.getEncryption(salt, verifycode)
 
     async def login_js(self):
-        async with await self.client.get(LOGIN_JS) as r:
+        async with self.client.get(LOGIN_JS) as r:
             r.raise_for_status()
             return r.text
 

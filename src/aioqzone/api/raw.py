@@ -60,7 +60,7 @@ class QzoneApi:
         params = params or {}
         params = du(params, {"g_tk": str(await self._get_gtk())})
         self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
-        return await self.client.get(self.host + url, params=params)
+        return self.client.get(self.host + url, params=params)
 
     async def apost(
         self, url: str, params: Optional[Dict[str, str]] = None, data: Optional[dict] = None
@@ -70,7 +70,7 @@ class QzoneApi:
         self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
         if data:
             data["qzreferrer"] = self.referer
-        return await self.client.post(self.host + url, params=params, data=data)
+        return self.client.post(self.host + url, params=params, data=data)
 
     def _relogin_retry(self, func: Callable):
         """A decorator which will relogin and retry given func if cookie expired.

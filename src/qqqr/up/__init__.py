@@ -101,7 +101,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
 
         :return: a up login session
         """
-        async with await self.client.get(self.xlogin_url) as r:
+        async with self.client.get(self.xlogin_url) as r:
             r.raise_for_status()
             local_token = r.cookies["pt_local_token"]
             login_sig = r.cookies["pt_login_sig"]
@@ -119,7 +119,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
             "r": random(),
             "pt_uistyle": 40,
         }
-        async with await self.client.get(CHECK_URL, params=data) as r:
+        async with self.client.get(CHECK_URL, params=data) as r:
             r.raise_for_status()
             rl = re.findall(r"'(.*?)'[,\)]", r.text)
 
@@ -142,7 +142,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
             "aid": self.app.appid,
             "pt_sms_ticket": sess.sms_ticket,
         }
-        async with await self.client.get(
+        async with self.client.get(
             "https://ui.ptlogin2.qq.com/ssl/send_sms_code", params=data
         ) as r:
             rl = re.findall(r"'(.*?)'[,\)]", r.text)
@@ -190,7 +190,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
             data["pt_sms_code"] = sess.sms_code
         self.referer = "https://xui.ptlogin2.qq.com/"
 
-        async with await self.client.get(LOGIN_URL, params=du(data, const)) as response:
+        async with self.client.get(LOGIN_URL, params=du(data, const)) as response:
             response.raise_for_status()
 
         rl = re.findall(r"'(.*?)'[,\)]", response.text)
