@@ -1,10 +1,11 @@
+from os import environ as env
 from pathlib import Path
 from typing import List, Tuple
 
 import cv2 as cv
 import numpy as np
 
-debug = False
+debug = bool(env.get("AIOQZONE_JIGSAW_DEBUG"))
 
 TC_OPERATION_WIDTH = 280
 
@@ -142,7 +143,7 @@ class Jigsaw:
     @property
     def rate(self):
         # TODO: operation width / 680
-        return TC_OPERATION_WIDTH / 672
+        return TC_OPERATION_WIDTH / self.width
 
     @property
     def left(self) -> int:
