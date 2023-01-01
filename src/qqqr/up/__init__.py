@@ -203,7 +203,8 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
     async def login(self):
         sess = await self.new()
         if sess.code == StatusCode.NeedCaptcha:
-            await self.passVC(sess)
+            log.warning("需通过防水墙")
+            await self.pass_vc(sess)
 
         while True:
             resp = await self.try_login(sess)
@@ -213,6 +214,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
                 sess.login_url = str(resp.url)
                 return await self._get_login_url(sess)
             elif resp.code == StatusCode.NeedSmsVerify:
+                log.warning("需用户短信验证")
                 if pastcode == StatusCode.NeedSmsVerify:
                     raise TencentLoginError(resp.code, "重复要求动态验证码")
                 if isinstance(self.hook, NullEvent):
@@ -233,7 +235,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
 
     def captcha(self, sid: str):
         """
-        The captcha function is used to build and cache a :class:`Captcha` instance.
+        The `captcha` function is used to build a :class:`Captcha` instance.
         It takes in a string, which is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance.
 
 
@@ -241,15 +243,13 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         :return: An instance of the captcha class
         """
 
-        if not self._captcha:
-            from .captcha import Captcha
+        from .captcha import Captcha
 
-            self._captcha = Captcha(self.client, self.app.appid, sid, str(self.xlogin_url))
-        return self._captcha
+        return Captcha(self.client, self.app.appid, sid, str(self.xlogin_url))
 
-    async def passVC(self, sess: UpSession):
+    async def pass_vc(self, sess: UpSession):
         """
-        The passVC function is used to pass the verification tcaptcha.
+        The `pass_vc` function is used to pass the verification tcaptcha.
         It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
 
         :param sess: the session object
@@ -258,4 +258,5 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
 
         c = self.captcha(sess.check_rst.session)
         sess.verify_rst = await c.verify()
+        log.info("verify success!")
         return sess

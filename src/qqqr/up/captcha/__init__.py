@@ -183,7 +183,8 @@ class Captcha:
         """Get the client's public IP(v4) address.
 
         :return: ipv4 str, or empty str if all apis failed."""
-        for api in ["api.ipify.org", "v4.ident.me"]:
+        for api in ["ifconfig.me/ip", "api.ipify.org", "v4.ident.me"]:
+            # BUG: should always bypass client's proxy settings
             async with self.client.get("https://" + api) as r:
                 cand = r.text.strip()
                 try:
@@ -268,8 +269,6 @@ class Captcha:
         sess = await self.new()
         await self.get_tdc(sess)
 
-        waitEnd = time() + 0.6 * random() + 0.9
-
         sess.solve_workload()
         await self.get_captcha_problem(sess)
         await self.solve_captcha(sess)
@@ -290,7 +289,6 @@ class Captcha:
             "pow_answer": hex_add(sess.conf.common.pow_cfg.prefix, sess.pow_ans),
             "pow_calc_time": sess.duration,
         }
-        await asyncio.sleep(max(0, waitEnd - time()))
         async with self.client.post(VERIFY_URL, data=data) as r:
             r = VerifyResp.parse_raw(r.text)
 

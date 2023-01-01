@@ -48,6 +48,7 @@ class ClientAdapter:
         async def __aexit__(self, *_):
             if self.response:
                 await self.response.aclose()
+                self.response = None
 
     def __init__(self, client: AsyncClient) -> None:
         """

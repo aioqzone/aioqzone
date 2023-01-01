@@ -38,7 +38,7 @@ class TestRequest:
     async def testEncodePwd(self, login: UpLogin):
         sess = await login.new()
         if sess.code == StatusCode.NeedCaptcha:
-            sess = await login.passVC(sess)
+            sess = await login.pass_vc(sess)
         if sess.code != 1:
             assert sess.verifycode
             assert sess.check_rst.salt
