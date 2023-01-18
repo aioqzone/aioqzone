@@ -4,7 +4,6 @@ import json
 import re
 from hashlib import md5
 from ipaddress import IPv4Address
-from math import floor
 from random import random
 from time import time
 from typing import List, Type, TypeVar
@@ -231,13 +230,12 @@ class Captcha:
                 r.raise_for_status()
                 return r.content
 
-        for i in await asyncio.gather(*(r(i) for i in sess.cdn_urls)):
-            sess.cdn_imgs.append(i)
+        sess.cdn_imgs = list(await asyncio.gather(*(r(i) for i in sess.cdn_urls)))
 
-    async def solve_captcha(self, sess: TcaptchaSession):
+    def solve_captcha(self, sess: TcaptchaSession):
         """
-        The solve_captcha function solves the captcha problem. If captcha images is not set,
-        it will call :meth:`.get_captcha_problem` firstly.
+        The solve_captcha function solves the captcha problem. It assumes that :obj:`TcaptchaSession.cdn_imgs`
+        is already initialized, so call :meth:`.get_captcha_problem` firstly.
 
         It then solve the captcha as that in :class:`.Jigsaw`. The answer is saved into `sess`.
 
@@ -247,8 +245,6 @@ class Captcha:
         :return: None
         """
 
-        if not sess.cdn_imgs:
-            await self.get_captcha_problem(sess)
         assert sess.cdn_imgs
 
         piece_pos = tuple(
@@ -262,7 +258,7 @@ class Captcha:
         jig = Jigsaw(*sess.cdn_imgs, piece_pos=piece_pos, top=sess.piece_sprite.init_pos[1])
         sess.set_captcha_answer(jig.left, jig.top)
 
-        xs, ys = imitate_drag(floor(50 * jig.rate), floor(jig.left * jig.rate), jig.top)
+        xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], jig.left, jig.top)
         sess.tdc.add_run("simulate_slide", xs, ys)
 
     async def verify(self):
@@ -270,8 +266,9 @@ class Captcha:
         await self.get_tdc(sess)
 
         sess.solve_workload()
+
         await self.get_captcha_problem(sess)
-        await self.solve_captcha(sess)
+        self.solve_captcha(sess)
 
         collect = await sess.tdc.get_data()
 

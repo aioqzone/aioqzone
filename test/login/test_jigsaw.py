@@ -1,50 +1,72 @@
-import os
-from math import floor
+import asyncio
+from os import environ as env
 
-import cv2 as cv
 import pytest
+import pytest_asyncio
 
-from qqqr.up.captcha.jigsaw import Jigsaw, Piece
+from qqqr.constant import QzoneAppid, QzoneProxy
+from qqqr.up import UpLogin
+from qqqr.up.captcha import Captcha, TcaptchaSession
+from qqqr.up.captcha.jigsaw import Jigsaw, imitate_drag
+from qqqr.utils.net import ClientAdapter
 
-pytestmark = pytest.mark.needuser
+
+@pytest_asyncio.fixture(scope="module")
+async def captcha(client: ClientAdapter):
+    login = UpLogin(client, QzoneAppid, QzoneProxy, int(env["TEST_UIN"]), env["TEST_PASSWORD"])
+    upsess = await login.new()
+    captcha = login.captcha(upsess.check_rst.session)
+    yield captcha
 
 
-class TestJigsaw:
-    @classmethod
-    def setUp(cls) -> None:
-        cls.j = Jigsaw.load("data/7.yml")
+@pytest_asyncio.fixture(scope="module")
+async def sess(client: ClientAdapter, captcha: Captcha):
+    sess = await captcha.new()
 
-    def testLoad(self):
-        cv.imshow("origin", self.j.ans)
-        cv.imshow("puzzle", self.j.puzzle)
-        cv.imshow("piece", self.j.piece.img)
-        cv.waitKey()
+    async def r(url):
+        async with client.get(url) as r:
+            r.raise_for_status()
+            return r.content
 
-    def testSpt(self):
-        self.j.piece.strip()
-        top = self.j.top + self.j.piece.padding[1]
-        lans = cv.line(self.j.ans, (0, top), (self.j.width - 1, top), (0, 0, 255))
-        lj = cv.line(self.j.puzzle, (0, top), (self.j.width - 1, top), (0, 0, 255))
-        cv.imshow("background", lans)
-        cv.imshow("foreground", lj)
-        cv.waitKey()
+    sess.cdn_imgs = list(await asyncio.gather(*(r(i) for i in sess.cdn_urls)))
+    yield sess
 
-    def testSolve(self):
-        for i in os.listdir("data"):
-            j = Jigsaw.load("data/" + i)
-            left = j.solve()
-            assert left > 0
 
-    def testRate(self):
-        assert self.j.rate > 0
+@pytest.fixture(scope="module")
+def jigsaw(sess: TcaptchaSession):
+    piece_pos = tuple(
+        slice(
+            sess.piece_sprite.sprite_pos[i],
+            sess.piece_sprite.sprite_pos[i] + sess.piece_sprite.size_2d[i],
+        )
+        for i in range(2)
+    )
+    yield Jigsaw(*sess.cdn_imgs, piece_pos=piece_pos, top=sess.piece_sprite.init_pos[1])
 
 
 class TestPiece:
-    @classmethod
-    def setup_class(cls) -> None:
-        cls.p = Jigsaw.load("data/6.yml").piece
+    def test_strip(self, jigsaw: Jigsaw):
+        spiece = jigsaw.piece.strip()
+        assert spiece.dtype.name == "uint8"
+        assert spiece.shape[-1] == 3
 
-    def testStrip(self):
-        r = self.p.strip()
-        cv.imshow("strip", r)
-        cv.waitKey()
+    def test_strip_mask(self, jigsaw: Jigsaw):
+        mask = jigsaw.piece.strip_mask()
+        assert mask.dtype.name == "uint8"
+        assert mask.shape[-1] == 1
+
+    def test_template(self, jigsaw: Jigsaw):
+        template = jigsaw.piece.build_template()
+        assert template.dtype.name == "uint8"
+        assert template.shape[-1] == 3
+
+
+def test_solve(jigsaw: Jigsaw):
+    left = jigsaw.solve() - jigsaw.piece.padding[0]
+    assert left > 0
+
+
+def test_imitate(sess: TcaptchaSession, jigsaw: Jigsaw):
+    left = jigsaw.solve() - jigsaw.piece.padding[0]
+    xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], left, sess.piece_sprite.init_pos[1])
+    assert len(xs) == len(ys)

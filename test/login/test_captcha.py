@@ -43,7 +43,7 @@ class TestCaptcha:
 
     async def test_puzzle(self, captcha: Captcha, sess: TcaptchaSession):
         await captcha.get_captcha_problem(sess)
-        await captcha.solve_captcha(sess)
+        captcha.solve_captcha(sess)
         assert sess.jig_ans[0]
         assert sess.jig_ans[1]
 
