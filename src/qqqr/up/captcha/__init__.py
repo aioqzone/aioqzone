@@ -267,14 +267,8 @@ class Captcha:
 
         sess.solve_workload()
 
-        for _ in range(10):
-            try:
-                await self.get_captcha_problem(sess)
-                self.solve_captcha(sess)
-            except:
-                break
-        else:
-            raise RuntimeError("cannot solve captcha")
+        await self.get_captcha_problem(sess)
+        self.solve_captcha(sess)
 
         collect = await sess.tdc.get_data()
 
