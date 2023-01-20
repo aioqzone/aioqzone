@@ -48,14 +48,20 @@ jobs:
         env:
           OUTPUT: CHANGELOG.md
 
-      - name: Create Pull Request
-        uses: repo-sync/pull-request@v2
+      - name: Push Changelog to PR
         if: "!contains(github.event.head_commit.message, '@no-pr')"
-        with:
-          destination_branch: beta
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: ${{ needs.test.outputs.package-version }}
-          pr_template: ${{ steps.git-cliff.outputs.changelog }}
+        run: |
+          number=$(gh pr list -l "auto-ci" --base beta --head dev --json number -q ".[] .number")
+          if [ $? ]; then
+              gh pr edit ${number} \
+              -t ${{ needs.test.outputs.package-version }} -F ${{ steps.git-cliff.outputs.changelog }}
+          else
+              gh pr create --base beta -l "auto-ci" \
+              -t ${{ needs.test.outputs.package-version }} -F ${{ steps.git-cliff.outputs.changelog }}
+
+              number=$(gh pr list -l "auto-ci" --base beta --head dev --json number -q ".[] .number")
+          fi
+          echo "number=$number" >> $GITHUB_OUTPUT
 
 concurrency:
   group: ci-${{ github.ref }}
