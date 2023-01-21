@@ -25,12 +25,15 @@ runs:
         GH_TOKEN: ${{ github.token }}
         base: ${{ inputs.base-branch }}
         head: ${{ inputs.head-branch }}
+        body: ${{ inputs.body }}
       run: |
         number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
         if [ $? ]; then
-            gh pr edit ${number} --body "${{ inputs.body }}"
+            echo "PR exist: #${number}"
+            gh pr edit ${number} --body "$body"
         else
-            gh pr create -d --base ${base} --fill --body "${{ inputs.body }}"
+            echo "Creating PR"
+            gh pr create -d --base ${base} --fill --body "$body"
             number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
         fi
         echo "number=$number" >> $GITHUB_OUTPUT
