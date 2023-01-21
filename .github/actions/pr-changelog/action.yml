@@ -25,16 +25,20 @@ runs:
   using: composite
   steps:
     - id: sha
-      run: echo "base-sha=$(git rev-parse --short refs/heads/${{ inputs.start }})" >> $GITHUB_OUTPUT
+      run: |
+        git branch --list
+        echo "base-sha=$(git rev-parse --short refs/heads/${{ inputs.start }})" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: set tag
+      env:
+        tag: ${{ inputs.tag }}
       run: |
-        if [ ${{ inputs.tag }} = "" ]; then
+        if [ $tag = "" ]; then
             version=$(sed -nr "s/^\s*version\s*=\s*\"(.*)\"/\1/p" pyproject.toml)
             echo "tag=$version" >> $GITHUB_ENV
         else
-            echo "tag=${{ inputs.tag }}"
+            echo "tag=$tag"
         fi
       shell: bash
 

@@ -28,13 +28,13 @@ runs:
         body: ${{ inputs.body }}
       run: |
         number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
-        if [ $number != "" ]; then
-            echo "PR exist: #${number}"
-            gh pr edit ${number} --body "$body"
-        else
+        if [ $number = "" ]; then
             echo "Creating PR"
             gh pr create -d --base ${base} --fill --body "$body"
             number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
+        else
+            echo "PR exist: #${number}"
+            gh pr edit ${number} --body "$body"
         fi
         echo "number=$number" >> $GITHUB_OUTPUT
       shell: bash
