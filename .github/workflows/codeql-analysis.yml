@@ -16,9 +16,7 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ beta ]
     paths:
-      - "src/**"
-      - "test/**"
-      - ".github/workflows/codeql-analysis.yml"
+      - "*.py"
   schedule:
     - cron: '31 23 * * 0/2'
 

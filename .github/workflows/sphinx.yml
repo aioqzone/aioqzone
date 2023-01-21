@@ -3,12 +3,11 @@ name: Sphinx Build and Deploy
 on:
   workflow_call:
   workflow_dispatch:
-  push:
+  pull_request:
+    types:
+      - ready_for_review
     branches:
       - beta
-    paths:
-      - doc/**
-      - ".github/workflows/sphinx.yml"
 
 concurrency:
   group: pages
