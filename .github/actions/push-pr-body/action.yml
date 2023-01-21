@@ -1,0 +1,37 @@
+name: Update PR Body
+description: Edit PR body if PR exist, else create a draft PR.
+inputs:
+  base-branch:
+    description: pr base branch
+    required: true
+  head-branch:
+    description: pr merge branch
+    required: true
+    default: ${{ github.ref }}
+  body:
+    description: pr body
+    required: true
+    default: ""
+outputs:
+  number:
+    description: pr number
+    value: ${{ steps.update.outputs.number }}
+
+runs:
+  using: composite
+  steps:
+    - id: update
+      env:
+        GH_TOKEN: ${{ github.token }}
+        base: ${{ inputs.base-branch }}
+        head: ${{ inputs.head-branch }}
+      run: |
+        number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
+        if [ $? ]; then
+            gh pr edit ${number} -t $version --notes "${{ inputs.body }}"
+        else
+            gh pr create -d --base ${base} -t $version --notes "${{ inputs.body }}"
+            number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
+        fi
+        echo "number=$number" >> $GITHUB_OUTPUT
+      shell: bash

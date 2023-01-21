@@ -11,9 +11,29 @@ on:
 
 jobs:
   test:
-    uses: ./.github/workflows/test.yml
-    with:
-      PYTEST_ARGS: -m "not needuser and not upstream" test/login/test_up.py test/login/test_captcha.py
-    secrets:
-      TEST_UIN: ${{ secrets.TEST_UIN }}
-      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: poetry
+
+      - name: Install and Test
+        env:
+          TEST_UIN: ${{ secrets.TEST_UIN }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: |
+          echo "::group::Install Dependencies"
+          poetry install -n -vv
+          echo "::endgroup::"
+
+          echo "::group::pytest outputs"
+          poetry run pytest -m "not needuser" test/login/test_captcha.py test/login/test_jigsaw.py
+          echo "::endgroup::"

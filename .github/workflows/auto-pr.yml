@@ -1,0 +1,40 @@
+name: Auto PR
+
+on:
+  push:
+    branches:
+      - dev
+      - dev/**
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  target: beta
+
+jobs:
+  pr:
+    name: Open or Edit PR
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, '@no-pr')"
+    permissions:
+      pull-requests: write
+    steps:
+      - name: match package version
+        id: match
+        run: |
+          version=$(sed -nr "s/^\s*version\s*=\s*\"(.*)\"/\1/p" pyproject.toml)
+          echo "version=version" >> $GITHUB_OUTPUT
+
+      - uses: ./.github/actions/pr-changelog
+        id: git-cliff
+        with:
+          start: ${{ env.target }}
+          args: -t ${{ steps.match.outputs.version }}
+
+      - name: Push Changelog to PR
+        uses: ./.github/actions/push-pr-body
+        with:
+          base-branch: ${{ env.target }}
+          body: ${{ steps.git-cliff.outputs.changelog }}

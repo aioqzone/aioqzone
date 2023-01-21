@@ -2,31 +2,23 @@
 name: Test Poetry Project
 
 on:
-  workflow_call:
-    inputs:
-      PYTEST_ARGS:
-        required: true
-        type: string
-    secrets:
-      TEST_UIN:
-        required: true
-      TEST_PASSWORD:
-        required: true
-    outputs:
-      package-version:
-        description: version of this python package output by poetry
-        value: ${{ jobs.install-test.outputs.package-version }}
+  pull_request:
+    types:
+      - review_requested
+    branches:
+      - beta
+      - release
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   install-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.11', '3.7']
-    outputs:
-      package-version:
-        ${{ steps.version_step.outputs.VERSION }}
-
+        python-version: ["3.11", "3.7"]
     steps:
       #----------------------------------------------
       #   check-out repo and set-up node & python
@@ -42,24 +34,23 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: poetry
-      - name: Get Package Version
-        id: version_step
-        run: echo "VERSION=$(poetry version -s)" >> $GITHUB_OUTPUT
-      #----------------------------------------------
-      #   install your root project, if required
-      #----------------------------------------------
-      - name: Install library
-        run: poetry install -n -vv
-      #----------------------------------------------
-      #    add matrix specifics and run test suite
-      #----------------------------------------------
-      - name: Test with pytest
+
+      - name: Install and Test
         env:
           TEST_UIN: ${{ secrets.TEST_UIN }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
-          poetry run pytest ${{ inputs.PYTEST_ARGS }}
+          echo "::group::Install Dependencies"
+          poetry install -n -vv
+          echo "::endgroup::"
 
-concurrency:
-  group: test-${{ github.ref }}
-  cancel-in-progress: true
+          echo "::group::pytest outputs"
+          poetry run pytest -m "not needuser and not upstream" test
+          echo "::endgroup::"
+
+      - name: Request Changes
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }} # maybe PAT?
+        run: |
+          gh pr review ${{ github.event.pull_request.number }} --request-changes

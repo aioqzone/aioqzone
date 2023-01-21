@@ -1,0 +1,37 @@
+name: Generate Changelog
+description: Generate a changelog from the given start & end revspec.
+inputs:
+  start:
+    description: start revspec
+    required: true
+  end:
+    description: end revspec
+    required: true
+    default: HEAD
+  args:
+    description: any other args
+    required: false
+    default: "-v"
+outputs:
+  changelog:
+    description: generated changelog
+    value: ${{ steps.git-cliff.outputs.content }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.start }}
+    - id: sha
+      run: echo "base-sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      shell: bash
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Generate a changelog
+      uses: orhun/git-cliff-action@v2
+      id: git-cliff
+      with:
+        config: cliff.toml
+        args: ${{ steps.sha.outputs.base-sha }}..${{ inputs.end }} ${{ inputs.args }}
