@@ -7,7 +7,7 @@ inputs:
   head-branch:
     description: pr merge branch
     required: true
-    default: ${{ github.sha }}
+    default: ${{ github.ref_name }}
   body:
     description: pr body
     required: true
@@ -27,11 +27,11 @@ runs:
         head: ${{ inputs.head-branch }}
         body: ${{ inputs.body }}
       run: |
-        number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
+        number=$(gh pr list --base ${base} --head ${head} --state open --json number -q ".[0] .number")
         if [[ $number = "" ]]; then
             echo "Creating PR"
             gh pr create -d --base ${base} --fill --body "$body"
-            number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
+            number=$(gh pr list --base ${base} --head ${head} --state open --json number -q ".[0] .number")
         else
             echo "PR exist: #${number}"
             gh pr edit ${number} --body "$body"
