@@ -8,6 +8,10 @@ inputs:
     description: end revspec
     required: true
     default: HEAD
+  tag:
+    description: a tag for the "unreleased" changes
+    required: false
+    default: ""
   args:
     description: any other args
     required: false
@@ -29,9 +33,20 @@ runs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+
+    - name: set tag
+      run: |
+        if [ ${{ inputs.tag }} = "" ]; then
+            version=$(sed -nr "s/^\s*version\s*=\s*\"(.*)\"/\1/p" pyproject.toml)
+            echo "tag=$version" >> $GITHUB_ENV
+        else
+            echo "tag=${{ inputs.tag }}"
+        fi
+      shell: bash
+
     - name: Generate a changelog
       uses: orhun/git-cliff-action@v2
       id: git-cliff
       with:
         config: cliff.toml
-        args: ${{ steps.sha.outputs.base-sha }}..${{ inputs.end }} ${{ inputs.args }}
+        args: ${{ steps.sha.outputs.base-sha }}..${{ inputs.end }} --tag ${{ env.tag }} ${{ inputs.args }}

@@ -28,9 +28,9 @@ runs:
       run: |
         number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
         if [ $? ]; then
-            gh pr edit ${number} -t $version --notes "${{ inputs.body }}"
+            gh pr edit ${number} --body "${{ inputs.body }}"
         else
-            gh pr create -d --base ${base} -t $version --notes "${{ inputs.body }}"
+            gh pr create -d --base ${base} --fill --body "${{ inputs.body }}"
             number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
         fi
         echo "number=$number" >> $GITHUB_OUTPUT
