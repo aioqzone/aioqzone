@@ -6,11 +6,12 @@ on:
       - ready_for_review
     branches:
       - beta
-  pull_request_target:
-    types:
-      - closed
+  push:
     branches:
       - beta
+    paths:
+      - doc/**
+      - .github/workflows/sphinx.yml
 
 concurrency:
   group: pages
@@ -23,8 +24,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
-      - name: Install poetry
-        run: pipx install poetry
+      - uses: actions/configure-pages@v2
+      - run: pipx install poetry
 
       - uses: actions/setup-python@v4
         with:
@@ -33,17 +34,22 @@ jobs:
 
       - name: Install Library and Build HTML
         run: |
+          echo "::group::Install Library"
           poetry install --with docs
+          echo "::endgroup::"
+
+          echo "::group::Build HTML"
           poetry run sphinx-build doc/source doc/build/html -D release=$(poetry version -s)
+          echo "::endgroup::"
 
       - name: Upload artifact
-        if: github.event_name == 'pull_request_target'
+        if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v1
         with:
           path: doc/build/html
 
   deploy:
-    if: github.event_name == 'pull_request_target'
+    if: github.event_name == 'push'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
