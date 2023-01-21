@@ -53,4 +53,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }} # maybe PAT?
         run: |
-          gh pr review ${{ github.event.pull_request.number }} --request-changes
+          gh pr review ${{ github.event.pull_request.number }} -r -b "Some test(s) failed."
