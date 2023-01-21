@@ -4,6 +4,8 @@ on:
   workflow_call:
   workflow_dispatch:
   push:
+    branches:
+      - beta
     paths:
       - doc/**
       - ".github/workflows/sphinx.yml"

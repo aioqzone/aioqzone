@@ -24,15 +24,9 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: ${{ inputs.start }}
     - id: sha
-      run: echo "base-sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      run: echo "base-sha=$(git rev-parse --short ${{ inputs.start }})" >> $GITHUB_OUTPUT
       shell: bash
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
 
     - name: set tag
       run: |

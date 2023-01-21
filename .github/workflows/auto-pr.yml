@@ -21,13 +21,17 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: ./.github/actions/pr-changelog
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: .github/actions/pr-changelog
         id: git-cliff
         with:
           start: ${{ env.target }}
 
       - name: Push Changelog to PR
-        uses: ./.github/actions/push-pr-body
+        uses: .github/actions/push-pr-body
         with:
           base-branch: ${{ env.target }}
           body: ${{ steps.git-cliff.outputs.changelog }}
