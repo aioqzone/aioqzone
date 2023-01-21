@@ -1,11 +1,14 @@
 name: Sphinx Build and Deploy
 
 on:
-  workflow_call:
-  workflow_dispatch:
   pull_request:
     types:
       - ready_for_review
+    branches:
+      - beta
+  pull_request_target:
+    types:
+      - closed
     branches:
       - beta
 
@@ -16,7 +19,6 @@ concurrency:
 jobs:
   sphinx-build:
     runs-on: ubuntu-latest
-    if: "!startsWith(github.event.head_commit.message, '@no-doc')"
     permissions:
       contents: read
     steps:
@@ -35,11 +37,13 @@ jobs:
           poetry run sphinx-build doc/source doc/build/html -D release=$(poetry version -s)
 
       - name: Upload artifact
+        if: github.event_name == 'pull_request_target'
         uses: actions/upload-pages-artifact@v1
         with:
           path: doc/build/html
 
   deploy:
+    if: github.event_name == 'pull_request_target'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
