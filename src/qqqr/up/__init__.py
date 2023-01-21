@@ -205,6 +205,8 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         if sess.code == StatusCode.NeedCaptcha:
             log.warning("需通过防水墙")
             await self.pass_vc(sess)
+            if sess.verify_rst is None or not sess.verify_rst.ticket:
+                raise TencentLoginError(StatusCode.NeedCaptcha, "internal error when passing vc")
 
         while True:
             resp = await self.try_login(sess)
@@ -256,7 +258,14 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
         :return: The session with :obj:`~UpSession.verify_rst` is set.
         """
 
-        c = self.captcha(sess.check_rst.session)
-        sess.verify_rst = await c.verify()
+        for retry in range(4):
+            c = self.captcha(sess.check_rst.session)
+            sess.verify_rst = await c.verify()
+            if sess.verify_rst.ticket:
+                break
+            log.warning(f"ticket is empty. retry={retry}")
+        else:
+            raise TencentLoginError(sess.code, "ticket is always empty")
+
         log.info("verify success!")
         return sess
