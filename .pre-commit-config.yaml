@@ -17,11 +17,6 @@ repos:
         pass_filenames: false
         language: system
         files: pyproject.toml
-      - id: poetry
-        name: poetry lock
-        entry: poetry lock -v
-        pass_filenames: false
-        language: system
       - id: isort
         name: isort (python)
         entry: poetry run isort .
