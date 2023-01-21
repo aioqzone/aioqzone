@@ -57,5 +57,5 @@ jobs:
 
 
 concurrency:
-  group: codeql-${{ github.ref }}
+  group: codeql-${{ github.ref_name }}
   cancel-in-progress: true

@@ -7,7 +7,7 @@ inputs:
   head-branch:
     description: pr merge branch
     required: true
-    default: ${{ github.ref }}
+    default: ${{ github.sha }}
   body:
     description: pr body
     required: true

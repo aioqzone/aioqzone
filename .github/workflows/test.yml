@@ -10,7 +10,7 @@ on:
       - release
 
 concurrency:
-  group: test-${{ github.ref }}
+  group: test-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
