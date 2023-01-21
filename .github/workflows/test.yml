@@ -49,8 +49,9 @@ jobs:
           echo "::endgroup::"
 
       - name: Request Changes
-        if: secrets.COMMENT_PAT && failure()
         env:
-          GH_TOKEN: secrets.COMMENT_PAT # the reviewer PAT
+          GH_TOKEN: ${{ secrets.COMMENT_PAT }} # the reviewer PAT
         run: |
-          gh pr review ${{ github.event.pull_request.number }} -r -b "Some test(s) failed."
+          if [[ $GH_TOKEN != "" ]]; then
+              gh pr review ${{ github.event.pull_request.number }} -r -b "Some test(s) failed."
+          fi
