@@ -28,7 +28,7 @@ runs:
         body: ${{ inputs.body }}
       run: |
         number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
-        if [ $? ]; then
+        if [ $number != "" ]; then
             echo "PR exist: #${number}"
             gh pr edit ${number} --body "$body"
         else
