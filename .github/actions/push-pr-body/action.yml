@@ -28,7 +28,7 @@ runs:
         body: ${{ inputs.body }}
       run: |
         number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
-        if [ $number = "" ]; then
+        if [[ $number = "" ]]; then
             echo "Creating PR"
             gh pr create -d --base ${base} --fill --body "$body"
             number=$(gh pr list --base ${base} --head ${head} --json number -q ".[0] .number")
