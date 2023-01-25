@@ -1,44 +1,60 @@
 name: Sphinx Build and Deploy
 
 on:
-  workflow_call:
-  workflow_dispatch:
-  push:
-    paths:
-      - doc/**
-      - ".github/workflows/sphinx.yml"
+  pull_request:
+    types:
+      - ready_for_review
+    branches:
+      - beta
+  pull_request_target:
+    types:
+      - closed
+    branches:
+      - beta
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
-  sphinx-build-deploy:
+  sphinx-build:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '@no-doc')"
+    permissions:
+      contents: read
     steps:
-      #----------------------------------------------
-      #     check-out repo and set-up python
-      #----------------------------------------------
       - uses: actions/checkout@v3
       - name: Install poetry
         run: pipx install poetry
+
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
           cache: poetry
-      #----------------------------------------------
-      # install your root project, if required
-      #----------------------------------------------
-      - name: Install library
-        run: poetry install --with docs
-      #----------------------------------------------
-      #             Run sphinx-build
-      #----------------------------------------------
-      - name: Build HTML
-        run: poetry run sphinx-build doc/source doc/build/html -D release=$(poetry version -s)
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: doc/build/html
 
-concurrency:
-  group: doc-${{ github.ref }}
-  cancel-in-progress: true
+      - name: Install Library and Build HTML
+        run: |
+          poetry install --with docs
+          poetry run sphinx-build doc/source doc/build/html -D release=$(poetry version -s)
+
+      - name: Upload artifact
+        if: github.event_name == 'pull_request_target'
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: doc/build/html
+
+  deploy:
+    if: github.event_name == 'pull_request_target'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: sphinx-build
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

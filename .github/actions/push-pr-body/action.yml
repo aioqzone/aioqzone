@@ -1,0 +1,46 @@
+name: Update PR Body
+description: Edit PR body if PR exist, else create a draft PR.
+inputs:
+  base-branch:
+    description: pr base branch
+    required: true
+  head-branch:
+    description: pr merge branch
+    required: true
+    default: ${{ github.ref_name }}
+  body:
+    description: pr body
+    required: true
+    default: ""
+outputs:
+  number:
+    description: pr number
+    value: ${{ steps.update.outputs.number }}
+
+runs:
+  using: composite
+  steps:
+    - id: update
+      env:
+        GH_TOKEN: ${{ github.token }}
+        base: ${{ inputs.base-branch }}
+        head: ${{ inputs.head-branch }}
+        body: ${{ inputs.body }}
+        comment: |
+          Hi! Thanks for opening pull request!
+
+          - **request for review** to trigger test actions
+          - **ready for review** to build and deploy docs
+      run: |
+        number=$(gh pr list --base ${base} --head ${head} --state open --json number -q ".[0] .number")
+        if [[ $number = "" ]]; then
+            echo "Creating PR"
+            gh pr create -d --base ${base} --fill --body "$body"
+            number=$(gh pr list --base ${base} --head ${head} --state open --json number -q ".[0] .number")
+            gh pr comment $number -b "$comment"
+        else
+            echo "PR exist: #${number}"
+            gh pr edit ${number} --body "$body"
+        fi
+        echo "number=$number" >> $GITHUB_OUTPUT
+      shell: bash

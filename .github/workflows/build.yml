@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # if: contains(github.event.issue.labels.*.name, 'publish')
+    if: contains(github.event.pull_request.labels.*.name, 'python')
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
@@ -27,11 +27,11 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-          cache: poetry
+          # cache: poetry
       #----------------------------------------------
       #  --------    Build and release   ---------
       #----------------------------------------------
       - name: Build dist and Publish to PyPI
-        run: |
-          export POETRY_PYPI_TOKEN_PYPI=${{ secrets.PYPI_TOKEN }}
-          poetry publish --build
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: poetry publish --build
