@@ -64,6 +64,13 @@ class Piece:
 
         self.bbox = cv.boundingRect(self.cont)
 
+        if debug:
+            debug_out = Path("data/debug")
+            debug_out.mkdir(exist_ok=True, parents=True)
+            mask = cv.cvtColor(self.strip_mask(), cv.COLOR_GRAY2BGR)
+            mask = cv.drawContours(mask, [self.cont - self.bbox[:2]], 0, (0, 0, 255), 1)
+            cv.imwrite((debug_out / "tmplmask.png").as_posix(), mask)
+
     @property
     def padding(self) -> Tuple[int, int, int, int]:
         """The padding of the jigsaw piece sprite in [left, top, right, bottom]"""
@@ -105,7 +112,7 @@ class Piece:
         """
         spiece = (self.strip() * a).astype("uint8")
         cont = self.cont - self.bbox[:2]
-        return cv.drawContours(spiece, [cont], 0, (255, 255, 255), 1)
+        return cv.drawContours(spiece, [cont], 0, (200, 200, 200), 1)
 
     def __bytes__(self) -> bytes:
         return tobytes(np.concatenate((self.img, self.mask), -1))
@@ -178,27 +185,38 @@ class Jigsaw:
             self._left = self.solve() - self.piece.padding[0]
         return self._left
 
-    def solve(self) -> int:
+    def solve(self, left_bound: int = 50) -> int:
         """Solve the captcha using :meth:`cv2.matchTemplate`.
 
         :return: position with the max confidence. This might be the left of the piece position on the puzzle.
         """
         template = self.piece.build_template()
+        left_bound += self.piece.padding[0]
+
         if not hasattr(self, "confidence"):
             top = self.top + self.piece.padding[1]
 
             self.confidence = cv.matchTemplate(
-                self.background[top : top + self.piece.bbox[3]],
+                self.background[top : top + self.piece.bbox[3], left_bound:],
                 template,
                 cv.TM_CCOEFF_NORMED,
                 mask=self.piece.strip_mask(),
             )
-        max_cfd_x = int(np.argmax(self.confidence))
+        max_cfd_x = int(np.argmax(self.confidence)) + left_bound
 
         if debug:
             debug_out = Path("data/debug")
             debug_out.mkdir(exist_ok=True, parents=True)
-            cv.imwrite((debug_out / "match.png").as_posix(), np.tile(self.confidence * 255, (200, 1)))  # type: ignore
+
+            confmap = self.confidence - self.confidence.min()
+            confmap /= confmap.max() / 255
+            confmap = confmap.astype(np.uint8)
+            confmap = np.pad(confmap, ((0, 0), (left_bound, template.shape[1] - 1)))
+            confmap = np.tile(confmap, (128, 1))
+            confmap = cv.cvtColor(confmap, cv.COLOR_GRAY2BGR)
+
+            bgw_conf = np.concatenate([self.background, confmap], axis=0)
+            cv.imwrite((debug_out / "bg_with_conf.png").as_posix(), bgw_conf)
             cv.imwrite((debug_out / "spiece.png").as_posix(), template)
 
             cont = self.piece.cont + np.array([max_cfd_x - self.piece.padding[0], self.top])
