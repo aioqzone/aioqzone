@@ -25,13 +25,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ./.github/actions/pr-changelog
+      - uses: JamzumSum/actions/pr-changelog@master
         id: git-cliff
         with:
           start: ${{ env.target }}
 
       - name: Push Changelog to PR
-        uses: ./.github/actions/push-pr-body
+        uses: JamzumSum/actions/push-pr-body@master
         with:
           base-branch: ${{ env.target }}
           body: ${{ steps.git-cliff.outputs.changelog }}
