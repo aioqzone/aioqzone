@@ -152,6 +152,7 @@ class TestQR:
 
 class MixFailureRecord(api.MixedLoginEvent):
     def __init__(self) -> None:
+        super().__init__()
         self.record = []
 
     async def LoginFailed(self, meth: LoginMethod, _=None):
