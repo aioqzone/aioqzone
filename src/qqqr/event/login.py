@@ -5,6 +5,11 @@ from . import Event
 
 
 class QrEvent(Event):
+    def __init__(self) -> None:
+        super().__init__()
+        self.cancel_flag = asyncio.Event()
+        self.refresh_flag = asyncio.Event()
+
     async def QrFetched(self, png: bytes, times: int):
         """Will be called on new QR code bytes are fetched. Means this will be triggered on:
 
@@ -17,13 +22,12 @@ class QrEvent(Event):
         """
         pass
 
-    @property
-    def cancel_flag(self) -> asyncio.Event:
-        raise NotImplementedError
+    async def QrCancelled(self):
+        """Will be called when QR login is cancelled.
 
-    @property
-    def refresh_flag(self) -> asyncio.Event:
-        raise NotImplementedError
+        .. versionadded:: 0.11.1
+        """
+        pass
 
 
 class UpEvent(Event):

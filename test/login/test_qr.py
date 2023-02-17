@@ -19,22 +19,9 @@ async def login(client: ClientAdapter):
     login = QrLogin(client, QzoneAppid, QzoneProxy)
 
     class showqr2user(QrEvent):
-        def __init__(self) -> None:
-            super().__init__()
-            self._cancel = asyncio.Event()
-            self._refresh = asyncio.Event()
-
         def QrFetched(self, png: bytes, times: int):
             _showqr(png)
             assert isinstance(times, int)
-
-        @property
-        def cancel_flag(self) -> asyncio.Event:
-            return self._cancel
-
-        @property
-        def refresh_flag(self) -> asyncio.Event:
-            return self._refresh
 
     login.register_hook(showqr2user())
     yield login
@@ -45,21 +32,8 @@ async def trouble_hook(client: ClientAdapter):
     login = QrLogin(client, QzoneAppid, QzoneProxy)
 
     class trouble(QrEvent):
-        def __init__(self) -> None:
-            super().__init__()
-            self._cancel = asyncio.Event()
-            self._refresh = asyncio.Event()
-
         def QrFetched(self, png: bytes, times: int):
             raise RuntimeError
-
-        @property
-        def cancel_flag(self) -> asyncio.Event:
-            return self._cancel
-
-        @property
-        def refresh_flag(self) -> asyncio.Event:
-            return self._refresh
 
     login.register_hook(trouble())
     yield login
