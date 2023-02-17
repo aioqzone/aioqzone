@@ -125,7 +125,9 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
 
             while not refresh_flag.is_set():
                 if cancel_flag.is_set():
+                    await hook_guard(self.hook.QrCancelled)()
                     raise UserBreak
+
                 await asyncio.sleep(polling_freq)
                 stat = await self.poll(sess)
                 if stat.code == StatusCode.Expired:

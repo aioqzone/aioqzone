@@ -35,11 +35,6 @@ class UPEvent_Test(UPEvent):
 
 
 class QREvent_Test(QREvent):
-    def __init__(self) -> None:
-        super().__init__()
-        self._cancel = asyncio.Event()
-        self._refresh = asyncio.Event()
-
     async def QrFetched(self, png: bytes, renew):
         showqr(png)
         self.renew_flag = renew
@@ -51,14 +46,6 @@ class QREvent_Test(QREvent):
     async def LoginFailed(self, meth, msg):
         assert meth == LoginMethod.qr
         self.login_fail = msg
-
-    @property
-    def cancel_flag(self) -> asyncio.Event:
-        return self._cancel
-
-    @property
-    def refresh_flag(self) -> asyncio.Event:
-        return self._refresh
 
 
 @pytest_asyncio.fixture(scope="class")
@@ -165,18 +152,11 @@ class TestQR:
 
 class MixFailureRecord(api.MixedLoginEvent):
     def __init__(self) -> None:
+        super().__init__()
         self.record = []
 
     async def LoginFailed(self, meth: LoginMethod, _=None):
         self.record.append(meth)
-
-    @property
-    def cancel_flag(self) -> asyncio.Event:
-        return asyncio.Event()
-
-    @property
-    def refresh_flag(self) -> asyncio.Event:
-        return self.cancel_flag
 
 
 mixed_loginman_exc_test_param = [

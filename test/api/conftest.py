@@ -38,21 +38,8 @@ async def man(client: ClientAdapter):
     )
 
     class mixed_event(MixedLoginEvent):
-        def __init__(self) -> None:
-            super().__init__()
-            self._cancel = asyncio.Event()
-            self._refresh = asyncio.Event()
-
         async def QrFetched(self, png: bytes, times: int):
             showqr(png)
-
-        @property
-        def cancel_flag(self) -> asyncio.Event:
-            return self._cancel
-
-        @property
-        def refresh_flag(self) -> asyncio.Event:
-            return self._refresh
 
     man.register_hook(mixed_event())
     yield man
