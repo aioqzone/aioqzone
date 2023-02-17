@@ -9,7 +9,7 @@ from httpx import ConnectError, HTTPError, Request
 
 import aioqzone.api.loginman as api
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
-from aioqzone.exception import LoginError
+from aioqzone.exception import LoginError, SkipLoginInterrupt
 from jssupport.exception import JsRuntimeError
 from qqqr.event.login import QrEvent, UpEvent
 from qqqr.exception import HookError, TencentLoginError, UserBreak
@@ -199,3 +199,13 @@ async def test_mixed_loginman_exc(
         await mix.new_cookie()
     await asyncio.sleep(0)
     assert hook.record == meth
+
+
+async def test_mixed_loginman_skip(client: ClientAdapter):
+    class sub_mix_loginman(api.MixedLoginMan):
+        def ordered_methods(self):
+            return []
+
+    mix = sub_mix_loginman(client, 1, api.QrStrategy.allow, "e")
+    with pytest.raises(SkipLoginInterrupt):
+        await mix._new_cookie()

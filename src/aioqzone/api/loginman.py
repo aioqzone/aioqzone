@@ -259,11 +259,13 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
 
         :return: cookie dict
         """
-        if not self._order:
+        methods = self.ordered_methods()
+        if not methods:
             raise SkipLoginInterrupt
+
         user_break = None
 
-        for c in self.ordered_methods():
+        for c in methods:
             try:
                 return await c._new_cookie()
             except (TencentLoginError, _NextMethodInterrupt, HookError) as e:
