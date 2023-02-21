@@ -62,17 +62,6 @@ class Emittable(Generic[Evt]):
 
     def __init__(self) -> None:
         self._tasks = defaultdict(set)
-        try:
-            self._loop = asyncio.get_running_loop()
-        except RuntimeError:
-            self._loop = asyncio.new_event_loop()
-
-    @property
-    def loop(self):
-        if self._loop.is_closed():
-            self._loop = asyncio.new_event_loop()
-            assert not self._loop.is_closed()
-        return self._loop
 
     def register_hook(self, hook: Evt):
         assert not isinstance(hook, NullEvent)
@@ -81,7 +70,7 @@ class Emittable(Generic[Evt]):
     def add_hook_ref(self, hook_cls, coro):
         # type: (str, Coroutine[Any, Any, T]) -> asyncio.Task[T]
         # NOTE: asyncio.Task becomes generic since py39
-        task = self.loop.create_task(coro)
+        task = asyncio.create_task(coro)
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
         return task
@@ -135,7 +124,9 @@ class EventManager:
     """EventManager is a convenient way to create/trace/manage friend classes."""
 
     __orig_bases__: Dict[Type[Event], Type[Event]]
-    __updated: bool = False
+    """Keys as base classes, values as their subclasses."""
+    __bases_init__: bool
+    """The `__orig_bases__` has been updated using :meth:`_update_bases`."""
 
     def sub_of(self, event: Type[Evt]) -> Type[Evt]:
         """Use this method to get current inheritence from an ancestor which was given to the
@@ -152,17 +143,15 @@ class EventManager:
         return f"EventManager of {self.__orig_bases__}"
 
     def __class_getitem__(cls, events: List[Type[Event]]):
-        """Factory.
+        """Factory."""
 
-        >>> class Mgr(EventManager[Event1, Event2]):    # create a manager of Event1 and Event2
-        >>>     pass
-        """
-        name = "Mgr" + "".join(i.__name__.capitalize() for i in events)
+        name = "evtmgr_" + "_".join(i.__name__.lower() for i in events)
         return type(
             name,
             (cls,),
             dict(
-                __orig_bases__={i: i for i in events},
+                __orig_bases__={i: lambda _, x: x for i in events},
+                __bases_init__=False,
             ),
         )
 
@@ -171,10 +160,16 @@ class EventManager:
         By default these methods should be named as `_sub_xxxx` (lowercase). One may
         override this method to change this manner.
 
-        >>> class Mgr(EventManager[Event1]):
-        >>>     def _sub_event1(self, base):
-        >>>         class my_event1(base): ...
-        >>>         return my_event1
+        .. code-block:: python
+            :caption: Example
+            :linenos:
+
+            class Mgr(EventManager[Event1]):
+                def _sub_event1(self, base):
+                    class my_event1(base): ...
+                    return my_event1
+
+        :meta public:
         """
         return getattr(self, f"_sub_{ty.__name__.lower()}", None)
 
@@ -182,23 +177,48 @@ class EventManager:
         self._update_bases()
 
     def _update_bases(self):
-        """Remember to call this **after** your own init."""
-        if self.__updated:
+        """Update bases. Could be called multiple times if the manager is subclassed.
+
+        .. code-block:: python
+            :caption: Example
+            :linenos:
+
+            class BaseMgr(EventManager[Event1]):
+                def _sub_event1(self, base):
+                    class basemgr_event1(base): ...
+                def __init__(self):
+                    # call _update_bases the first time, update event1 to basemgr_event1
+                    super().__init__()
+
+            class SubMgr(BaseMgr):
+                def _sub_event1(self, base):
+                    class submgr_event1(base): ...
+                def __init__(self):
+                    # call _update_bases the second time, update basemgr_event1 to submgr_event1
+                    super().__init__()
+
+        :meta public:
+        """
+        if self.__bases_init__:
             return
-        for k in self.__orig_bases__:
+        for k, v in self.__orig_bases__.items():
             sub_func = self._get_sub_func(k)
             if sub_func is None:
                 continue
-            self.__orig_bases__[k] = sub_func(k)
-        self.__updated = True
+            self.__orig_bases__[k] = sub_func(v)
+        self.__bases_init__ = True
 
 
 def hook_guard(hook: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
+    """This can be used as a decorator to ensure a hook can only raise :exc:`HookError`."""
+    assert not hasattr(hook, "__hook_guard__")
+
     @wraps(hook)
     async def guard_wrapper(*args: P.args, **kwds: P.kwargs) -> T:
         try:
             return await hook(*args, **kwds)
-        except BaseException as e:
+        except (BaseException, Exception) as e:  # Exception to catch ExceptionGroup
             raise HookError(hook) from e
 
+    setattr(guard_wrapper, "__hook_guard__", True)
     return guard_wrapper
