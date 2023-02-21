@@ -13,14 +13,16 @@ from typing import (
     Coroutine,
     Dict,
     Generic,
+    List,
     Optional,
     Set,
     Tuple,
+    Type,
     TypeVar,
     Union,
 )
 
-from typing_extensions import ParamSpec
+from typing_extensions import ParamSpec, final
 
 from qqqr.exception import HookError
 
@@ -109,19 +111,13 @@ class NullEvent(Event):
         return "NullEvent()"
 
 
-class Emittable(Generic[Evt]):
+class Tasksets:
     """An object has some event to trigger."""
 
-    hook: Union[Evt, NullEvent] = NullEvent()
     _tasks: Dict[str, Set[asyncio.Task]]
-    _loop: asyncio.AbstractEventLoop
 
     def __init__(self) -> None:
         self._tasks = defaultdict(set)
-
-    def register_hook(self, hook: Evt):
-        assert not isinstance(hook, NullEvent)
-        self.hook = hook
 
     def add_hook_ref(self, hook_cls, coro):
         # type: (str, Coroutine[Any, Any, T]) -> asyncio.Task[T]
@@ -131,6 +127,7 @@ class Emittable(Generic[Evt]):
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
         return task
 
+    @final
     async def wait(
         self,
         *hook_cls: str,
@@ -156,7 +153,7 @@ class Emittable(Generic[Evt]):
         r = await asyncio.wait(s, timeout=timeout)
         if timeout is None and any(self._tasks[i] for i in hook_cls):
             # await potential new tasks in these sets, only if no timeout.
-            r2 = await Emittable.wait(self, *hook_cls)
+            r2 = await self.wait(*hook_cls)
             return set(chain(r[0], r2[0])), set()
         return r
 
@@ -174,6 +171,14 @@ class Emittable(Generic[Evt]):
                 continue
             for t in s:
                 t.cancel()  # done callback will remove the task from this set
+
+
+class Emittable(Tasksets, Generic[Evt]):
+    hook: Union[Evt, NullEvent] = NullEvent()
+
+    def register_hook(self, hook: Evt):
+        assert not isinstance(hook, NullEvent)
+        self.hook = hook
 
 
 class EventManager:
