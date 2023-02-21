@@ -1,5 +1,5 @@
 """
-Define hooks that can trigger user actions.
+QQQR event system.
 """
 
 import asyncio
@@ -13,11 +13,9 @@ from typing import (
     Coroutine,
     Dict,
     Generic,
-    List,
     Optional,
     Set,
     Tuple,
-    Type,
     TypeVar,
     Union,
 )
@@ -26,16 +24,74 @@ from typing_extensions import ParamSpec
 
 from qqqr.exception import HookError
 
+T = TypeVar("T")
+P = ParamSpec("P")
 
-class Event:
-    """Base class for event system."""
 
-    pass
+class Event(Generic[T]):
+    """Base class for event system.
+
+    .. code-block:: python
+        :linenos:
+        :caption: my_events.py
+
+        class Event1(Event):
+            async def database_query(self, pid: int) -> str:
+                pass
+
+    .. code-block:: python
+        :linenos:
+        :caption: my_hooks.py
+
+        from typing import TYPE_CHECKING
+
+        if TYPE_CHECKING:
+            from app import AppClass    # to avoid circular import
+
+        class Event1Hook(Event1["AppClass"]):
+            async def database_query(self, pid: int) -> str:
+                return await self.scope.db.query(pid) or ""   # typing of scope is ok
+
+    .. code-block:: python
+        :linenos:
+        :caption: service.py
+
+        from my_event import Event1
+
+        class Service(Emittable[Event1]):
+            async def run(self):
+                ...
+                name = await self.hook.database_query(pid)
+                ...
+
+    .. code-block:: python
+        :linenos:
+        :caption: app.py
+
+        from my_hooks import Event1Hook
+        from service import Service
+
+        class AppClass:
+            db: Database
+
+            def __init__(self):
+                self.event1_hook = Event1Hook()
+                self.event1_hook.link_to_scope(self)
+                self.service = Service()
+                self.service.register_hook(self.event1_hook)
+    """
+
+    scope: T
+    """Access to a larger scope. This may allow hooks to achieve more functions.
+
+    .. warning:: Can only be access after calling `link_to_scope`."""
+
+    def link_to_scope(self, scope: T):
+        """Set the :obj:`scope`."""
+        self.scope = scope
 
 
 Evt = TypeVar("Evt", bound=Event)
-T = TypeVar("T")
-P = ParamSpec("P")
 
 
 class NullEvent(Event):
@@ -62,17 +118,6 @@ class Emittable(Generic[Evt]):
 
     def __init__(self) -> None:
         self._tasks = defaultdict(set)
-        try:
-            self._loop = asyncio.get_running_loop()
-        except RuntimeError:
-            self._loop = asyncio.new_event_loop()
-
-    @property
-    def loop(self):
-        if self._loop.is_closed():
-            self._loop = asyncio.new_event_loop()
-            assert not self._loop.is_closed()
-        return self._loop
 
     def register_hook(self, hook: Evt):
         assert not isinstance(hook, NullEvent)
@@ -81,7 +126,7 @@ class Emittable(Generic[Evt]):
     def add_hook_ref(self, hook_cls, coro):
         # type: (str, Coroutine[Any, Any, T]) -> asyncio.Task[T]
         # NOTE: asyncio.Task becomes generic since py39
-        task = self.loop.create_task(coro)
+        task = asyncio.create_task(coro)
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
         return task
@@ -131,74 +176,16 @@ class Emittable(Generic[Evt]):
                 t.cancel()  # done callback will remove the task from this set
 
 
-class EventManager:
-    """EventManager is a convenient way to create/trace/manage friend classes."""
-
-    __orig_bases__: Dict[Type[Event], Type[Event]]
-    __updated: bool = False
-
-    def sub_of(self, event: Type[Evt]) -> Type[Evt]:
-        """Use this method to get current inheritence from an ancestor which was given to the
-        factory.
-
-        >>> class Mgr(EventManager[Event1, Event2]): pass
-        >>> m = Mgr()
-        >>> m.sub_of(Event1)    # must be one of Event1, Event2
-        Event1
-        """
-        return self.__orig_bases__[event]  # type: ignore
-
-    def __repr__(self) -> str:
-        return f"EventManager of {self.__orig_bases__}"
-
-    def __class_getitem__(cls, events: List[Type[Event]]):
-        """Factory.
-
-        >>> class Mgr(EventManager[Event1, Event2]):    # create a manager of Event1 and Event2
-        >>>     pass
-        """
-        name = "Mgr" + "".join(i.__name__.capitalize() for i in events)
-        return type(
-            name,
-            (cls,),
-            dict(
-                __orig_bases__={i: i for i in events},
-            ),
-        )
-
-    def _get_sub_func(self, ty: Type[Evt]) -> Optional[Callable[[Type[Evt]], Type[Evt]]]:
-        """Given a event type, returns a method in which a subclass is returned.
-        By default these methods should be named as `_sub_xxxx` (lowercase). One may
-        override this method to change this manner.
-
-        >>> class Mgr(EventManager[Event1]):
-        >>>     def _sub_event1(self, base):
-        >>>         class my_event1(base): ...
-        >>>         return my_event1
-        """
-        return getattr(self, f"_sub_{ty.__name__.lower()}", None)
-
-    def __init__(self) -> None:
-        self._update_bases()
-
-    def _update_bases(self):
-        """Remember to call this **after** your own init."""
-        if self.__updated:
-            return
-        for k in self.__orig_bases__:
-            sub_func = self._get_sub_func(k)
-            if sub_func is None:
-                continue
-            self.__orig_bases__[k] = sub_func(k)
-        self.__updated = True
-
-
 def hook_guard(hook: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
+    """This can be used as a decorator to ensure a hook can only raise :exc:`HookError`."""
+    assert not hasattr(hook, "__hook_guard__")
+
     @wraps(hook)
     async def guard_wrapper(*args: P.args, **kwds: P.kwargs) -> T:
         try:
             return await hook(*args, **kwds)
-        except BaseException as e:
+        except (BaseException, Exception) as e:  # Exception to catch ExceptionGroup
             raise HookError(hook) from e
 
+    setattr(guard_wrapper, "__hook_guard__", True)
     return guard_wrapper
