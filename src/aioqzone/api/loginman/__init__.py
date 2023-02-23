@@ -5,21 +5,21 @@ Users can inherit these managers and implement their own caching logic.
 
 import asyncio
 import logging
-from enum import Enum
-from typing import Dict, List, Optional, Union
+from typing import Dict, Optional, Sequence
 
 from httpx import ConnectError, HTTPError
 
+from aioqzone.event.login import LoginMethod, QREvent, UPEvent
+from aioqzone.exception import LoginError, SkipLoginInterrupt
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
-from qqqr.event.login import QrEvent, UpEvent
+from qqqr.event import Emittable, EventManager
 from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.up import UpLogin
 from qqqr.utils.net import ClientAdapter
 
-from ..event.login import Loginable, LoginMethod, QREvent, UPEvent
-from ..exception import LoginError, SkipLoginInterrupt
+from ._base import Loginable
 
 log = logging.getLogger(__name__)
 JsError = JsRuntimeError, JsImportError, NodeNotFoundError
@@ -44,7 +44,7 @@ class ConstLoginMan(Loginable):
         return self._cookie
 
 
-class UPLoginMan(Loginable[UPEvent]):
+class UPLoginMan(Loginable, Emittable[UPEvent]):
     """Login manager for username-password login.
     This manager may trigger :meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and
     :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook.
@@ -116,14 +116,14 @@ class UPLoginMan(Loginable[UPEvent]):
                 exit(1)
 
 
-class QRLoginMan(Loginable[QREvent]):
+class QRLoginMan(Loginable, Emittable[QREvent]):
     """Login manager for QR login.
     This manager may trigger :meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and
     :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook.
     """
 
     def __init__(self, client: ClientAdapter, uin: int, refresh_time: int = 6) -> None:
-        Loginable.__init__(self, uin)
+        super().__init__(uin)
         self.client = client
         self.refresh = refresh_time
         self.qrlogin = QrLogin(self.client, QzoneAppid, QzoneProxy)
@@ -189,15 +189,6 @@ class QRLoginMan(Loginable[QREvent]):
             self.hook.refresh_flag.clear()
 
 
-class QrStrategy(str, Enum):
-    """Represents QR strategy."""
-
-    force = "force"
-    prefer = "prefer"
-    allow = "allow"
-    forbid = "forbid"
-
-
 class MixedLoginEvent(QREvent, UPEvent):
     def __instancecheck__(self, o: object) -> bool:
         return isinstance(o, QREvent) and isinstance(o, UPEvent)
@@ -206,48 +197,52 @@ class MixedLoginEvent(QREvent, UPEvent):
         return issubclass(cls, QREvent) and issubclass(cls, UPEvent)
 
 
-class MixedLoginMan(Loginable[MixedLoginEvent]):
-    """A login manager that will try methods according to the given :class:`.QrStrategy`."""
+class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
+    """A login manager that will try methods according to the given :class:`.QrStrategy`.
+
+    .. versionchanged:: 0.12.0
+
+        Make it a :class:`EventManager`.
+    """
 
     def __init__(
         self,
         client: ClientAdapter,
         uin: int,
-        strategy: QrStrategy,
+        order: Sequence[LoginMethod],
         pwd: Optional[str] = None,
         refresh_time: int = 6,
     ) -> None:
         super().__init__(uin)
-        self.strategy = strategy
-        self._order: List[Loginable] = []
-        if strategy != QrStrategy.force:
+        self.order = tuple(dict.fromkeys(order))
+        self.loginables: Dict[LoginMethod, Loginable] = {}
+        if LoginMethod.qr in self.order:
+            self.loginables[LoginMethod.qr] = QRLoginMan(
+                client=client, uin=uin, refresh_time=refresh_time
+            )
+        if LoginMethod.up in self.order:
             assert pwd
-            self._order.append(UPLoginMan(client, uin, pwd))
-        if strategy != QrStrategy.forbid:
-            self._order.append(QRLoginMan(client, uin, refresh_time))
-        if strategy == QrStrategy.prefer:
-            self._order = self._order[::-1]
+            self.loginables[LoginMethod.up] = UPLoginMan(client=client, uin=uin, pwd=pwd)
+        self.init_hooks()
 
-        # use a unified task store
-        self._tasks = self._order[0]._tasks
-        for i in self._order:
-            i._tasks = self._tasks
+    def init_hooks(self):
+        if LoginMethod.qr in self.order:
+            c = self.loginables[LoginMethod.qr]
+            if isinstance(c, Emittable):
+                c.register_hook(self.inst_of(QREvent))
+        if LoginMethod.up in self.order:
+            c = self.loginables[LoginMethod.up]
+            if isinstance(c, Emittable):
+                c.register_hook(self.inst_of(UPEvent))
 
-    def register_hook(self, hook: Union[MixedLoginEvent, QrEvent, UpEvent]):
-        for c in self._order:
-            if isinstance(c, QRLoginMan) and isinstance(hook, QREvent):
-                c.register_hook(hook)
-            if isinstance(c, UPLoginMan) and isinstance(hook, UPEvent):
-                c.register_hook(hook)
-
-    def ordered_methods(self) -> List[Loginable]:
+    def ordered_methods(self) -> Sequence[LoginMethod]:
         """Subclasses can inherit this method to choose a subset of `._order` according to its own policy.
 
         :return: a subset of `._order`.
 
         .. versionadded:: 0.9.8.dev1
         """
-        return self._order
+        return list(self.order)
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
@@ -265,7 +260,8 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
 
         user_break = None
 
-        for c in methods:
+        for m in methods:
+            c = self.loginables[m]
             try:
                 return await c._new_cookie()
             except (TencentLoginError, _NextMethodInterrupt, HookError) as e:
@@ -274,18 +270,30 @@ class MixedLoginMan(Loginable[MixedLoginEvent]):
             except UserBreak as e:
                 user_break = e
                 log.debug("Mixed loginman received UserBreak, continue.")
-            except SystemExit as e:
+            except SystemExit:
                 log.debug("Mixed loginman captured System Exit, reraise.")
-                raise e
+                raise
 
         if user_break:
             raise UserBreak from user_break
 
-        if self.strategy == "forbid":
+        if LoginMethod.qr not in methods:
             hint = "您可能被限制账密登陆. 扫码登陆仍然可行."
-        elif self.strategy != "force":
+        elif LoginMethod.up not in methods:
             hint = "您可能已被限制登陆."
         else:
             hint = "你在睡觉！"
 
-        raise LoginError(hint, self.strategy)
+        raise LoginError(hint, methods_tried=methods)
+
+
+strategy_to_order = dict(
+    forbid=[LoginMethod.up],
+    allow=[LoginMethod.up, LoginMethod.qr],
+    prefer=[LoginMethod.qr, LoginMethod.up],
+    force=[LoginMethod.qr],
+)
+"""We provide a mapping to transform old "strategy" manner to new "order" manner.
+
+.. versionadded:: 0.12.0
+"""

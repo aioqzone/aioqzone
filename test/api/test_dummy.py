@@ -5,7 +5,7 @@ import pytest
 import pytest_asyncio
 from httpx import HTTPStatusError
 
-from aioqzone.api import DummyQapi
+from aioqzone.api import QzoneAPI
 from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.exception import LoginError, QzoneError
 from aioqzone.type.resp import FeedRep
@@ -21,19 +21,19 @@ def storage():
 
 @pytest_asyncio.fixture(scope="module")
 async def api(client: ClientAdapter, man: MixedLoginMan):
-    yield DummyQapi(client, man)
+    yield QzoneAPI(client, man)
 
 
 class TestDummy:
     pytestmark = pytest.mark.asyncio
 
-    async def test_heartbeat(self, api: DummyQapi):
+    async def test_heartbeat(self, api: QzoneAPI):
         try:
             assert await api.get_feeds_count()
         except LoginError:
             pytest.xfail("Login failed")
 
-    async def test_more(self, api: DummyQapi, storage: list):
+    async def test_more(self, api: QzoneAPI, storage: list):
         try:
             f = await api.feeds3_html_more(0)
             r = await asyncio.gather(*(api.feeds3_html_more(i) for i in range(1, 3)))
@@ -46,7 +46,7 @@ class TestDummy:
         assert storage
 
     @pytest.mark.upstream
-    async def test_complete(self, api: DummyQapi, storage: List[FeedRep]):
+    async def test_complete(self, api: QzoneAPI, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
         f: Optional[FeedRep] = first(storage, default=None)
@@ -56,7 +56,7 @@ class TestDummy:
         _, info = HtmlInfo.from_html(f.html)
         assert await api.emotion_getcomments(f.uin, f.fid, info.feedstype)
 
-    async def test_detail(self, api: DummyQapi, storage: List[FeedRep]):
+    async def test_detail(self, api: QzoneAPI, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
         for f in storage:
@@ -65,7 +65,7 @@ class TestDummy:
             except (QzoneError, HTTPStatusError) as e:
                 continue
 
-    async def test_photo_list(self, api: DummyQapi, storage: List[FeedRep]):
+    async def test_photo_list(self, api: QzoneAPI, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
         f: Optional[HtmlContent] = first(

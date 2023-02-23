@@ -150,7 +150,7 @@ class TestQR:
         assert qr.hook.renew_flag  # type: ignore
 
 
-class MixFailureRecord(api.MixedLoginEvent):
+class MixFailureRecord(QREvent):
     def __init__(self) -> None:
         super().__init__()
         self.record = []
@@ -159,46 +159,50 @@ class MixFailureRecord(api.MixedLoginEvent):
         self.record.append(meth)
 
 
+allow = [LoginMethod.up, LoginMethod.qr]
+prefer = [LoginMethod.qr, LoginMethod.up]
 mixed_loginman_exc_test_param = [
-    ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, "allow", ["up", "qr"]),
-    ((HookError(UpEvent.GetSmsCode), asyncio.TimeoutError()), LoginError, "allow", ["up", "qr"]),
-    ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, "allow", ["up", "qr"]),
-    ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, "allow", ["up", "qr"]),
-    ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, "allow", ["up", "qr"]),
+    ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, allow, ["up", "qr"]),
+    ((HookError(UpEvent.GetSmsCode), asyncio.TimeoutError()), LoginError, allow, ["up", "qr"]),
+    ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, allow, ["up", "qr"]),
+    ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, allow, ["up", "qr"]),
+    ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, allow, ["up", "qr"]),
     #
-    ((SystemExit(), UserBreak()), SystemExit, "allow", ["up"]),
+    ((SystemExit(), UserBreak()), SystemExit, allow, ["up"]),
     #
-    ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, "prefer", ["qr", "up"]),
-    ((HookError(UpEvent.GetSmsCode), asyncio.TimeoutError()), LoginError, "prefer", ["qr", "up"]),
-    ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, "prefer", ["qr", "up"]),
-    ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, "prefer", ["qr", "up"]),
-    ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, "prefer", ["qr"]),
+    ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, prefer, ["qr", "up"]),
+    ((HookError(UpEvent.GetSmsCode), asyncio.TimeoutError()), LoginError, prefer, ["qr", "up"]),
+    ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, prefer, ["qr", "up"]),
+    ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, prefer, ["qr", "up"]),
+    ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, prefer, ["qr"]),
     #
-    ((SystemExit(), UserBreak()), SystemExit, "prefer", ["qr", "up"]),
-    ((SystemExit(), asyncio.TimeoutError()), SystemExit, "prefer", ["qr", "up"]),
-    ((SystemExit(), GeneratorExit()), SystemExit, "prefer", ["qr", "up"]),
-    ((SystemExit(), _fake_http_error), SystemExit, "prefer", ["qr", "up"]),
-    ((SystemExit(), SystemExit()), SystemExit, "prefer", ["qr"]),
+    ((SystemExit(), UserBreak()), SystemExit, prefer, ["qr", "up"]),
+    ((SystemExit(), asyncio.TimeoutError()), SystemExit, prefer, ["qr", "up"]),
+    ((SystemExit(), GeneratorExit()), SystemExit, prefer, ["qr", "up"]),
+    ((SystemExit(), _fake_http_error), SystemExit, prefer, ["qr", "up"]),
+    ((SystemExit(), SystemExit()), SystemExit, prefer, ["qr"]),
 ]
 
 
-@pytest.mark.parametrize("exc2r,exc2e,strategy,meth", mixed_loginman_exc_test_param)
+@pytest.mark.parametrize(["exc2r", "exc2e", "order", "record"], mixed_loginman_exc_test_param)
 async def test_mixed_loginman_exc(
     client: ClientAdapter,
     exc2r: Tuple[BaseException, BaseException],
     exc2e: Type[BaseException],
-    strategy: api.QrStrategy,
-    meth: List[api.LoginMethod],
+    order: List[LoginMethod],
+    record: List[api.LoginMethod],
 ):
     hook = MixFailureRecord()
-    mix = api.MixedLoginMan(client, 1, strategy, "e")
-    mix.register_hook(hook)
+    mix = api.MixedLoginMan(client, 1, order, "e")
+    mix.__hooks__[QREvent] = mix.__hooks__[UPEvent] = hook
+    mix.init_hooks()
+
     with pytest.raises(exc2e), mock.patch(
         f"qqqr.up.UpLogin.new", side_effect=exc2r[0]
     ), mock.patch(f"qqqr.qr.QrLogin.new", side_effect=exc2r[1]):
         await mix.new_cookie()
     await asyncio.sleep(0)
-    assert hook.record == meth
+    assert hook.record == record
 
 
 async def test_mixed_loginman_skip(client: ClientAdapter):
@@ -206,6 +210,6 @@ async def test_mixed_loginman_skip(client: ClientAdapter):
         def ordered_methods(self):
             return []
 
-    mix = sub_mix_loginman(client, 1, api.QrStrategy.allow, "e")
+    mix = sub_mix_loginman(client, 1, [LoginMethod.up, LoginMethod.qr], "e")
     with pytest.raises(SkipLoginInterrupt):
         await mix._new_cookie()

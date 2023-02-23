@@ -38,6 +38,7 @@ class ClientAdapter:
         __slots__ = ("response", "__async")
 
         def __init__(self, response: Awaitable[Response]) -> None:
+            super().__init__()
             self.__async = response
             self.response = None
 
@@ -56,6 +57,7 @@ class ClientAdapter:
 
             `timeout` of the client will be overwrite.
         """
+        super().__init__()
         self.client = client
         client.timeout = Timeout(None)
 

@@ -38,6 +38,7 @@ class LoginBase(ABC, Generic[_S]):
         :param proxy: specify where to redirect after login. This can be got from login HTTP request workload.
         :param info: Optional, app help link, download link, etc.
         """
+        super().__init__()
         self.app = app
         self.proxy = proxy
         self.info = info or PT_QR_APP()

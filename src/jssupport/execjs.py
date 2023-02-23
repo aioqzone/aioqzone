@@ -33,6 +33,7 @@ class Partial:
         :param asis: If True, the argument's :meth:`repr` will be saved directly.
         Otherwise we will look for some appropriate "repr" for an argument.
         """
+        super().__init__()
         self.func = name
         self.args = args
         self.asis = asis
@@ -101,6 +102,7 @@ class ExecJS:
         assert self.loop_policy_check(), "loop policy cannot be `WindowsSelectorEventLoopPolicy`"
 
     def __init__(self):
+        super().__init__()
         self.check_all()
         self.setup = []
         self.run = []
@@ -172,5 +174,5 @@ class ExecJS:
         return await self(prop)
 
 
-if sys.platform == "win32":
+if sys.platform == "win32" and sys.version_info < (3, 8):
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())

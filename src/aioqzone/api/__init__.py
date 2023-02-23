@@ -8,15 +8,19 @@ from pydantic import ValidationError
 
 from ..type.internal import AlbumData
 from ..type.resp import *
-from .raw import QzoneApi
+from .raw import QzoneRawAPI
 
 log = logging.getLogger(__name__)
 
 
-class DummyQapi(QzoneApi):
-    """A wrapper of :class:`.QzoneApi`. It will validate the returns from :class:`.QzoneApi`,
-    and return a typed response. The value returned is usually a :class:`BaseModel`, sometimes
-    just a basic type if not needed."""
+class QzoneAPI(QzoneRawAPI):
+    """A wrapper of :class:`.QzoneRawAPI`. It will validate the returns from :class:`.QzoneRawAPI`,
+    and return a typed response. The value returned is usually one or more :class:`BaseModel`, sometimes
+    just a basic type if not needed.
+
+    .. versionchanged:: 0.12.0
+        rename to ``QzoneAPI``
+    """
 
     async def feeds3_html_more(
         self, pagenum: int, count: int = 10, *, aux: Optional[FeedMoreAux] = None

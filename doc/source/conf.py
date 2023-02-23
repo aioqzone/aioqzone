@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "aioqzone"
-copyright = "2022, aioqzone"
+copyright = "2022-2023, aioqzone"
 author = "aioqzone"
 
 # The full version, including alpha/beta/rc tags

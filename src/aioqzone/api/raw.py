@@ -15,24 +15,29 @@ from jssupport.jsjson import JsonValue, json_loads
 from qqqr.utils.daug import du
 from qqqr.utils.net import ClientAdapter, raise_for_status
 
-from ..event.login import Loginable
 from ..exception import CorruptError, QzoneError
 from ..type.internal import AlbumData, LikeData
 from ..utils.regex import response_callback
 from ..utils.time import time_ms
+from .loginman import Loginable
 
 logger = logging.getLogger(__name__)
 
 StrDict = Dict[str, JsonValue]
 
 
-class QzoneApi:
-    """Just a wrapper for Qzone http interface. No type validating."""
+class QzoneRawAPI:
+    """Just a wrapper for Qzone http interface. No type validating.
+
+    .. versionchanged:: 0.12.0
+        rename to ``QzoneRawAPI``
+    """
 
     encoding = "utf-8"
     host = "https://user.qzone.qq.com"
 
     def __init__(self, client: ClientAdapter, loginman: Loginable) -> None:
+        super().__init__()
         self.client = client
         self.login = loginman
 
