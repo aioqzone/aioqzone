@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 10:45+0800\n"
+"POT-Creation-Date: 2023-02-23 21:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,13 +33,11 @@ msgstr ""
 msgid "Will be emitted on login failed."
 msgstr ""
 
-#: aioqzone.event.login.LoginEvent.LoginFailed
-#: aioqzone.event.login.LoginEvent.LoginSuccess of
+#: aioqzone.event.login.LoginEvent.LoginFailed aioqzone.event.login.LoginEvent.LoginSuccess of
 msgid "参数"
 msgstr ""
 
-#: aioqzone.event.login.LoginEvent.LoginFailed:4
-#: aioqzone.event.login.LoginEvent.LoginSuccess:4 of
+#: aioqzone.event.login.LoginEvent.LoginFailed:4 aioqzone.event.login.LoginEvent.LoginSuccess:4 of
 msgid "indicate what login method this login attempt used"
 msgstr ""
 
@@ -59,81 +57,64 @@ msgstr ""
 msgid "Defines usual events happens during password login."
 msgstr ""
 
-#: aioqzone.event.login.Loginable:1 of
-msgid ""
-"Abstract class represents a login manager. It is a :class:`Emittable` "
-"class which can emit :class:`LoginEvent`."
-msgstr ""
+#~ msgid ""
+#~ "Abstract class represents a login manager. It is"
+#~ " a :class:`Emittable` class which can emit "
+#~ ":class:`LoginEvent`."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable._new_cookie:1 of
-msgid "Subclasses *must* implement this method to return a cookie dict."
-msgstr ""
+#~ msgid "Subclasses *must* implement this method to return a cookie dict."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable._new_cookie
-#: aioqzone.event.login.Loginable.cookie aioqzone.event.login.Loginable.gtk of
-msgid "返回类型"
-msgstr ""
+#~ msgid "返回类型"
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable._new_cookie:4
-#: aioqzone.event.login.Loginable.cookie:3 of
-msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
-msgstr ""
+#~ msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable._new_cookie
-#: aioqzone.event.login.Loginable.cookie aioqzone.event.login.Loginable.gtk
-#: aioqzone.event.login.Loginable.new_cookie of
-msgid "返回"
-msgstr ""
+#~ msgid "返回"
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable._new_cookie:5 of
-msgid "cookie dict"
-msgstr ""
+#~ msgid "cookie dict"
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.cookie:1 of
-msgid "Get a cookie dict using any method. Allows cached cookie."
-msgstr ""
+#~ msgid "Get a cookie dict using any method. Allows cached cookie."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.cookie:4 of
-msgid "cookie. Cached cookie is preferable."
-msgstr ""
+#~ msgid "cookie. Cached cookie is preferable."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.gtk:1 of
-msgid "Calculate ``gtk`` using ``pskey`` filed in the cookie."
-msgstr ""
+#~ msgid "Calculate ``gtk`` using ``pskey`` filed in the cookie."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.gtk:3 of
-msgid ":py:class:`int`"
-msgstr ""
+#~ msgid ":py:class:`int`"
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.gtk:4 of
-msgid "gtk"
-msgstr ""
+#~ msgid "gtk"
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.gtk:6 of
-msgid "``0`` denotes no existing login."
-msgstr ""
+#~ msgid "``0`` denotes no existing login."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.gtk:7 of
-msgid ":meth:`qqqr.utils.encrypt.gtk`"
-msgstr ""
+#~ msgid ":meth:`qqqr.utils.encrypt.gtk`"
+#~ msgstr ""
 
-#: ../../../docstring aioqzone.event.login.Loginable.last_login:1 of
-msgid "Last login time stamp. 0 represents no login since created."
-msgstr ""
+#~ msgid "Last login time stamp. 0 represents no login since created."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.new_cookie:1 of
-msgid ""
-"Get a new cookie dict, which means cached cookie is not allowed. "
-"Generally, this will trigger a login."
-msgstr ""
+#~ msgid ""
+#~ "Get a new cookie dict, which means cached "
+#~ "cookie is not allowed. Generally, this will trigger"
+#~ " a login."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.new_cookie:4 of
-msgid ""
-"This method uses :class:`asyncio.Lock` to ensure that only one request "
-"can trigger an actual login at the same time, other requests will block "
-"until the first is complete and share the cookie from this single login."
-msgstr ""
+#~ msgid ""
+#~ "This method uses :class:`asyncio.Lock` to ensure that "
+#~ "only one request can trigger an actual login "
+#~ "at the same time, other requests will block "
+#~ "until the first is complete and share the "
+#~ "cookie from this single login."
+#~ msgstr ""
 
-#: aioqzone.event.login.Loginable.new_cookie:8 of
-msgid "cookie. Shouldn't be a cached one."
-msgstr ""
+#~ msgid "cookie. Shouldn't be a cached one."
+#~ msgstr ""

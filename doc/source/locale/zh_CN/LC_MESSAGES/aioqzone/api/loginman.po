@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 10:45+0800\n"
+"POT-Creation-Date: 2023-02-23 21:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,18 +23,100 @@ msgstr "登录管理器"
 
 #: aioqzone.api.loginman:1 of
 msgid ""
-"Collect some built-in login manager w/o caching. Users can inherit these "
-"managers and implement their own caching logic."
+"Collect some built-in login manager w/o caching. Users can inherit these managers and implement "
+"their own caching logic."
+msgstr ""
+
+#: aioqzone.api.loginman._base.Loginable:1 of
+msgid ""
+"Abstract class represents a login manager. It is a :class:`Emittable` class which can emit "
+":class:`LoginEvent`."
+msgstr ""
+
+#: aioqzone.api.loginman._base.Loginable._new_cookie:1 of
+msgid "Subclasses *must* implement this method to return a cookie dict."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie aioqzone.api.loginman.MixedLoginMan.ordered_methods
+#: aioqzone.api.loginman.QRLoginMan._new_cookie aioqzone.api.loginman.UPLoginMan._new_cookie
+#: aioqzone.api.loginman._base.Loginable._new_cookie of
+msgid "返回类型"
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:7 aioqzone.api.loginman.QRLoginMan._new_cookie:7
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:6 aioqzone.api.loginman._base.Loginable._new_cookie:4
+#: of
+msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
+msgstr ""
+
+#: aioqzone.api.loginman.Loginable.cookie aioqzone.api.loginman.Loginable.gtk
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie aioqzone.api.loginman.MixedLoginMan.ordered_methods
+#: aioqzone.api.loginman.QRLoginMan._new_cookie aioqzone.api.loginman.UPLoginMan._new_cookie
+#: aioqzone.api.loginman._base.Loginable._new_cookie aioqzone.api.loginman._base.Loginable.new_cookie
+#: of
+msgid "返回"
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:8 aioqzone.api.loginman.QRLoginMan._new_cookie:8
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:7 aioqzone.api.loginman._base.Loginable._new_cookie:5
+#: of
+msgid "cookie dict"
+msgstr ""
+
+#: aioqzone.api.loginman.Loginable.cookie:1 of
+msgid "Get a cookie dict using any method. Allows cached cookie."
+msgstr ""
+
+#: aioqzone.api.loginman.Loginable.cookie:3 of
+msgid "cookie. Cached cookie is preferable."
+msgstr ""
+
+#: aioqzone.api.loginman.Loginable.gtk:1 of
+msgid "Calculate ``gtk`` using ``pskey`` filed in the cookie."
+msgstr ""
+
+#: aioqzone.api.loginman.Loginable.gtk:3 of
+msgid "gtk"
+msgstr ""
+
+#: aioqzone.api.loginman.Loginable.gtk:5 of
+msgid "``0`` denotes no existing login."
+msgstr ""
+
+#: aioqzone.api.loginman.Loginable.gtk:6 of
+msgid ":meth:`qqqr.utils.encrypt.gtk`"
+msgstr ""
+
+#: ../../docstring aioqzone.api.loginman.Loginable.last_login:1 of
+msgid "Last login time stamp. 0 represents no login since created."
+msgstr ""
+
+#: aioqzone.api.loginman._base.Loginable.new_cookie:1 of
+msgid ""
+"Get a new cookie dict, which means cached cookie is not allowed. Generally, this will trigger a "
+"login."
+msgstr ""
+
+#: aioqzone.api.loginman._base.Loginable.new_cookie:4 of
+msgid ""
+"This method uses :class:`asyncio.Lock` to ensure that only one request can trigger an actual "
+"login at the same time, other requests will block until the first is complete and share the "
+"cookie from this single login."
+msgstr ""
+
+#: aioqzone.api.loginman._base.Loginable.new_cookie:8 of
+msgid "cookie. Shouldn't be a cached one."
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan:1 of
-msgid ""
-"A login manager that will try methods according to the given "
-":class:`.QrStrategy`."
+msgid "A login manager that will try methods according to the given :class:`.QrStrategy`."
 msgstr ""
 
-#: aioqzone.api.loginman.MixedLoginMan._new_cookie
-#: aioqzone.api.loginman.QRLoginMan._new_cookie
+#: aioqzone.api.loginman.MixedLoginMan:5 of
+msgid "Make it a :class:`EventManager`."
+msgstr ""
+
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie aioqzone.api.loginman.QRLoginMan._new_cookie
 #: aioqzone.api.loginman.UPLoginMan._new_cookie of
 msgid "抛出"
 msgstr ""
@@ -52,45 +134,15 @@ msgid "if all login methods failed."
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan._new_cookie:5 of
-msgid ""
-"if unexcpected error occured in any login method. Succeeding method will "
-"not be used."
-msgstr ""
-
-#: aioqzone.api.loginman.MixedLoginMan._new_cookie
-#: aioqzone.api.loginman.MixedLoginMan.ordered_methods
-#: aioqzone.api.loginman.QRLoginMan._new_cookie
-#: aioqzone.api.loginman.UPLoginMan._new_cookie of
-msgid "返回类型"
-msgstr ""
-
-#: aioqzone.api.loginman.MixedLoginMan._new_cookie:7
-#: aioqzone.api.loginman.QRLoginMan._new_cookie:7
-#: aioqzone.api.loginman.UPLoginMan._new_cookie:6 of
-msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
-msgstr ""
-
-#: aioqzone.api.loginman.MixedLoginMan._new_cookie
-#: aioqzone.api.loginman.MixedLoginMan.ordered_methods
-#: aioqzone.api.loginman.QRLoginMan._new_cookie
-#: aioqzone.api.loginman.UPLoginMan._new_cookie of
-msgid "返回"
-msgstr ""
-
-#: aioqzone.api.loginman.MixedLoginMan._new_cookie:8
-#: aioqzone.api.loginman.QRLoginMan._new_cookie:8
-#: aioqzone.api.loginman.UPLoginMan._new_cookie:7 of
-msgid "cookie dict"
+msgid "if unexcpected error occured in any login method. Succeeding method will not be used."
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan.ordered_methods:1 of
-msgid ""
-"Subclasses can inherit this method to choose a subset of `._order` "
-"according to its own policy."
+msgid "Subclasses can inherit this method to choose a subset of `._order` according to its own policy."
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan.ordered_methods:3 of
-msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.event.login.Loginable`]"
+msgid ":py:class:`~typing.Sequence`\\[:py:class:`~aioqzone.event.login.LoginMethod`]"
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan.ordered_methods:4 of
@@ -124,10 +176,6 @@ msgstr ""
 msgid "`qqqr.exception.HookError`: an error is raised from hook"
 msgstr ""
 
-#: aioqzone.api.loginman.QrStrategy:1 of
-msgid "Represents QR strategy."
-msgstr ""
-
 #: aioqzone.api.loginman.UPLoginMan:1 of
 msgid ""
 "Login manager for username-password login. This manager may trigger "
@@ -149,9 +197,8 @@ msgstr ""
 
 #: aioqzone.api.loginman._NextMethodInterrupt:1 of
 msgid ""
-"Internal exception represents the condition that the login method is "
-"interrupted and the caller could choose the next login method or just to "
-"raise a :exc:`.LoginError`."
+"Internal exception represents the condition that the login method is interrupted and the caller "
+"could choose the next login method or just to raise a :exc:`.LoginError`."
 msgstr ""
 
 #~ msgid "Raises"
@@ -161,4 +208,10 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Returns"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.event.login.Loginable`]"
+#~ msgstr ""
+
+#~ msgid "Represents QR strategy."
 #~ msgstr ""

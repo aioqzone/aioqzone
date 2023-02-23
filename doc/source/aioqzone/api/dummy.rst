@@ -1,5 +1,5 @@
 Qzone API with Typing and Validation
 =======================================
 
-.. autoclass:: aioqzone.api.DummyQapi
+.. autoclass:: aioqzone.api.QzoneAPI
     :members:

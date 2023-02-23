@@ -1,5 +1,5 @@
 Qzone API
 ================
 
-.. autoclass:: aioqzone.api.raw.QzoneApi
+.. autoclass:: aioqzone.api.raw.QzoneRawAPI
     :members:
