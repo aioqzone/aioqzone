@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.labels.*.name, 'python')
+    if: contains(github.event.pull_request.labels.*.name, 'release')
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
