@@ -2,12 +2,12 @@ import sys
 from dataclasses import dataclass
 
 if sys.version_info >= (3, 9):
-    frozen = dataclass(frozen=True, slots=True)
+    frozen_args = dict(frozen=True, slots=True)
 else:
-    frozen = dataclass(frozen=True)
+    frozen_args = dict(frozen=True)
 
 
-@frozen
+@dataclass(**frozen_args)
 class PT_QR_APP:
     app: str = ""
     link: str = ""
@@ -15,13 +15,13 @@ class PT_QR_APP:
     help: str = ""
 
 
-@frozen
+@dataclass(**frozen_args)
 class Proxy:
-    proxy_url: str
     s_url: str
+    proxy_url: str = ""
 
 
-@frozen
+@dataclass(**frozen_args)
 class APPID:
     appid: int
     daid: int

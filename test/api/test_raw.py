@@ -5,7 +5,7 @@ import pytest
 import pytest_asyncio
 
 from aioqzone.api.loginman import MixedLoginMan
-from aioqzone.api.raw import QzoneRawAPI
+from aioqzone.api.raw import QzoneWebRawAPI
 from aioqzone.exception import LoginError
 from aioqzone.type.internal import LikeData
 from aioqzone.utils.html import HtmlContent, HtmlInfo
@@ -22,11 +22,11 @@ def storage():
 
 @pytest_asyncio.fixture(scope="module")
 async def api(client: ClientAdapter, man: MixedLoginMan):
-    yield QzoneRawAPI(client, man)
+    yield QzoneWebRawAPI(client, man)
 
 
 class TestDownload:
-    async def test_more(self, api: QzoneRawAPI, storage: list):
+    async def test_more(self, api: QzoneWebRawAPI, storage: list):
         try:
             f = await api.feeds3_html_more(0)
             r = await asyncio.gather(*(api.feeds3_html_more(i) for i in range(1, 3)))
@@ -38,7 +38,7 @@ class TestDownload:
         assert storage
 
     @pytest.mark.upstream
-    async def test_complete(self, api: QzoneRawAPI, storage: list):
+    async def test_complete(self, api: QzoneWebRawAPI, storage: list):
         if not storage:
             pytest.skip("storage is empty")
         f: Optional[dict] = first(storage, default=None)
@@ -47,7 +47,7 @@ class TestDownload:
         d = await api.emotion_getcomments(f["uin"], f["key"], info.feedstype)
         assert "newFeedXML" in d
 
-    async def test_detail(self, api: QzoneRawAPI, storage: list):
+    async def test_detail(self, api: QzoneWebRawAPI, storage: list):
         if not storage:
             pytest.skip("storage is empty")
         f: Optional[dict] = first(storage, lambda f: int(f["appid"]) == 311, default=None)
@@ -56,7 +56,7 @@ class TestDownload:
         assert f
         await api.emotion_msgdetail(f["uin"], f["key"])
 
-    async def test_heartbeat(self, api: QzoneRawAPI):
+    async def test_heartbeat(self, api: QzoneWebRawAPI):
         try:
             d = await api.get_feeds_count()
         except LoginError:
@@ -67,7 +67,7 @@ class TestDownload:
             assert isinstance(k, str)
             assert isinstance(v, int)
 
-    async def test_like(self, api: QzoneRawAPI, storage: list):
+    async def test_like(self, api: QzoneWebRawAPI, storage: list):
         if not storage:
             pytest.skip("storage is empty")
         f: Optional[Tuple[dict, HtmlInfo]] = first(
@@ -91,7 +91,7 @@ class TestDownload:
         assert await api.like_app(ld, not info.islike)
         assert await api.like_app(ld, bool(info.islike))
 
-    async def test_photo_list(self, api: QzoneRawAPI, storage: list):
+    async def test_photo_list(self, api: QzoneWebRawAPI, storage: list):
         if not storage:
             pytest.skip("storage is empty")
         f: Optional[HtmlContent] = first(
@@ -107,7 +107,7 @@ class TestDownload:
 
 
 @pytest_asyncio.fixture(scope="class")
-async def published(api: QzoneRawAPI):
+async def published(api: QzoneWebRawAPI):
     try:
         r = await api.emotion_publish("Test")
     except LoginError:
@@ -124,14 +124,14 @@ class TestUpload:
             pytest.xfail("login failed")
             # should fail this entire class
 
-    async def test_reply(self, api: QzoneRawAPI, published: Optional[dict]):
+    async def test_reply(self, api: QzoneWebRawAPI, published: Optional[dict]):
         if published is None:
             pytest.skip("login failed")
         _, info = HtmlInfo.from_html(published["feedinfo"])
         r = await api.emotion_re_feeds("comment", info.topicid, 0, api.login.uin)
         assert isinstance(r, str)
 
-    async def test_delete(self, api: QzoneRawAPI, published: Optional[dict]):
+    async def test_delete(self, api: QzoneWebRawAPI, published: Optional[dict]):
         if published is None:
             pytest.skip("login failed")
         _, info = HtmlInfo.from_html(published["feedinfo"])

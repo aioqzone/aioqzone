@@ -12,7 +12,7 @@ from .entity import HasConEntity, HasContent
 
 # Below are the response reps of Qzone Apis.
 class FeedRep(BaseModel):
-    """Represents a feed in :meth:`~aioqzone.api.DummyQapi.feeds3_html_more`.
+    """Represents a feed in :meth:`~aioqzone.api.QzoneWebAPI.feeds3_html_more`.
     The feed content is in html format.
     """
 

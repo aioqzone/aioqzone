@@ -1,0 +1,5 @@
+Qzone H5 API
+================
+
+.. autoclass:: aioqzone.api.h5.QzoneH5API
+    :members:

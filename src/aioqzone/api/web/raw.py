@@ -10,27 +10,26 @@ from urllib.parse import parse_qs
 
 from httpx import HTTPStatusError
 
-import aioqzone.api.constant as const
+import aioqzone.api.web.constant as const
+from aioqzone.api.loginman import Loginable
+from aioqzone.exception import CorruptError, QzoneError
+from aioqzone.type.internal import AlbumData, LikeData
+from aioqzone.utils.regex import response_callback
+from aioqzone.utils.time import time_ms
 from jssupport.jsjson import JsonValue, json_loads
 from qqqr.utils.daug import du
 from qqqr.utils.net import ClientAdapter, raise_for_status
-
-from ..exception import CorruptError, QzoneError
-from ..type.internal import AlbumData, LikeData
-from ..utils.regex import response_callback
-from ..utils.time import time_ms
-from .loginman import Loginable
 
 logger = logging.getLogger(__name__)
 
 StrDict = Dict[str, JsonValue]
 
 
-class QzoneRawAPI:
+class QzoneWebRawAPI:
     """Just a wrapper for Qzone http interface. No type validating.
 
-    .. versionchanged:: 0.12.0
-        rename to ``QzoneRawAPI``
+    .. versionchanged:: 0.12.1
+        rename to ``QzoneWebRawAPI``
     """
 
     encoding = "utf-8"
