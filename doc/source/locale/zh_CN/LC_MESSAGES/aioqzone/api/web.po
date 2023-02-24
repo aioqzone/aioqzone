@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 10:36+0800\n"
+"POT-Creation-Date: 2023-02-24 20:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -285,4 +285,168 @@ msgstr ""
 #~ "typed response. The value returned is usually one"
 #~ " or more :class:`BaseModel`, sometimes just a basic"
 #~ " type if not needed."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A wrapper of :class:`.QzoneWebRawAPI`. It will validate"
+#~ " the returns from :class:`.QzoneWebRawAPI`, and return "
+#~ "a typed response. The value returned is usually "
+#~ "one or more :class:`BaseModel`, sometimes just a "
+#~ "basic type if not needed."
+#~ msgstr ""
+
+#~ msgid "rename to ``QzoneWebAPI``"
+#~ msgstr ""
+
+#~ msgid "Get complete html of a given feed"
+#~ msgstr ""
+
+#~ msgid "参数"
+#~ msgstr ""
+
+#~ msgid "uin"
+#~ msgstr ""
+
+#~ msgid "feed id"
+#~ msgstr ""
+
+#~ msgid "feedstype in html"
+#~ msgstr ""
+
+#~ msgid "抛出"
+#~ msgstr ""
+
+#~ msgid "error http response code"
+#~ msgstr ""
+
+#~ msgid "error qzone response code"
+#~ msgstr ""
+
+#~ msgid "raises"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "All error that may be raised from "
+#~ ":meth:`.login.new_cookie`, which depends on the login "
+#~ "manager you passed in."
+#~ msgstr ""
+
+#~ msgid "返回类型"
+#~ msgstr ""
+
+#~ msgid ":py:class:`str`"
+#~ msgstr ""
+
+#~ msgid "返回"
+#~ msgstr ""
+
+#~ msgid "response dict"
+#~ msgstr ""
+
+#~ msgid "Get detail of a given msg."
+#~ msgstr ""
+
+#~ msgid "owner uin"
+#~ msgstr ""
+
+#~ msgid "feed id, named fid, tid or feedkey"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.type.resp.FeedDetailRep`"
+#~ msgstr ""
+
+#~ msgid "a dict represents the feed in detail."
+#~ msgstr ""
+
+#~ msgid "share msg is not support, i.e. `appid=311`"
+#~ msgstr ""
+
+#~ msgid "Get msg(feed?) list of a user."
+#~ msgstr ""
+
+#~ msgid "number, defaults to 20"
+#~ msgstr ""
+
+#~ msgid "start position, defaults to 0"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.type.resp.MsgListElm`]"
+#~ msgstr ""
+
+#~ msgid "a list of messages"
+#~ msgstr ""
+
+#~ msgid "Publish a feed. appid=311."
+#~ msgstr ""
+
+#~ msgid "text content."
+#~ msgstr ""
+
+#~ msgid "feed access right, defaults to 0 (Not used till now)"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.type.resp.PublishResp`"
+#~ msgstr ""
+
+#~ msgid "qzone response as is, containing feed html and fid."
+#~ msgstr ""
+
+#~ msgid "This api is under development. It has basic functions only."
+#~ msgstr ""
+
+#~ msgid "This will call :meth:`.QzoneWebRawAPI.feeds3_html_more`."
+#~ msgstr ""
+
+#~ msgid ":obj:`~.FeedMoreResp.aux` field of last return (pagenum - 1)."
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.type.resp.FeedMoreResp`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "a validated and typed response with a list of"
+#~ " :obj:`~.FeedMoreResp.feeds` and :obj:`~.FeedMoreResp.aux` info."
+#~ msgstr ""
+
+#~ msgid "use `aux` instead of previous `trans` keyword."
+#~ msgstr ""
+
+#~ msgid "Get detail of an album, including raw image url."
+#~ msgstr ""
+
+#~ msgid "Necessary album data"
+#~ msgstr ""
+
+#~ msgid "pic num"
+#~ msgstr ""
+
+#~ msgid "maybe data is corruptted"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.type.resp.FloatViewPhoto`]"
+#~ msgstr ""
+
+#~ msgid "album details"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This api is a 'slow' api, means it always "
+#~ "returns an error code, requesting a retry a "
+#~ "moment later. Use :meth:`.emotion_msgdetail` to get raw"
+#~ " photo/video in a feed."
+#~ msgstr ""
+
+#~ msgid "Get feeds update count (new feeds, new photos, new comments, etc)"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.type.resp.FeedsCount`"
+#~ msgstr ""
+
+#~ msgid "update counts"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This api is also the 'keep-alive' signal to"
+#~ " avoid cookie from expiring. Call this api every"
+#~ " 300s can help keep cookie alive."
 #~ msgstr ""

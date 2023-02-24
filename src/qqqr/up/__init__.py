@@ -7,7 +7,7 @@ from typing import List, Optional, Type
 
 from ..base import LoginBase, LoginSession
 from ..constant import StatusCode
-from ..event import Emittable, NullEvent
+from ..event import Emittable
 from ..event.login import UpEvent
 from ..exception import TencentLoginError
 from ..type import APPID, PT_QR_APP, Proxy
@@ -219,7 +219,7 @@ class UpLogin(LoginBase[UpSession], Emittable[UpEvent]):
                 log.warning("需用户短信验证")
                 if pastcode == StatusCode.NeedSmsVerify:
                     raise TencentLoginError(resp.code, "重复要求动态验证码")
-                if isinstance(self.hook, NullEvent):
+                if UpEvent.GetSmsCode.__name__ in self.hook.__dict__:
                     # fast return so we won't always request smscode which may risk test account.
                     raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 if self.hook.GetSmsCode.__qualname__ == UpEvent.GetSmsCode.__qualname__:

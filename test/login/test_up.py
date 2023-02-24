@@ -4,7 +4,6 @@ import pytest
 import pytest_asyncio
 
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
-from qqqr.event import NullEvent
 from qqqr.exception import TencentLoginError
 from qqqr.up import UpEvent, UpLogin
 from qqqr.utils.net import ClientAdapter
@@ -51,7 +50,10 @@ class TestRequest:
         except TencentLoginError as e:
             if e.code in [StatusCode.RiskyNetwork, StatusCode.ForceQR]:
                 pytest.skip(str(e))
-            elif e.code == StatusCode.NeedSmsVerify and isinstance(login.hook, NullEvent):
+            elif (
+                e.code == StatusCode.NeedSmsVerify
+                and UpEvent.GetSmsCode.__name__ not in login.hook.__dict__
+            ):
                 pytest.skip(str(e))
             else:
                 raise e

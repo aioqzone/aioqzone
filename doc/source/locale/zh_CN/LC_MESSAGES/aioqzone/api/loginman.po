@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 21:12+0800\n"
+"POT-Creation-Date: 2023-02-24 20:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -214,4 +214,144 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Represents QR strategy."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Collect some built-in login manager w/o caching."
+#~ " Users can inherit these managers and implement "
+#~ "their own caching logic."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Abstract class represents a login manager. It is"
+#~ " a :class:`Emittable` class which can emit "
+#~ ":class:`LoginEvent`."
+#~ msgstr ""
+
+#~ msgid "Subclasses *must* implement this method to return a cookie dict."
+#~ msgstr ""
+
+#~ msgid "返回类型"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
+#~ msgstr ""
+
+#~ msgid "返回"
+#~ msgstr ""
+
+#~ msgid "cookie dict"
+#~ msgstr ""
+
+#~ msgid "Get a cookie dict using any method. Allows cached cookie."
+#~ msgstr ""
+
+#~ msgid "cookie. Cached cookie is preferable."
+#~ msgstr ""
+
+#~ msgid "Calculate ``gtk`` using ``pskey`` filed in the cookie."
+#~ msgstr ""
+
+#~ msgid "gtk"
+#~ msgstr ""
+
+#~ msgid "``0`` denotes no existing login."
+#~ msgstr ""
+
+#~ msgid ":meth:`qqqr.utils.encrypt.gtk`"
+#~ msgstr ""
+
+#~ msgid "Last login time stamp. 0 represents no login since created."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Get a new cookie dict, which means cached "
+#~ "cookie is not allowed. Generally, this will trigger"
+#~ " a login."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This method uses :class:`asyncio.Lock` to ensure that "
+#~ "only one request can trigger an actual login "
+#~ "at the same time, other requests will block "
+#~ "until the first is complete and share the "
+#~ "cookie from this single login."
+#~ msgstr ""
+
+#~ msgid "cookie. Shouldn't be a cached one."
+#~ msgstr ""
+
+#~ msgid "A login manager that will try methods according to the given :class:`.QrStrategy`."
+#~ msgstr ""
+
+#~ msgid "Make it a :class:`EventManager`."
+#~ msgstr ""
+
+#~ msgid "抛出"
+#~ msgstr ""
+
+#~ msgid "if qr login is canceled and no succeeding method exist and success."
+#~ msgstr ""
+
+#~ msgid "if all login methods are removed by subclasses."
+#~ msgstr ""
+
+#~ msgid "if all login methods failed."
+#~ msgstr ""
+
+#~ msgid "if unexcpected error occured in any login method. Succeeding method will not be used."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Subclasses can inherit this method to choose a "
+#~ "subset of `._order` according to its own policy."
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.Sequence`\\[:py:class:`~aioqzone.event.login.LoginMethod`]"
+#~ msgstr ""
+
+#~ msgid "a subset of `._order`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Login manager for QR login. This manager may "
+#~ "trigger :meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and "
+#~ ":meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook."
+#~ msgstr ""
+
+#~ msgid "qr polling task is canceled"
+#~ msgstr ""
+
+#~ msgid "on exceptions do not break the system, such as timeout, Http errors, etc."
+#~ msgstr ""
+
+#~ msgid "on unexpected error raised when polling"
+#~ msgstr ""
+
+#~ msgid "raises"
+#~ msgstr ""
+
+#~ msgid "`qqqr.exception.HookError`: an error is raised from hook"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Login manager for username-password login. This "
+#~ "manager may trigger :meth:`~aioqzone.event.login.LoginEvent.LoginSuccess`"
+#~ " and :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook."
+#~ msgstr ""
+
+#~ msgid "login error when up login."
+#~ msgstr ""
+
+#~ msgid "if acceptable errors occured, for example, http errors."
+#~ msgstr ""
+
+#~ msgid "if unexpected error raised"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Internal exception represents the condition that the "
+#~ "login method is interrupted and the caller could"
+#~ " choose the next login method or just to "
+#~ "raise a :exc:`.LoginError`."
 #~ msgstr ""

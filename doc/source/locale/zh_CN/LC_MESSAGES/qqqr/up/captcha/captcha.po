@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 21:04+0800\n"
+"POT-Creation-Date: 2023-02-24 20:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,4 +128,82 @@ msgstr ""
 #~ "The solve_captcha function solves the captcha problem."
 #~ " If captcha images is not set, it will "
 #~ "call :meth:`.get_captcha_problem` firstly."
+#~ msgstr ""
+
+#~ msgid "The base64_ua function encodes the User-Agent header in base64."
+#~ msgstr ""
+
+#~ msgid "返回"
+#~ msgstr ""
+
+#~ msgid "A string containing the base64 encoded user agent"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The get_captcha_problem function is a coroutine that "
+#~ "accepts a TcaptchaSession object as an argument. It"
+#~ " then uses the session to make an HTTP GET"
+#~ " request to the captcha images (the problem). "
+#~ "The images will be stored in the given "
+#~ "session."
+#~ msgstr ""
+
+#~ msgid "参数"
+#~ msgstr ""
+
+#~ msgid "captcha session"
+#~ msgstr ""
+
+#~ msgid "None"
+#~ msgstr ""
+
+#~ msgid "Get the client's public IP(v4) address."
+#~ msgstr ""
+
+#~ msgid "ipv4 str, or empty str if all apis failed."
+#~ msgstr ""
+
+#~ msgid "The get_tdc function is a coroutine that sets an instance of the :class:`TDC` class to `sess`."
+#~ msgstr ""
+
+#~ msgid "Specify the type of :class:`TDC` instance to be returned, default as :class:`TDC`."
+#~ msgstr ""
+
+#~ msgid "call this right after calling :meth:`.prehandle`"
+#~ msgstr ""
+
+#~ msgid "``prehandle``. Call this method to generate a new verify session."
+#~ msgstr ""
+
+#~ msgid "a tcaptcha session"
+#~ msgstr ""
+
+#~ msgid "alias of :meth:`.new`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The solve_captcha function solves the captcha problem."
+#~ " It assumes that :obj:`TcaptchaSession.cdn_imgs` is already"
+#~ " initialized, so call :meth:`.get_captcha_problem` firstly."
+#~ msgstr ""
+
+#~ msgid "It then solve the captcha as that in :class:`.Jigsaw`. The answer is saved into `sess`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This function will also call :meth:`TDC.set_data` to "
+#~ "imitate human behavior when solving captcha."
+#~ msgstr ""
+
+#~ msgid "Store the information of the current session"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The solve_workload function solves the workload from "
+#~ "Tcaptcha: It solves md5(:obj:`PowCfg.prefix` + str(?)) =="
+#~ " :obj:`PowCfg.md5`. The result and the calculating "
+#~ "duration will be saved into this session."
+#~ msgstr ""
+
+#~ msgid "Calculating timeout, default as 30 seconds."
 #~ msgstr ""
