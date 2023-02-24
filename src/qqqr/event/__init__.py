@@ -10,8 +10,10 @@ from typing import (
     Any,
     Awaitable,
     Callable,
+    ClassVar,
     Coroutine,
     Dict,
+    Generator,
     Generic,
     List,
     Optional,
@@ -22,7 +24,7 @@ from typing import (
     Union,
 )
 
-from typing_extensions import ParamSpec, final
+from typing_extensions import ParamSpec, Self, final
 
 from qqqr.exception import HookError
 
@@ -30,67 +32,8 @@ T = TypeVar("T")
 P = ParamSpec("P")
 
 
-class Event(Generic[T]):
-    """Base class for event system.
-
-    .. code-block:: python
-        :linenos:
-        :caption: my_events.py
-
-        class Event1(Event):
-            async def database_query(self, pid: int) -> str:
-                pass
-
-    .. code-block:: python
-        :linenos:
-        :caption: my_hooks.py
-
-        from typing import TYPE_CHECKING
-
-        if TYPE_CHECKING:
-            from app import AppClass    # to avoid circular import
-
-        class Event1Hook(Event1["AppClass"]):
-            async def database_query(self, pid: int) -> str:
-                return await self.scope.db.query(pid) or ""   # typing of scope is ok
-
-    .. code-block:: python
-        :linenos:
-        :caption: service.py
-
-        from my_event import Event1
-
-        class Service(Emittable[Event1]):
-            async def run(self):
-                ...
-                name = await self.hook.database_query(pid)
-                ...
-
-    .. code-block:: python
-        :linenos:
-        :caption: app.py
-
-        from my_hooks import Event1Hook
-        from service import Service
-
-        class AppClass:
-            db: Database
-
-            def __init__(self):
-                self.event1_hook = Event1Hook()
-                self.event1_hook.link_to_scope(self)
-                self.service = Service()
-                self.service.register_hook(self.event1_hook)
-    """
-
-    scope: T
-    """Access to a larger scope. This may allow hooks to achieve more functions.
-
-    .. warning:: Can only be access after calling `link_to_scope`."""
-
-    def link_to_scope(self, scope: T):
-        """Set the :obj:`scope`."""
-        self.scope = scope
+class Event:
+    """Base class for event system."""
 
 
 Evt = TypeVar("Evt", bound=Event)
@@ -105,7 +48,7 @@ class NullEvent(Event):
         try:
             return super().__getattribute__(__name)
         except AttributeError:
-            raise AssertionError("call `o.register_hook` before accessing `o.hook`")
+            raise AttributeError(__name, "call `o.register_hook` before accessing `o.hook`")
 
     def __repr__(self) -> str:
         return "NullEvent()"
@@ -117,12 +60,23 @@ class Tasksets:
     _tasks: Dict[str, Set[asyncio.Task]]
 
     def __init__(self) -> None:
+        super().__init__()
         self._tasks = defaultdict(set)
 
-    def add_hook_ref(self, hook_cls, coro):
-        # type: (str, Coroutine[Any, Any, T]) -> asyncio.Task[T]
+    def add_hook_ref(self, hook_cls: str, coro):
+        # type: (str, Coroutine[Any, Any, T] | Generator[Any, Any, T] | asyncio.Task[T]) -> asyncio.Task[T]
         # NOTE: asyncio.Task becomes generic since py39
-        task = asyncio.create_task(coro)
+        """Add an awaitable into the given taskset.
+
+        :param hook_cls: taskset key
+        :param coro: the awaitable (`Coroutine`, `Generator` and `~asyncio.Task` supported)
+        """
+        if isinstance(coro, (Coroutine, Generator)):
+            task = asyncio.create_task(coro)
+        elif isinstance(coro, asyncio.Task):
+            task = coro
+        else:
+            raise TypeError(coro)
         self._tasks[hook_cls].add(task)
         task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
         return task
@@ -157,12 +111,15 @@ class Tasksets:
             return set(chain(r[0], r2[0])), set()
         return r
 
+    @final
     def clear(self, *hook_cls: str, cancel: bool = True):
-        """Clear the given task sets
+        """Clear the given task sets.
 
-        :param hook_cls: task class names
+        :param hook_cls: task class names. **If not given, all tasks will be cleared.**
         :param cancel: Cancel the task if a set is not empty, defaults to True. Else will just clear the ref.
         """
+        if not hook_cls:
+            hook_cls = tuple(self._tasks.keys())
         for i in hook_cls:
             s = self._tasks[i]
             if s and not cancel:
@@ -173,7 +130,7 @@ class Tasksets:
                 t.cancel()  # done callback will remove the task from this set
 
 
-class Emittable(Tasksets, Generic[Evt]):
+class Emittable(Generic[Evt], Tasksets):
     hook: Union[Evt, NullEvent] = NullEvent()
 
     def register_hook(self, hook: Evt):
@@ -182,97 +139,99 @@ class Emittable(Tasksets, Generic[Evt]):
 
 
 class EventManager:
-    """EventManager is a convenient way to create/trace/manage friend classes."""
+    """EventManager is a convenient way to create/trace/manage friend classes.
 
-    __orig_bases__: Dict[Type[Event], Type[Event]]
-    """Keys as base classes, values as their subclasses."""
-    __bases_init__: bool
-    """The `__orig_bases__` has been updated using :meth:`_update_bases`."""
+    .. versionchanged:: 0.12.0
+    """
 
-    def sub_of(self, event: Type[Evt]) -> Type[Evt]:
-        """Use this method to get current inheritence from an ancestor which was given to the
-        factory.
+    __events_mro__: ClassVar[
+        Dict[Type[Event], Tuple[Callable[[Self, Type[Event]], Type[Event]], ...]]
+    ]
+    """Keys as base classes, values as hook classes."""
+    __hooks__: Dict[Type[Event], Event]
+    """Keys as base classes, values as hook instances."""
 
-        >>> class Mgr(EventManager[Event1, Event2]): pass
-        >>> m = Mgr()
-        >>> m.sub_of(Event1)    # must be one of Event1, Event2
-        Event1
+    def type_of(self, event: Type[Evt]) -> Type[Evt]:
+        """Get current hook class by the given type.
+
+        .. versionadded:: 0.12.0
         """
-        return self.__orig_bases__[event]  # type: ignore
+        base: Type[Evt] = event
+        for level in self.__events_mro__[event]:
+            base = level(self, base)  # type: ignore
+        return base
+
+    def inst_of(self, event: Type[Evt], *args, **kwds) -> Evt:
+        """A helper function that initiate a hook with given args.
+
+        .. versionadded:: 0.12.0
+        """
+        if event in self.__hooks__:
+            return self[event]
+
+        self.__hooks__[event] = o = self.type_of(event)(*args, **kwds)
+        return o
+
+    def __getitem__(self, event: Type[Evt]) -> Evt:
+        return self.__hooks__[event]  # type: ignore
 
     def __repr__(self) -> str:
-        return f"EventManager of {self.__orig_bases__}"
+        events = [c.__name__ for c in self.__events_mro__.keys()]
+        return f"<EventManager {events}>"
 
     def __class_getitem__(cls, events: List[Type[Event]]):
-        """Factory."""
+        """Factory. Create a EventManager class of the given events.
 
-        name = "evtmgr_" + "_".join(i.__name__.lower() for i in events)
-        return type(
-            name,
-            (cls,),
-            dict(
-                __orig_bases__={i: i for i in events},
-                __bases_init__=False,
-            ),
+        :meta public:
+        """
+
+        name = "evtmgr_" + "_".join(
+            i.__name__.lower() for i in sorted(events, key=lambda c: c.__name__)
         )
+        cls = type(name, (cls,), dict(__events_mro__={k: () for k in events}))
+        return cls
 
-    def _get_sub_func(self, ty: Type[Evt]) -> Optional[Callable[[Type[Evt]], Type[Evt]]]:
-        """Given a event type, returns a method in which a subclass is returned.
-        By default these methods should be named as `_sub_xxxx` (lowercase). One may
-        override this method to change this manner.
+    def __new__(cls, *_, **__):
+        self = super().__new__(cls)
+        self.__hooks__ = {}
+        return self
 
-        .. code-block:: python
-            :caption: Example
-            :linenos:
 
-            class Mgr(EventManager[Event1]):
-                def _sub_event1(self, base):
-                    class my_event1(base): ...
-                    return my_event1
+class sub_of(Generic[Evt]):
+    """Add a hook class scope.
 
-        :meta public:
-        """
-        return getattr(self, f"_sub_{ty.__name__.lower()}", None)
+    .. code-block:: python
+        :linenos:
+        :caption: Example
 
-    def __init__(self) -> None:
-        self._update_bases()
+        class App(EventManager[Event1, Event2]):
+            @sub_of(Event1)
+            def _sub_event1(self, base):
+                class app_event1(base): ...
+                return app_event1
+    """
 
-    def _update_bases(self):
-        """Update bases. Could be called multiple times if the manager is subclassed.
+    def __init__(self, event: Type[Evt]) -> None:
+        self.event = event
 
-        .. code-block:: python
-            :caption: Example
-            :linenos:
+    def __call__(self, meth: Callable[[Any, Type[Evt]], Type[Evt]]):
+        self.meth = meth
+        return self
 
-            class BaseMgr(EventManager[Event1]):
-                def _sub_event1(self, base):
-                    class basemgr_event1(base): ...
-                def __init__(self):
-                    # call _update_bases the first time, update event1 to basemgr_event1
-                    super().__init__()
-
-            class SubMgr(BaseMgr):
-                def _sub_event1(self, base):
-                    class submgr_event1(base): ...
-                def __init__(self):
-                    # call _update_bases the second time, update basemgr_event1 to submgr_event1
-                    super().__init__()
-
-        :meta public:
-        """
-        if self.__bases_init__:
-            return
-        for k, v in self.__orig_bases__.items():
-            sub_func = self._get_sub_func(k)
-            if sub_func is None:
-                continue
-            self.__orig_bases__[k] = sub_func(v)
-        self.__bases_init__ = True
+    def __set_name__(self, owner: Type[EventManager], name):
+        if not "__events_mro__" in owner.__dict__:
+            owner.__events_mro__ = owner.__events_mro__.copy()
+        owner.__events_mro__[self.event] = (*owner.__events_mro__[self.event], self.meth)  # type: ignore
+        setattr(owner, name, self.meth)
 
 
 def hook_guard(hook: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
-    """This can be used as a decorator to ensure a hook can only raise :exc:`HookError`."""
-    assert not hasattr(hook, "__hook_guard__")
+    """This can be used as a decorator to ensure a hook can only raise :exc:`HookError`.
+
+    ..note:: If the hook is already wrapped, it will be returned as is.
+    """
+    if hasattr(hook, "__hook_guard__"):
+        return hook  # type: ignore
 
     @wraps(hook)
     async def guard_wrapper(*args: P.args, **kwds: P.kwargs) -> T:

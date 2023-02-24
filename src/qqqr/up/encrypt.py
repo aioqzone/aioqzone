@@ -17,6 +17,7 @@ LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_log
 
 class PasswdEncoder(ABC):
     def __init__(self, client: ClientAdapter, passwd: str) -> None:
+        super().__init__()
         self.client = client
         self._passwd = passwd
 

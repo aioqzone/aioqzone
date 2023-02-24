@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"POT-Creation-Date: 2023-02-23 21:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/qqqr/up/captcha/jigsaw.rst:2
 msgid "Solving Jigsaw-Like Tcaptcha"
@@ -25,69 +25,84 @@ msgstr ""
 msgid "Represents the jigsaw piece."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.Piece.crop:1
+#: ../../docstring of qqqr.up.captcha.jigsaw.Piece.bbox:1
+msgid "The bounding box of the jigsaw piece in [x, y, w, h]"
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.Piece.build_template:1
 msgid ""
-"The crop method crops the image and saves the contour of the jigsaw "
-"piece. It also saves a bounding box for that contour, and calculates "
-"padding to be used in cropping."
+"This method attempts to generate a piece view like that on the puzzle. In order to help "
+":meth:`cv2.matchTemplate` to get an accurate result."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.Piece.crop:4
-msgid ""
-"Use `.bbox` to get bounding box of the piece, and `.padding` to get "
-"padding size."
-msgstr ""
-
-#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.img:1
-msgid "BGR channel masked by :obj:`.mask`"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.imitated:1
-msgid ""
-"This method attempts to generate a piece view like that on the puzzle. In"
-" order to help `cv2.matchTemplate` to get an accurate result."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.imitated:4
+#: of qqqr.up.captcha.jigsaw.Piece.build_template:4
 msgid "It will dim the original piece and draw its contour with white lines."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.Piece.imitated qqqr.up.captcha.jigsaw.imitate_drag
+#: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.imitate_drag
 msgid "参数"
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.Piece.imitated:7
+#: of qqqr.up.captcha.jigsaw.Piece.build_template:7
 msgid "coeff to be multiplied with the image in order to dim it, default as 0.3"
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.Piece.imitated qqqr.up.captcha.jigsaw.imitate_drag
+#: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.Piece.strip
+#: qqqr.up.captcha.jigsaw.Piece.strip_mask qqqr.up.captcha.jigsaw.imitate_drag
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.Piece.build_template:8 qqqr.up.captcha.jigsaw.Piece.strip:7
+#: qqqr.up.captcha.jigsaw.Piece.strip_mask:4
+msgid ":py:class:`~numpy.ndarray`"
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.imitate_drag
 msgid "返回"
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.Piece.imitated:8
+#: of qqqr.up.captcha.jigsaw.Piece.build_template:9
 msgid "generated piece image."
 msgstr ""
 
-#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.mask:1
-msgid "alpha channel"
+#: ../../docstring of qqqr.up.captcha.jigsaw.Piece.cont:1
+msgid "The contour of the jigsaw piece in [N, 1, 2]i4, the last axis represents (x,y)."
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.Piece.find_bbox:1
+msgid ""
+"The crop method crops the image and saves the contour of the jigsaw piece. It also saves a "
+"bounding box for that contour, and calculates padding to be used in cropping."
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.Piece.find_bbox:4
+msgid "Use ::obj`.bbox` to get bounding box of the piece, and :obj:`.padding` to get padding size."
+msgstr ""
+
+#: ../../docstring of qqqr.up.captcha.jigsaw.Piece.img:1
+msgid "BGR channel of the jigsaw piece, which is masked by :obj:`.mask`"
+msgstr ""
+
+#: ../../docstring of qqqr.up.captcha.jigsaw.Piece.mask:1
+msgid "The alpha channel of the jigsaw piece, which is used as mask."
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.Piece.padding:1
+msgid "The padding of the jigsaw piece sprite in [left, top, right, bottom]"
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.Piece.strip:1
-msgid ""
-"The strip method crops the image and returns exactly the piece w/o any "
-"padding."
+msgid "The strip method crops the image and returns exactly the piece w/o any padding."
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.Piece.strip:3
 msgid ""
-"Once cropped, use `.bbox` to get bounding box of the piece, and use "
-"`.padding` to get padding size."
+"Once cropped, use `.bbox` to get bounding box of the piece, and use `.padding` to get padding "
+"size."
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.Piece.strip_mask:1
-msgid ""
-"Generate a mask for `cv2.matchTemplate` since the piece is in an "
-"irregular shape."
+msgid "Generate a mask for `cv2.matchTemplate` since the piece is in an irregular shape."
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.imitate_drag:1
@@ -96,28 +111,31 @@ msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.imitate_drag:3
 msgid ""
-"The function takes one argument, x, which is the number of pixels that "
-"the user drags. The function returns a list of lists containing three "
-"integers: [x_coordinate, y_coordinate, time]. Each coordinate and time "
-"value is randomly generated according to corresponding rules."
+"The function takes one argument, x, which is the number of pixels that the user drags. The "
+"function returns a tuple of lists containing three integers: [x_coordinate, y_coordinate]. Each "
+"coordinate and time value is randomly generated according to corresponding rules."
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.imitate_drag:8
-msgid "Specify the number of pixels that the user drags."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.imitate_drag
-msgid "返回类型"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.imitate_drag:9
-msgid ":py:class:`~typing.List`\\[:py:class:`~typing.List`\\[:py:class:`int`]]"
+msgid "Specify the position that the drag starts."
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.imitate_drag:10
+msgid "Specify the position that the drag ends."
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.imitate_drag:12
+msgid "Specify the y-coordinate."
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.imitate_drag:13
 msgid ""
-"A list of lists, where each sublist contains three elements: the x "
-"coordinate, y coordinate and time"
+":py:data:`~typing.Tuple`\\[:py:class:`~typing.List`\\[:py:class:`int`], "
+":py:class:`~typing.List`\\[:py:class:`int`]]"
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.imitate_drag:14
+msgid "Two lists consist of the x coordinate and y coordinate"
 msgstr ""
 
 #~ msgid "Parameters"
@@ -127,4 +145,40 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Return type"
+#~ msgstr ""
+
+#~ msgid "Use `.bbox` to get bounding box of the piece, and `.padding` to get padding size."
+#~ msgstr ""
+
+#~ msgid "BGR channel masked by :obj:`.mask`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This method attempts to generate a piece view "
+#~ "like that on the puzzle. In order to help "
+#~ "`cv2.matchTemplate` to get an accurate result."
+#~ msgstr ""
+
+#~ msgid "alpha channel"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The function takes one argument, x, which is "
+#~ "the number of pixels that the user drags. The"
+#~ " function returns a list of lists containing "
+#~ "three integers: [x_coordinate, y_coordinate, time]. Each "
+#~ "coordinate and time value is randomly generated "
+#~ "according to corresponding rules."
+#~ msgstr ""
+
+#~ msgid "Specify the number of pixels that the user drags."
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.List`\\[:py:class:`~typing.List`\\[:py:class:`int`]]"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A list of lists, where each sublist contains "
+#~ "three elements: the x coordinate, y coordinate and"
+#~ " time"
 #~ msgstr ""

@@ -14,6 +14,3 @@ Login Events
 
 .. autoclass:: UPEvent
     :members:
-
-.. autoclass:: Loginable
-    :members:

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Sequence
 
 
 class QzoneError(RuntimeError):
@@ -11,7 +11,7 @@ class QzoneError(RuntimeError):
         self.rdict = rdict
         if len(args) > 0 and isinstance(args[0], str):
             self.msg = args[0]
-        RuntimeError.__init__(self, *args)
+        super().__init__(self, *args)
 
     def __str__(self) -> str:
         return f"Code {self.code}: {self.msg}"
@@ -20,14 +20,14 @@ class QzoneError(RuntimeError):
 class LoginError(RuntimeError):
     """Login failed for some reasons."""
 
-    def __init__(self, msg: str, strategy: Optional[str] = None) -> None:
+    def __init__(self, msg: str, methods_tried: Optional[Sequence] = None) -> None:
         msg = "登陆失败: " + msg
-        super().__init__(msg, strategy)
+        super().__init__(msg, methods_tried)
         self.msg = msg
-        self.strategy = strategy
+        self.methods_tried = methods_tried or []
 
     def __str__(self) -> str:
-        return f"{self.msg} (strategy={self.strategy})"
+        return f"{self.msg} (tried={self.methods_tried})"
 
 
 class CorruptError(ValueError):

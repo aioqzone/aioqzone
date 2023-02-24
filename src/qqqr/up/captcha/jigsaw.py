@@ -36,6 +36,7 @@ class Piece:
     """The contour of the jigsaw piece in [N, 1, 2]i4, the last axis represents (x,y)."""
 
     def __init__(self, img: mat_u1) -> None:
+        super().__init__()
         self.mask = img[:, :, 3:]
         self.img = img[:, :, :3] * (self.mask >= 128)
         self.find_bbox()
@@ -132,6 +133,7 @@ class Jigsaw:
         :param piece_pos: the piece position on the sprites image, in x-y order.
         :param top: the upper bound (so-called "top") of the gap on the puzzle image.
         """
+        super().__init__()
         self.top = top
         self.background = frombytes(background, flags=cv.IMREAD_COLOR)
 

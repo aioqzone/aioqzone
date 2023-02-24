@@ -10,29 +10,33 @@ from urllib.parse import parse_qs
 
 from httpx import HTTPStatusError
 
-import aioqzone.api.constant as const
+import aioqzone.api.web.constant as const
+from aioqzone.api.loginman import Loginable
+from aioqzone.exception import CorruptError, QzoneError
+from aioqzone.type.internal import AlbumData, LikeData
+from aioqzone.utils.regex import response_callback
+from aioqzone.utils.time import time_ms
 from jssupport.jsjson import JsonValue, json_loads
 from qqqr.utils.daug import du
 from qqqr.utils.net import ClientAdapter, raise_for_status
-
-from ..event.login import Loginable
-from ..exception import CorruptError, QzoneError
-from ..type.internal import AlbumData, LikeData
-from ..utils.regex import response_callback
-from ..utils.time import time_ms
 
 logger = logging.getLogger(__name__)
 
 StrDict = Dict[str, JsonValue]
 
 
-class QzoneApi:
-    """Just a wrapper for Qzone http interface. No type validating."""
+class QzoneWebRawAPI:
+    """Just a wrapper for Qzone http interface. No type validating.
+
+    .. versionchanged:: 0.12.1
+        rename to ``QzoneWebRawAPI``
+    """
 
     encoding = "utf-8"
     host = "https://user.qzone.qq.com"
 
     def __init__(self, client: ClientAdapter, loginman: Loginable) -> None:
+        super().__init__()
         self.client = client
         self.login = loginman
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.11.4.dev1"
+version = "0.12.1.dev1"
 description = "Python wrapper for Qzone web login and Qzone http api."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -27,16 +27,13 @@ exclude = ["*.js"]
 "Bug Tracker" = "https://github.com/aioqzone/aioqzone/issues"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 httpx = "~0.23.0"
 pydantic = "^1.10.4"
 pytz = "^2022.1"
 lxml = "^4.9.1"
 cssselect = "^1.1.0"
-numpy = [
-    { version = "~1.21.6", python = ">=3.7,<3.8" },
-    { version = "^1.22.3", python = "^3.8" },
-]
+numpy = "^1.22.3"
 opencv-python-headless = "^4.7.0"
 rsa = "^4.8"
 
@@ -53,10 +50,7 @@ pytest-asyncio = "~0.20.1"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = [
-    { version = "^2.20.0", python = ">=3.7,<3.8" },
-    { version = "^3.0.1", python = "^3.8" },
-]
+pre-commit = "^3.0.1"
 black = "^22.12.0"
 isort = "^5.11.2"
 
@@ -92,4 +86,4 @@ line_length = 99
 
 [tool.black]
 line-length = 99
-target-version = ['py37']
+target-version = ['py38']

@@ -3,23 +3,24 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: aioqzone \n"
+"Project-Id-Version: aioqzone\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-13 10:13+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-02-23 21:02+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ../../source/reference.rst:2
 msgid "References"
-msgstr ""
+msgstr "参考"
 
 #: ../../source/reference.rst:6
 msgid "Terms"
@@ -31,23 +32,23 @@ msgstr "此处解释一些常用的缩写、别名"
 
 #: ../../source/reference.rst:11
 msgid "appid"
-msgstr ""
+msgstr "appid"
 
 #: ../../source/reference.rst:13
 msgid ""
-"Specifies where the feed is created. For example, the app id of "
-"\"emotion\" is 311, 202 means shares from Wechat or other apps."
+"Specifies where the feed is created. For example, the app id of \"emotion\" is "
+"311, 202 means shares from Wechat or other apps."
 msgstr ""
 
 #: ../../source/reference.rst:15
 msgid "fid"
-msgstr ""
+msgstr "fid"
 
 #: ../../source/reference.rst:17
 msgid ""
-"Means \"feed id\". All \"emotion\" feed has a **unique** fid, but other "
-"app such as shares do not. For those apps, their `fid` field might be a "
-"fixed string."
+"Means \"feed id\". All \"emotion\" feed has a **unique** fid, but other app "
+"such as shares do not. For those apps, their `fid` field might be a fixed "
+"string."
 msgstr ""
 
 #: ../../source/reference.rst:20
@@ -56,12 +57,12 @@ msgstr ""
 
 #: ../../source/reference.rst:21
 msgid "abstime"
-msgstr ""
+msgstr "abstime"
 
 #: ../../source/reference.rst:23
 msgid ""
-"A timestamp represents when the feed is created. All feeds have this "
-"field. If not, generate a persudo one is easy."
+"A timestamp represents when the feed is created. All feeds have this field. If "
+"not, generate a persudo one is easy."
 msgstr ""
 
 #: ../../source/reference.rst:26

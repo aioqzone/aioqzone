@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:45+0800\n"
+"POT-Creation-Date: 2023-02-23 21:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../source/qqqr/up/login.rst:2
 msgid "UpLogin and UpSession"
@@ -23,13 +23,12 @@ msgstr ""
 
 #: of qqqr.up.UpLogin.captcha:1
 msgid ""
-"The captcha function is used to build and cache a :class:`Captcha` "
-"instance. It takes in a string, which is the session id got from "
-":meth:`.new`, and returns the :class:`Captcha` instance."
+"The `captcha` function is used to build a :class:`Captcha` instance. It takes in a string, which"
+" is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance."
 msgstr ""
 
-#: of qqqr.up.UpLogin.captcha qqqr.up.UpLogin.passVC
-#: qqqr.up.UpLogin.send_sms_code qqqr.up.UpLogin.try_login
+#: of qqqr.up.UpLogin.captcha qqqr.up.UpLogin.pass_vc qqqr.up.UpLogin.send_sms_code
+#: qqqr.up.UpLogin.try_login
 msgid "参数"
 msgstr ""
 
@@ -37,8 +36,7 @@ msgstr ""
 msgid "Pass the session id to the captcha function"
 msgstr ""
 
-#: of qqqr.up.UpLogin.captcha qqqr.up.UpLogin.new qqqr.up.UpLogin.passVC
-#: qqqr.up.UpLogin.try_login
+#: of qqqr.up.UpLogin.captcha qqqr.up.UpLogin.new qqqr.up.UpLogin.pass_vc qqqr.up.UpLogin.try_login
 msgid "返回"
 msgstr ""
 
@@ -52,9 +50,8 @@ msgstr ""
 
 #: of qqqr.up.UpLogin.new:1
 msgid ""
-"Create a :class:`UpSession`. This will call `check` api of Qzone, and "
-"receive result about whether this login needs a captcha, sms "
-"verification, etc."
+"Create a :class:`UpSession`. This will call `check` api of Qzone, and receive result about "
+"whether this login needs a captcha, sms verification, etc."
 msgstr ""
 
 #: of qqqr.up.UpLogin.new
@@ -65,18 +62,17 @@ msgstr ""
 msgid "a up login session"
 msgstr ""
 
-#: of qqqr.up.UpLogin.passVC:1
+#: of qqqr.up.UpLogin.pass_vc:1
 msgid ""
-"The passVC function is used to pass the verification tcaptcha. It is "
-"called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` "
-"code."
+"The `pass_vc` function is used to pass the verification tcaptcha. It is called when "
+":meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code."
 msgstr ""
 
-#: of qqqr.up.UpLogin.passVC:5
+#: of qqqr.up.UpLogin.pass_vc:5
 msgid "the session object"
 msgstr ""
 
-#: of qqqr.up.UpLogin.passVC:6
+#: of qqqr.up.UpLogin.pass_vc:6
 msgid "The session with :obj:`~UpSession.verify_rst` is set."
 msgstr ""
 
@@ -90,8 +86,8 @@ msgstr ""
 
 #: of qqqr.up.UpLogin.try_login:1
 msgid ""
-"Check if current session meets the login condition. It takes a session "
-"object and returns response of this try."
+"Check if current session meets the login condition. It takes a session object and returns "
+"response of this try."
 msgstr ""
 
 #: of qqqr.up.UpLogin.try_login:5
@@ -109,4 +105,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Raises"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The captcha function is used to build and "
+#~ "cache a :class:`Captcha` instance. It takes in a"
+#~ " string, which is the session id got from "
+#~ ":meth:`.new`, and returns the :class:`Captcha` instance."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The passVC function is used to pass the "
+#~ "verification tcaptcha. It is called when "
+#~ ":meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code."
 #~ msgstr ""

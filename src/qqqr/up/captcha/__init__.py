@@ -43,8 +43,8 @@ class TcaptchaSession:
         self,
         prehandle: PrehandleResp,
     ) -> None:
+        super().__init__()
         self.prehandle = prehandle
-
         self.set_captcha()
 
     def set_captcha(self):
@@ -111,6 +111,7 @@ class Captcha:
         :param xlogin_url: :obj:`LoginBase.xlogin_url`
         """
 
+        super().__init__()
         self.client = client
         self.appid = appid
         self.sid = sid

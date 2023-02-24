@@ -4,5 +4,6 @@ Qzone APIs
 .. toctree::
     :maxdepth: 1
 
-    raw
-    dummy
+    loginman
+    web
+    h5
