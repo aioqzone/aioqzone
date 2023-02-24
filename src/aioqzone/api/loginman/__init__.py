@@ -189,14 +189,6 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
             self.hook.refresh_flag.clear()
 
 
-class MixedLoginEvent(QREvent, UPEvent):
-    def __instancecheck__(self, o: object) -> bool:
-        return isinstance(o, QREvent) and isinstance(o, UPEvent)
-
-    def __subclasscheck__(self, cls: type) -> bool:
-        return issubclass(cls, QREvent) and issubclass(cls, UPEvent)
-
-
 class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
     """A login manager that will try methods according to the given :class:`.QrStrategy`.
 
