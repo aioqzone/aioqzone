@@ -1,0 +1,34 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2023, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-24 20:44+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../source/qqqr/event/evt.rst:2
+msgid "Event and Hooks"
+msgstr ""
+
+#: ../../source/qqqr/event/evt.rst:4
+msgid ""
+"aioqzone has designed a simple hook management system. You may extend your own event, or just "
+"inherit a event and implement your hooks."
+msgstr ""
+
+#: of qqqr.event.evt.Event:1
+msgid "Base class for event system."
+msgstr ""

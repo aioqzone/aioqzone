@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 21:04+0800\n"
+"POT-Creation-Date: 2023-02-24 20:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,4 +181,100 @@ msgstr ""
 #~ "A list of lists, where each sublist contains "
 #~ "three elements: the x coordinate, y coordinate and"
 #~ " time"
+#~ msgstr ""
+
+#~ msgid "Represents the jigsaw piece."
+#~ msgstr ""
+
+#~ msgid "The bounding box of the jigsaw piece in [x, y, w, h]"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This method attempts to generate a piece view "
+#~ "like that on the puzzle. In order to help "
+#~ ":meth:`cv2.matchTemplate` to get an accurate result."
+#~ msgstr ""
+
+#~ msgid "It will dim the original piece and draw its contour with white lines."
+#~ msgstr ""
+
+#~ msgid "参数"
+#~ msgstr ""
+
+#~ msgid "coeff to be multiplied with the image in order to dim it, default as 0.3"
+#~ msgstr ""
+
+#~ msgid "返回类型"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~numpy.ndarray`"
+#~ msgstr ""
+
+#~ msgid "返回"
+#~ msgstr ""
+
+#~ msgid "generated piece image."
+#~ msgstr ""
+
+#~ msgid "The contour of the jigsaw piece in [N, 1, 2]i4, the last axis represents (x,y)."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The crop method crops the image and saves the"
+#~ " contour of the jigsaw piece. It also saves "
+#~ "a bounding box for that contour, and calculates "
+#~ "padding to be used in cropping."
+#~ msgstr ""
+
+#~ msgid "Use ::obj`.bbox` to get bounding box of the piece, and :obj:`.padding` to get padding size."
+#~ msgstr ""
+
+#~ msgid "BGR channel of the jigsaw piece, which is masked by :obj:`.mask`"
+#~ msgstr ""
+
+#~ msgid "The alpha channel of the jigsaw piece, which is used as mask."
+#~ msgstr ""
+
+#~ msgid "The padding of the jigsaw piece sprite in [left, top, right, bottom]"
+#~ msgstr ""
+
+#~ msgid "The strip method crops the image and returns exactly the piece w/o any padding."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Once cropped, use `.bbox` to get bounding box "
+#~ "of the piece, and use `.padding` to get "
+#~ "padding size."
+#~ msgstr ""
+
+#~ msgid "Generate a mask for `cv2.matchTemplate` since the piece is in an irregular shape."
+#~ msgstr ""
+
+#~ msgid "The imitate_drag function simulates a drag event."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The function takes one argument, x, which is "
+#~ "the number of pixels that the user drags. The"
+#~ " function returns a tuple of lists containing "
+#~ "three integers: [x_coordinate, y_coordinate]. Each coordinate"
+#~ " and time value is randomly generated according "
+#~ "to corresponding rules."
+#~ msgstr ""
+
+#~ msgid "Specify the position that the drag starts."
+#~ msgstr ""
+
+#~ msgid "Specify the position that the drag ends."
+#~ msgstr ""
+
+#~ msgid "Specify the y-coordinate."
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:data:`~typing.Tuple`\\[:py:class:`~typing.List`\\[:py:class:`int`], "
+#~ ":py:class:`~typing.List`\\[:py:class:`int`]]"
+#~ msgstr ""
+
+#~ msgid "Two lists consist of the x coordinate and y coordinate"
 #~ msgstr ""

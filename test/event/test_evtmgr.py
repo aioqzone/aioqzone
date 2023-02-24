@@ -3,14 +3,11 @@ from typing import Type
 
 from qqqr.event import Event, EventManager, sub_of
 
+from . import Event2
+
 
 class Event1(Event):
     async def notify(self):
-        pass
-
-
-class Event2(Event):
-    async def save(self, pid: int):
         pass
 
 
@@ -53,14 +50,12 @@ class SubApp(BaseApp):
 
         return subapp_event1
 
-    @sub_of(Event2)
-    def _sub_event2(_self, base: Type[Event2]):
-        class subapp_event2(base):
-            async def save(self, pid: int):
-                await super().save(pid)
-                _self.log.debug(f"subapp save pid={pid}")
+    from . import _sub_event2
 
-        return subapp_event2
+
+class StandAloneEvent2(Event2):
+    async def save(self, pid: int):
+        return pid + 10
 
 
 def test_baseapp():
@@ -87,3 +82,14 @@ def test_subapp():
     )
     assert app[Event1].__class__.__name__ == (SubApp.__name__ + "_" + Event1.__name__).lower()
     assert app[Event2].__class__.__name__ == (SubApp.__name__ + "_" + Event2.__name__).lower()
+
+
+def test_standalone():
+    app = SubApp(kw_arg=2)
+    app[Event2] = StandAloneEvent2()
+    assert app.inst_of(Event2).__class__.__name__ == StandAloneEvent2.__name__
+
+    app = SubApp(kw_arg=2)
+    assert (
+        app.inst_of(Event2).__class__.__name__ == (SubApp.__name__ + "_" + Event2.__name__).lower()
+    )

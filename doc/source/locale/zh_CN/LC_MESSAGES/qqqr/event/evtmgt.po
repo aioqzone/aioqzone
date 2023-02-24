@@ -1,0 +1,109 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2023, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-24 20:44+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: ../../source/qqqr/event/evtmgt.rst:2
+msgid "Event Manager"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets:1
+msgid "An object has some event to trigger."
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.add_hook_ref:1
+msgid "Add an awaitable into the given taskset."
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.add_hook_ref qqqr.event.evt.Tasksets.clear qqqr.event.evt.Tasksets.wait
+msgid "参数"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.add_hook_ref:4
+msgid "taskset key"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.add_hook_ref:6
+msgid "the awaitable (`Coroutine`, `Generator` and `~asyncio.Task` supported)"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.clear:1
+msgid "Clear the given task sets."
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.clear:4
+msgid "task class names. **If not given, all tasks will be cleared.**"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.clear:6
+msgid "Cancel the task if a set is not empty, defaults to True. Else will just clear the ref."
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.wait:1
+msgid "Wait for all task in the specific task set(s)."
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.wait:4
+msgid "timeout, defaults to None"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.wait
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.wait:6
+msgid ""
+":py:data:`~typing.Tuple`\\[:py:class:`~typing.Set`\\[:py:class:`~_asyncio.Task`], "
+":py:class:`~typing.Set`\\[:py:class:`~_asyncio.Task`]]"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.wait
+msgid "返回"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.wait:7
+msgid "done, pending"
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.wait:10
+msgid ""
+"If `timeout` is None, this method will loop until all tasks in the set(s) are done. That means "
+"if other tasks are added during awaiting, the added task will be waited as well."
+msgstr ""
+
+#: of qqqr.event.evt.Tasksets.wait:13
+msgid ":meth:`asyncio.wait`"
+msgstr ""
+
+#: of qqqr.event.evtmgr.EventManager:1
+msgid "`EventManager` is a convenient way to create/trace/manage friend classes."
+msgstr ""
+
+#: of qqqr.event.evtmgr.EventManager.inst_of:1
+msgid ""
+"A helper function that initiate a hook with given args. :rtype: "
+":py:class:`~typing.TypeVar`\\(``Evt``, bound= :py:class:`~qqqr.event.evt.Event`)"
+msgstr ""
+
+#: of qqqr.event.evtmgr.EventManager.type_of:1
+msgid ""
+"Get current hook class by the given type. :rtype: "
+":py:class:`~typing.Type`\\[:py:class:`~typing.TypeVar`\\(``Evt``, bound= "
+":py:class:`~qqqr.event.evt.Event`)]"
+msgstr ""

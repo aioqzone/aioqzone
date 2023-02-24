@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 21:04+0800\n"
+"POT-Creation-Date: 2023-02-24 20:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,4 +118,68 @@ msgstr ""
 #~ "The passVC function is used to pass the "
 #~ "verification tcaptcha. It is called when "
 #~ ":meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The `captcha` function is used to build a "
+#~ ":class:`Captcha` instance. It takes in a string, "
+#~ "which is the session id got from :meth:`.new`, "
+#~ "and returns the :class:`Captcha` instance."
+#~ msgstr ""
+
+#~ msgid "参数"
+#~ msgstr ""
+
+#~ msgid "Pass the session id to the captcha function"
+#~ msgstr ""
+
+#~ msgid "返回"
+#~ msgstr ""
+
+#~ msgid "An instance of the captcha class"
+#~ msgstr ""
+
+#~ msgid "Block until cookie is received."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Create a :class:`UpSession`. This will call `check` "
+#~ "api of Qzone, and receive result about whether "
+#~ "this login needs a captcha, sms verification, etc."
+#~ msgstr ""
+
+#~ msgid "抛出"
+#~ msgstr ""
+
+#~ msgid "a up login session"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The `pass_vc` function is used to pass the "
+#~ "verification tcaptcha. It is called when "
+#~ ":meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code."
+#~ msgstr ""
+
+#~ msgid "the session object"
+#~ msgstr ""
+
+#~ msgid "The session with :obj:`~UpSession.verify_rst` is set."
+#~ msgstr ""
+
+#~ msgid "Send verify sms (to get dynamic code)"
+#~ msgstr ""
+
+#~ msgid "The up login session to send sms code"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Check if current session meets the login condition."
+#~ " It takes a session object and returns response"
+#~ " of this try."
+#~ msgstr ""
+
+#~ msgid "Store the session information"
+#~ msgstr ""
+
+#~ msgid "A login response"
 #~ msgstr ""
