@@ -18,7 +18,7 @@ class TencentLoginError(RuntimeError):
         super().__init__(*args)
 
     def __str__(self) -> str:
-        return f"Code {self.code}: {self.msg}"
+        return f"Code {self.code}({self.subcode}): {self.msg}"
 
 
 class UserBreak(KeyboardInterrupt):
