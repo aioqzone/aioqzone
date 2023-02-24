@@ -5,7 +5,7 @@ import pytest
 import pytest_asyncio
 
 from aioqzone.api.loginman import MixedLoginMan
-from aioqzone.api.raw import QzoneWebRawAPI
+from aioqzone.api.web.raw import QzoneWebRawAPI
 from aioqzone.exception import LoginError
 from aioqzone.type.internal import LikeData
 from aioqzone.utils.html import HtmlContent, HtmlInfo
