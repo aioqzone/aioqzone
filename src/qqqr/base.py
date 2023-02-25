@@ -1,10 +1,8 @@
 from abc import ABC, abstractmethod
 from time import time
-from typing import Dict, Generic, Optional, TypeVar, Union
+from typing import Dict, Generic, Optional, TypeVar
 
-import httpx
-
-from .constant import UA
+from .constant import UA, QzoneH5Proxy
 from .type import APPID, PT_QR_APP, Proxy
 from .utils.net import ClientAdapter, get_all_cookie, raise_for_status
 
@@ -51,34 +49,6 @@ class LoginBase(ABC, Generic[_S]):
             if blackword in self.client.ua.lower():
                 self.ua = UA
                 break
-
-    @property
-    def xlogin_url(self):
-        params = {
-            "hide_title_bar": 1,
-            "style": 22,
-            "daid": self.app.daid,
-            "low_login": 0,
-            "qlogin_auto_login": 1,
-            "no_verifyimg": 1,
-            "link_target": "blank",
-            "appid": self.app.appid,
-            "target": "self",
-            "s_url": self.proxy.s_url,
-            "proxy_url": self.proxy.proxy_url,
-            "pt_no_auth": 1,
-        }
-        if self.info:
-            if self.info.app:
-                params["pt_qr_app"] = self.info.app
-            if self.info.link:
-                params["pt_qr_link"] = self.info.link
-            if self.info.register:
-                params["self_regurl"] = self.info.register
-            if self.info.help:
-                params["pt_qr_help_link"] = self.info.help
-
-        return httpx.URL("https://xui.ptlogin2.qq.com/cgi-bin/xlogin").copy_with(params=params)
 
     @abstractmethod
     async def login(self) -> Dict[str, str]:

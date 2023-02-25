@@ -16,7 +16,7 @@ from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
 from qqqr.event import Emittable, EventManager
 from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
-from qqqr.up import UpLogin
+from qqqr.up import UpWebLogin
 from qqqr.utils.net import ClientAdapter
 
 from ._base import Loginable
@@ -54,7 +54,7 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         assert pwd
         super().__init__(uin)
         self.client = client
-        self.uplogin = UpLogin(self.client, QzoneAppid, QzoneProxy, self.uin, pwd)
+        self.uplogin = UpWebLogin(self.client, QzoneAppid, QzoneProxy, self.uin, pwd)
 
     def register_hook(self, hook: UPEvent):
         self.uplogin.register_hook(hook)
