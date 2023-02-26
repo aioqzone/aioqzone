@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 20:48+0800\n"
+"POT-Creation-Date: 2023-02-26 15:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -148,7 +148,7 @@ msgid "feed id, named fid, tid or feedkey"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:12 of
-msgid ":py:class:`~aioqzone.type.resp.FeedDetailRep`"
+msgid ":py:class:`~aioqzone.type.resp.web.FeedDetailRep`"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:13 of
@@ -172,7 +172,7 @@ msgid "start position, defaults to 0"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msglist:14 of
-msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.type.resp.MsgListElm`]"
+msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.type.resp.web.MsgListElm`]"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msglist:15 of
@@ -192,7 +192,7 @@ msgid "feed access right, defaults to 0 (Not used till now)"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_publish:12 of
-msgid ":py:class:`~aioqzone.type.resp.PublishResp`"
+msgid ":py:class:`~aioqzone.type.resp.web.PublishResp`"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_publish:13 of
@@ -212,7 +212,7 @@ msgid ":obj:`~.FeedMoreResp.aux` field of last return (pagenum - 1)."
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.feeds3_html_more:5 of
-msgid ":py:class:`~aioqzone.type.resp.FeedMoreResp`"
+msgid ":py:class:`~aioqzone.type.resp.web.FeedMoreResp`"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.feeds3_html_more:6 of
@@ -242,7 +242,7 @@ msgid "maybe data is corruptted"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:13 of
-msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.type.resp.FloatViewPhoto`]"
+msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.type.resp.web.FloatViewPhoto`]"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:14 of
@@ -260,7 +260,7 @@ msgid "Get feeds update count (new feeds, new photos, new comments, etc)"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.get_feeds_count:7 of
-msgid ":py:class:`~aioqzone.type.resp.FeedsCount`"
+msgid ":py:class:`~aioqzone.type.resp.web.FeedsCount`"
 msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.get_feeds_count:8 of

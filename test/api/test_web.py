@@ -15,6 +15,8 @@ from aioqzone.utils.html import HtmlContent, HtmlInfo
 from qqqr.utils.iter import first
 from qqqr.utils.net import ClientAdapter
 
+pytestmark = pytest.mark.asyncio
+
 
 @pytest.fixture(scope="class")
 def storage():
@@ -140,14 +142,12 @@ class TestUpload:
         assert r
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="class")
 async def api(client: ClientAdapter, man: MixedLoginMan):
     yield QzoneWebAPI(client, man)
 
 
 class TestWebAPI:
-    pytestmark = pytest.mark.asyncio
-
     async def test_heartbeat(self, api: QzoneWebAPI):
         try:
             assert await api.get_feeds_count()
