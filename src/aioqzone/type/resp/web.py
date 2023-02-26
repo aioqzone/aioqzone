@@ -1,4 +1,4 @@
-"""This module defines types that represent responses from Qzone.
+"""This module defines types that represent responses from Qzone web.
 These `*Rep` or `*Resp` classes are :class:`pydantic.BaseModel` which can be used to validate responses.
 """
 
@@ -7,7 +7,7 @@ from typing import List, Optional, Union
 from pydantic import BaseModel, Field
 from pydantic.networks import HttpUrl
 
-from .entity import HasConEntity, HasContent
+from ..entity import HasConEntity, HasContent
 
 
 # Below are the response reps of Qzone Apis.

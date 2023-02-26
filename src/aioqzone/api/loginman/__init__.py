@@ -12,11 +12,11 @@ from httpx import ConnectError, HTTPError
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from aioqzone.exception import LoginError, SkipLoginInterrupt
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
-from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
+from qqqr.constant import StatusCode
 from qqqr.event import Emittable, EventManager
 from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
-from qqqr.up import UpLogin
+from qqqr.up import UpH5Login, UpWebLogin
 from qqqr.utils.net import ClientAdapter
 
 from ._base import Loginable
@@ -50,11 +50,19 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
     :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook.
     """
 
-    def __init__(self, client: ClientAdapter, uin: int, pwd: str) -> None:
+    def __init__(self, client: ClientAdapter, uin: int, pwd: str, *, h5=False) -> None:
         assert pwd
         super().__init__(uin)
         self.client = client
-        self.uplogin = UpLogin(self.client, QzoneAppid, QzoneProxy, self.uin, pwd)
+        if h5:
+            cls = UpH5Login
+            from qqqr.constant import QzoneH5Appid as appid
+            from qqqr.constant import QzoneH5Proxy as proxy
+        else:
+            cls = UpWebLogin
+            from qqqr.constant import QzoneAppid as appid
+            from qqqr.constant import QzoneProxy as proxy
+        self.uplogin = cls(self.client, appid, proxy, self.uin, pwd)
 
     def register_hook(self, hook: UPEvent):
         self.uplogin.register_hook(hook)
@@ -122,11 +130,19 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
     :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook.
     """
 
-    def __init__(self, client: ClientAdapter, uin: int, refresh_time: int = 6) -> None:
+    def __init__(
+        self, client: ClientAdapter, uin: int, *, refresh_time: int = 6, h5=False
+    ) -> None:
         super().__init__(uin)
         self.client = client
-        self.refresh = refresh_time
-        self.qrlogin = QrLogin(self.client, QzoneAppid, QzoneProxy)
+        self.refresh_time = refresh_time
+        if h5:
+            from qqqr.constant import QzoneH5Appid as appid
+            from qqqr.constant import QzoneH5Proxy as proxy
+        else:
+            from qqqr.constant import QzoneAppid as appid
+            from qqqr.constant import QzoneProxy as proxy
+        self.qrlogin = QrLogin(self.client, appid, proxy)
 
     def register_hook(self, hook: QREvent):
         self.qrlogin.register_hook(hook)
@@ -148,7 +164,7 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
         self.hook.refresh_flag.clear()
 
         try:
-            cookie = await self.qrlogin.login()
+            cookie = await self.qrlogin.login(self.refresh_time)
             emit_hook(self.hook.LoginSuccess(meth))
             self.client.cookies.update(cookie)
             return cookie

@@ -4,6 +4,7 @@
 # changelog header
 header = """
 # Changelog
+
 All notable changes to this project will be documented in this file.\n
 """
 # template for the changelog body
@@ -17,7 +18,11 @@ body = """
 {% for group, commits in commits | group_by(attribute="group") %}
     ### {{ group | upper_first }}
     {% for commit in commits %}
-        - {{ commit.message | upper_first }} ({{ commit.id | truncate(length=7, end="") }})\
+        {% raw -%} - {% endraw %}\
+        {%- if commit.breaking -%} 💥 **{% endif -%}\
+        {%- if commit.scope -%} ({{ commit.scope }}) {% endif -%}\
+        {{ commit.message | upper_first }} ({{ commit.id | truncate(length=7, end="") }})\
+        {%- if commit.breaking -%} ** {%- endif -%}\
     {% endfor %}
 {% endfor %}\n
 """
@@ -41,6 +46,7 @@ commit_parsers = [
     { message = "^doc", group = "Documentation"},
     { message = "^perf", group = "Performance"},
     { message = "^proj", group = "Project"},
+    { message = "^chore", group = "Miscellaneous"},
     { message = "^refactor", group = "Refactor"},
     { message = "^style", group = "Styling"},
     { message = "^test", group = "Testing"},

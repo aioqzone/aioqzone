@@ -5,7 +5,7 @@ import pytest
 import pytest_asyncio
 
 from qqqr.constant import QzoneAppid, QzoneProxy
-from qqqr.up import UpLogin
+from qqqr.up import UpWebLogin
 from qqqr.up.captcha import Captcha, TcaptchaSession
 from qqqr.up.captcha.jigsaw import Jigsaw, imitate_drag
 from qqqr.utils.net import ClientAdapter
@@ -13,8 +13,9 @@ from qqqr.utils.net import ClientAdapter
 
 @pytest_asyncio.fixture(scope="module")
 async def captcha(client: ClientAdapter):
-    login = UpLogin(client, QzoneAppid, QzoneProxy, int(env["TEST_UIN"]), env["TEST_PASSWORD"])
+    login = UpWebLogin(client, QzoneAppid, QzoneProxy, int(env["TEST_UIN"]), env["TEST_PASSWORD"])
     upsess = await login.new()
+    await login.check(upsess)
     captcha = login.captcha(upsess.check_rst.session)
     yield captcha
 

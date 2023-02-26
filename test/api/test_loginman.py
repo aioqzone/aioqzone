@@ -1,7 +1,7 @@
 import asyncio
 from os import environ as env
 from typing import List, Tuple, Type, cast
-from unittest import mock
+from unittest.mock import patch
 
 import pytest
 import pytest_asyncio
@@ -13,6 +13,8 @@ from aioqzone.exception import LoginError, SkipLoginInterrupt
 from jssupport.exception import JsRuntimeError
 from qqqr.event.login import QrEvent, UpEvent
 from qqqr.exception import HookError, TencentLoginError, UserBreak
+from qqqr.qr import QrLogin
+from qqqr.up import UpWebLogin
 from qqqr.utils.net import ClientAdapter
 
 from . import showqr
@@ -73,7 +75,7 @@ class TestUP:
     async def test_exception(
         self, up: api.UPLoginMan, exc2r: BaseException, exc2e: Type[BaseException]
     ):
-        with pytest.raises(exc2e), mock.patch("qqqr.up.UpLogin.new", side_effect=exc2r):
+        with pytest.raises(exc2e), patch.object(UpWebLogin, "new", side_effect=exc2r):
             await up.new_cookie()
 
     async def test_newcookie(self, up: api.UPLoginMan):
@@ -119,7 +121,7 @@ class TestQR:
     async def test_exception(
         self, qr: api.QRLoginMan, exc2r: BaseException, exc2e: Type[BaseException]
     ):
-        with pytest.raises(exc2e), mock.patch("qqqr.qr.QrLogin.new", side_effect=exc2r):
+        with pytest.raises(exc2e), patch.object(QrLogin, "new", side_effect=exc2r):
             await qr.new_cookie()
 
     async def test_newcookie(self, qr: api.QRLoginMan):
@@ -197,9 +199,9 @@ async def test_mixed_loginman_exc(
     mix.__hooks__[QREvent] = mix.__hooks__[UPEvent] = hook
     mix.init_hooks()
 
-    with pytest.raises(exc2e), mock.patch(
-        f"qqqr.up.UpLogin.new", side_effect=exc2r[0]
-    ), mock.patch(f"qqqr.qr.QrLogin.new", side_effect=exc2r[1]):
+    with pytest.raises(exc2e), patch.object(UpWebLogin, "new", side_effect=exc2r[0]), patch.object(
+        QrLogin, "new", side_effect=exc2r[1]
+    ):
         await mix.new_cookie()
     await asyncio.sleep(0)
     assert hook.record == record

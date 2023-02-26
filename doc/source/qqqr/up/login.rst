@@ -3,8 +3,8 @@ UpLogin and UpSession
 
 .. currentmodule:: qqqr.up
 
-.. autoclass:: UpLogin
+.. autoclass:: UpWebLogin
     :members:
 
-.. autoclass:: UpSession
+.. autoclass:: UpH5Login
     :members:

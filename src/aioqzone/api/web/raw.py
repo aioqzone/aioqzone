@@ -48,33 +48,37 @@ class QzoneWebRawAPI:
     def referer(self, value: str):
         self.client.headers["referer"] = value
 
-    async def _get_gtk(self) -> int:
-        """Get gtk with async-lock
-
-        :raises `aioqzone.exception.QzoneError`: if gtk is 0
-        :return: gtk
-        """
-        async with self.login.lock:
-            gtk = self.login.gtk
-        if gtk == 0:
-            raise QzoneError(-3000)
-        return gtk
-
-    async def aget(self, url: str, params: Optional[Dict[str, str]] = None):
-        params = params or {}
-        params = du(params, {"g_tk": str(await self._get_gtk())})
-        self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
-        return self.client.get(self.host + url, params=params)
-
-    async def apost(
-        self, url: str, params: Optional[Dict[str, str]] = None, data: Optional[dict] = None
+    def host_get(
+        self, path: str, params: Optional[Dict[str, str]] = None, *, attach_gtk=True, **kw
     ):
-        params = params or {}
-        params = du(params, {"g_tk": str(await self._get_gtk())})
+        if params is None:
+            params = {}
+        if "p_skey" not in self.login.cookie:
+            raise QzoneError(-3000, "未登录")
+        if attach_gtk:
+            params["g_tk"] = str(self.login.gtk)
+        self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
+        return self.client.get(self.host + path, params=params, **kw)
+
+    def host_post(
+        self,
+        path: str,
+        params: Optional[Dict[str, str]] = None,
+        data: Optional[dict] = None,
+        *,
+        attach_gtk=True,
+        **kw,
+    ):
+        if params is None:
+            params = {}
+        if "p_skey" not in self.login.cookie:
+            raise QzoneError(-3000, "未登录")
+        if attach_gtk:
+            params["g_tk"] = str(self.login.gtk)
         self.referer = f"https://user.qzone.qq.com/{self.login.uin}/infocenter"
         if data:
             data["qzreferrer"] = self.referer
-        return self.client.post(self.host + url, params=params, data=data)
+        return self.client.post(self.host + path, params=params, data=data, **kw)
 
     def _relogin_retry(self, func: Callable):
         """A decorator which will relogin and retry given func if cookie expired.
@@ -231,7 +235,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.feeds3_html_more, du(default, query)) as r:
+            async with self.host_get(const.feeds3_html_more, du(default, query)) as r:
                 r.raise_for_status()
                 rtext = r.text
 
@@ -281,7 +285,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_getcomments, data=du(default, body)) as r:
+            async with self.host_post(const.emotion_getcomments, data=du(default, body)) as r:
                 r.raise_for_status()
                 rtext = r.text
 
@@ -318,7 +322,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.emotion_msgdetail, params=du(default, query)) as r:
+            async with self.host_get(const.emotion_msgdetail, params=du(default, query)) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -341,7 +345,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.get_feeds_count, query) as r:
+            async with self.host_get(const.get_feeds_count, query) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -380,7 +384,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(url, data=du(default, body)) as r:
+            async with self.host_post(url, data=du(default, body)) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text, errno_key=("code", "ret"))
 
@@ -445,7 +449,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(const.floatview_photo_list, du(default, query)) as r:
+            async with self.host_get(const.floatview_photo_list, du(default, query)) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -496,9 +500,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.aget(
-                const.emotion_msglist, du(param, add) if pos else param
-            ) as r:
+            async with self.host_get(const.emotion_msglist, du(param, add) if pos else param) as r:
                 r.raise_for_status()
                 rtext = r.text
             return self._rtext_handler(rtext)
@@ -544,7 +546,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_publish, data=du(default, body)) as r:
+            async with self.host_post(const.emotion_publish, data=du(default, body)) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -590,7 +592,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_delete, data=body) as r:
+            async with self.host_post(const.emotion_delete, data=body) as r:
                 # upstream error: qzone server returns 503, but the feed operation is done.
                 raise_for_status(r, 200, 503)
                 if r.status_code == 503:
@@ -640,7 +642,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_update, data=du(default, body)) as r:
+            async with self.host_post(const.emotion_update, data=du(default, body)) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -696,7 +698,7 @@ class QzoneWebRawAPI:
 
         @self._relogin_retry
         async def retry_closure():
-            async with await self.apost(const.emotion_re_feeds, data=du(default, data)) as r:
+            async with self.host_post(const.emotion_re_feeds, data=du(default, data)) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
