@@ -38,6 +38,7 @@ class TestUpWeb:
 
     async def test_encode_password(self, web: UpWebLogin):
         sess = await web.new()
+        await web.check(sess)
         if sess.code == StatusCode.NeedCaptcha:
             sess = await web.pass_vc(sess)
         if sess.code != 1:

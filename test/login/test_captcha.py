@@ -17,6 +17,7 @@ pytestmark = pytest.mark.asyncio
 async def captcha(client: ClientAdapter):
     login = UpWebLogin(client, QzoneAppid, QzoneProxy, int(env["TEST_UIN"]), env["TEST_PASSWORD"])
     upsess = await login.new()
+    await login.check(upsess)
     captcha = login.captcha(upsess.check_rst.session)
     yield captcha
 
