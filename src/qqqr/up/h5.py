@@ -16,6 +16,14 @@ LOGIN_URL = "https://ui.ptlogin2.qq.com/ssl/login"
 
 
 class UpH5Login(UpWebLogin):
+    def __init__(self, client, app, proxy, uin: int, pwd: str, info=None):
+        super().__init__(client, app, proxy, uin, pwd, info)
+        lwua = self.client.ua.lower()
+        if not any(i in lwua for i in ["android", "ios"]):
+            from qqqr.constant import AndroidUA
+
+            self.client.ua = AndroidUA
+
     @property
     def login_page_url(self):
         params = dict(
