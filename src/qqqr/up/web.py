@@ -127,7 +127,7 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
         return ""
 
     async def new(self):
-        """Create a :class:`UpSession`. This will call `check` api of Qzone, and receive result
+        """Create a :class:`UpWebSession`. This will call `check` api of Qzone, and receive result
         about whether this login needs a captcha, sms verification, etc.
 
         :raises `httpx.HTTPStatusError`:
@@ -289,7 +289,7 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
         It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
 
         :param sess: the session object
-        :return: The session with :obj:`~UpSession.verify_rst` is set.
+        :return: The session with :obj:`~UpWebSession.verify_rst` is set.
         """
 
         for retry in range(4):

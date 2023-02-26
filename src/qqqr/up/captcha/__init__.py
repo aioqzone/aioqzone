@@ -107,7 +107,7 @@ class Captcha:
         """
         :param client: network client
         :param appid: Specify the appid of the application
-        :param sid: Session id got from :meth:`UpLogin.new`
+        :param sid: Session id got from :meth:`UpWebLogin.new`
         :param xlogin_url: :obj:`LoginBase.xlogin_url`
         """
 
