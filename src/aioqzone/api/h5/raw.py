@@ -23,6 +23,9 @@ class QzoneH5RawAPI:
     qzonetoken: str = ""
 
     def __init__(self, client: ClientAdapter, loginman: Loginable) -> None:
+        """
+        .. warning:: If `loginman` uses an `AsyncClient`, the `client` param MUST use this client as well.
+        """
         super().__init__()
         self.client = client
         self.login = loginman
@@ -217,3 +220,26 @@ class QzoneH5RawAPI:
                 return r.json()
 
         return self._rtext_handler(await retry_closure(), cb=False, data_key="data")
+
+    async def internal_dolike_app(self, appid: int, unikey: str, curkey: str, like=True):
+        data = dict(
+            opuin=self.login.uin,
+            unikey=unikey,
+            curkey=curkey,
+            appid=appid,
+            opr_type="like",
+            format="purejson",
+        )
+        if like:
+            path = "/proxy/domain/w.qzone.qq.com/cgi-bin/likes/internal_dolike_app"
+        else:
+            path = "/proxy/domain/w.qzone.qq.com/cgi-bin/likes/internal_unlike_app"
+
+        @self._relogin_retry
+        async def retry_closure() -> StrDict:
+            async with self.host_get(path, data) as r:
+                r.raise_for_status()
+                return r.json()
+
+        self._rtext_handler(await retry_closure(), cb=False)
+        return True

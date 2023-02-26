@@ -219,18 +219,20 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
         uin: int,
         order: Sequence[LoginMethod],
         pwd: Optional[str] = None,
+        *,
         refresh_time: int = 6,
+        h5=False,
     ) -> None:
         super().__init__(uin)
         self.order = tuple(dict.fromkeys(order))
         self.loginables: Dict[LoginMethod, Loginable] = {}
         if LoginMethod.qr in self.order:
             self.loginables[LoginMethod.qr] = QRLoginMan(
-                client=client, uin=uin, refresh_time=refresh_time
+                client=client, uin=uin, refresh_time=refresh_time, h5=h5
             )
         if LoginMethod.up in self.order:
             assert pwd
-            self.loginables[LoginMethod.up] = UPLoginMan(client=client, uin=uin, pwd=pwd)
+            self.loginables[LoginMethod.up] = UPLoginMan(client=client, uin=uin, pwd=pwd, h5=h5)
         self.init_hooks()
 
     def init_hooks(self):
