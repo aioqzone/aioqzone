@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 20:48+0800\n"
+"POT-Creation-Date: 2023-02-26 14:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,80 +21,89 @@ msgstr ""
 msgid "UpLogin and UpSession"
 msgstr ""
 
-#: of qqqr.up.UpLogin.captcha:1
+#: of qqqr.up.web.UpWebLogin.captcha:1
 msgid ""
 "The `captcha` function is used to build a :class:`Captcha` instance. It takes in a string, which"
 " is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance."
 msgstr ""
 
-#: of qqqr.up.UpLogin.captcha qqqr.up.UpLogin.pass_vc qqqr.up.UpLogin.send_sms_code
-#: qqqr.up.UpLogin.try_login
+#: of qqqr.up.h5.UpH5Login.try_login qqqr.up.web.UpWebLogin.captcha qqqr.up.web.UpWebLogin.pass_vc
+#: qqqr.up.web.UpWebLogin.send_sms_code qqqr.up.web.UpWebLogin.try_login
 msgid "参数"
 msgstr ""
 
-#: of qqqr.up.UpLogin.captcha:6
+#: of qqqr.up.web.UpWebLogin.captcha:6
 msgid "Pass the session id to the captcha function"
 msgstr ""
 
-#: of qqqr.up.UpLogin.captcha qqqr.up.UpLogin.new qqqr.up.UpLogin.pass_vc qqqr.up.UpLogin.try_login
+#: of qqqr.up.h5.UpH5Login.try_login qqqr.up.web.UpWebLogin.captcha qqqr.up.web.UpWebLogin.new
+#: qqqr.up.web.UpWebLogin.pass_vc qqqr.up.web.UpWebLogin.try_login
 msgid "返回"
 msgstr ""
 
-#: of qqqr.up.UpLogin.captcha:7
+#: of qqqr.up.web.UpWebLogin.captcha:7
 msgid "An instance of the captcha class"
 msgstr ""
 
-#: of qqqr.up.UpLogin.login:1
+#: of qqqr.up.web.UpWebLogin.deviceId:1
+msgid "a js fingerprint. :rtype: :py:class:`str`"
+msgstr ""
+
+#: of qqqr.up.web.UpWebLogin.deviceId:5
+msgid "https://github.com/fingerprintjs/fingerprintjs"
+msgstr ""
+
+#: of qqqr.up.web.UpWebLogin.login:1
 msgid "Block until cookie is received."
 msgstr ""
 
-#: of qqqr.up.UpLogin.new:1
+#: of qqqr.up.web.UpWebLogin.new:1
 msgid ""
-"Create a :class:`UpSession`. This will call `check` api of Qzone, and receive result about "
+"Create a :class:`UpWebSession`. This will call `check` api of Qzone, and receive result about "
 "whether this login needs a captcha, sms verification, etc."
 msgstr ""
 
-#: of qqqr.up.UpLogin.new
+#: of qqqr.up.web.UpWebLogin.new
 msgid "抛出"
 msgstr ""
 
-#: of qqqr.up.UpLogin.new:6
+#: of qqqr.up.web.UpWebLogin.new:6
 msgid "a up login session"
 msgstr ""
 
-#: of qqqr.up.UpLogin.pass_vc:1
+#: of qqqr.up.web.UpWebLogin.pass_vc:1
 msgid ""
 "The `pass_vc` function is used to pass the verification tcaptcha. It is called when "
 ":meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code."
 msgstr ""
 
-#: of qqqr.up.UpLogin.pass_vc:5
+#: of qqqr.up.web.UpWebLogin.pass_vc:5
 msgid "the session object"
 msgstr ""
 
-#: of qqqr.up.UpLogin.pass_vc:6
-msgid "The session with :obj:`~UpSession.verify_rst` is set."
+#: of qqqr.up.web.UpWebLogin.pass_vc:6
+msgid "The session with :obj:`~UpWebSession.verify_rst` is set."
 msgstr ""
 
-#: of qqqr.up.UpLogin.send_sms_code:1
+#: of qqqr.up.web.UpWebLogin.send_sms_code:1
 msgid "Send verify sms (to get dynamic code)"
 msgstr ""
 
-#: of qqqr.up.UpLogin.send_sms_code:4
+#: of qqqr.up.web.UpWebLogin.send_sms_code:4
 msgid "The up login session to send sms code"
 msgstr ""
 
-#: of qqqr.up.UpLogin.try_login:1
+#: of qqqr.up.h5.UpH5Login.try_login:1 qqqr.up.web.UpWebLogin.try_login:1
 msgid ""
 "Check if current session meets the login condition. It takes a session object and returns "
 "response of this try."
 msgstr ""
 
-#: of qqqr.up.UpLogin.try_login:5
+#: of qqqr.up.h5.UpH5Login.try_login:5 qqqr.up.web.UpWebLogin.try_login:5
 msgid "Store the session information"
 msgstr ""
 
-#: of qqqr.up.UpLogin.try_login:6
+#: of qqqr.up.h5.UpH5Login.try_login:6 qqqr.up.web.UpWebLogin.try_login:6
 msgid "A login response"
 msgstr ""
 

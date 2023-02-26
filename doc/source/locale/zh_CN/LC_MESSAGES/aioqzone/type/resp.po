@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 10:28+0800\n"
+"POT-Creation-Date: 2023-02-26 14:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,538 +21,411 @@ msgstr ""
 msgid "Response Models"
 msgstr ""
 
-#: aioqzone.type.resp:1 of
-msgid ""
-"This module defines types that represent responses from Qzone. These `*Rep` or `*Resp` classes "
-"are :class:`pydantic.BaseModel` which can be used to validate responses."
-msgstr ""
-
-#: aioqzone.type.resp.CommentRep aioqzone.type.resp.FeedDetailRep aioqzone.type.resp.FeedMoreAux
-#: aioqzone.type.resp.FeedMoreResp aioqzone.type.resp.FeedRep aioqzone.type.resp.FeedsCount
-#: aioqzone.type.resp.FloatViewPhoto aioqzone.type.resp.MsgListElm aioqzone.type.resp.PicRep
-#: aioqzone.type.resp.PublishResp aioqzone.type.resp.VideoInfo aioqzone.type.resp.VideoInfo2
-#: aioqzone.type.resp.VideoRep of
-msgid "Fields"
-msgstr ""
-
-#: aioqzone.type.resp.CommentRep:1 of
-msgid ":py:obj:`abstime (int) <aioqzone.type.resp.CommentRep.abstime>`"
-msgstr ""
-
-#: aioqzone.type.resp.CommentRep:1 of
-msgid ":py:obj:`name (str) <aioqzone.type.resp.CommentRep.name>`"
-msgstr ""
-
-#: aioqzone.type.resp.CommentRep:1 of
-msgid ":py:obj:`pic (Optional[List[dict]]) <aioqzone.type.resp.CommentRep.pic>`"
-msgstr ""
-
-#: aioqzone.type.resp.CommentRep:1 of
-msgid ":py:obj:`replyNum (int) <aioqzone.type.resp.CommentRep.replyNum>`"
-msgstr ""
-
-#: aioqzone.type.resp.CommentRep:1 of
-msgid ":py:obj:`tid (int) <aioqzone.type.resp.CommentRep.tid>`"
-msgstr ""
-
-#: aioqzone.type.resp.CommentRep:1 of
-msgid ":py:obj:`uin (int) <aioqzone.type.resp.CommentRep.uin>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`abstime (int) <aioqzone.type.resp.FeedDetailRep.abstime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`cmtnum (int) <aioqzone.type.resp.FeedDetailRep.cmtnum>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ""
-":py:obj:`commentlist (Optional[List[aioqzone.type.resp.CommentRep]]) "
-"<aioqzone.type.resp.FeedDetailRep.commentlist>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`fid (str) <aioqzone.type.resp.FeedDetailRep.fid>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`fwdnum (int) <aioqzone.type.resp.FeedDetailRep.fwdnum>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`name (str) <aioqzone.type.resp.FeedDetailRep.name>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ""
-":py:obj:`pic (Optional[List[Union[aioqzone.type.resp.VideoRep, aioqzone.type.resp.PicRep]]]) "
-"<aioqzone.type.resp.FeedDetailRep.pic>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`rt_abstime (int) <aioqzone.type.resp.FeedDetailRep.rt_abstime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ""
-":py:obj:`rt_con (Optional[aioqzone.type.entity.HasConEntity]) "
-"<aioqzone.type.resp.FeedDetailRep.rt_con>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`rt_createTime (str) <aioqzone.type.resp.FeedDetailRep.rt_createTime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`rt_fid (str) <aioqzone.type.resp.FeedDetailRep.rt_fid>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`rt_uin (int) <aioqzone.type.resp.FeedDetailRep.rt_uin>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`rt_uinname (str) <aioqzone.type.resp.FeedDetailRep.rt_uinname>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ":py:obj:`uin (int) <aioqzone.type.resp.FeedDetailRep.uin>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedDetailRep:1 of
-msgid ""
-":py:obj:`video (Optional[List[aioqzone.type.resp.VideoInfo]]) "
-"<aioqzone.type.resp.FeedDetailRep.video>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`aisortBeginTime (str) <aioqzone.type.resp.FeedMoreAux.aisortBeginTime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`aisortEndTime (str) <aioqzone.type.resp.FeedMoreAux.aisortEndTime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`aisortNextTime (str) <aioqzone.type.resp.FeedMoreAux.aisortNextTime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`aisortOffset (str) <aioqzone.type.resp.FeedMoreAux.aisortOffset>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`begintime (int) <aioqzone.type.resp.FeedMoreAux.begintime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`daylist (str) <aioqzone.type.resp.FeedMoreAux.daylist>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`dayspac (int) <aioqzone.type.resp.FeedMoreAux.dayspac>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`endtime (str) <aioqzone.type.resp.FeedMoreAux.endtime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`externparam (str) <aioqzone.type.resp.FeedMoreAux.externparam>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`hasMoreFeeds (bool) <aioqzone.type.resp.FeedMoreAux.hasMoreFeeds>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`lastAccessRelateTime (str) <aioqzone.type.resp.FeedMoreAux.lastAccessRelateTime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`lastaccesstime (str) <aioqzone.type.resp.FeedMoreAux.lastaccesstime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`pagenum (int) <aioqzone.type.resp.FeedMoreAux.pagenum>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreAux:1 of
-msgid ":py:obj:`uinlist (str) <aioqzone.type.resp.FeedMoreAux.uinlist>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreResp:1 of
-msgid ":py:obj:`aux (aioqzone.type.resp.FeedMoreAux) <aioqzone.type.resp.FeedMoreResp.aux>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedMoreResp:1 of
-msgid ":py:obj:`feeds (List[aioqzone.type.resp.FeedRep]) <aioqzone.type.resp.FeedMoreResp.feeds>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ""
-"Represents a feed in :meth:`~aioqzone.api.QzoneWebAPI.feeds3_html_more`. The feed content is in "
-"html format."
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ":py:obj:`abstime (int) <aioqzone.type.resp.FeedRep.abstime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ":py:obj:`appid (int) <aioqzone.type.resp.FeedRep.appid>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ":py:obj:`fid (str) <aioqzone.type.resp.FeedRep.fid>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ":py:obj:`html (str) <aioqzone.type.resp.FeedRep.html>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ":py:obj:`nickname (str) <aioqzone.type.resp.FeedRep.nickname>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ":py:obj:`typeid (int) <aioqzone.type.resp.FeedRep.typeid>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ":py:obj:`uin (int) <aioqzone.type.resp.FeedRep.uin>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedRep:1 of
-msgid ":py:obj:`ver (int) <aioqzone.type.resp.FeedRep.ver>`"
-msgstr ""
-
-#: ../../docstring aioqzone.type.resp.FeedRep.abstime:1 of
-msgid ":term:`abstime` in references."
-msgstr ""
-
-#: ../../docstring aioqzone.type.resp.FeedRep.appid:1 of
-msgid ":term:`appid` in references."
-msgstr ""
-
-#: ../../docstring aioqzone.type.resp.FeedRep.fid:1 of
-msgid ":term:`fid` in references."
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`aboutHostFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.aboutHostFeeds_new_cnt>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`followFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.followFeeds_new_cnt>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`friendFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.friendFeeds_new_cnt>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`friendFeeds_newblog_cnt (int) <aioqzone.type.resp.FeedsCount.friendFeeds_newblog_cnt>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`friendFeeds_newphoto_cnt (int) <aioqzone.type.resp.FeedsCount.friendFeeds_newphoto_cnt>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`myFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.myFeeds_new_cnt>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`newfeeds_uinlist (list) <aioqzone.type.resp.FeedsCount.newfeeds_uinlist>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`replyHostFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.replyHostFeeds_new_cnt>`"
-msgstr ""
-
-#: aioqzone.type.resp.FeedsCount:1 of
-msgid ":py:obj:`specialCareFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.specialCareFeeds_new_cnt>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`albumId (str) <aioqzone.type.resp.FloatViewPhoto.albumId>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`cmtTotal (int) <aioqzone.type.resp.FloatViewPhoto.cmtTotal>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`createTime (str) <aioqzone.type.resp.FloatViewPhoto.createTime>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`desc (dict) <aioqzone.type.resp.FloatViewPhoto.desc>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`fid (str) <aioqzone.type.resp.FloatViewPhoto.fid>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`fwdnum (int) <aioqzone.type.resp.FloatViewPhoto.fwdnum>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`height (int) <aioqzone.type.resp.FloatViewPhoto.height>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`isMultiPic (Optional[bool]) <aioqzone.type.resp.FloatViewPhoto.isMultiPic>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`is_video (Optional[bool]) <aioqzone.type.resp.FloatViewPhoto.is_video>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`is_weixin_mode (Optional[bool]) <aioqzone.type.resp.FloatViewPhoto.is_weixin_mode>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`likeKey (str) <aioqzone.type.resp.FloatViewPhoto.likeKey>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`likeList (Optional[List[dict]]) <aioqzone.type.resp.FloatViewPhoto.likeList>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`likeTotal (int) <aioqzone.type.resp.FloatViewPhoto.likeTotal>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`lloc (str) <aioqzone.type.resp.FloatViewPhoto.lloc>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`ownerName (str) <aioqzone.type.resp.FloatViewPhoto.ownerName>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`ownerUin (int) <aioqzone.type.resp.FloatViewPhoto.ownerUin>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`photoOwner (int) <aioqzone.type.resp.FloatViewPhoto.photoOwner>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`photocubage (Optional[int]) <aioqzone.type.resp.FloatViewPhoto.photocubage>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`phototype (int) <aioqzone.type.resp.FloatViewPhoto.phototype>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`picId (Union[pydantic.networks.HttpUrl, str]) <aioqzone.type.resp.FloatViewPhoto.picId>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`picKey (str) <aioqzone.type.resp.FloatViewPhoto.picKey>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`raw (pydantic.networks.HttpUrl) <aioqzone.type.resp.FloatViewPhoto.raw>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`rt_fid (str) <aioqzone.type.resp.FloatViewPhoto.rt_fid>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`thumb (pydantic.networks.HttpUrl) <aioqzone.type.resp.FloatViewPhoto.thumb>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`topicId (str) <aioqzone.type.resp.FloatViewPhoto.topicId>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ""
-":py:obj:`video_info (Optional[aioqzone.type.resp.VideoInfo2]) "
-"<aioqzone.type.resp.FloatViewPhoto.video_info>`"
-msgstr ""
-
-#: aioqzone.type.resp.FloatViewPhoto:1 of
-msgid ":py:obj:`width (int) <aioqzone.type.resp.FloatViewPhoto.width>`"
-msgstr ""
-
-#: ../../docstring aioqzone.type.resp.FloatViewPhoto.raw aioqzone.type.resp.FloatViewPhoto.thumb
-#: aioqzone.type.resp.VideoInfo.raw aioqzone.type.resp.VideoInfo.thumb
-#: aioqzone.type.resp.VideoInfo2.raw of
-msgid "Constraints"
-msgstr ""
-
-#: ../../docstring aioqzone.type.resp.FloatViewPhoto.raw:1 aioqzone.type.resp.FloatViewPhoto.thumb:1
-#: aioqzone.type.resp.VideoInfo.raw:1 aioqzone.type.resp.VideoInfo.thumb:1
-#: aioqzone.type.resp.VideoInfo2.raw:1 of
-msgid "**minLength** = 1"
-msgstr ""
-
-#: ../../docstring aioqzone.type.resp.FloatViewPhoto.raw:1 aioqzone.type.resp.FloatViewPhoto.thumb:1
-#: aioqzone.type.resp.VideoInfo.raw:1 aioqzone.type.resp.VideoInfo.thumb:1
-#: aioqzone.type.resp.VideoInfo2.raw:1 of
-msgid "**maxLength** = 2083"
-msgstr ""
-
-#: ../../docstring aioqzone.type.resp.FloatViewPhoto.raw:1 aioqzone.type.resp.FloatViewPhoto.thumb:1
-#: aioqzone.type.resp.VideoInfo.raw:1 aioqzone.type.resp.VideoInfo.thumb:1
-#: aioqzone.type.resp.VideoInfo2.raw:1 of
-msgid "**format** = uri"
-msgstr ""
-
-#: aioqzone.type.resp.MsgListElm:1 of
-msgid ":py:obj:`abstime (int) <aioqzone.type.resp.MsgListElm.abstime>`"
-msgstr ""
-
-#: aioqzone.type.resp.MsgListElm:1 of
-msgid ":py:obj:`cmtnum (int) <aioqzone.type.resp.MsgListElm.cmtnum>`"
-msgstr ""
-
-#: aioqzone.type.resp.MsgListElm:1 of
-msgid ":py:obj:`commentlist (list) <aioqzone.type.resp.MsgListElm.commentlist>`"
-msgstr ""
-
-#: aioqzone.type.resp.MsgListElm:1 of
-msgid ":py:obj:`createTime (str) <aioqzone.type.resp.MsgListElm.createTime>`"
-msgstr ""
-
-#: aioqzone.type.resp.MsgListElm:1 of
-msgid ":py:obj:`fid (str) <aioqzone.type.resp.MsgListElm.fid>`"
-msgstr ""
-
-#: aioqzone.type.resp.MsgListElm:1 of
-msgid ":py:obj:`fwdnum (int) <aioqzone.type.resp.MsgListElm.fwdnum>`"
-msgstr ""
-
-#: aioqzone.type.resp.MsgListElm:1 of
-msgid ":py:obj:`name (str) <aioqzone.type.resp.MsgListElm.name>`"
-msgstr ""
-
-#: aioqzone.type.resp.MsgListElm:1 of
-msgid ":py:obj:`uin (int) <aioqzone.type.resp.MsgListElm.uin>`"
-msgstr ""
-
-#: aioqzone.type.resp.PicRep:1 of
-msgid ":py:obj:`height (int) <aioqzone.type.resp.PicRep.height>`"
-msgstr ""
-
-#: aioqzone.type.resp.PicRep:1 of
-msgid ":py:obj:`is_video (int) <aioqzone.type.resp.PicRep.is_video>`"
-msgstr ""
-
-#: aioqzone.type.resp.PicRep:1 of
-msgid ":py:obj:`picId (Union[pydantic.networks.HttpUrl, str]) <aioqzone.type.resp.PicRep.picId>`"
-msgstr ""
-
-#: aioqzone.type.resp.PicRep:1 of
-msgid ":py:obj:`raw (Union[pydantic.networks.HttpUrl, str]) <aioqzone.type.resp.PicRep.raw>`"
-msgstr ""
-
-#: aioqzone.type.resp.PicRep:1 of
-msgid ":py:obj:`thumb (Union[pydantic.networks.HttpUrl, str]) <aioqzone.type.resp.PicRep.thumb>`"
-msgstr ""
-
-#: aioqzone.type.resp.PicRep:1 of
-msgid ":py:obj:`width (int) <aioqzone.type.resp.PicRep.width>`"
-msgstr ""
-
-#: aioqzone.type.resp.PicRep.valid_url:1 of
-msgid "Test if `self.thumb` and `self.raw` is :class:`HttpUrl`."
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`abstime (int) <aioqzone.type.resp.PublishResp.abstime>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`attach (str) <aioqzone.type.resp.PublishResp.attach>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`code (int) <aioqzone.type.resp.PublishResp.code>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`feedinfo (str) <aioqzone.type.resp.PublishResp.feedinfo>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`fid (str) <aioqzone.type.resp.PublishResp.fid>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`message (str) <aioqzone.type.resp.PublishResp.message>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`needVerify (bool) <aioqzone.type.resp.PublishResp.needVerify>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`republish (bool) <aioqzone.type.resp.PublishResp.republish>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`secret (bool) <aioqzone.type.resp.PublishResp.secret>`"
-msgstr ""
-
-#: aioqzone.type.resp.PublishResp:1 of
-msgid ":py:obj:`vote (str) <aioqzone.type.resp.PublishResp.vote>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo:1 of
-msgid ":py:obj:`cover_height (int) <aioqzone.type.resp.VideoInfo.cover_height>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo:1 of
-msgid ":py:obj:`cover_width (int) <aioqzone.type.resp.VideoInfo.cover_width>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo:1 of
-msgid ":py:obj:`raw (pydantic.networks.HttpUrl) <aioqzone.type.resp.VideoInfo.raw>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo:1 of
-msgid ":py:obj:`thumb (pydantic.networks.HttpUrl) <aioqzone.type.resp.VideoInfo.thumb>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo:1 of
-msgid ":py:obj:`vid (str) <aioqzone.type.resp.VideoInfo.vid>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo2:1 of
-msgid ":py:obj:`cover_height (int) <aioqzone.type.resp.VideoInfo2.cover_height>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo2:1 of
-msgid ":py:obj:`cover_width (int) <aioqzone.type.resp.VideoInfo2.cover_width>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo2:1 of
-msgid ":py:obj:`raw (pydantic.networks.HttpUrl) <aioqzone.type.resp.VideoInfo2.raw>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoInfo2:1 of
-msgid ":py:obj:`vid (str) <aioqzone.type.resp.VideoInfo2.vid>`"
-msgstr ""
-
-#: aioqzone.type.resp.VideoRep:1 of
-msgid ":py:obj:`video_info (aioqzone.type.resp.VideoInfo) <aioqzone.type.resp.VideoRep.video_info>`"
-msgstr ""
-
 #~ msgid ""
 #~ "Represents a feed in "
 #~ ":meth:`~aioqzone.api.DummyQapi.feeds3_html_more`. The feed content is"
 #~ " in html format."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This module defines types that represent responses "
+#~ "from Qzone. These `*Rep` or `*Resp` classes are "
+#~ ":class:`pydantic.BaseModel` which can be used to validate"
+#~ " responses."
+#~ msgstr ""
+
+#~ msgid "Fields"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`abstime (int) <aioqzone.type.resp.CommentRep.abstime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`name (str) <aioqzone.type.resp.CommentRep.name>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`pic (Optional[List[dict]]) <aioqzone.type.resp.CommentRep.pic>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`replyNum (int) <aioqzone.type.resp.CommentRep.replyNum>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`tid (int) <aioqzone.type.resp.CommentRep.tid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`uin (int) <aioqzone.type.resp.CommentRep.uin>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`abstime (int) <aioqzone.type.resp.FeedDetailRep.abstime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`cmtnum (int) <aioqzone.type.resp.FeedDetailRep.cmtnum>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`commentlist (Optional[List[aioqzone.type.resp.CommentRep]]) "
+#~ "<aioqzone.type.resp.FeedDetailRep.commentlist>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`fid (str) <aioqzone.type.resp.FeedDetailRep.fid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`fwdnum (int) <aioqzone.type.resp.FeedDetailRep.fwdnum>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`name (str) <aioqzone.type.resp.FeedDetailRep.name>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`pic (Optional[List[Union[aioqzone.type.resp.VideoRep, "
+#~ "aioqzone.type.resp.PicRep]]]) <aioqzone.type.resp.FeedDetailRep.pic>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`rt_abstime (int) <aioqzone.type.resp.FeedDetailRep.rt_abstime>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`rt_con (Optional[aioqzone.type.entity.HasConEntity]) "
+#~ "<aioqzone.type.resp.FeedDetailRep.rt_con>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`rt_createTime (str) <aioqzone.type.resp.FeedDetailRep.rt_createTime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`rt_fid (str) <aioqzone.type.resp.FeedDetailRep.rt_fid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`rt_uin (int) <aioqzone.type.resp.FeedDetailRep.rt_uin>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`rt_uinname (str) <aioqzone.type.resp.FeedDetailRep.rt_uinname>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`uin (int) <aioqzone.type.resp.FeedDetailRep.uin>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`video (Optional[List[aioqzone.type.resp.VideoInfo]]) "
+#~ "<aioqzone.type.resp.FeedDetailRep.video>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`aisortBeginTime (str) <aioqzone.type.resp.FeedMoreAux.aisortBeginTime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`aisortEndTime (str) <aioqzone.type.resp.FeedMoreAux.aisortEndTime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`aisortNextTime (str) <aioqzone.type.resp.FeedMoreAux.aisortNextTime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`aisortOffset (str) <aioqzone.type.resp.FeedMoreAux.aisortOffset>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`begintime (int) <aioqzone.type.resp.FeedMoreAux.begintime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`daylist (str) <aioqzone.type.resp.FeedMoreAux.daylist>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`dayspac (int) <aioqzone.type.resp.FeedMoreAux.dayspac>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`endtime (str) <aioqzone.type.resp.FeedMoreAux.endtime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`externparam (str) <aioqzone.type.resp.FeedMoreAux.externparam>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`hasMoreFeeds (bool) <aioqzone.type.resp.FeedMoreAux.hasMoreFeeds>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`lastAccessRelateTime (str) <aioqzone.type.resp.FeedMoreAux.lastAccessRelateTime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`lastaccesstime (str) <aioqzone.type.resp.FeedMoreAux.lastaccesstime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`pagenum (int) <aioqzone.type.resp.FeedMoreAux.pagenum>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`uinlist (str) <aioqzone.type.resp.FeedMoreAux.uinlist>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`aux (aioqzone.type.resp.FeedMoreAux) <aioqzone.type.resp.FeedMoreResp.aux>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`feeds (List[aioqzone.type.resp.FeedRep]) <aioqzone.type.resp.FeedMoreResp.feeds>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Represents a feed in "
+#~ ":meth:`~aioqzone.api.QzoneWebAPI.feeds3_html_more`. The feed content "
+#~ "is in html format."
+#~ msgstr ""
+
+#~ msgid ":py:obj:`abstime (int) <aioqzone.type.resp.FeedRep.abstime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`appid (int) <aioqzone.type.resp.FeedRep.appid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`fid (str) <aioqzone.type.resp.FeedRep.fid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`html (str) <aioqzone.type.resp.FeedRep.html>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`nickname (str) <aioqzone.type.resp.FeedRep.nickname>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`typeid (int) <aioqzone.type.resp.FeedRep.typeid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`uin (int) <aioqzone.type.resp.FeedRep.uin>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`ver (int) <aioqzone.type.resp.FeedRep.ver>`"
+#~ msgstr ""
+
+#~ msgid ":term:`abstime` in references."
+#~ msgstr ""
+
+#~ msgid ":term:`appid` in references."
+#~ msgstr ""
+
+#~ msgid ":term:`fid` in references."
+#~ msgstr ""
+
+#~ msgid ":py:obj:`aboutHostFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.aboutHostFeeds_new_cnt>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`followFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.followFeeds_new_cnt>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`friendFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.friendFeeds_new_cnt>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`friendFeeds_newblog_cnt (int) "
+#~ "<aioqzone.type.resp.FeedsCount.friendFeeds_newblog_cnt>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`friendFeeds_newphoto_cnt (int) "
+#~ "<aioqzone.type.resp.FeedsCount.friendFeeds_newphoto_cnt>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`myFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.myFeeds_new_cnt>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`newfeeds_uinlist (list) <aioqzone.type.resp.FeedsCount.newfeeds_uinlist>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`replyHostFeeds_new_cnt (int) <aioqzone.type.resp.FeedsCount.replyHostFeeds_new_cnt>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`specialCareFeeds_new_cnt (int) "
+#~ "<aioqzone.type.resp.FeedsCount.specialCareFeeds_new_cnt>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`albumId (str) <aioqzone.type.resp.FloatViewPhoto.albumId>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`cmtTotal (int) <aioqzone.type.resp.FloatViewPhoto.cmtTotal>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`createTime (str) <aioqzone.type.resp.FloatViewPhoto.createTime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`desc (dict) <aioqzone.type.resp.FloatViewPhoto.desc>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`fid (str) <aioqzone.type.resp.FloatViewPhoto.fid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`fwdnum (int) <aioqzone.type.resp.FloatViewPhoto.fwdnum>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`height (int) <aioqzone.type.resp.FloatViewPhoto.height>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`isMultiPic (Optional[bool]) <aioqzone.type.resp.FloatViewPhoto.isMultiPic>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`is_video (Optional[bool]) <aioqzone.type.resp.FloatViewPhoto.is_video>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`is_weixin_mode (Optional[bool]) <aioqzone.type.resp.FloatViewPhoto.is_weixin_mode>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`likeKey (str) <aioqzone.type.resp.FloatViewPhoto.likeKey>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`likeList (Optional[List[dict]]) <aioqzone.type.resp.FloatViewPhoto.likeList>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`likeTotal (int) <aioqzone.type.resp.FloatViewPhoto.likeTotal>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`lloc (str) <aioqzone.type.resp.FloatViewPhoto.lloc>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`ownerName (str) <aioqzone.type.resp.FloatViewPhoto.ownerName>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`ownerUin (int) <aioqzone.type.resp.FloatViewPhoto.ownerUin>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`photoOwner (int) <aioqzone.type.resp.FloatViewPhoto.photoOwner>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`photocubage (Optional[int]) <aioqzone.type.resp.FloatViewPhoto.photocubage>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`phototype (int) <aioqzone.type.resp.FloatViewPhoto.phototype>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`picId (Union[pydantic.networks.HttpUrl, str]) "
+#~ "<aioqzone.type.resp.FloatViewPhoto.picId>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`picKey (str) <aioqzone.type.resp.FloatViewPhoto.picKey>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`raw (pydantic.networks.HttpUrl) <aioqzone.type.resp.FloatViewPhoto.raw>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`rt_fid (str) <aioqzone.type.resp.FloatViewPhoto.rt_fid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`thumb (pydantic.networks.HttpUrl) <aioqzone.type.resp.FloatViewPhoto.thumb>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`topicId (str) <aioqzone.type.resp.FloatViewPhoto.topicId>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`video_info (Optional[aioqzone.type.resp.VideoInfo2]) "
+#~ "<aioqzone.type.resp.FloatViewPhoto.video_info>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`width (int) <aioqzone.type.resp.FloatViewPhoto.width>`"
+#~ msgstr ""
+
+#~ msgid "Constraints"
+#~ msgstr ""
+
+#~ msgid "**minLength** = 1"
+#~ msgstr ""
+
+#~ msgid "**maxLength** = 2083"
+#~ msgstr ""
+
+#~ msgid "**format** = uri"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`abstime (int) <aioqzone.type.resp.MsgListElm.abstime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`cmtnum (int) <aioqzone.type.resp.MsgListElm.cmtnum>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`commentlist (list) <aioqzone.type.resp.MsgListElm.commentlist>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`createTime (str) <aioqzone.type.resp.MsgListElm.createTime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`fid (str) <aioqzone.type.resp.MsgListElm.fid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`fwdnum (int) <aioqzone.type.resp.MsgListElm.fwdnum>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`name (str) <aioqzone.type.resp.MsgListElm.name>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`uin (int) <aioqzone.type.resp.MsgListElm.uin>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`height (int) <aioqzone.type.resp.PicRep.height>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`is_video (int) <aioqzone.type.resp.PicRep.is_video>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`picId (Union[pydantic.networks.HttpUrl, str]) <aioqzone.type.resp.PicRep.picId>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`raw (Union[pydantic.networks.HttpUrl, str]) <aioqzone.type.resp.PicRep.raw>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`thumb (Union[pydantic.networks.HttpUrl, str]) <aioqzone.type.resp.PicRep.thumb>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`width (int) <aioqzone.type.resp.PicRep.width>`"
+#~ msgstr ""
+
+#~ msgid "Test if `self.thumb` and `self.raw` is :class:`HttpUrl`."
+#~ msgstr ""
+
+#~ msgid ":py:obj:`abstime (int) <aioqzone.type.resp.PublishResp.abstime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`attach (str) <aioqzone.type.resp.PublishResp.attach>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`code (int) <aioqzone.type.resp.PublishResp.code>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`feedinfo (str) <aioqzone.type.resp.PublishResp.feedinfo>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`fid (str) <aioqzone.type.resp.PublishResp.fid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`message (str) <aioqzone.type.resp.PublishResp.message>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`needVerify (bool) <aioqzone.type.resp.PublishResp.needVerify>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`republish (bool) <aioqzone.type.resp.PublishResp.republish>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`secret (bool) <aioqzone.type.resp.PublishResp.secret>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`vote (str) <aioqzone.type.resp.PublishResp.vote>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`cover_height (int) <aioqzone.type.resp.VideoInfo.cover_height>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`cover_width (int) <aioqzone.type.resp.VideoInfo.cover_width>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`raw (pydantic.networks.HttpUrl) <aioqzone.type.resp.VideoInfo.raw>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`thumb (pydantic.networks.HttpUrl) <aioqzone.type.resp.VideoInfo.thumb>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`vid (str) <aioqzone.type.resp.VideoInfo.vid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`cover_height (int) <aioqzone.type.resp.VideoInfo2.cover_height>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`cover_width (int) <aioqzone.type.resp.VideoInfo2.cover_width>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`raw (pydantic.networks.HttpUrl) <aioqzone.type.resp.VideoInfo2.raw>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`vid (str) <aioqzone.type.resp.VideoInfo2.vid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`video_info (aioqzone.type.resp.VideoInfo) <aioqzone.type.resp.VideoRep.video_info>`"
 #~ msgstr ""
