@@ -192,6 +192,11 @@ class QzoneH5RawAPI:
         return self._rtext_handler(data, cb=False, errno_key=("code", "ret"), data_key="data")
 
     async def get_active_feeds(self, attach_info: str) -> StrDict:
+        """Get next page.
+
+        :param attach_info: The ``attach_info`` field from last call. Pass an empty string if getting the first page.
+        :return: If success, the ``data`` field of the response.
+        """
         data = dict(
             res_type=0,
             res_attach=attach_info,

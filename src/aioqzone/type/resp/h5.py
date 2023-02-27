@@ -12,14 +12,19 @@ class FeedCount(BaseModel):
     visitor_cnt: int = 0
 
 
+class RightInfo(BaseModel):
+    ugc_right: int
+    allow_uins: List = Field(default_factory=list)
+
+
 class FeedCommon(BaseModel):
     appid: int
-    abstime: int = Field(alias="time")
+    time: int
     curkey: HttpUrl = Field(alias="curlikekey")
     orgkey: Union[HttpUrl, str] = Field(alias="orglikekey")
     ugckey: str
     ugcrightkey: str
-    right_info: Optional[dict] = None
+    right_info: RightInfo
     wup_feeds_type: int
 
     subid: int = 0
@@ -44,9 +49,9 @@ class FeedSummary(BaseModel):
     hasmore: bool = False
 
 
-class FeedLike(BaseModel):
-    islike: bool = Field(False, alias="isliked")
-    num: int = 0
+class LikeInfo(BaseModel):
+    isliked: bool = False
+    likeNum: int = Field(alias="num", default_factory=int)
     likemans: List[UserInfo] = Field(default_factory=list)
 
 
@@ -102,26 +107,24 @@ class FeedPic(BaseModel):
     picdata: List[PicData]
 
 
-class CommentItem(BaseModel):
+class CommentItem(LikeInfo):
     commentid: int
     commentLikekey: HttpUrl
     content: str
     date: int
     user: UserInfo
     isDeleted: bool = False
-    isliked: bool = False
 
-    likeNum: int = 0
-    likemans: List = Field(default_factory=list)
+    likeNum: int = Field(default_factory=int)
     replynum: int
     commentpic: List = Field(default_factory=list)
     replys: List = Field(default_factory=list)
 
 
 class FeedComment(BaseModel):
-    num: int
+    num: int = 0
     unreadCnt: int = 0
-    comments: List[CommentItem]
+    comments: List[CommentItem] = Field(default_factory=list)
 
 
 class HasCommon(BaseModel):
@@ -170,10 +173,14 @@ class FeedOriginal(HasCommon, HasUserInfo, HasSummary, HasMedia):
 
 class FeedData(HasCommon, HasSummary, HasMedia, HasUserInfo):
     common: FeedCommon = Field(alias="comm")
-    like: FeedLike
+    like: LikeInfo = Field(default_factory=LikeInfo)
 
-    comment: Optional[FeedComment]
-    original: Optional[Union[FeedOriginal, Share]]
+    comment: FeedComment = Field(default_factory=FeedComment)
+    original: Union[FeedOriginal, Share, None]
+
+    @property
+    def abstime(self):
+        return self.common.time
 
 
 class FeedPageResp(BaseModel):
