@@ -46,6 +46,8 @@ class TestUpWeb:
             assert sess.check_rst.salt
             p = await web.pwder.encode(sess.check_rst.salt, sess.verifycode)
             assert len(p) > 4
+            r = await web.try_login(sess)
+            assert r.code != StatusCode.WrongPassword
 
     async def test_login(self, web: UpWebLogin):
         try:
