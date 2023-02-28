@@ -77,7 +77,7 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
     .. versionchanged:: 0.12.4
 
         TeaEncoder is used as the default password encoder. A `legacy_encoder` paramater is added to force
-        using the former `NodeEncoder`. It can also be configured by set :env:`AIOQZONE_PWDENCODER` to "node".
+        using the former `NodeEncoder`. It can also be configured by set :envvar:`AIOQZONE_PWDENCODER` to "node".
         Note that the paramater in code, i.e. `legacy_encoder`, takes precedence.
     """
 
