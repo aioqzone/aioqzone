@@ -80,3 +80,24 @@ class TestH5API:
             await api.mfeeds_get_count()
         except TencentLoginError:
             pytest.xfail("login failed")
+
+
+@pytest.mark.needuser
+async def test_h5_up_login(client: ClientAdapter):
+    from aioqzone.api.loginman import QREvent, QRLoginMan
+
+    from . import showqr
+
+    man = QRLoginMan(client, int(env["TEST_UIN"]), h5=True)
+    api = QzoneH5API(client, man)
+
+    hook = QREvent()
+
+    async def __qr_fetched(png, times):
+        showqr(png)
+
+    hook.QrFetched = __qr_fetched
+    man.register_hook(hook)
+
+    d = await api.mfeeds_get_count()
+    print(d.active_cnt)

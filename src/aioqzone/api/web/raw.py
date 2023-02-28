@@ -36,6 +36,9 @@ class QzoneWebRawAPI:
     host = "https://user.qzone.qq.com"
 
     def __init__(self, client: ClientAdapter, loginman: Loginable) -> None:
+        """
+        .. warning:: If `loginman` uses an `AsyncClient`, the `client` param MUST use this client as well.
+        """
         super().__init__()
         self.client = client
         self.login = loginman

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-26 14:39+0800\n"
+"POT-Creation-Date: 2023-02-28 20:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,14 @@ msgstr ""
 
 #: ../../source/qqqr/up/login.rst:2
 msgid "UpLogin and UpSession"
+msgstr ""
+
+#: of qqqr.up.web.UpWebLogin:3
+msgid ""
+"TeaEncoder is used as the default password encoder. A `legacy_encoder` paramater is added to "
+"force using the former `NodeEncoder`. It can also be configured by set "
+":envvar:`AIOQZONE_PWDENCODER` to \"node\". Note that the paramater in code, i.e. "
+"`legacy_encoder`, takes precedence."
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.captcha:1
@@ -191,4 +199,13 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "A login response"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "TeaEncoder is used as the default password encoder."
+#~ " A `legacy_encoder` paramater is added to force "
+#~ "using the former `NodeEncoder`. It can also be "
+#~ "configured by set :env:`AIOQZONE_PWDENCODER` to \"node\". "
+#~ "Note that the paramater in code, i.e. "
+#~ "`legacy_encoder`, takes precedence."
 #~ msgstr ""

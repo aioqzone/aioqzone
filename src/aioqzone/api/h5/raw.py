@@ -23,6 +23,9 @@ class QzoneH5RawAPI:
     qzonetoken: str = ""
 
     def __init__(self, client: ClientAdapter, loginman: Loginable) -> None:
+        """
+        .. warning:: If `loginman` uses an `AsyncClient`, the `client` param MUST use this client as well.
+        """
         super().__init__()
         self.client = client
         self.login = loginman
@@ -189,6 +192,11 @@ class QzoneH5RawAPI:
         return self._rtext_handler(data, cb=False, errno_key=("code", "ret"), data_key="data")
 
     async def get_active_feeds(self, attach_info: str) -> StrDict:
+        """Get next page.
+
+        :param attach_info: The ``attach_info`` field from last call. Pass an empty string if getting the first page.
+        :return: If success, the ``data`` field of the response.
+        """
         data = dict(
             res_type=0,
             res_attach=attach_info,
@@ -217,3 +225,26 @@ class QzoneH5RawAPI:
                 return r.json()
 
         return self._rtext_handler(await retry_closure(), cb=False, data_key="data")
+
+    async def internal_dolike_app(self, appid: int, unikey: str, curkey: str, like=True):
+        data = dict(
+            opuin=self.login.uin,
+            unikey=unikey,
+            curkey=curkey,
+            appid=appid,
+            opr_type="like",
+            format="purejson",
+        )
+        if like:
+            path = "/proxy/domain/w.qzone.qq.com/cgi-bin/likes/internal_dolike_app"
+        else:
+            path = "/proxy/domain/w.qzone.qq.com/cgi-bin/likes/internal_unlike_app"
+
+        @self._relogin_retry
+        async def retry_closure() -> StrDict:
+            async with self.host_get(path, data) as r:
+                r.raise_for_status()
+                return r.json()
+
+        self._rtext_handler(await retry_closure(), cb=False)
+        return True

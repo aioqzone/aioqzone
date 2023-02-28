@@ -22,10 +22,9 @@ from .type import CheckResp, LoginResp, VerifyResp
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
 
+LEGACY_ENCODER = env.get("AIOQZONE_PWDENCODER", "").strip().lower() == "node"
+
 log = logging.getLogger(__name__)
-UseEncoder = (
-    TeaEncoder if env.get("AIOQZONE_PWDENCODER", "").strip().lower() == "python" else NodeEncoder
-)
 
 
 class UpWebSession(LoginSession):
@@ -74,7 +73,13 @@ class UpWebSession(LoginSession):
 
 
 class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
-    encode_cls: Type[PasswdEncoder] = UseEncoder
+    """
+    .. versionchanged:: 0.12.4
+
+        TeaEncoder is used as the default password encoder. A `legacy_encoder` paramater is added to force
+        using the former `NodeEncoder`. It can also be configured by set :envvar:`AIOQZONE_PWDENCODER` to "node".
+        Note that the paramater in code, i.e. `legacy_encoder`, takes precedence.
+    """
 
     def __init__(
         self,
@@ -84,12 +89,17 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
         uin: int,
         pwd: str,
         info: Optional[PT_QR_APP] = None,
+        *,
+        legacy_encoder=LEGACY_ENCODER,
     ):
         super().__init__(client, app, proxy, info=info)
         assert pwd
         self.uin = uin
         self.pwd = pwd
-        self.pwder = self.encode_cls(client, pwd)
+        if legacy_encoder:
+            self.pwder = NodeEncoder(client, pwd)
+        else:
+            self.pwder = TeaEncoder(pwd)
 
     @property
     def login_page_url(self):
