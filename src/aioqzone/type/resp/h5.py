@@ -119,6 +119,7 @@ class CommentItem(LikeInfo):
     replynum: int
     commentpic: List = Field(default_factory=list)
     replys: List = Field(default_factory=list)
+    # picdata: dict
 
 
 class FeedComment(BaseModel):

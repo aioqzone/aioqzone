@@ -16,8 +16,7 @@ class HasContent(BaseModel):
 class ConEntity(BaseModel):
     """Base class for all content entities. All entities has a numeric :obj:`type`."""
 
-    type: int
-    """Official qzone type is positive. Our self-defined entities will have a negative type."""
+    pass
 
 
 class TextEntity(ConEntity):
@@ -25,7 +24,6 @@ class TextEntity(ConEntity):
 
     Two objects of this class are considered equal, if their :obj:`con` is equal."""
 
-    type: int = 2
     con: str = ""
 
     def __eq__(self, other) -> bool:
@@ -37,7 +35,6 @@ class AtEntity(ConEntity):
 
     Two objects of this class are considered equal, if their :obj:`uin` is equal."""
 
-    type: int = 0
     nick: str = ""
     uin: int
 
@@ -50,7 +47,6 @@ class EmEntity(ConEntity):
 
     Two objects of this class are considered equal, if their :obj:`eid` is equal."""
 
-    type: int = -1
     eid: int
 
     def __eq__(self, other):
