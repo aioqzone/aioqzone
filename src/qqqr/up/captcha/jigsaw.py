@@ -1,9 +1,11 @@
+import io
 from os import environ as env
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
-import cv2 as cv
 import numpy as np
+from numpy.fft import fft2, ifft2
+from PIL import Image as image
 
 if TYPE_CHECKING:
     mat_u1 = np.ndarray[Any, np.dtype[np.uint8]]
@@ -14,13 +16,59 @@ else:
 debug = bool(env.get("AIOQZONE_JIGSAW_DEBUG"))
 
 
-def frombytes(b: bytes, dtype="uint8", flags=cv.IMREAD_UNCHANGED) -> np.ndarray:
-    return cv.imdecode(np.frombuffer(b, dtype=dtype), flags=flags)
+def frombytes(b: bytes, dtype=np.uint8) -> mat_u1:
+    buf = io.BytesIO(b)
+    return np.asarray(image.open(buf), dtype=dtype)
 
 
-def tobytes(img: mat_u1, ext=".png") -> bytes:
-    _, arr = cv.imencode(ext, img)
-    return arr.tobytes()
+def tobytes(img: mat_u1, format="png") -> bytes:
+    buf = io.BytesIO()
+    image.fromarray(img).save(buf, format)
+    return buf.getvalue()
+
+
+def conv2d(x: np.ndarray, k: np.ndarray, axes=(0, 1)):
+    """
+    :return: f8 array, with the shape of `x.shape - (k.shape - 1)`
+    """
+    kh, kw = k.shape[axes[0]], k.shape[axes[1]]
+    out_shape = x.shape[axes[0]], x.shape[axes[1]]
+    back = ifft2((fft2(x, axes=axes)) * fft2(k, axes=axes, s=out_shape), axes=axes)
+    return back.real[kh - 1 :, kw - 1 :]
+
+
+def corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
+    r"""``TM_CCORR_NORMED`` mode in opecv matchTemplate.
+
+    .. math::
+
+        R(x,y)= \frac{\sum_{x',y'} (T(x',y') \cdot I(x+x',y+y') \cdot M(x',y')^2)}{\sqrt{\sum_{x',y'} \left( T(x',y') \cdot M(x',y') \right)^2 \cdot \sum_{x',y'} \left( I(x+x',y+y') \cdot M(x',y') \right)^2}}
+    """
+    mask_template = mask * tmpl
+    mask_template = np.flip(mask_template, axis=(0, 1))
+    mask_template = mask_template / np.linalg.norm(mask_template, axis=(0, 1))
+    corr = conv2d(x, mask_template)
+    img_norm = np.sqrt(conv2d(np.power(x, 2), mask))
+    img_norm[img_norm < 1e-12] = +np.inf
+    return (corr / img_norm).sum(axis=-1)
+
+
+def hdiff_corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
+    x = x.astype(np.int16)
+    tmpl = tmpl.astype(np.int16)
+    x_diff = x[:, 1:] - x[:, :-1]
+    t_diff = tmpl[:, 1:] - tmpl[:, :-1]
+    mask_u = mask[:, 1:] * mask[:, :-1]
+    return corr_norm_mask_match(x_diff, t_diff, mask_u)
+
+
+def vdiff_corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
+    x = x.astype(np.int16)
+    tmpl = tmpl.astype(np.int16)
+    y_diff = x[1:] - x[:-1]
+    t_diff = tmpl[1:] - tmpl[:-1]
+    mask_u = mask[1:] * mask[:-1]
+    return corr_norm_mask_match(y_diff, t_diff, mask_u)
 
 
 class Piece:
@@ -48,29 +96,25 @@ class Piece:
 
         Use ::obj`.bbox` to get bounding box of the piece, and :obj:`.padding` to get padding size.
         """
-        contours, _ = cv.findContours(
-            cv.cvtColor(self.img, cv.COLOR_BGR2GRAY), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE
-        )
-        # hierarchy array: (next, prev, child, parent)
-        center = (int(self.img.shape[0] // 2), int(self.img.shape[1] // 2))
-        contours = [
-            contour
-            for contour in contours
-            if cv.pointPolygonTest(contour, center, False) == 1
-            and cv.pointPolygonTest(contour, (0, 0), False) == -1
-        ]
+        bool_map = self.img.mean(axis=-1) > 170
+        accum_h = bool_map.sum(axis=0)
+        accum_w = bool_map.sum(axis=1)
 
-        assert len(contours) >= 1
-        self.cont = contours[0]
+        h_center = bool_map.shape[1] // 2
+        v_center = bool_map.shape[0] // 2
 
-        self.bbox = cv.boundingRect(self.cont)
+        bound_l = np.argwhere(accum_h[:h_center]).min()
+        bound_r = np.argwhere(accum_h[h_center:]).max() + h_center
+
+        bound_t = np.argwhere(accum_w[:v_center]).min()
+        bound_b = np.argwhere(accum_w[v_center:]).max() + v_center
+
+        self.bbox = (bound_l, bound_t, bound_r - bound_l, bound_b - bound_t)
 
         if debug:
             debug_out = Path("data/debug")
             debug_out.mkdir(exist_ok=True, parents=True)
-            mask = cv.cvtColor(self.strip_mask(), cv.COLOR_GRAY2BGR)
-            mask = cv.drawContours(mask, [self.cont - self.bbox[:2]], 0, (0, 0, 255), 1)
-            cv.imwrite((debug_out / "tmplmask.png").as_posix(), mask)
+            image.fromarray(self.mask[..., 0]).save(debug_out / "mask.png")
 
     @property
     def padding(self) -> Tuple[int, int, int, int]:
@@ -98,22 +142,18 @@ class Piece:
         return self.img[ys, xs]
 
     def strip_mask(self) -> mat_u1:
-        """Generate a mask for `cv2.matchTemplate` since the piece is in an irregular shape."""
+        """Generate a mask for :meth:`corr_norm_mask_match` since the piece is in an irregular shape."""
         ys, xs = self._yx_range
         return self.mask[ys, xs]
 
     def build_template(self, a: float = 0.3) -> mat_u1:
-        """This method attempts to generate a piece view like that on the puzzle.
-        In order to help :meth:`cv2.matchTemplate` to get an accurate result.
-
-        It will dim the original piece and draw its contour with white lines.
+        """This method attempts to generate a piece view like that on the puzzle by dimming the original piece.
+        In order to get an accurate result.
 
         :param a: coeff to be multiplied with the image in order to dim it, default as 0.3
         :return: generated piece image.
         """
-        spiece = (self.strip() * a).astype("uint8")
-        cont = self.cont - self.bbox[:2]
-        return cv.drawContours(spiece, [cont], 0, (200, 200, 200), 1)
+        return (self.strip() * a).round().astype(np.uint8)
 
     def __bytes__(self) -> bytes:
         return tobytes(np.concatenate((self.img, self.mask), -1))
@@ -135,7 +175,7 @@ class Jigsaw:
         """
         super().__init__()
         self.top = top
-        self.background = frombytes(background, flags=cv.IMREAD_COLOR)
+        self.background = frombytes(background)
 
         piece = frombytes(sprites)
         if piece_pos is not None:
@@ -188,43 +228,46 @@ class Jigsaw:
         return self._left
 
     def solve(self, left_bound: int = 50) -> int:
-        """Solve the captcha using :meth:`cv2.matchTemplate`.
+        """Solve the captcha using :meth:`corr_norm_mask_match`.
 
         :return: position with the max confidence. This might be the left of the piece position on the puzzle.
         """
-        template = self.piece.build_template()
-        left_bound += self.piece.padding[0]
-
         if not hasattr(self, "confidence"):
+            template = self.piece.build_template()
+            left_bound += self.piece.padding[0]
             top = self.top + self.piece.padding[1]
 
-            self.confidence = cv.matchTemplate(
-                self.background[top : top + self.piece.bbox[3], left_bound:],
-                template,
-                cv.TM_CCOEFF_NORMED,
-                mask=self.piece.strip_mask(),
-            )
+            x = self.background[top : top + self.piece.bbox[3], left_bound:]
+            mask = (self.piece.strip_mask() > 170).astype(np.uint8)
+            h_cfd = hdiff_corr_norm_mask_match(x, template, mask)
+            v_cfd = vdiff_corr_norm_mask_match(x, template, mask)
+            self.confidence = h_cfd + v_cfd
+
+            if debug:
+                debug_out = Path("data/debug")
+                debug_out.mkdir(exist_ok=True, parents=True)
+
+                def cfd_bands(confidence, h=50):
+                    confmap = confidence - self.confidence.min()
+                    confmap /= confmap.max() / 255
+                    confmap = confmap.astype(np.uint8)
+                    confmap = np.pad(confmap, ((0, 0), (left_bound, template.shape[1] - 1)))
+                    confmap = np.tile(confmap[:, :, None], (h, 1, 3))
+                    return confmap
+
+                bgw_conf = np.concatenate(
+                    [
+                        self.background,
+                        cfd_bands(h_cfd),
+                        cfd_bands(v_cfd),
+                        cfd_bands(self.confidence),
+                    ],
+                    axis=0,
+                )
+                image.fromarray(bgw_conf).save(debug_out / "bg_with_conf.png")
+                image.fromarray(template).save(debug_out / "spiece.png")
+
         max_cfd_x = int(np.argmax(self.confidence)) + left_bound
-
-        if debug:
-            debug_out = Path("data/debug")
-            debug_out.mkdir(exist_ok=True, parents=True)
-
-            confmap = self.confidence - self.confidence.min()
-            confmap /= confmap.max() / 255
-            confmap = confmap.astype(np.uint8)
-            confmap = np.pad(confmap, ((0, 0), (left_bound, template.shape[1] - 1)))
-            confmap = np.tile(confmap, (128, 1))
-            confmap = cv.cvtColor(confmap, cv.COLOR_GRAY2BGR)
-
-            bgw_conf = np.concatenate([self.background, confmap], axis=0)
-            cv.imwrite((debug_out / "bg_with_conf.png").as_posix(), bgw_conf)
-            cv.imwrite((debug_out / "spiece.png").as_posix(), template)
-
-            cont = self.piece.cont + np.array([max_cfd_x - self.piece.padding[0], self.top])
-            d = cv.drawContours(self.background, [cont], 0, (0, 0, 255), 2)
-            cv.imwrite((debug_out / "contour.png").as_posix(), d)
-
         return max_cfd_x
 
 
