@@ -1,20 +1,8 @@
-import cv2 as cv
-import numpy as np
+import io
 
-
-def frombytes(b: bytes, dtype="uint8", flags=cv.IMREAD_COLOR) -> np.ndarray:
-    return cv.imdecode(np.frombuffer(b, dtype=dtype), flags=flags)
+from PIL import Image as image
 
 
 def showqr(png: bytes):
-    try:
-        cv.destroyAllWindows()
-        cv.imshow("Scan and login", frombytes(png))
-        cv.waitKey()
-    except:
-        from pathlib import Path
-
-        Path("tmp").mkdir(exist_ok=True)
-        with open("tmp/r.png", "wb") as f:
-            f.write(png)
-        print("Open tmp/r.png and scan")
+    buf = io.BytesIO(png)
+    image.open(buf).show()

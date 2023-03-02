@@ -142,7 +142,7 @@ class Piece:
         return self.img[ys, xs]
 
     def strip_mask(self) -> mat_u1:
-        """Generate a mask for `cv2.matchTemplate` since the piece is in an irregular shape."""
+        """Generate a mask for :meth:`corr_norm_mask_match` since the piece is in an irregular shape."""
         ys, xs = self._yx_range
         return self.mask[ys, xs]
 
@@ -228,7 +228,7 @@ class Jigsaw:
         return self._left
 
     def solve(self, left_bound: int = 50) -> int:
-        """Solve the captcha using :meth:`cv2.matchTemplate`.
+        """Solve the captcha using :meth:`corr_norm_mask_match`.
 
         :return: position with the max confidence. This might be the left of the piece position on the puzzle.
         """
