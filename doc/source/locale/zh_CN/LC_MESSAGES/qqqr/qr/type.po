@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 10:13+0800\n"
+"POT-Creation-Date: 2023-03-07 21:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.12.1\n"
 
 #: ../../source/qqqr/qr/type.rst:2
 msgid "QrLogin Types"
@@ -38,7 +38,8 @@ msgid ":py:obj:`nickname (str) <qqqr.qr.type.PollResp.nickname>`"
 msgstr ""
 
 #: of qqqr.qr.type.PollResp:1
-msgid ""
-":py:obj:`url (Union[pydantic.networks.HttpUrl, str]) "
-"<qqqr.qr.type.PollResp.url>`"
+msgid ":py:obj:`url (pydantic.networks.HttpUrl | str) <qqqr.qr.type.PollResp.url>`"
 msgstr ""
+
+#~ msgid ":py:obj:`url (Union[pydantic.networks.HttpUrl, str]) <qqqr.qr.type.PollResp.url>`"
+#~ msgstr ""
