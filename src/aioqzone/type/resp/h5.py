@@ -28,7 +28,6 @@ class FeedCommon(BaseModel):
     wup_feeds_type: int
 
     subid: int = 0
-    feedsid: str = ""
     feedstype: int = 0
     originaltype: int = 0
 
@@ -165,19 +164,33 @@ class Share(HasCommon):
 
 
 class FeedOriginal(HasCommon, HasUserInfo, HasSummary, HasMedia):
+    cellid: str = ""
     common: FeedCommon = Field(alias="cell_comm")
     userinfo: UserInfo = Field(alias="cell_userinfo")
     summary: FeedSummary = Field(alias="cell_summary")
     pic: Optional[FeedPic] = Field(alias="cell_pic")
     video: Optional[FeedVideo] = Field(alias="cell_video")
 
+    @root_validator(pre=True)
+    def unpack_cellid(cls, v: dict):
+        if "cell_id" in v:
+            v["cellid"] = v["cell_id"]["cellid"]
+        return v
+
 
 class FeedData(HasCommon, HasSummary, HasMedia, HasUserInfo):
+    cellid: str = ""
     common: FeedCommon = Field(alias="comm")
     like: LikeInfo = Field(default_factory=LikeInfo)
 
     comment: FeedComment = Field(default_factory=FeedComment)
     original: Union[FeedOriginal, Share, None]
+
+    @root_validator(pre=True)
+    def unpack_cellid(cls, v: dict):
+        if "id" in v:
+            v["cellid"] = v["id"]["cellid"]
+        return v
 
     @property
     def abstime(self):
