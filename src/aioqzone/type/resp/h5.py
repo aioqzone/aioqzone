@@ -18,17 +18,19 @@ class RightInfo(BaseModel):
 
 
 class FeedCommon(BaseModel):
-    appid: int
     time: int
+    appid: int
+    typeid: int = Field(alias="feedstype")
     curkey: HttpUrl = Field(alias="curlikekey")
     orgkey: Union[HttpUrl, str] = Field(alias="orglikekey")
     ugckey: str
+    """an underscore-joined string including `uin`, `appid`, `ugcrightkey`"""
     ugcrightkey: str
+    """an identifier, for most 311 feeds, it equals to cellid (fid)."""
     right_info: RightInfo
     wup_feeds_type: int
 
     subid: int = 0
-    feedstype: int = 0
     originaltype: int = 0
 
 
@@ -57,14 +59,22 @@ class LikeInfo(BaseModel):
 class PhotoUrl(BaseModel):
     height: int
     width: int
-    url: Union[HttpUrl, str] = ""
+    url: HttpUrl
 
-    md5: str
-    size: int
+    md5: str = ""
+    size: int = 0
 
     def __hash__(self) -> int:
         o = (self.__class__.__name__, self.height, self.width, self.url)
         return hash(o)
+
+    def __eq__(self, o) -> bool:
+        return (
+            isinstance(o, PhotoUrl)
+            and (o.url == self.url)
+            and (o.width == self.width)
+            and (o.height == self.height)
+        )
 
 
 class PhotoUrls(BaseModel):
@@ -78,10 +88,14 @@ class PhotoUrls(BaseModel):
     def largest(self) -> PhotoUrl:
         return max(self.urls, key=lambda p: p.height * p.width)
 
+    @property
+    def smallest(self) -> PhotoUrl:
+        return min(self.urls, key=lambda p: p.height * p.width)
+
 
 class FeedVideo(BaseModel):
     videoid: str
-    videourl: Union[HttpUrl, str] = ""
+    videourl: HttpUrl
     # videourls: dict
     coverurl: PhotoUrls
     videotime: int
@@ -93,11 +107,23 @@ class FeedVideo(BaseModel):
 
 class PicData(BaseModel):
     photourl: PhotoUrls
-    videodata: FeedVideo
+    videodata: Optional[FeedVideo] = None
     videoflag: int = 0
 
     albumid: str
     curkey: str = Field(alias="curlikekey")
+
+    origin_size: int
+    origin_height: int
+    origin_width: int
+    origin_phototype: int = 0
+
+    @root_validator(pre=True)
+    def remove_useless_data(cls, v: dict):
+        if "videodata" in v:
+            if not v["videodata"]["videourl"]:
+                del v["videodata"]
+        return v
 
 
 class FeedPic(BaseModel):
@@ -129,6 +155,10 @@ class FeedComment(BaseModel):
 
 class HasCommon(BaseModel):
     common: FeedCommon
+
+    @property
+    def abstime(self):
+        return self.common.time
 
 
 class HasUserInfo(BaseModel):
@@ -191,10 +221,6 @@ class FeedData(HasCommon, HasSummary, HasMedia, HasUserInfo):
         if "id" in v:
             v["cellid"] = v["id"]["cellid"]
         return v
-
-    @property
-    def abstime(self):
-        return self.common.time
 
 
 class FeedPageResp(BaseModel):
