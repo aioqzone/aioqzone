@@ -192,11 +192,14 @@ class QzoneH5RawAPI:
         return self._rtext_handler(data, cb=False, errno_key=("code", "ret"), data_key="data")
 
     async def get_active_feeds(self, attach_info: str) -> StrDict:
-        """Get next page.
+        """Get next page. If :obj:`qzonetoken` is not parsed, it will call :meth:`index` and return its response.
 
         :param attach_info: The ``attach_info`` field from last call. Pass an empty string if getting the first page.
         :return: If success, the ``data`` field of the response.
         """
+        if not self.qzonetoken:
+            return await self.index()
+
         data = dict(
             res_type=0,
             res_attach=attach_info,
@@ -248,3 +251,28 @@ class QzoneH5RawAPI:
 
         self._rtext_handler(await retry_closure(), cb=False)
         return True
+
+    async def add_comment(self, ownuin: int, srcId: str, appid: int, content: str, private=False):
+        assert content, "comment should not be empty"
+        assert len(content) <= 2000, "comment maxlen=2000"
+
+        data = dict(
+            ownuin=str(ownuin),
+            srcId=srcId,
+            uin=self.login.uin,
+            isPrivateComment=int(private),
+            content=content,
+            appid=appid,
+            bypass_param={},
+            busi_param={},
+        )
+
+        @self._relogin_retry
+        async def retry_closure() -> StrDict:
+            async with self.host_post("/webapp/json/qzoneOperation/addComment", data=data) as r:
+                r.raise_for_status()
+                return r.json()
+
+        return self._rtext_handler(
+            await retry_closure(), cb=False, errno_key=("ret",), data_key="data"
+        )
