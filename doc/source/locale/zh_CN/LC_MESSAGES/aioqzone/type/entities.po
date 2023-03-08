@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 21:54+0800\n"
+"POT-Creation-Date: 2023-03-08 21:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,16 +66,12 @@ msgstr ""
 
 #: aioqzone.type.entity.HasConEntity:1 of
 msgid ""
-":py:obj:`entities (List[aioqzone.type.entity.AtEntity | aioqzone.type.entity.TextEntity] | None)"
-" <aioqzone.type.entity.HasConEntity.entities>`"
+":py:obj:`entities (List[aioqzone.type.entity.ConEntity]) "
+"<aioqzone.type.entity.HasConEntity.entities>`"
 msgstr ""
 
 #: aioqzone.type.entity.HasContent:1 of
 msgid ":py:obj:`content (str) <aioqzone.type.entity.HasContent.content>`"
-msgstr ""
-
-#: ../../docstring aioqzone.type.entity.RespEntities:1 of
-msgid "Entities that occurs in Qzone responses."
 msgstr ""
 
 #: aioqzone.type.entity.TextEntity:1 of
@@ -111,4 +107,13 @@ msgstr ""
 #~ msgid ""
 #~ ":py:obj:`entities (Optional[List[Union[aioqzone.type.entity.AtEntity, "
 #~ "aioqzone.type.entity.TextEntity]]]) <aioqzone.type.entity.HasConEntity.entities>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`entities (List[aioqzone.type.entity.AtEntity | "
+#~ "aioqzone.type.entity.TextEntity] | None) "
+#~ "<aioqzone.type.entity.HasConEntity.entities>`"
+#~ msgstr ""
+
+#~ msgid "Entities that occurs in Qzone responses."
 #~ msgstr ""
