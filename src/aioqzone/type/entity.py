@@ -4,7 +4,7 @@ and details the works of rich-text stringify.
 .. versionadded:: 0.5.0.dev0
 """
 
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -54,4 +54,4 @@ class EmEntity(ConEntity):
 
 
 class HasConEntity(HasContent):
-    entities: List[ConEntity] = Field(default_factory=list, alias="conlist")
+    entities: Optional[List[ConEntity]] = Field(default=None, alias="conlist")
