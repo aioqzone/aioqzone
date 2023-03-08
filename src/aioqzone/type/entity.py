@@ -4,7 +4,7 @@ and details the works of rich-text stringify.
 .. versionadded:: 0.5.0.dev0
 """
 
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -53,9 +53,5 @@ class EmEntity(ConEntity):
         return isinstance(other, EmEntity) and self.eid == other.eid
 
 
-RespEntities = Union[AtEntity, TextEntity]
-"""Entities that occurs in Qzone responses."""
-
-
 class HasConEntity(HasContent):
-    entities: Optional[List[RespEntities]] = Field(default=None, alias="conlist")
+    entities: Optional[List[ConEntity]] = Field(default=None, alias="conlist")

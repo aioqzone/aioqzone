@@ -10,7 +10,7 @@ from pydantic import BaseModel, HttpUrl
 
 from qqqr.utils.daug import di
 
-from ..type.entity import RespEntities, TextEntity
+from ..type.entity import ConEntity, TextEntity
 from ..type.internal import AlbumData
 from ..type.resp import PicRep
 
@@ -59,7 +59,7 @@ class HtmlInfo(BaseModel):
 
 
 class HtmlContent(BaseModel):
-    entities: Optional[List[RespEntities]]
+    entities: Optional[List[ConEntity]]
     pic: Optional[List[PicRep]] = None
     album: Optional[AlbumData] = None
 
@@ -119,5 +119,5 @@ class HtmlContent(BaseModel):
             )
 
         # TODO
-        alltxt = TextEntity(type=2, con=finfo.text_content())
+        alltxt = TextEntity(con=finfo.text_content())
         return cls(entities=[alltxt], pic=pic, album=album)
