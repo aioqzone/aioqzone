@@ -73,7 +73,7 @@ class CommentRep(HasContent):
     uin: int
     replyNum: int
     tid: int
-    pic: Optional[List[dict]] = None
+    pic: List[dict] = Field(default_factory=list)
 
 
 class PicRep(BaseModel):
@@ -166,11 +166,11 @@ class FeedDetailRep(HasConEntity):
     rt_abstime: int = Field(default=0, alias="rt_created_time")
 
     # medias
-    pic: Optional[List[Union[VideoRep, PicRep]]] = None
-    video: Optional[List[VideoInfo]] = None
+    pic: List[Union[VideoRep, PicRep]] = Field(default_factory=list)
+    video: List[VideoInfo] = Field(default_factory=list)
 
     cmtnum: int
-    commentlist: Optional[List[CommentRep]] = None
+    commentlist: List[CommentRep] = Field(default_factory=list)
     fwdnum: int
 
 
@@ -210,16 +210,16 @@ class FloatViewPhoto(BaseModel):
 
     likeTotal: int
     likeKey: str
-    likeList: Optional[List[dict]] = None
+    likeList: List[dict] = Field(default_factory=list)
 
     lloc: str
     rt_fid: str = Field(alias="original_tid")
     photocubage: Optional[int] = None
     phototype: int = 1
 
-    isMultiPic: Optional[bool] = False
-    is_weixin_mode: Optional[bool] = False
-    is_video: Optional[bool] = False
+    isMultiPic: bool = False
+    is_weixin_mode: bool = False
+    is_video: bool = False
 
 
 class MsgListElm(HasContent):
