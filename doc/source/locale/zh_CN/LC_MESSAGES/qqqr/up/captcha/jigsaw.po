@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-02 20:09+0800\n"
+"POT-Creation-Date: 2023-03-09 20:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,8 @@ msgid ""
 "piece. In order to get an accurate result."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.imitate_drag
+#: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.corr_norm_mask_match
+#: qqqr.up.captcha.jigsaw.imitate_drag
 msgid "参数"
 msgstr ""
 
@@ -110,7 +111,19 @@ msgstr ""
 msgid "``TM_CCORR_NORMED`` mode in opecv matchTemplate."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:3
+#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:4
+msgid "data mat. dtype should be int/uint."
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:6
+msgid "template mat. dtype should be the same with that of `x`."
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:8
+msgid "a binary mask mat in ``{0, 1}``. dtype should be int/uint."
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:10
 msgid ""
 "R(x,y)= \\frac{\\sum_{x',y'} (T(x',y') \\cdot I(x+x',y+y') \\cdot "
 "M(x',y')^2)}{\\sqrt{\\sum_{x',y'} \\left( T(x',y') \\cdot M(x',y') \\right)^2 \\cdot "

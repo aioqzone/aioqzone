@@ -170,7 +170,7 @@ class FeedDetailRep(HasConEntity):
     video: List[VideoInfo] = Field(default_factory=list)
 
     cmtnum: int
-    commentlist: List[CommentRep] = Field(default_factory=list)
+    commentlist: Optional[List[CommentRep]] = None
     fwdnum: int
 
 

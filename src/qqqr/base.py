@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from time import time
 from typing import Dict, Generic, Optional, TypeVar
 
-from .constant import UA, QzoneH5Proxy
+from .constant import UA
 from .type import APPID, PT_QR_APP, Proxy
 from .utils.net import ClientAdapter, get_all_cookie, raise_for_status
 
