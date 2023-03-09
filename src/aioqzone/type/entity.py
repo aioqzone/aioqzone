@@ -20,9 +20,10 @@ class ConEntity(BaseModel):
 
 
 class TextEntity(ConEntity):
-    """Text, type=2.
+    """Text.
 
-    Two objects of this class are considered equal, if their :obj:`con` is equal."""
+    Two objects of this class are considered equal, if their :obj:`con` is equal.
+    """
 
     con: str = ""
 
@@ -31,21 +32,23 @@ class TextEntity(ConEntity):
 
 
 class AtEntity(ConEntity):
-    """At, type=0. like: ``@bot``
+    """Mention. like: ``@{uin:123456,nick:foobar}``, ``@foobar``
 
-    Two objects of this class are considered equal, if their :obj:`uin` is equal."""
+    Two objects of this class are considered equal, if their :obj:`uin` is equal.
+    """
 
-    nick: str = ""
     uin: int
+    nick: str = ""
 
     def __eq__(self, other) -> bool:
         return isinstance(other, AtEntity) and self.uin == other.uin
 
 
 class EmEntity(ConEntity):
-    """Emoji, type=-1. like: ``[em]e100[/em]``
+    """Emoji. like: ``[em]e100[/em]``
 
-    Two objects of this class are considered equal, if their :obj:`eid` is equal."""
+    Two objects of this class are considered equal, if their :obj:`eid` is equal.
+    """
 
     eid: int
 

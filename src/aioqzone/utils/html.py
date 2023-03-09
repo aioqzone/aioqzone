@@ -10,9 +10,10 @@ from pydantic import BaseModel, HttpUrl
 
 from qqqr.utils.daug import di
 
-from ..type.entity import ConEntity, TextEntity
+from ..type.entity import ConEntity
 from ..type.internal import AlbumData
 from ..type.resp import PicRep
+from .entity import finfo_box_entities
 
 logger = logging.getLogger(__name__)
 
@@ -59,9 +60,9 @@ class HtmlInfo(BaseModel):
 
 
 class HtmlContent(BaseModel):
-    entities: Optional[List[ConEntity]]
-    pic: Optional[List[PicRep]] = None
-    album: Optional[AlbumData] = None
+    entities: List[ConEntity]
+    pic: List[PicRep]
+    album: Optional[AlbumData]
 
     @classmethod
     def from_html(cls, html: Union[HtmlElement, str], hostuin: int = 0):
@@ -94,7 +95,7 @@ class HtmlContent(BaseModel):
             else:
                 logger.warning(f"WTF is this? {dict(o.attrib)}")
 
-        finfo = mxsafe(root.cssselect("div.f-info"))
+        finfo: HtmlElement = mxsafe(root.cssselect("div.f-info"))
         lia: List[HtmlElement] = root.cssselect("div.f-ct a.img-item")
 
         try:
@@ -102,22 +103,16 @@ class HtmlContent(BaseModel):
         except:
             album = None
 
-        pic = []
-        for a in lia:
-            src = load_src(a)  # type: ignore
-            if not src:
-                continue
-            data = img_data(a)
-            pic.append(
-                PicRep(
-                    height=data.get("height", 0),
-                    width=data.get("width", 0),
-                    url1=src,
-                    url2=src,
-                    url3=src,
-                )
+        pic = [
+            PicRep(
+                height=data.get("height", 0),
+                width=data.get("width", 0),
+                url1=src,
+                url2=src,
+                url3=src,
             )
+            for a in lia
+            if (src := load_src(iter(a))) and (data := img_data(a)) is not None
+        ]
 
-        # TODO
-        alltxt = TextEntity(con=finfo.text_content())
-        return cls(entities=[alltxt], pic=pic, album=album)
+        return cls(entities=finfo_box_entities(finfo), pic=pic, album=album)
