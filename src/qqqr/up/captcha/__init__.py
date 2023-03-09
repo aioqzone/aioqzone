@@ -291,5 +291,11 @@ class Captcha:
             r = VerifyResp.parse_raw(r.text)
 
         if r.code:
-            raise TencentLoginError(StatusCode.NeedCaptcha, r.errMessage, subcode=r.code)
+            from qqqr.constant import captcha_status_description
+
+            raise TencentLoginError(
+                StatusCode.NeedCaptcha,
+                captcha_status_description.get(r.code, r.errMessage),
+                subcode=r.code,
+            )
         return r

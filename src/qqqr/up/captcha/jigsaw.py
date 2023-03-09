@@ -9,9 +9,10 @@ from PIL import Image as image
 
 if TYPE_CHECKING:
     mat_u1 = np.ndarray[Any, np.dtype[np.uint8]]
+    mat_i2 = np.ndarray[Any, np.dtype[np.int16]]
     mat_i4 = np.ndarray[Any, np.dtype[np.int32]]
 else:
-    mat_u1 = mat_i4 = np.ndarray
+    mat_u1 = mat_i2 = mat_i4 = np.ndarray
 
 debug = bool(env.get("AIOQZONE_JIGSAW_DEBUG"))
 
@@ -37,8 +38,12 @@ def conv2d(x: np.ndarray, k: np.ndarray, axes=(0, 1)):
     return back.real[kh - 1 :, kw - 1 :]
 
 
-def corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
+def corr_norm_mask_match(x: mat_i2, tmpl: mat_i2, mask: mat_u1):
     r"""``TM_CCORR_NORMED`` mode in opecv matchTemplate.
+
+    :param x: data mat. dtype should be int/uint.
+    :param tmpl: template mat. dtype should be the same with that of `x`.
+    :param mask: a binary mask mat in ``{0, 1}``. dtype should be int/uint.
 
     .. math::
 
@@ -48,7 +53,13 @@ def corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
     mask_template = np.flip(mask_template, axis=(0, 1))
     mask_template = mask_template / np.linalg.norm(mask_template, axis=(0, 1))
     corr = conv2d(x, mask_template)
-    img_norm = np.sqrt(conv2d(np.power(x, 2), mask))
+
+    # NOTE: suppose x is in (-(2^8 - 1), 2^8 - 1), saved in int16
+    # then x^2 is in (0, 2^16-1), cannot be saved in int16 but can be saved in uint16.
+    # so we should cast |x| into uint16 and calc. |x|^2, which is in uint16.
+    abs_x = np.abs(x).astype(np.dtype(f"u{x.dtype.itemsize}"))
+
+    img_norm = np.sqrt(conv2d(np.power(abs_x, 2), mask))
     img_norm[img_norm < 1e-12] = +np.inf
     return (corr / img_norm).sum(axis=-1)
 
@@ -56,8 +67,8 @@ def corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
 def hdiff_corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
     x = x.astype(np.int16)
     tmpl = tmpl.astype(np.int16)
-    x_diff = x[:, 1:] - x[:, :-1]
-    t_diff = tmpl[:, 1:] - tmpl[:, :-1]
+    x_diff: mat_i2 = x[:, 1:] - x[:, :-1]  # type: ignore
+    t_diff: mat_i2 = tmpl[:, 1:] - tmpl[:, :-1]  # type: ignore
     mask_u = mask[:, 1:] * mask[:, :-1]
     return corr_norm_mask_match(x_diff, t_diff, mask_u)
 
@@ -65,8 +76,8 @@ def hdiff_corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
 def vdiff_corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
     x = x.astype(np.int16)
     tmpl = tmpl.astype(np.int16)
-    y_diff = x[1:] - x[:-1]
-    t_diff = tmpl[1:] - tmpl[:-1]
+    y_diff: mat_i2 = x[1:] - x[:-1]  # type: ignore
+    t_diff: mat_i2 = tmpl[1:] - tmpl[:-1]  # type: ignore
     mask_u = mask[1:] * mask[:-1]
     return corr_norm_mask_match(y_diff, t_diff, mask_u)
 
