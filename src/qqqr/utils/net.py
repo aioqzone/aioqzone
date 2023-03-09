@@ -1,4 +1,3 @@
-from functools import wraps
 from typing import Awaitable, Dict, Union
 
 from httpx import URL, AsyncClient, HTTPStatusError, Response, Timeout
@@ -85,10 +84,8 @@ class ClientAdapter:
     def cookies(self):
         return self.client.cookies
 
-    @wraps(AsyncClient.get)
     def get(self, url: Union[URL, str], *args, **kwds):
         return self.RequestClosure(self.client.get(url, *args, **kwds))
 
-    @wraps(AsyncClient.get)
     def post(self, url: Union[URL, str], *args, **kwds):
         return self.RequestClosure(self.client.post(url, *args, **kwds))

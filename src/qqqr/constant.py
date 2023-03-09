@@ -42,3 +42,16 @@ class StatusCode(IntEnum):
     ForceQR = 10005
     NeedSmsVerify = 10009  # Means, notify the owner
     RiskyNetwork = 23003
+
+
+captcha_status_description = {
+    0: "verifySuccess",
+    9: "verifyFailRefresh",
+    12: "verifyError",
+    20: "verifySessionTimeout",
+    50: "verifyFail",
+    30: "verifyHybrid",
+    51: "verifyHybrid",
+    52: "verifyError",
+    206: "verifySessionTimeout",
+}

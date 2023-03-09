@@ -12,7 +12,7 @@ from httpx import ConnectError, HTTPError
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from aioqzone.exception import LoginError, SkipLoginInterrupt
 from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
-from qqqr.constant import StatusCode
+from qqqr.constant import QzoneH5Proxy, StatusCode
 from qqqr.event import Emittable, EventManager
 from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
@@ -123,6 +123,18 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
             finally:
                 exit(1)
 
+    def h5(self):
+        """Change this login manager to h5 login proxy.
+
+        .. note:: This will remove existing login cookie in :obj:`.cookie`!
+
+        .. versionadded:: 0.12.6
+        """
+        self.uplogin.proxy = QzoneH5Proxy
+        for k in self._cookie:
+            if k.startswith("pt_"):
+                self._cookie.pop(k, "")
+
 
 class QRLoginMan(Loginable, Emittable[QREvent]):
     """Login manager for QR login.
@@ -203,6 +215,18 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
         finally:
             self.hook.cancel_flag.clear()
             self.hook.refresh_flag.clear()
+
+    def h5(self):
+        """Change this login manager to h5 login proxy.
+
+        .. note:: This will remove existing login cookie in :obj:`.cookie`!
+
+        .. versionadded:: 0.12.6
+        """
+        self.qrlogin.proxy = QzoneH5Proxy
+        for k in self._cookie:
+            if k.startswith("pt_"):
+                self._cookie.pop(k, "")
 
 
 class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
@@ -295,6 +319,18 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
             hint = "你在睡觉！"
 
         raise LoginError(hint, methods_tried=methods)
+
+    def h5(self):
+        """Change all manager in :obj:`loginables` to h5 login proxy.
+
+        .. note:: This will remove existing login cookie in :obj:`.cookie`!
+
+        .. versionadded:: 0.12.6
+        """
+        for v in self.loginables.values():
+            if h5 := getattr(v, "h5", None):
+                if callable(h5):
+                    h5()
 
 
 strategy_to_order = dict(
