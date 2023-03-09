@@ -59,6 +59,7 @@ def corr_norm_mask_match(x: mat_i2, tmpl: mat_i2, mask: mat_u1):
     # so we should cast |x| into uint16 and calc. |x|^2, which is in uint16.
     abs_x = np.abs(x).astype(np.dtype(f"u{x.dtype.itemsize}"))
 
+    mask = np.flip(mask, axis=(0, 1))
     img_norm = np.sqrt(conv2d(np.power(abs_x, 2), mask))
     img_norm[img_norm < 1e-12] = +np.inf
     return (corr / img_norm).sum(axis=-1)
@@ -80,6 +81,28 @@ def vdiff_corr_norm_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
     t_diff: mat_i2 = tmpl[1:] - tmpl[:-1]  # type: ignore
     mask_u = mask[1:] * mask[:-1]
     return corr_norm_mask_match(y_diff, t_diff, mask_u)
+
+
+def energy_mask(x: mat_u1, tmpl: mat_u1, mask: mat_u1, threshold=0.6):
+    mask_template = mask * tmpl
+    x_u2 = x.astype(np.uint16)
+    tpl_energy = np.linalg.norm(mask_template, axis=(0, 1))
+
+    mask = np.flip(mask, axis=(0, 1))
+    img_sqe = np.sqrt(conv2d(np.power(x_u2, 2), mask))
+    return np.any(img_sqe > (threshold * tpl_energy), axis=-1)
+
+
+def sdiff_mask_match(x: mat_u1, tmpl: mat_u1, mask: mat_u1):
+    mask_template = mask * tmpl
+    mask_template = np.flip(mask_template, axis=(0, 1))
+    corr = conv2d(x, mask_template)
+
+    x_u2 = x.astype(np.uint16)
+    mask = np.flip(mask, axis=(0, 1))
+    img_energy = conv2d(np.power(x_u2, 2), mask)
+
+    return (img_energy - 2 * corr).sum(axis=-1)
 
 
 class Piece:
@@ -157,11 +180,11 @@ class Piece:
         ys, xs = self._yx_range
         return self.mask[ys, xs]
 
-    def build_template(self, a: float = 0.3) -> mat_u1:
+    def build_template(self, a: float = 0.38) -> mat_u1:
         """This method attempts to generate a piece view like that on the puzzle by dimming the original piece.
         In order to get an accurate result.
 
-        :param a: coeff to be multiplied with the image in order to dim it, default as 0.3
+        :param a: coeff to be multiplied with the image in order to dim it, default as 0.36
         :return: generated piece image.
         """
         return (self.strip() * a).round().astype(np.uint8)
@@ -253,8 +276,12 @@ class Jigsaw:
             h_cfd = hdiff_corr_norm_mask_match(x, template, mask)
             v_cfd = vdiff_corr_norm_mask_match(x, template, mask)
             self.confidence = h_cfd + v_cfd
+            filt = energy_mask(x, self.piece.strip(), mask)
+            if not np.all(filt):
+                self.confidence[filt] = 0
 
             if debug:
+                sdiff = sdiff_mask_match(x, template, mask)
                 debug_out = Path("data/debug")
                 debug_out.mkdir(exist_ok=True, parents=True)
 
@@ -272,6 +299,7 @@ class Jigsaw:
                         cfd_bands(h_cfd),
                         cfd_bands(v_cfd),
                         cfd_bands(self.confidence),
+                        cfd_bands(-sdiff),
                     ],
                     axis=0,
                 )
