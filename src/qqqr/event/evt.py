@@ -55,14 +55,14 @@ class NullEvent(Event):
 class Tasksets:
     """An object has some event to trigger."""
 
-    _tasks: Dict[str, Set[asyncio.Task]]
+    _tasks: Dict[str, Set[asyncio.Future]]
 
     def __init__(self) -> None:
         super().__init__()
         self._tasks = defaultdict(set)
 
     def add_hook_ref(self, hook_cls: str, coro):
-        # type: (str, Coroutine[Any, Any, T] | Generator[Any, Any, T] | asyncio.Task[T]) -> asyncio.Task[T]
+        # type: (str, Coroutine[Any, Any, T] | Generator[Any, Any, T] | asyncio.Future[T]) -> asyncio.Future[T]
         # NOTE: asyncio.Task becomes generic since py39
         """Add an awaitable into the given taskset.
 
@@ -71,20 +71,22 @@ class Tasksets:
         """
         if isinstance(coro, (Coroutine, Generator)):
             task = asyncio.create_task(coro)
-        elif isinstance(coro, asyncio.Task):
-            task = coro
-        else:
-            raise TypeError(coro)
-        self._tasks[hook_cls].add(task)
-        task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
-        return task
+            self._tasks[hook_cls].add(task)
+            task.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
+            return task
+        elif isinstance(coro, asyncio.Future):
+            self._tasks[hook_cls].add(coro)
+            coro.add_done_callback(lambda t: self._tasks[hook_cls].remove(t))
+            return coro
+
+        raise TypeError(coro)
 
     @final
     async def wait(
         self,
         *hook_cls: str,
         timeout: Optional[float] = None,
-    ) -> Tuple[Set[asyncio.Task], Set[asyncio.Task]]:
+    ) -> Tuple[Set[asyncio.Future], Set[asyncio.Future]]:
         """Wait for all task in the specific task set(s).
 
         :param timeout: timeout, defaults to None
@@ -97,7 +99,7 @@ class Tasksets:
 
         .. seealso:: :meth:`asyncio.wait`
         """
-        s: Set[asyncio.Task] = set()
+        s: Set[asyncio.Future] = set()
         for i in hook_cls:
             s.update(self._tasks[i])
         if not s:
@@ -127,6 +129,15 @@ class Tasksets:
             for t in s:
                 t.cancel()  # done callback will remove the task from this set
 
+    def pop_empty_set(self):
+        """Remove all empty tasksets. This method mainly aims to avoid holding too many empty set objects.
+
+        .. versionadded:: 0.12.8
+        """
+        for k, v in self._tasks.items():
+            if not v:
+                self._tasks.pop(k)
+
 
 class Emittable(Generic[Evt], Tasksets):
     hook: Union[Evt, NullEvent] = NullEvent()
@@ -139,7 +150,7 @@ class Emittable(Generic[Evt], Tasksets):
 def hook_guard(hook: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]:
     """This can be used as a decorator to ensure a hook can only raise :exc:`HookError`.
 
-    ..note:: If the hook is already wrapped, it will be returned as is.
+    .. note:: If the hook is already wrapped, it will be returned as is.
     """
     if hasattr(hook, "__hook_guard__"):
         return hook  # type: ignore
