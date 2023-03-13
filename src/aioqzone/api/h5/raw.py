@@ -207,6 +207,7 @@ class QzoneH5RawAPI:
             format="json",
             attach_info=attach_info,
         )
+        log.debug("get_active_feeds post data:", data)
 
         @self._relogin_retry
         async def retry_closure() -> StrDict:
@@ -266,6 +267,7 @@ class QzoneH5RawAPI:
             bypass_param={},
             busi_param={},
         )
+        log.debug("add_comment post data:", data)
 
         @self._relogin_retry
         async def retry_closure() -> StrDict:

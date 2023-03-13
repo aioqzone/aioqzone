@@ -21,7 +21,7 @@ class FeedCommon(BaseModel):
     time: int
     appid: int
     typeid: int = Field(alias="feedstype")
-    curkey: HttpUrl = Field(alias="curlikekey")
+    curkey: Union[HttpUrl, str] = Field(alias="curlikekey")
     orgkey: Union[HttpUrl, str] = Field(alias="orglikekey")
     ugckey: str
     """an underscore-joined string including `uin`, `appid`, `ugcrightkey`"""
@@ -175,22 +175,19 @@ class HasMedia(BaseModel):
 
 
 class ShareInfo(BaseModel):
-    summary: str
-    title: str
-    photourl: PhotoUrl
-    qq_url: Union[HttpUrl, str] = ""
-    weixin_url: Union[HttpUrl, str] = ""
+    summary: str = ""
+    title: str = ""
+    photourl: Optional[PhotoUrls] = None
+
+    @root_validator(pre=True)
+    def remove_empty_photourl(cls, v: dict):
+        if not v.get("photourl"):
+            v["photourl"] = None
+        return v
 
 
 class Share(HasCommon):
     common: FeedCommon = Field(alias="cell_comm")
-    share_info: ShareInfo
-
-    @root_validator(pre=True)
-    def unpack_share_info(cls, v: dict):
-        if "operation" in v:
-            v["share_info"] = v["operation"].get("share_info", {})
-        return v
 
 
 class FeedOriginal(HasCommon, HasUserInfo, HasSummary, HasMedia):
@@ -215,11 +212,18 @@ class FeedData(HasCommon, HasSummary, HasMedia, HasUserInfo):
 
     comment: FeedComment = Field(default_factory=FeedComment)
     original: Union[FeedOriginal, Share, None]
+    share_info: ShareInfo = Field(default_factory=ShareInfo)
 
     @root_validator(pre=True)
     def unpack_cellid(cls, v: dict):
         if "id" in v:
             v["cellid"] = v["id"]["cellid"]
+        return v
+
+    @root_validator(pre=True)
+    def unpack_share_info(cls, v: dict):
+        if "operation" in v:
+            v["share_info"] = v["operation"].get("share_info", {})
         return v
 
 
