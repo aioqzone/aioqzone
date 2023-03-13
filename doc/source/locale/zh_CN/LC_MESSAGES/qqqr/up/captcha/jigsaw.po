@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-09 20:10+0800\n"
+"POT-Creation-Date: 2023-03-13 12:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgid "参数"
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.Piece.build_template:5
-msgid "coeff to be multiplied with the image in order to dim it, default as 0.3"
+msgid "coeff to be multiplied with the image in order to dim it, default as 0.36"
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.Piece.strip
