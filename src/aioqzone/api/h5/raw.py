@@ -192,12 +192,14 @@ class QzoneH5RawAPI:
         return self._rtext_handler(data, cb=False, errno_key=("code", "ret"), data_key="data")
 
     async def get_active_feeds(self, attach_info: str) -> StrDict:
-        """Get next page. If :obj:`qzonetoken` is not parsed, it will call :meth:`index` and return its response.
+        """Get next page. If :obj:`.qzonetoken` is not parsed or `attach_info` is empty,
+        it will call :meth:`index` and return its response.
 
-        :param attach_info: The ``attach_info`` field from last call. Pass an empty string if getting the first page.
+        :param attach_info: The ``attach_info`` field from last call.
+            Pass an empty string equals to call :meth:`.index`.
         :return: If success, the ``data`` field of the response.
         """
-        if not self.qzonetoken:
+        if not self.qzonetoken or not attach_info:
             return await self.index()
 
         data = dict(
