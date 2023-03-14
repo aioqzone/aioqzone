@@ -254,17 +254,10 @@ class Jigsaw:
         with open(filename) as f:
             return cls(**yaml.safe_load(f))
 
-    @property
-    def left(self) -> int:
-        """Captcha answer."""
-        if not hasattr(self, "_left"):
-            self._left = self.solve() - self.piece.padding[0]
-        return self._left
-
     def solve(self, left_bound: int = 50) -> int:
         """Solve the captcha using :meth:`corr_norm_mask_match`.
 
-        :return: position with the max confidence. This might be the left of the piece position on the puzzle.
+        :return: position with the max confidence, which is the detected left bound of the jigsaw piece with padding.
         """
         if not hasattr(self, "confidence"):
             template = self.piece.build_template()
@@ -306,6 +299,8 @@ class Jigsaw:
                 image.fromarray(bgw_conf).save(debug_out / "bg_with_conf.png")
                 image.fromarray(template).save(debug_out / "spiece.png")
 
+            left_bound -= self.piece.padding[0]
+
         max_cfd_x = int(np.argmax(self.confidence)) + left_bound
         return max_cfd_x
 
@@ -324,8 +319,8 @@ def imitate_drag(x1: int, x2: int, y: int) -> Tuple[List[int], List[int]]:
     :return: Two lists consist of the x coordinate and y coordinate
     """
 
-    assert 0 < x1 < x2
-    assert 0 < y
+    assert 0 < x1 < x2, (x1, x2)
+    assert 0 < y, y
     # 244, 1247
     n = np.random.randint(50, 65)
     clean_x = np.linspace(x1, x2, n, dtype=np.int16)
