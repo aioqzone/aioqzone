@@ -257,9 +257,10 @@ class Captcha:
         )
 
         jig = Jigsaw(*sess.cdn_imgs, piece_pos=piece_pos, top=sess.piece_sprite.init_pos[1])
-        sess.set_captcha_answer(jig.left, jig.top)
+        left = jig.solve(sess.piece_sprite.init_pos[0])
+        sess.set_captcha_answer(left, jig.top)
 
-        xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], jig.left, jig.top)
+        xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], left, jig.top)
         sess.tdc.add_run("simulate_slide", xs, ys)
 
     async def verify(self):
