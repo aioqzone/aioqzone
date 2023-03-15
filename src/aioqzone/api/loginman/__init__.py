@@ -112,7 +112,6 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
             raise
 
         emit_hook(self.hook.LoginSuccess(meth))
-        self.client.cookies.update(cookie)  # optional
         return cookie
 
     def h5(self):
@@ -191,7 +190,6 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
             self.hook.refresh_flag.clear()
 
         emit_hook(self.hook.LoginSuccess(meth))
-        self.client.cookies.update(cookie)
         return cookie
 
     def h5(self):
