@@ -99,7 +99,11 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
             log.error(str(e), exc_info=e)
             emit_hook(self.hook.LoginFailed(meth, "JS调用出错"))
             raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha") from e
-        except (GeneratorExit, ConnectError, HTTPError, HookError) as e:
+        except HookError as e:
+            log.warning(f"HookError occured in {e.hook}", exc_info=e)
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise
+        except (GeneratorExit, ConnectError, HTTPError) as e:
             omit_exc_info = isinstance(e, (GeneratorExit, ConnectError))
             log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
             log.debug(e.args, extra=e.__dict__)
@@ -174,7 +178,11 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
         except KeyboardInterrupt as e:
             emit_hook(self.hook.LoginFailed(meth, "用户取消了登录"))
             raise UserBreak from e
-        except (asyncio.TimeoutError, GeneratorExit, ConnectError, HTTPError, HookError) as e:
+        except HookError as e:
+            log.warning(f"HookError occured in {e.hook}", exc_info=e)
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise
+        except (asyncio.TimeoutError, GeneratorExit, ConnectError, HTTPError) as e:
             omit_exc_info = isinstance(e, (ConnectError, GeneratorExit, asyncio.TimeoutError))
             log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
             log.debug(e.args, extra=e.__dict__)
