@@ -98,24 +98,13 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         except JsError as e:
             log.error(str(e), exc_info=e)
             emit_hook(self.hook.LoginFailed(meth, "JS调用出错"))
-            raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha")
-        except GeneratorExit as e:
-            log.warning("Generator Exit captured, continue.")
+            raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha") from e
+        except (GeneratorExit, ConnectError, HTTPError, HookError) as e:
+            omit_exc_info = isinstance(e, (GeneratorExit, ConnectError))
+            log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
+            log.debug(e.args, extra=e.__dict__)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
-        except ConnectError as e:
-            log.warning("Connection Error captured, continue.")
-            log.debug(e.request)
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
-        except HTTPError as e:
-            log.error("Unknown HTTP Error captured, continue.", exc_info=True)
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
-        except HookError as e:
-            log.error(str(e))
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise e
         except:
             log.fatal("密码登录抛出未捕获的异常.", exc_info=True)
             msg = "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
@@ -134,9 +123,8 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         .. versionadded:: 0.12.6
         """
         self.uplogin.proxy = QzoneH5Proxy
-        for k in self._cookie:
-            if k.startswith("pt_"):
-                self._cookie.pop(k, "")
+        self._cookie.pop("pt4_token", None)
+        self._cookie.pop("p_skey", None)
 
 
 class QRLoginMan(Loginable, Emittable[QREvent]):
@@ -184,31 +172,15 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
 
         try:
             cookie = await self.qrlogin.login(self.refresh_time)
-        except asyncio.TimeoutError as e:
-            log.warning(str(e))
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
         except KeyboardInterrupt as e:
             emit_hook(self.hook.LoginFailed(meth, "用户取消了登录"))
             raise UserBreak from e
-        except GeneratorExit as e:
-            log.warning("Generator Exit captured, continue.")
+        except (asyncio.TimeoutError, GeneratorExit, ConnectError, HTTPError, HookError) as e:
+            omit_exc_info = isinstance(e, (ConnectError, GeneratorExit, asyncio.TimeoutError))
+            log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
+            log.debug(e.args, extra=e.__dict__)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
             raise _NextMethodInterrupt from e
-        except ConnectError as e:
-            log.warning("Connection Error captured, continue.")
-            log.debug(e.request)
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
-        except HTTPError as e:
-            log.error("Unknown HTTP Error captured, continue.", exc_info=True)
-            log.debug(e.request)
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
-        except HookError as e:
-            log.error(str(e))
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise e
         except:
             log.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
@@ -230,9 +202,8 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
         .. versionadded:: 0.12.6
         """
         self.qrlogin.proxy = QzoneH5Proxy
-        for k in self._cookie:
-            if k.startswith("pt_"):
-                self._cookie.pop(k, "")
+        self._cookie.pop("pt4_token", None)
+        self._cookie.pop("p_skey", None)
 
 
 class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
