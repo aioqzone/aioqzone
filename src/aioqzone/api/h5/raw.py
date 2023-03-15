@@ -111,6 +111,12 @@ class QzoneH5RawAPI:
 
             log.info(f"Cookie expire in {func.__qualname__}. Relogin...")
             cookie = await self.login.new_cookie()
+            try:
+                self.client.cookies.update(cookie)
+            except:
+                log.error("Error when updating client cookies", exc_info=True)
+                # since actually we often use the same client in loginman and QzoneAPI,
+                # it is not essential to update cookies.
             return await func(*args, **kwds)
 
         return relogin_wrapper
@@ -131,7 +137,7 @@ class QzoneH5RawAPI:
         :param errno_key: Error # key, defaults to ('code', 'err').
         :param msg_key: Error message key, defaults to ('msg', 'message').
 
-        :raises `aioqzone.exception.QzoneError`: if errno != 0
+        :raise `aioqzone.exception.QzoneError`: if errno != 0
 
         :return: json response
         """

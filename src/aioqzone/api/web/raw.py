@@ -123,6 +123,12 @@ class QzoneWebRawAPI:
 
             logger.info(f"Cookie expire in {func.__qualname__}. Relogin...")
             cookie = await self.login.new_cookie()
+            try:
+                self.client.cookies.update(cookie)
+            except:
+                logger.error("Error when updating client cookie", exc_info=True)
+                # since actually we often use the same client in loginman and QzoneAPI,
+                # it is not essential to update cookies.
             return await func(*args, **kwds)
 
         return relogin_wrapper
@@ -142,7 +148,7 @@ class QzoneWebRawAPI:
         :param errno_key: Error # key, defaults to ('code', 'err').
         :param msg_key: Error message key, defaults to ('msg', 'message').
 
-        :raises `aioqzone.exception.QzoneError`: if errno != 0
+        :raise `aioqzone.exception.QzoneError`: if errno != 0
 
         :return: json response
         """
@@ -185,8 +191,8 @@ class QzoneWebRawAPI:
         :param daylist: `!main.daylist` field in last response
         :param uinlist: `!main.uinlist` field in last response
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: feed attributes and html feed
@@ -261,8 +267,8 @@ class QzoneWebRawAPI:
         :param tid: feed id
         :param feedstype: feedstype in html
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: response dict
@@ -285,6 +291,7 @@ class QzoneWebRawAPI:
             "tid": tid,
             "feedsType": feedstype,
         }
+        logger.debug("emotion_getcomments post data:", body)
 
         @self._relogin_retry
         async def retry_closure():
@@ -302,8 +309,8 @@ class QzoneWebRawAPI:
         :param owner: owner uin
         :param fid: feed id, named fid, tid or feedkey
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: a dict represents the feed in detail.
@@ -334,8 +341,8 @@ class QzoneWebRawAPI:
     async def get_feeds_count(self) -> Dict[str, Union[int, list]]:
         """Get feeds update count (new feeds, new photos, new comments, etc)
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: update counts
@@ -361,7 +368,7 @@ class QzoneWebRawAPI:
         :param likedata: Necessary data for like/unlike
         :param like: True as like, False as unlike, defaults to True.
 
-        :raises `httpx.HTTPStatusError`: error http response code
+        :raise `httpx.HTTPStatusError`: error http response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: success flag
@@ -383,6 +390,7 @@ class QzoneWebRawAPI:
             "abstime": likedata.abstime,
             "fid": likedata.fid,
         }
+        logger.debug("like_app post data:", body)
         url = const.internal_dolike_app if like else const.internal_unlike_app
 
         @self._relogin_retry
@@ -409,10 +417,10 @@ class QzoneWebRawAPI:
         :param album: Necessary album data
         :param num: pic num
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
-        :raises `aioqzone.exception.CorruptError`: maybe data is corruptted
+        :raise `aioqzone.exception.CorruptError`: maybe data is corruptted
 
         :return: album details
 
@@ -473,8 +481,8 @@ class QzoneWebRawAPI:
         :param num: number, defaults to 20
         :param pos: start position, defaults to 0
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: a list of messages
@@ -517,8 +525,8 @@ class QzoneWebRawAPI:
         :param content: text content.
         :param right: feed access right, defaults to 0 (Not used till now)
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: qzone response as is, containing feed html and fid.
@@ -546,6 +554,7 @@ class QzoneWebRawAPI:
             "feedversion": 1,
             "hostuin": self.login.uin,
         }
+        logger.debug("emotion_publish post data:", body)
 
         @self._relogin_retry
         async def retry_closure():
@@ -573,8 +582,8 @@ class QzoneWebRawAPI:
         :param topicId: topic id, got from html
         :param uin: host uin, defaults to None, means current logined user.
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: qzone response as is, usually nothing meaningful.
@@ -592,6 +601,7 @@ class QzoneWebRawAPI:
             "fupdate": 1,
             "ref": "feeds",
         }
+        logger.debug("emotion_delete post data:", body)
 
         @self._relogin_retry
         async def retry_closure():
@@ -611,8 +621,8 @@ class QzoneWebRawAPI:
         :param content: new content in text.
         :param uin: host uin, defaults to None, means current logined user.
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: qzone response as is.
@@ -642,6 +652,7 @@ class QzoneWebRawAPI:
             "hostuin": uin or self.login.uin,
             # 'pic_bo': ''
         }
+        logger.debug("emotion_update post data:", body)
 
         @self._relogin_retry
         async def retry_closure():
@@ -667,8 +678,8 @@ class QzoneWebRawAPI:
         :param topicId: topic id, got from html
         :param owner: owner uin
 
-        :raises `httpx.HTTPStatusError`: error http response code
-        :raises `aioqzone.exception.QzoneError`: error qzone response code
+        :raise `httpx.HTTPStatusError`: error http response code
+        :raise `aioqzone.exception.QzoneError`: error qzone response code
         :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
 
         :return: new feed html
@@ -698,6 +709,7 @@ class QzoneWebRawAPI:
             private=int(is_private),
             paramstr=1,
         )
+        logger.debug("emotion_re_feeds post data:", data)
 
         @self._relogin_retry
         async def retry_closure():

@@ -9,7 +9,7 @@ def raise_for_status(response: Response, *accept_code: int):
     :param response: Client response to check.
     :param accept_code: Overwrite codes that can be accepted, If not given, default is `(200, )`
 
-    :raises `httpx.HTTPStatusError`: if status not in :obj:`accept_code`
+    :raise `httpx.HTTPStatusError`: if status not in :obj:`accept_code`
     """
     accept_code = accept_code or (200,)
     if response.status_code not in accept_code:

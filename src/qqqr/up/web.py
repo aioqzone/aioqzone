@@ -140,7 +140,7 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
         """Create a :class:`UpWebSession`. This will call `check` api of Qzone, and receive result
         about whether this login needs a captcha, sms verification, etc.
 
-        :raises `httpx.HTTPStatusError`:
+        :raise `httpx.HTTPStatusError`:
 
         :return: a up login session
         """
