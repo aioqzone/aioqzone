@@ -290,9 +290,11 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
         """
         methods = self.ordered_methods()
         if not methods:
+            log.info("No method selected for this login, raise SkipLoginInterrupt.")
             raise SkipLoginInterrupt
 
         user_break = None
+        log.info(f"Methods selected for this login: {methods}")
 
         for m in methods:
             c = self.loginables[m]
@@ -300,12 +302,13 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
                 return await c._new_cookie()
             except (TencentLoginError, _NextMethodInterrupt, HookError) as e:
                 excname = e.__class__.__name__
-                log.debug(f"Mixed loginman received {excname}, continue.")
+                log.info(f"Mixed loginman received {excname}, continue.")
+                log.debug(e.args)
             except UserBreak as e:
                 user_break = e
-                log.debug("Mixed loginman received UserBreak, continue.")
+                log.info("Mixed loginman received UserBreak, continue.")
             except SystemExit:
-                log.debug("Mixed loginman captured System Exit, reraise.")
+                log.error("Mixed loginman captured System Exit, reraise.")
                 raise
 
         if user_break:

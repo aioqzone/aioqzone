@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import json
+import logging
 import re
 from hashlib import md5
 from ipaddress import IPv4Address
@@ -26,6 +27,7 @@ VERIFY_URL = "https://t.captcha.qq.com/cap_union_new_verify"
 time_ms = lambda: int(1e3 * time())
 """+new Date"""
 rnd6 = lambda: str(random())[2:8]
+log = logging.getLogger(__name__)
 
 _TDC_TY = TypeVar("_TDC_TY", bound=CollectEnv)
 
@@ -288,6 +290,8 @@ class Captcha:
             "pow_answer": hex_add(sess.conf.common.pow_cfg.prefix, sess.pow_ans),
             "pow_calc_time": sess.duration,
         }
+        log.debug("verify post data:", data)
+
         async with self.client.post(VERIFY_URL, data=data) as r:
             r = VerifyResp.parse_raw(r.text)
 

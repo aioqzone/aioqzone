@@ -285,6 +285,7 @@ class QzoneWebRawAPI:
             "tid": tid,
             "feedsType": feedstype,
         }
+        logger.debug("emotion_getcomments post data:", body)
 
         @self._relogin_retry
         async def retry_closure():
@@ -383,6 +384,7 @@ class QzoneWebRawAPI:
             "abstime": likedata.abstime,
             "fid": likedata.fid,
         }
+        logger.debug("like_app post data:", body)
         url = const.internal_dolike_app if like else const.internal_unlike_app
 
         @self._relogin_retry
@@ -546,6 +548,7 @@ class QzoneWebRawAPI:
             "feedversion": 1,
             "hostuin": self.login.uin,
         }
+        logger.debug("emotion_publish post data:", body)
 
         @self._relogin_retry
         async def retry_closure():
@@ -592,6 +595,7 @@ class QzoneWebRawAPI:
             "fupdate": 1,
             "ref": "feeds",
         }
+        logger.debug("emotion_delete post data:", body)
 
         @self._relogin_retry
         async def retry_closure():
@@ -642,6 +646,7 @@ class QzoneWebRawAPI:
             "hostuin": uin or self.login.uin,
             # 'pic_bo': ''
         }
+        logger.debug("emotion_update post data:", body)
 
         @self._relogin_retry
         async def retry_closure():
@@ -698,6 +703,7 @@ class QzoneWebRawAPI:
             private=int(is_private),
             paramstr=1,
         )
+        logger.debug("emotion_re_feeds post data:", data)
 
         @self._relogin_retry
         async def retry_closure():
