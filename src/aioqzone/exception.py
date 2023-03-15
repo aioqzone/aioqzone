@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Sequence
 
 
 class QzoneError(RuntimeError):
@@ -18,13 +18,25 @@ class QzoneError(RuntimeError):
 
 
 class LoginError(RuntimeError):
-    """Login failed for some reasons."""
+    """Login failed for some reasons.
 
-    def __init__(self, msg: str, methods_tried: Optional[Sequence] = None) -> None:
+    .. versionchanged:: 0.12.9
+
+        :.obj:`.methods_tried` is not optional.
+    """
+
+    methods_tried: tuple
+    """Login methods that have been tried in this login."""
+
+    def __init__(
+        self,
+        msg: str,
+        methods_tried: Sequence,
+    ) -> None:
         msg = "登陆失败: " + msg
         super().__init__(msg, methods_tried)
         self.msg = msg
-        self.methods_tried = methods_tried or []
+        self.methods_tried = tuple(methods_tried or ())
 
     def __str__(self) -> str:
         return f"{self.msg} (tried={self.methods_tried})"

@@ -71,9 +71,13 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raises `qqqr.exception.TencentLoginError`: login error when up login.
-        :raises `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
-        :raises `SystemExit`: if unexpected error raised
+        :raise `~qqqr.exception.TencentLoginError`: login error when up login.
+        :raise `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
+        :raises: Any unexpected exception will be reraise.
+
+        .. versionchanged:: 0.12.9
+
+            Do not raise :exc:`SystemExit` any more. Any unexpected error will be reraised.
 
         :return: cookie dict
         """
@@ -81,47 +85,38 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         emit_hook = lambda c: self.add_hook_ref("hook", c)
         try:
             cookie = await self.uplogin.login()
-            emit_hook(self.hook.LoginSuccess(meth))
-            self.client.cookies.update(cookie)  # optional
-            return cookie
         except TencentLoginError as e:
             log.warning(str(e))
             emit_hook(self.hook.LoginFailed(meth, e.msg))
-            raise e
+            raise
         except NotImplementedError as e:
             log.warning(str(e))
             emit_hook(self.hook.LoginFailed(meth, "10009：需要手机验证"))
             raise TencentLoginError(
                 StatusCode.NeedSmsVerify, "Dynamic code verify not implemented"
-            )
+            ) from e
         except JsError as e:
             log.error(str(e), exc_info=e)
             emit_hook(self.hook.LoginFailed(meth, "JS调用出错"))
-            raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha")
-        except GeneratorExit as e:
-            log.warning("Generator Exit captured, continue.")
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
-        except ConnectError as e:
-            log.warning("Connection Error captured, continue.")
-            log.debug(e.request)
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
-        except HTTPError as e:
-            log.error("Unknown HTTP Error captured, continue.", exc_info=True)
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
+            raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha") from e
         except HookError as e:
-            log.error(str(e))
+            log.warning(f"HookError occured in {e.hook}", exc_info=e)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise e
+            raise
+        except (GeneratorExit, ConnectError, HTTPError) as e:
+            omit_exc_info = isinstance(e, (GeneratorExit, ConnectError))
+            log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
+            log.debug(e.args, extra=e.__dict__)
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise _NextMethodInterrupt from e
         except:
             log.fatal("密码登录抛出未捕获的异常.", exc_info=True)
             msg = "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
-            try:
-                emit_hook(self.hook.LoginFailed(meth, msg))
-            finally:
-                exit(1)
+            emit_hook(self.hook.LoginFailed(meth, msg))
+            raise
+
+        emit_hook(self.hook.LoginSuccess(meth))
+        return cookie
 
     def h5(self):
         """Change this login manager to h5 login proxy.
@@ -131,9 +126,8 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         .. versionadded:: 0.12.6
         """
         self.uplogin.proxy = QzoneH5Proxy
-        for k in self._cookie:
-            if k.startswith("pt_"):
-                self._cookie.pop(k, "")
+        self._cookie.pop("pt4_token", None)
+        self._cookie.pop("p_skey", None)
 
 
 class QRLoginMan(Loginable, Emittable[QREvent]):
@@ -163,10 +157,14 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raises `qqqr.exception.UserBreak`: qr polling task is canceled
-        :raises `~aioqzone.api.loginman._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
-        :raises: `qqqr.exception.HookError`: an error is raised from hook
-        :raises `SystemExit`: on unexpected error raised when polling
+        :raise `~qqqr.exception.UserBreak`: qr polling task is canceled
+        :raise `~aioqzone.api.loginman._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
+        :raise `~qqqr.exception.HookError`: an error is raised from hook
+        :raises: Any unexpected exception will be reraise.
+
+        .. versionchanged:: 0.12.9
+
+            Do not raise :exc:`SystemExit` any more. Any unexpected error will be reraised.
 
         :return: cookie dict
         """
@@ -177,44 +175,30 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
 
         try:
             cookie = await self.qrlogin.login(self.refresh_time)
-            emit_hook(self.hook.LoginSuccess(meth))
-            self.client.cookies.update(cookie)
-            return cookie
-        except asyncio.TimeoutError as e:
-            log.warning(str(e))
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
         except KeyboardInterrupt as e:
             emit_hook(self.hook.LoginFailed(meth, "用户取消了登录"))
             raise UserBreak from e
-        except GeneratorExit as e:
-            log.warning("Generator Exit captured, continue.")
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
-        except ConnectError as e:
-            log.warning("Connection Error captured, continue.")
-            log.debug(e.request)
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
-        except HTTPError as e:
-            log.error("Unknown HTTP Error captured, continue.", exc_info=True)
-            log.debug(e.request)
-            emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise _NextMethodInterrupt from e
         except HookError as e:
-            log.error(str(e))
+            log.warning(f"HookError occured in {e.hook}", exc_info=e)
             emit_hook(self.hook.LoginFailed(meth, str(e)))
-            raise e
+            raise
+        except (asyncio.TimeoutError, GeneratorExit, ConnectError, HTTPError) as e:
+            omit_exc_info = isinstance(e, (ConnectError, GeneratorExit, asyncio.TimeoutError))
+            log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
+            log.debug(e.args, extra=e.__dict__)
+            emit_hook(self.hook.LoginFailed(meth, str(e)))
+            raise _NextMethodInterrupt from e
         except:
             log.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
-            try:
-                emit_hook(self.hook.LoginFailed(meth, msg))
-            finally:
-                exit(1)
+            emit_hook(self.hook.LoginFailed(meth, msg))
+            raise
         finally:
             self.hook.cancel_flag.clear()
             self.hook.refresh_flag.clear()
+
+        emit_hook(self.hook.LoginSuccess(meth))
+        return cookie
 
     def h5(self):
         """Change this login manager to h5 login proxy.
@@ -224,9 +208,8 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
         .. versionadded:: 0.12.6
         """
         self.qrlogin.proxy = QzoneH5Proxy
-        for k in self._cookie:
-            if k.startswith("pt_"):
-                self._cookie.pop(k, "")
+        self._cookie.pop("pt4_token", None)
+        self._cookie.pop("p_skey", None)
 
 
 class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
@@ -281,18 +264,20 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raises `qqqr.exception.UserBreak`: if qr login is canceled and no succeeding method exist and success.
-        :raises `aioqzone.exception.SkipLoginInterrupt`: if all login methods are removed by subclasses.
-        :raises `aioqzone.exception.LoginError`: if all login methods failed.
-        :raises `SystemExit`: if unexcpected error occured in any login method. Succeeding method will not be used.
+        :raise `qqqr.exception.UserBreak`: if qr login is canceled and no succeeding method exist and success.
+        :raise `aioqzone.exception.SkipLoginInterrupt`: if all login methods are removed by subclasses.
+        :raise `aioqzone.exception.LoginError`: if all login methods failed.
+        :raises: Any unexpected exceptions.
 
         :return: cookie dict
         """
         methods = self.ordered_methods()
         if not methods:
+            log.info("No method selected for this login, raise SkipLoginInterrupt.")
             raise SkipLoginInterrupt
 
         user_break = None
+        log.info(f"Methods selected for this login: {methods}")
 
         for m in methods:
             c = self.loginables[m]
@@ -300,13 +285,11 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
                 return await c._new_cookie()
             except (TencentLoginError, _NextMethodInterrupt, HookError) as e:
                 excname = e.__class__.__name__
-                log.debug(f"Mixed loginman received {excname}, continue.")
+                log.info(f"Mixed loginman received {excname}, continue.")
+                log.debug(e.args)
             except UserBreak as e:
                 user_break = e
-                log.debug("Mixed loginman received UserBreak, continue.")
-            except SystemExit:
-                log.debug("Mixed loginman captured System Exit, reraise.")
-                raise
+                log.info("Mixed loginman received UserBreak, continue.")
 
         if user_break:
             raise UserBreak from user_break

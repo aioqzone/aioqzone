@@ -221,7 +221,7 @@ class Jigsaw:
         """
         The save function saves the puzzle, piece, piece_pos and top to a yaml file.
 
-        :raises `ImportError`: if PyYaml not installed.
+        :raise `ImportError`: if PyYaml not installed.
         """
 
         import yaml
