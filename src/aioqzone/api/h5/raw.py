@@ -131,7 +131,7 @@ class QzoneH5RawAPI:
         :param errno_key: Error # key, defaults to ('code', 'err').
         :param msg_key: Error message key, defaults to ('msg', 'message').
 
-        :raises `aioqzone.exception.QzoneError`: if errno != 0
+        :raise `aioqzone.exception.QzoneError`: if errno != 0
 
         :return: json response
         """

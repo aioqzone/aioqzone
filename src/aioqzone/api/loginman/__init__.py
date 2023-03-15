@@ -71,9 +71,13 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raises `qqqr.exception.TencentLoginError`: login error when up login.
-        :raises `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
-        :raises `SystemExit`: if unexpected error raised
+        :raise `~qqqr.exception.TencentLoginError`: login error when up login.
+        :raise `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
+        :raises: Any unexpected exception will be reraise.
+
+        .. versionchanged:: 0.12.9
+
+            Do not raise :exc:`SystemExit` any more. Any unexpected error will be reraised.
 
         :return: cookie dict
         """
@@ -81,19 +85,16 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         emit_hook = lambda c: self.add_hook_ref("hook", c)
         try:
             cookie = await self.uplogin.login()
-            emit_hook(self.hook.LoginSuccess(meth))
-            self.client.cookies.update(cookie)  # optional
-            return cookie
         except TencentLoginError as e:
             log.warning(str(e))
             emit_hook(self.hook.LoginFailed(meth, e.msg))
-            raise e
+            raise
         except NotImplementedError as e:
             log.warning(str(e))
             emit_hook(self.hook.LoginFailed(meth, "10009：需要手机验证"))
             raise TencentLoginError(
                 StatusCode.NeedSmsVerify, "Dynamic code verify not implemented"
-            )
+            ) from e
         except JsError as e:
             log.error(str(e), exc_info=e)
             emit_hook(self.hook.LoginFailed(meth, "JS调用出错"))
@@ -118,10 +119,12 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         except:
             log.fatal("密码登录抛出未捕获的异常.", exc_info=True)
             msg = "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
-            try:
-                emit_hook(self.hook.LoginFailed(meth, msg))
-            finally:
-                exit(1)
+            emit_hook(self.hook.LoginFailed(meth, msg))
+            raise
+
+        emit_hook(self.hook.LoginSuccess(meth))
+        self.client.cookies.update(cookie)  # optional
+        return cookie
 
     def h5(self):
         """Change this login manager to h5 login proxy.
@@ -163,10 +166,14 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raises `qqqr.exception.UserBreak`: qr polling task is canceled
-        :raises `~aioqzone.api.loginman._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
-        :raises: `qqqr.exception.HookError`: an error is raised from hook
-        :raises `SystemExit`: on unexpected error raised when polling
+        :raise `~qqqr.exception.UserBreak`: qr polling task is canceled
+        :raise `~aioqzone.api.loginman._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
+        :raise `~qqqr.exception.HookError`: an error is raised from hook
+        :raises: Any unexpected exception will be reraise.
+
+        .. versionchanged:: 0.12.9
+
+            Do not raise :exc:`SystemExit` any more. Any unexpected error will be reraised.
 
         :return: cookie dict
         """
@@ -177,9 +184,6 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
 
         try:
             cookie = await self.qrlogin.login(self.refresh_time)
-            emit_hook(self.hook.LoginSuccess(meth))
-            self.client.cookies.update(cookie)
-            return cookie
         except asyncio.TimeoutError as e:
             log.warning(str(e))
             emit_hook(self.hook.LoginFailed(meth, str(e)))
@@ -208,13 +212,15 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
         except:
             log.fatal("Unexpected error in QR login.", exc_info=True)
             msg = "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
-            try:
-                emit_hook(self.hook.LoginFailed(meth, msg))
-            finally:
-                exit(1)
+            emit_hook(self.hook.LoginFailed(meth, msg))
+            raise
         finally:
             self.hook.cancel_flag.clear()
             self.hook.refresh_flag.clear()
+
+        emit_hook(self.hook.LoginSuccess(meth))
+        self.client.cookies.update(cookie)
+        return cookie
 
     def h5(self):
         """Change this login manager to h5 login proxy.
@@ -281,10 +287,10 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raises `qqqr.exception.UserBreak`: if qr login is canceled and no succeeding method exist and success.
-        :raises `aioqzone.exception.SkipLoginInterrupt`: if all login methods are removed by subclasses.
-        :raises `aioqzone.exception.LoginError`: if all login methods failed.
-        :raises `SystemExit`: if unexcpected error occured in any login method. Succeeding method will not be used.
+        :raise `qqqr.exception.UserBreak`: if qr login is canceled and no succeeding method exist and success.
+        :raise `aioqzone.exception.SkipLoginInterrupt`: if all login methods are removed by subclasses.
+        :raise `aioqzone.exception.LoginError`: if all login methods failed.
+        :raises: Any unexpected exceptions.
 
         :return: cookie dict
         """
@@ -307,9 +313,6 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
             except UserBreak as e:
                 user_break = e
                 log.info("Mixed loginman received UserBreak, continue.")
-            except SystemExit:
-                log.error("Mixed loginman captured System Exit, reraise.")
-                raise
 
         if user_break:
             raise UserBreak from user_break

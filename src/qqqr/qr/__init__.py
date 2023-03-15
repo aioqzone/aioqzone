@@ -62,7 +62,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
     async def poll(self, sess: QrSession) -> PollResp:
         """Poll QR status.
 
-        :raises `httpx.HTTPStatusError`: if response status code != 200
+        :raise `httpx.HTTPStatusError`: if response status code != 200
 
         :return: a poll response object
         """
