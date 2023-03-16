@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, Generic, Optional, Set, Type, TypeVar, get_args
+from typing import Any, Callable, Dict, Generic, Optional, Set, Type, TypeVar, Union, get_args
 
 from httpx import HTTPStatusError
 
@@ -9,8 +9,8 @@ _E = TypeVar("_E", bound=BaseException)
 
 
 class CatchCodeDispatch(ABC, Generic[_E]):
-    code_dispatch: Dict[int, Callable[[_E], Any]]
-    code_suppress: Set[int]
+    code_dispatch: Dict[int, Optional[Callable[[_E], Any]]]
+    code_suppress: Dict[int, Union[bool, Callable[[_E], bool]]]
 
     @classmethod
     @abstractmethod
@@ -20,16 +20,18 @@ class CatchCodeDispatch(ABC, Generic[_E]):
     def __init__(self) -> None:
         super().__init__()
         self.code_dispatch = {}
-        self.code_suppress = set()
+        self.code_suppress = {}
 
     def dispatch(
-        self, *code: int, dispatcher: Optional[Callable[[_E], Any]] = None, suppress=True
+        self,
+        *code: int,
+        dispatcher: Optional[Callable[[_E], Any]] = None,
+        suppress: Union[bool, Callable[[_E], bool]] = True,
     ):
-        if dispatcher:
-            for i in code:
-                self.code_dispatch[i] = dispatcher
-        if suppress:
-            self.code_suppress.update(code)
+        for i in code:
+            self.code_dispatch[i] = dispatcher
+        for i in code:
+            self.code_suppress[i] = suppress
 
     def __enter__(self):
         return self
@@ -39,7 +41,12 @@ class CatchCodeDispatch(ABC, Generic[_E]):
             code = self.get_code(e)
             if dispatcher := self.code_dispatch.get(code):
                 dispatcher(e)
-            return code in self.code_suppress
+            suppress = self.code_suppress.get(code)
+            if suppress is None:
+                return True
+            if callable(suppress):
+                return suppress(e)
+            return bool(suppress)
         return False
 
 
