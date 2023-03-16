@@ -3,11 +3,11 @@ import re
 from functools import wraps
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
-from httpx import HTTPStatusError
 from lxml.html import fromstring
 
 from aioqzone.api.loginman import Loginable
 from aioqzone.exception import QzoneError
+from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import entire_closing, response_callback
 from jssupport.jsjson import JsonValue, json_loads
 from qqqr.utils.net import ClientAdapter
@@ -100,14 +100,11 @@ class QzoneH5RawAPI:
 
             :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
             """
-            try:
+
+            with QzoneErrorDispatch() as qze, HTTPStatusErrorDispatch() as hse:
+                qze.dispatch(-10000)
+                hse.dispatch(302, 403)
                 return await func(*args, **kwds)
-            except QzoneError as e:
-                if e.code not in [-3000, -4002]:
-                    raise e
-            except HTTPStatusError as e:
-                if e.response.status_code not in [302, 403]:
-                    raise e
 
             log.info(f"Cookie expire in {func.__qualname__}. Relogin...")
             cookie = await self.login.new_cookie()

@@ -14,6 +14,7 @@ import aioqzone.api.web.constant as const
 from aioqzone.api.loginman import Loginable
 from aioqzone.exception import CorruptError, QzoneError
 from aioqzone.type.internal import AlbumData, LikeData
+from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import response_callback
 from aioqzone.utils.time import time_ms
 from jssupport.jsjson import JsonValue, json_loads
@@ -112,14 +113,10 @@ class QzoneWebRawAPI:
 
             :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
             """
-            try:
+            with QzoneErrorDispatch() as qse, HTTPStatusErrorDispatch() as hse:
+                qse.dispatch(-3000, -4002)
+                hse.dispatch(403)
                 return await func(*args, **kwds)
-            except QzoneError as e:
-                if e.code not in [-3000, -4002]:
-                    raise e
-            except HTTPStatusError as e:
-                if e.response.status_code != 403:
-                    raise e
 
             logger.info(f"Cookie expire in {func.__qualname__}. Relogin...")
             cookie = await self.login.new_cookie()
