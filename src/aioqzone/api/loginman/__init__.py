@@ -16,7 +16,6 @@ from qqqr.constant import QzoneH5Proxy, StatusCode
 from qqqr.event import Emittable, EventManager
 from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
-from qqqr.up import UpH5Login, UpWebLogin
 from qqqr.utils.net import ClientAdapter
 
 from ._base import Loginable
@@ -55,13 +54,13 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         super().__init__(uin)
         self.client = client
         if h5:
-            cls = UpH5Login
             from qqqr.constant import QzoneH5Appid as appid
             from qqqr.constant import QzoneH5Proxy as proxy
+            from qqqr.up import UpH5Login as cls
         else:
-            cls = UpWebLogin
             from qqqr.constant import QzoneAppid as appid
             from qqqr.constant import QzoneProxy as proxy
+            from qqqr.up import UpWebLogin as cls
         self.uplogin = cls(self.client, appid, proxy, self.uin, pwd)
 
     def register_hook(self, hook: UPEvent):
@@ -73,6 +72,7 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         :meta public:
         :raise `~qqqr.exception.TencentLoginError`: login error when up login.
         :raise `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
+        :raise `~qqqr.exception.HookError`: an error is raised from hook
         :raises: Any unexpected exception will be reraise.
 
         .. versionchanged:: 0.12.9
@@ -119,15 +119,15 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
         return cookie
 
     def h5(self):
-        """Change this login manager to h5 login proxy.
-
-        .. note:: This will remove existing login cookie in :obj:`.cookie`!
+        """Realloc a :class:`LoginBase` object.
 
         .. versionadded:: 0.12.6
         """
-        self.uplogin.proxy = QzoneH5Proxy
-        self._cookie.pop("pt4_token", None)
-        self._cookie.pop("p_skey", None)
+        from qqqr.constant import QzoneH5Appid as appid
+        from qqqr.constant import QzoneH5Proxy as proxy
+        from qqqr.up import UpH5Login
+
+        self.uplogin = UpH5Login(self.client, appid, proxy, self.uin, self.uplogin.pwd)
 
 
 class QRLoginMan(Loginable, Emittable[QREvent]):
@@ -201,15 +201,14 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
         return cookie
 
     def h5(self):
-        """Change this login manager to h5 login proxy.
-
-        .. note:: This will remove existing login cookie in :obj:`.cookie`!
+        """Realloc a :class:`LoginBase` object.
 
         .. versionadded:: 0.12.6
         """
-        self.qrlogin.proxy = QzoneH5Proxy
-        self._cookie.pop("pt4_token", None)
-        self._cookie.pop("p_skey", None)
+        from qqqr.constant import QzoneH5Appid as appid
+        from qqqr.constant import QzoneH5Proxy as proxy
+
+        self.qrlogin = QrLogin(self.client, appid, proxy)
 
 
 class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):

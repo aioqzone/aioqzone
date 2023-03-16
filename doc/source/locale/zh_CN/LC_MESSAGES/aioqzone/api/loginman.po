@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-09 15:46+0800\n"
+"POT-Creation-Date: 2023-03-16 09:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,8 +43,8 @@ msgstr ""
 msgid "返回类型"
 msgstr ""
 
-#: aioqzone.api.loginman.MixedLoginMan._new_cookie:7 aioqzone.api.loginman.QRLoginMan._new_cookie:7
-#: aioqzone.api.loginman.UPLoginMan._new_cookie:6 aioqzone.api.loginman._base.Loginable._new_cookie:4
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:7 aioqzone.api.loginman.QRLoginMan._new_cookie:11
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:10 aioqzone.api.loginman._base.Loginable._new_cookie:4
 #: of
 msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
 msgstr ""
@@ -57,8 +57,8 @@ msgstr ""
 msgid "返回"
 msgstr ""
 
-#: aioqzone.api.loginman.MixedLoginMan._new_cookie:8 aioqzone.api.loginman.QRLoginMan._new_cookie:8
-#: aioqzone.api.loginman.UPLoginMan._new_cookie:7 aioqzone.api.loginman._base.Loginable._new_cookie:5
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie:8 aioqzone.api.loginman.QRLoginMan._new_cookie:12
+#: aioqzone.api.loginman.UPLoginMan._new_cookie:11 aioqzone.api.loginman._base.Loginable._new_cookie:5
 #: of
 msgid "cookie dict"
 msgstr ""
@@ -133,16 +133,20 @@ msgstr ""
 msgid "if all login methods failed."
 msgstr ""
 
+#: aioqzone.api.loginman.MixedLoginMan._new_cookie aioqzone.api.loginman.QRLoginMan._new_cookie
+#: aioqzone.api.loginman.UPLoginMan._new_cookie of
+msgid "raises"
+msgstr ""
+
 #: aioqzone.api.loginman.MixedLoginMan._new_cookie:5 of
-msgid "if unexcpected error occured in any login method. Succeeding method will not be used."
+msgid "Any unexpected exceptions."
 msgstr ""
 
 #: aioqzone.api.loginman.MixedLoginMan.h5:1 of
 msgid "Change all manager in :obj:`loginables` to h5 login proxy."
 msgstr ""
 
-#: aioqzone.api.loginman.MixedLoginMan.h5:3 aioqzone.api.loginman.QRLoginMan.h5:3
-#: aioqzone.api.loginman.UPLoginMan.h5:3 of
+#: aioqzone.api.loginman.MixedLoginMan.h5:3 of
 msgid "This will remove existing login cookie in :obj:`.cookie`!"
 msgstr ""
 
@@ -173,20 +177,20 @@ msgstr ""
 msgid "on exceptions do not break the system, such as timeout, Http errors, etc."
 msgstr ""
 
-#: aioqzone.api.loginman.QRLoginMan._new_cookie:5 of
-msgid "on unexpected error raised when polling"
-msgstr ""
-
-#: aioqzone.api.loginman.QRLoginMan._new_cookie of
-msgid "raises"
-msgstr ""
-
 #: aioqzone.api.loginman.QRLoginMan._new_cookie:4 of
-msgid "`qqqr.exception.HookError`: an error is raised from hook"
+msgid "an error is raised from hook"
+msgstr ""
+
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:5 aioqzone.api.loginman.UPLoginMan._new_cookie:4 of
+msgid "Any unexpected exception will be reraise."
+msgstr ""
+
+#: aioqzone.api.loginman.QRLoginMan._new_cookie:9 aioqzone.api.loginman.UPLoginMan._new_cookie:8 of
+msgid "Do not raise :exc:`SystemExit` any more. Any unexpected error will be reraised."
 msgstr ""
 
 #: aioqzone.api.loginman.QRLoginMan.h5:1 aioqzone.api.loginman.UPLoginMan.h5:1 of
-msgid "Change this login manager to h5 login proxy."
+msgid "Realloc a :class:`LoginBase` object."
 msgstr ""
 
 #: aioqzone.api.loginman.UPLoginMan:1 of
@@ -202,10 +206,6 @@ msgstr ""
 
 #: aioqzone.api.loginman.UPLoginMan._new_cookie:3 of
 msgid "if acceptable errors occured, for example, http errors."
-msgstr ""
-
-#: aioqzone.api.loginman.UPLoginMan._new_cookie:4 of
-msgid "if unexpected error raised"
 msgstr ""
 
 #: aioqzone.api.loginman._NextMethodInterrupt:1 of
@@ -367,4 +367,7 @@ msgstr ""
 #~ "login method is interrupted and the caller could"
 #~ " choose the next login method or just to "
 #~ "raise a :exc:`.LoginError`."
+#~ msgstr ""
+
+#~ msgid "Change this login manager to h5 login proxy."
 #~ msgstr ""
