@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from time import time
 from typing import Dict, Generic, Optional, TypeVar
 
-from .constant import UA
+from .constant import QzoneH5Appid
 from .type import APPID, PT_QR_APP, Proxy
 from .utils.net import ClientAdapter, get_all_cookie, raise_for_status
 
@@ -45,10 +45,14 @@ class LoginBase(ABC, Generic[_S]):
         self.referer = "https://i.qq.com/"
 
         self.client.headers["DNT"] = "1"
-        for blackword in ["python", "httpx", "aiohttp"]:
-            if blackword in self.client.ua.lower():
+        if app.appid == QzoneH5Appid.appid:
+            self.client.use_mobile_ua()
+        else:
+            from .constant import UA
+
+            ua = self.client.ua.lower()
+            if any(i in ua for i in ["python", "httpx", "aiohttp"]):
                 self.ua = UA
-                break
 
     @abstractmethod
     async def login(self) -> Dict[str, str]:
