@@ -89,3 +89,10 @@ class ClientAdapter:
 
     def post(self, url: Union[URL, str], *args, **kwds):
         return self.RequestClosure(self.client.post(url, *args, **kwds))
+
+    def use_mobile_ua(self):
+        ua = self.ua.lower()
+        if not any(i in ua for i in ["android", "ios"]):
+            from qqqr.constant import AndroidUA
+
+            self.ua = AndroidUA
