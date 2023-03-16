@@ -259,7 +259,9 @@ class Captcha:
         )
 
         jig = Jigsaw(*sess.cdn_imgs, piece_pos=piece_pos, top=sess.piece_sprite.init_pos[1])
-        left = jig.solve(sess.piece_sprite.init_pos[0])
+        # BUG: +1 to ensure left > init_pos[0], otherwise it's >=.
+        # However if left == init_pos[0] + 1, it is certainly a wrong result.
+        left = jig.solve(sess.piece_sprite.init_pos[0] + 1)
         sess.set_captcha_answer(left, jig.top)
 
         xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], left, jig.top)
@@ -295,12 +297,4 @@ class Captcha:
         async with self.client.post(VERIFY_URL, data=data) as r:
             r = VerifyResp.parse_raw(r.text)
 
-        if r.code:
-            from qqqr.constant import captcha_status_description
-
-            raise TencentLoginError(
-                StatusCode.NeedCaptcha,
-                captcha_status_description.get(r.code, r.errMessage),
-                subcode=r.code,
-            )
         return r

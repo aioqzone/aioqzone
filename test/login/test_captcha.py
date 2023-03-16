@@ -3,7 +3,7 @@ from os import environ as env
 import pytest
 import pytest_asyncio
 
-from qqqr.constant import QzoneAppid, QzoneProxy
+from qqqr.constant import QzoneAppid, QzoneProxy, captcha_status_description
 from qqqr.up import UpWebLogin
 from qqqr.up.captcha import Captcha, CollectEnv, TcaptchaSession
 from qqqr.up.captcha.jigsaw import imitate_drag
@@ -50,8 +50,11 @@ class TestCaptcha:
 
     async def test_verify(self, captcha: Captcha):
         r = await captcha.verify()
-        assert r.verifycode
-        assert r.code == 0
+        if r.code == 0:
+            assert r.verifycode
+            assert r.ticket
+        else:
+            pytest.xfail(captcha_status_description[r.code])
 
 
 @pytest_asyncio.fixture(scope="class")

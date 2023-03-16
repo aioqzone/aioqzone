@@ -301,15 +301,22 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
         :param sess: the session object
         :return: The session with :obj:`~UpWebSession.verify_rst` is set.
         """
-
+        solver = self.captcha(sess.check_rst.session)
         for retry in range(4):
-            c = self.captcha(sess.check_rst.session)
-            sess.verify_rst = await c.verify()
+            sess.verify_rst = await solver.verify()
             if sess.verify_rst.ticket:
                 break
             log.warning(f"ticket is empty. retry={retry}")
         else:
-            raise TencentLoginError(sess.code, "ticket is always empty")
+            from qqqr.constant import captcha_status_description
+
+            r = sess.verify_rst
+            assert r
+            raise TencentLoginError(
+                StatusCode.NeedCaptcha,
+                captcha_status_description.get(r.code, r.errMessage),
+                subcode=r.code,
+            )
 
         log.info("verify success!")
         return sess
