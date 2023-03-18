@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import asyncio
-from os import environ as env
-from typing import List, Tuple, Type, cast
+from typing import TYPE_CHECKING, List, Tuple, Type, cast
 from unittest.mock import patch
 
 import pytest
@@ -18,6 +19,11 @@ from qqqr.up import UpWebLogin
 from qqqr.utils.net import ClientAdapter
 
 from . import showqr
+
+if TYPE_CHECKING:
+    from test.conftest import test_env
+
+    from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 
@@ -51,13 +57,12 @@ class QREvent_Test(QREvent):
 
 
 @pytest_asyncio.fixture(scope="class")
-async def up(client: ClientAdapter):
-    man = api.UPLoginMan(client, int(env["TEST_UIN"]), pwd=env["TEST_PASSWORD"])
+async def up(client: ClientAdapter, env: test_env):
+    man = api.UPLoginMan(client, env.uin, env.pwd.get_secret_value())
     man.register_hook(UPEvent_Test())
     yield man
 
 
-@pytest.mark.incremental
 class TestUP:
     @pytest.mark.parametrize(
         "exc2r,exc2e",
@@ -89,23 +94,18 @@ class TestUP:
             assert "p_skey" in cookie
             await asyncio.sleep(1)
             assert hasattr(up.hook, "login_succ")
-
-    def test_cookie(self, up: api.UPLoginMan):
-        assert up.cookie
-
-    def test_gtk(self, up: api.UPLoginMan):
-        assert up.gtk >= 0
+            assert up.cookie
+            assert up.gtk >= 0
 
 
 @pytest_asyncio.fixture(scope="class")
-async def qr(client: ClientAdapter):
-    man = api.QRLoginMan(client, int(env["TEST_UIN"]))
+async def qr(client: ClientAdapter, env: test_env):
+    man = api.QRLoginMan(client, env.uin)
     man.register_hook(QREvent_Test())
     yield man
 
 
 @pytest.mark.needuser
-@pytest.mark.incremental
 class TestQR:
     @pytest.mark.parametrize(
         "exc2r,exc2e",
@@ -124,6 +124,15 @@ class TestQR:
         with pytest.raises(exc2e), patch.object(QrLogin, "new", side_effect=exc2r):
             await qr.new_cookie()
 
+    async def test_cancel(self, qr: api.QRLoginMan):
+        await qr.new_cookie()
+        qr.hook.cancel_flag.set()
+
+    async def test_resend(self, qr: api.QRLoginMan):
+        await qr.new_cookie()
+        qr.hook.refresh_flag.set()
+        assert qr.hook.renew_flag  # type: ignore
+
     async def test_newcookie(self, qr: api.QRLoginMan):
         try:
             cookie = await qr.new_cookie()
@@ -135,21 +144,8 @@ class TestQR:
             assert "p_skey" in cookie
             await asyncio.sleep(1)
             assert hasattr(qr.hook, "login_succ")
-
-    def test_cookie(self, qr: api.QRLoginMan):
-        assert qr.cookie
-
-    def test_gtk(self, qr: api.QRLoginMan):
-        assert qr.gtk >= 0
-
-    async def test_cancel(self, qr: api.QRLoginMan):
-        await qr.new_cookie()
-        qr.hook.cancel_flag.set()
-
-    async def test_resend(self, qr: api.QRLoginMan):
-        await qr.new_cookie()
-        qr.hook.refresh_flag.set()
-        assert qr.hook.renew_flag  # type: ignore
+            assert qr.cookie
+            assert qr.gtk >= 0
 
 
 class MixFailureRecord(QREvent):

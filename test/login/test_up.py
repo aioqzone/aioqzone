@@ -1,4 +1,6 @@
-from os import environ as env
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
@@ -6,21 +8,25 @@ import pytest_asyncio
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.up import UpEvent, UpH5Login, UpWebLogin
-from qqqr.utils.net import ClientAdapter
+
+if TYPE_CHECKING:
+    from test.conftest import test_env
+
+    from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 
 
 @pytest_asyncio.fixture(scope="module")
-async def web(client: ClientAdapter):
+async def web(client: ClientAdapter, env: test_env):
     from qqqr.constant import QzoneAppid, QzoneProxy
 
     yield UpWebLogin(
         client,
         QzoneAppid,
         QzoneProxy,
-        int(env["TEST_UIN"]),
-        env["TEST_PASSWORD"],
+        env.uin,
+        env.pwd.get_secret_value(),
     )
 
 
@@ -65,15 +71,15 @@ class TestUpWeb:
 
 
 @pytest.fixture
-def h5(client: ClientAdapter):
+def h5(client: ClientAdapter, env: test_env):
     from qqqr.constant import QzoneH5Appid, QzoneH5Proxy
 
     yield UpH5Login(
         client,
         QzoneH5Appid,
         QzoneH5Proxy,
-        int(env["TEST_UIN"]),
-        env["TEST_PASSWORD"],
+        env.uin,
+        env.pwd.get_secret_value(),
     )
 
 
@@ -85,8 +91,8 @@ async def test_h5_login(h5: UpH5Login):
             pytest.skip(str(e))
         elif (
             e.code == StatusCode.NeedSmsVerify
-            and UpEvent.GetSmsCode.__name__ not in web.hook.__dict__
+            and UpEvent.GetSmsCode.__name__ not in h5.hook.__dict__
         ):
             pytest.skip(str(e))
         else:
-            raise e
+            raise
