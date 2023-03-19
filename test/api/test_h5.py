@@ -88,7 +88,7 @@ class TestH5API:
             pytest.xfail("login failed")
 
 
-@pytest.mark.needuser
+@pytest.mark.skip("this test should be called manually")
 async def test_h5_up_login(client: ClientAdapter, env: test_env):
     from aioqzone.api.loginman import QREvent, QRLoginMan
 

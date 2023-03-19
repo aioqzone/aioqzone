@@ -1,10 +1,15 @@
+import asyncio
 from typing import List
 
 import pytest
+import pytest_asyncio
+from httpx import AsyncClient
 from pydantic import BaseSettings, Field, SecretStr, root_validator
 from pydantic.env_settings import SettingsSourceCallable
 
 from aioqzone.api.loginman import LoginMethod, strategy_to_order
+from qqqr.ssl import ssl_context
+from qqqr.utils.net import ClientAdapter
 
 
 class test_env(BaseSettings):
@@ -31,3 +36,17 @@ class test_env(BaseSettings):
 @pytest.fixture(scope="session")
 def env():
     return test_env()  # type: ignore
+
+
+@pytest.fixture(scope="module")
+def event_loop():
+    loop = asyncio.new_event_loop()
+    yield loop
+    loop.close()
+
+
+@pytest_asyncio.fixture(scope="module")
+async def client():
+    async with AsyncClient(verify=ssl_context()) as client:
+        client = ClientAdapter(client)
+        yield client

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.12.10.dev3"
+version = "0.12.10.dev4"
 description = "Python wrapper for Qzone web login and Qzone http api."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -73,11 +73,6 @@ build-backend = "poetry.core.masonry.api"
 # customize begin
 [tool.pytest.ini_options]
 pythonpath = 'src'
-markers = [
-    "needuser: Need user interaction, DO NOT use in ci",
-    "incremental: xfail succ cases if pred case failed or skipped",
-    "upstream: Test cannot run normally due to upstream problems",
-]
 log_cli = 1
 log_cli_level = 'WARNING'
 

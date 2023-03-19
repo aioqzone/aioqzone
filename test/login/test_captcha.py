@@ -86,7 +86,7 @@ class TestVM:
         assert "TDC_itoken" in cookie
 
 
-@pytest.mark.needuser
+@pytest.mark.skip("this test should be called manually")
 async def test_decrypt(vm: CollectEnv, captcha: Captcha, sess: TcaptchaSession):
     xs, ys = imitate_drag(21, 230, 50)
     vm.add_run("simulate_slide", xs, ys)

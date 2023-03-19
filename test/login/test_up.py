@@ -31,7 +31,7 @@ async def web(client: ClientAdapter, env: test_env):
 
 
 class TestUpWeb:
-    @pytest.mark.needuser
+    @pytest.mark.skip("this test should be called manually")
     async def testRegisterSmsCodeGetter(self, web: UpWebLogin):
         class ntdin(UpEvent):
             async def GetSmsCode(self, phone: str, nickname: str):

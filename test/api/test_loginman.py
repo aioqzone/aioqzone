@@ -105,7 +105,6 @@ async def qr(client: ClientAdapter, env: test_env):
     yield man
 
 
-@pytest.mark.needuser
 class TestQR:
     @pytest.mark.parametrize(
         "exc2r,exc2e",
@@ -133,6 +132,7 @@ class TestQR:
         qr.hook.refresh_flag.set()
         assert qr.hook.renew_flag  # type: ignore
 
+    @pytest.mark.skip("this test should be called manually")
     async def test_newcookie(self, qr: api.QRLoginMan):
         try:
             cookie = await qr.new_cookie()

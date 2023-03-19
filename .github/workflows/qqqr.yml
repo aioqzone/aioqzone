@@ -35,5 +35,5 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::pytest outputs"
-          poetry run pytest -m "not needuser" test/login/test_captcha.py test/login/test_jigsaw.py
+          poetry run pytest -m test/login/test_captcha.py test/login/test_jigsaw.py
           echo "::endgroup::"
