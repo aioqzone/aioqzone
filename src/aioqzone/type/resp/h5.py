@@ -46,7 +46,7 @@ class UserInfo(BaseModel):
 
 
 class FeedSummary(BaseModel):
-    summary: str
+    summary: str = ""
     hasmore: bool = False
 
 
@@ -166,7 +166,7 @@ class HasUserInfo(BaseModel):
 
 
 class HasSummary(BaseModel):
-    summary: FeedSummary
+    summary: FeedSummary = Field(default_factory=FeedSummary)
 
 
 class HasMedia(BaseModel):
