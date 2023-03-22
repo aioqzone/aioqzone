@@ -61,6 +61,7 @@ class Tasksets:
         super().__init__()
         self._tasks = defaultdict(set)
 
+    @final
     def add_hook_ref(self, hook_cls: str, coro):
         # type: (str, Coroutine[Any, Any, T] | Generator[Any, Any, T] | asyncio.Future[T]) -> asyncio.Future[T]
         # NOTE: asyncio.Task becomes generic since py39
@@ -129,6 +130,7 @@ class Tasksets:
             for t in s:
                 t.cancel()  # done callback will remove the task from this set
 
+    @final
     def pop_empty_set(self):
         """Remove all empty tasksets. This method mainly aims to avoid holding too many empty set objects.
 

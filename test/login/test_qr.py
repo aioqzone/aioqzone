@@ -27,8 +27,8 @@ async def login(client: ClientAdapter):
     yield login
 
 
-@pytest_asyncio.fixture
-async def trouble_hook(client: ClientAdapter):
+@pytest.fixture
+def trouble_hook(client: ClientAdapter):
     login = QrLogin(client, QzoneAppid, QzoneProxy)
 
     class trouble(QrEvent):
