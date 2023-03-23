@@ -1,4 +1,6 @@
-from os import environ as env
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
@@ -8,14 +10,18 @@ from aioqzone.api.h5.raw import QzoneH5RawAPI
 from aioqzone.api.loginman import UPLoginMan
 from aioqzone.event import UPEvent
 from qqqr.exception import TencentLoginError
-from qqqr.utils.net import ClientAdapter
+
+if TYPE_CHECKING:
+    from test.conftest import test_env
+
+    from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 
 
 @pytest.fixture(scope="module")
-def h5(client: ClientAdapter):
-    man = UPLoginMan(client, int(env["TEST_UIN"]), env["TEST_PASSWORD"], h5=True)
+def h5(client: ClientAdapter, env: test_env):
+    man = UPLoginMan(client, env.uin, env.pwd.get_secret_value(), h5=True)
     man.register_hook(UPEvent())
     yield man
 
@@ -82,13 +88,13 @@ class TestH5API:
             pytest.xfail("login failed")
 
 
-@pytest.mark.needuser
-async def test_h5_up_login(client: ClientAdapter):
+@pytest.mark.skip("this test should be called manually")
+async def test_h5_up_login(client: ClientAdapter, env: test_env):
     from aioqzone.api.loginman import QREvent, QRLoginMan
 
     from . import showqr
 
-    man = QRLoginMan(client, int(env["TEST_UIN"]), h5=True)
+    man = QRLoginMan(client, env.uin, h5=True)
     api = QzoneH5API(client, man)
 
     hook = QREvent()

@@ -1,4 +1,6 @@
-from os import environ as env
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
@@ -8,14 +10,18 @@ from qqqr.up import UpWebLogin
 from qqqr.up.captcha import Captcha, CollectEnv, TcaptchaSession
 from qqqr.up.captcha.jigsaw import imitate_drag
 from qqqr.up.captcha.vm import DecryptTDC
-from qqqr.utils.net import ClientAdapter
+
+if TYPE_CHECKING:
+    from test.conftest import test_env
+
+    from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 
 
 @pytest_asyncio.fixture(scope="module")
-async def captcha(client: ClientAdapter):
-    login = UpWebLogin(client, QzoneAppid, QzoneProxy, int(env["TEST_UIN"]), env["TEST_PASSWORD"])
+async def captcha(client: ClientAdapter, env: test_env):
+    login = UpWebLogin(client, QzoneAppid, QzoneProxy, env.uin, env.pwd.get_secret_value())
     upsess = await login.new()
     await login.check(upsess)
     captcha = login.captcha(upsess.check_rst.session)
@@ -29,7 +35,6 @@ async def sess(captcha: Captcha):
     yield sess
 
 
-@pytest.mark.incremental
 class TestCaptcha:
     async def test_windowconf(self, sess: TcaptchaSession):
         assert sess.conf
@@ -81,7 +86,7 @@ class TestVM:
         assert "TDC_itoken" in cookie
 
 
-@pytest.mark.needuser
+@pytest.mark.skip("this test should be called manually")
 async def test_decrypt(vm: CollectEnv, captcha: Captcha, sess: TcaptchaSession):
     xs, ys = imitate_drag(21, 230, 50)
     vm.add_run("simulate_slide", xs, ys)

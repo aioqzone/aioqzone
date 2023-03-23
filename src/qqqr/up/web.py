@@ -3,7 +3,7 @@ import re
 from os import environ as env
 from random import choice, random
 from time import time_ns
-from typing import List, Optional, Type
+from typing import List, Optional
 
 from httpx import URL
 

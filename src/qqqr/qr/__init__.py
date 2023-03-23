@@ -94,11 +94,11 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
         log.debug(resp)
         return resp
 
-    async def _loop(
+    async def login(
         self,
         *,
         refresh_times: int = 6,
-        polling_freq: float = 3,
+        poll_freq: float = 3,
     ):
         """Loop until cookie is returned or max `refresh_times` exceeds.
         - This method will emit :meth:`QrEvent.QrFetched` event if a new qrcode is fetched.
@@ -108,7 +108,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
 
         :meta public:
         :param refresh_times: max qr expire times.
-        :param polling_freq: interval between two status polling, in seconds, default as 3.
+        :param poll_freq: interval between two status polling, in seconds, default as 3.
 
         :raise `asyncio.TimeoutError`: if qr is not scanned after `refresh_times` expires.
         :raise `UserBreak`: if :obj:`QrEvent.cancel_flag` is set.
@@ -128,7 +128,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
                     await hook_guard(self.hook.QrCancelled)()
                     raise UserBreak
 
-                await asyncio.sleep(polling_freq)
+                await asyncio.sleep(poll_freq)
                 stat = await self.poll(sess)
                 if stat.code == StatusCode.Expired:
                     expired += 1
@@ -141,10 +141,3 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
             refresh_flag.clear()
 
         raise asyncio.TimeoutError
-
-    async def login(self, refresh_time: int = 6, polling_freq: float = 3):
-        """.. seealso:: :meth:`._loop`"""
-        try:
-            return await self._loop(refresh_times=refresh_time, polling_freq=polling_freq)
-        except (KeyboardInterrupt, asyncio.CancelledError) as e:
-            raise UserBreak from e

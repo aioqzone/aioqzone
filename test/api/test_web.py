@@ -40,7 +40,7 @@ class TestWebRawAPI:
             storage.extend(i["data"])
         assert storage
 
-    @pytest.mark.upstream
+    @pytest.mark.skip("this test fails by chance for upstream reason")
     async def test_complete(self, raw: QzoneWebRawAPI, storage: list):
         if not storage:
             pytest.skip("storage is empty")
@@ -120,7 +120,7 @@ async def published(raw: QzoneWebRawAPI):
     return r
 
 
-@pytest.mark.upstream
+@pytest.mark.skip("these tests fails by chance for upstream reason")
 class TestUpload:
     async def test_publish(self, published: Optional[dict]):
         if published is None:
@@ -166,7 +166,7 @@ class TestWebAPI:
             storage.extend(i.feeds)
         assert storage
 
-    @pytest.mark.upstream
+    @pytest.mark.skip("this test fails by chance for upstream reason")
     async def test_complete(self, api: QzoneWebAPI, storage: List[FeedRep]):
         if not storage:
             pytest.xfail("storage is empty")
