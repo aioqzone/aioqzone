@@ -1,5 +1,3 @@
-import asyncio
-
 import pytest
 import pytest_asyncio
 
@@ -18,17 +16,19 @@ pytestmark = pytest.mark.asyncio
 async def login(client: ClientAdapter):
     login = QrLogin(client, QzoneAppid, QzoneProxy)
 
-    class showqr2user(QrEvent):
-        def QrFetched(self, png: bytes, times: int):
-            _showqr(png)
-            assert isinstance(times, int)
+    async def __qr_fetched(png: bytes, times: int):
+        _showqr(png)
+        assert isinstance(times, int)
 
-    login.register_hook(showqr2user())
+    hook = QrEvent()
+    hook.QrFetched = __qr_fetched
+    login.register_hook(hook)
+
     yield login
 
 
-@pytest_asyncio.fixture
-async def trouble_hook(client: ClientAdapter):
+@pytest.fixture
+def trouble_hook(client: ClientAdapter):
     login = QrLogin(client, QzoneAppid, QzoneProxy)
 
     class trouble(QrEvent):
@@ -58,7 +58,7 @@ class TestProcedure:
             cookie = await trouble_hook.login()
 
 
-@pytest.mark.needuser
+@pytest.mark.skip("this test should be called manually")
 async def test_loop(login: QrLogin):
     cookie = await login.login()
     assert cookie["p_skey"]

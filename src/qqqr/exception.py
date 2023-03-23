@@ -21,11 +21,16 @@ class TencentLoginError(RuntimeError):
         return f"Code {self.code}({self.subcode}): {self.msg}"
 
 
-class UserBreak(KeyboardInterrupt):
-    """Represents that user cancels the login spontaneously."""
+class UserBreak(RuntimeError):
+    """Represents that user cancels the login spontaneously.
 
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+    .. versionchanged:: 0.12.10
+
+        Do not inherit from :exc:`KeyboardInterrupt`.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
 
 
 class HookError(RuntimeError):

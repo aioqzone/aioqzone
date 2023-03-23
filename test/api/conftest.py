@@ -1,43 +1,25 @@
-import asyncio
-import sys
-from typing import Type
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Type
 
 import pytest
-import pytest_asyncio
-from httpx import AsyncClient
 
-from aioqzone.api.loginman import MixedLoginMan, strategy_to_order
+from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.event import QREvent
 from qqqr.event import sub_of
-from qqqr.ssl import ssl_context
 from qqqr.utils.net import ClientAdapter
 
 from . import showqr
 
+if TYPE_CHECKING:
+    from test.conftest import test_env
+
 
 @pytest.fixture(scope="module")
-def event_loop():
-    if sys.version_info < (3, 8):
-        import jssupport.execjs  # set policy
-
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
-
-
-@pytest_asyncio.fixture(scope="module")
-async def client():
-    async with AsyncClient(verify=ssl_context()) as client:
-        yield ClientAdapter(client)
-
-
-@pytest_asyncio.fixture(scope="module")
-async def man(client: ClientAdapter):
-    from os import environ as env
-
+def man(client: ClientAdapter, env: test_env):
     class show_qr_in_test(MixedLoginMan):
         @sub_of(QREvent)
-        def _sub_qrevent(self, base: Type[QREvent]):
+        def _sub_qrevent(_self, base: Type[QREvent]):
             class showqr_qrevent(base):
                 async def QrFetched(self, png: bytes, times: int):
                     showqr(png)
@@ -46,9 +28,9 @@ async def man(client: ClientAdapter):
 
     man = show_qr_in_test(
         client,
-        int(env["TEST_UIN"]),
-        strategy_to_order[env.get("TEST_QRSTRATEGY", "forbid")],  # forbid QR by default.
-        pwd=env.get("TEST_PASSWORD", None),
+        env.uin,
+        env.order,  # forbid QR by default.
+        pwd=env.pwd.get_secret_value(),
     )
 
     yield man

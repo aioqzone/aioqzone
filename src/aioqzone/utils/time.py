@@ -1,10 +1,8 @@
 import time
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from typing import Optional, Union
 
-from pytz import timezone
-
-TIME_ZONE = timezone("Asia/Shanghai")
+TIME_ZONE = timezone(timedelta(hours=8), name="Asia/Shanghai")
 
 
 def time_ms(ts: Optional[float] = None):

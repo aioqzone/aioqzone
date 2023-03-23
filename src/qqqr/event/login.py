@@ -18,7 +18,7 @@ class QrEvent(Event):
         3. QR is refreshed
 
         :param png: QR bytes (png format)
-        :param times: QR refresh times in this session
+        :param times: QR **expire** times in this session
         """
         pass
 

@@ -31,7 +31,7 @@ repos:
         types: [python]
       - id: pytest
         name: pytest-check
-        entry: poetry run pytest -m "not needuser and not upstream" test
+        entry: poetry run pytest test
         language: system
         pass_filenames: false
         types: [python, toml]

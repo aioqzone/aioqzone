@@ -172,7 +172,3 @@ class ExecJS:
         :param prop: The property to get.
         """
         return await self(prop)
-
-
-if sys.platform == "win32" and sys.version_info < (3, 8):
-    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())

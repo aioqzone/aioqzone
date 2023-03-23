@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import asyncio
-from os import environ as env
+from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
@@ -8,12 +10,16 @@ from qqqr.constant import QzoneAppid, QzoneProxy
 from qqqr.up import UpWebLogin
 from qqqr.up.captcha import Captcha, TcaptchaSession
 from qqqr.up.captcha.jigsaw import Jigsaw, imitate_drag
-from qqqr.utils.net import ClientAdapter
+
+if TYPE_CHECKING:
+    from test.conftest import test_env
+
+    from qqqr.utils.net import ClientAdapter
 
 
 @pytest_asyncio.fixture(scope="module")
-async def captcha(client: ClientAdapter):
-    login = UpWebLogin(client, QzoneAppid, QzoneProxy, int(env["TEST_UIN"]), env["TEST_PASSWORD"])
+async def captcha(client: ClientAdapter, env: test_env):
+    login = UpWebLogin(client, QzoneAppid, QzoneProxy, env.uin, env.pwd.get_secret_value())
     upsess = await login.new()
     await login.check(upsess)
     captcha = login.captcha(upsess.check_rst.session)

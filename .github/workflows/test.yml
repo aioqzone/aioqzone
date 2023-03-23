@@ -45,7 +45,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::pytest outputs"
-          poetry run pytest -m "not needuser and not upstream" test
+          poetry run pytest test
           echo "::endgroup::"
 
       - name: Request Changes

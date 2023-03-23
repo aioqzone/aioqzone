@@ -164,7 +164,10 @@ class QzoneH5RawAPI:
         return r[data_key] if data_key is not None else r  # type: ignore
 
     async def index(self) -> StrDict:
-        """This api is the redirect page after h5 login, which is also the landing (main) page of h5 qzone."""
+        """This api is the redirect page after h5 login, which is also the landing (main) page of h5 qzone.
+
+        :raise RuntimeError: if any failure occurs in data parsing.
+        """
 
         @self._relogin_retry
         async def retry_closure():
@@ -175,22 +178,24 @@ class QzoneH5RawAPI:
         html = await retry_closure()
         scripts: List = fromstring(html).xpath('body/script[@type="application/javascript"]')
         if not scripts:
-            raise FileNotFoundError
+            log.debug(html)
+            raise RuntimeError("script tag not found")
 
         texts: List[str] = [s.text for s in scripts]
         script = next(filter(lambda s: "shine0callback" in s, texts), None)
         if not script:
-            raise FileExistsError
+            raise RuntimeError("data script not found")
 
         m = re.search(r'window\.shine0callback.*return "([0-9a-f]+?)";', script)
         if m is None:
-            raise ValueError
+            raise RuntimeError("data script not found")
 
         self.qzonetoken = m.group(1)
+        log.debug(f"got qzonetoken = {self.qzonetoken}")
 
         m = re.search(r"var FrontPage =.*?data\s*:\s*\{", script)
         if m is None:
-            raise
+            raise RuntimeError("page data not found")
         data = script[m.end() - 1 : m.end() + entire_closing(script[m.end() - 1 :])]
         return self._rtext_handler(data, cb=False, errno_key=("code", "ret"), data_key="data")
 
