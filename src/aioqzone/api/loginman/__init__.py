@@ -137,11 +137,18 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
     """
 
     def __init__(
-        self, client: ClientAdapter, uin: int, *, refresh_time: int = 6, h5=False
+        self,
+        client: ClientAdapter,
+        uin: int,
+        *,
+        refresh_times: int = 6,
+        poll_freq: float = 3,
+        h5=False,
     ) -> None:
         super().__init__(uin)
         self.client = client
-        self.refresh_time = refresh_time
+        self.refresh_times = refresh_times
+        self.poll_freq = poll_freq
         if h5:
             from qqqr.constant import QzoneH5Appid as appid
             from qqqr.constant import QzoneH5Proxy as proxy
@@ -174,9 +181,13 @@ class QRLoginMan(Loginable, Emittable[QREvent]):
         self.hook.refresh_flag.clear()
 
         try:
-            cookie = await self.qrlogin.login(self.refresh_time)
-        except KeyboardInterrupt as e:
+            cookie = await self.qrlogin.login(
+                refresh_times=self.refresh_times, poll_freq=self.poll_freq
+            )
+        except (UserBreak, KeyboardInterrupt, asyncio.CancelledError) as e:
             emit_hook(self.hook.LoginFailed(meth, "用户取消了登录"))
+            if isinstance(e, UserBreak):
+                raise
             raise UserBreak from e
         except HookError as e:
             log.warning(f"HookError occured in {e.hook}", exc_info=e)
@@ -226,7 +237,8 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
         order: Sequence[LoginMethod],
         pwd: Optional[str] = None,
         *,
-        refresh_time: int = 6,
+        refresh_times: int = 6,
+        poll_freq: float = 3,
         h5=False,
     ) -> None:
         super().__init__(uin)
@@ -234,7 +246,7 @@ class MixedLoginMan(EventManager[QREvent, UPEvent], Loginable):
         self.loginables: Dict[LoginMethod, Loginable] = {}
         if LoginMethod.qr in self.order:
             self.loginables[LoginMethod.qr] = QRLoginMan(
-                client=client, uin=uin, refresh_time=refresh_time, h5=h5
+                client=client, uin=uin, refresh_times=refresh_times, poll_freq=poll_freq, h5=h5
             )
         if LoginMethod.up in self.order:
             assert pwd

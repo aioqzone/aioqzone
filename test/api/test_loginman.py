@@ -123,14 +123,46 @@ class TestQR:
         with pytest.raises(exc2e), patch.object(QrLogin, "new", side_effect=exc2r):
             await qr.new_cookie()
 
-    async def test_cancel(self, qr: api.QRLoginMan):
-        await qr.new_cookie()
-        qr.hook.cancel_flag.set()
+    async def test_cancel(self, client: ClientAdapter, env: test_env):
+        qr = api.QRLoginMan(client, env.uin, refresh_times=1, poll_freq=1)
+        block = asyncio.Event()
 
-    async def test_resend(self, qr: api.QRLoginMan):
-        await qr.new_cookie()
-        qr.hook.refresh_flag.set()
-        assert qr.hook.renew_flag  # type: ignore
+        async def __qr_fetched(png: bytes, times: int):
+            hook.cancel_flag.set()
+            block.set()
+
+        async def __qr_cancelled():
+            block.clear()
+
+        hook = QREvent()
+        hook.QrFetched = __qr_fetched
+        hook.QrCancelled = __qr_cancelled
+        qr.register_hook(hook)
+
+        e, _ = await asyncio.gather(qr.new_cookie(), block.wait(), return_exceptions=True)
+        assert isinstance(e, UserBreak)
+
+    async def test_resend(self, client: ClientAdapter, env: test_env):
+        qr = api.QRLoginMan(client, env.uin, refresh_times=1, poll_freq=1)
+        last_png: bytes = b""
+
+        async def __qr_fetched(png: bytes, times: int):
+            assert times == 0
+            nonlocal last_png
+            if last_png:
+                assert png != last_png
+                hook.cancel_flag.set()
+            else:
+                last_png = png
+                hook.refresh_flag.set()
+
+        hook = QREvent()
+        hook.QrFetched = __qr_fetched
+        qr.register_hook(hook)
+        with pytest.raises(UserBreak):
+            await asyncio.wait_for(qr.new_cookie(), timeout=3)
+
+        assert last_png
 
     @pytest.mark.skip("this test should be called manually")
     async def test_newcookie(self, qr: api.QRLoginMan):
