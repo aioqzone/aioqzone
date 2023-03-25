@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-07 21:54+0800\n"
+"POT-Creation-Date: 2023-03-25 14:33+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -25,23 +25,25 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:1 of
 msgid ""
-"Get next page. If :obj:`qzonetoken` is not parsed, it will call :meth:`index` and return its "
-"response."
+"Get next page. If :obj:`.qzonetoken` is not parsed or `attach_info` is empty, it will call "
+":meth:`index` and return its response."
 msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds of
+#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds aioqzone.api.h5.model.QzoneH5API.shuoshuo of
 msgid "参数"
 msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:4 of
-msgid "The ``attach_info`` field from last call. Pass an empty string if getting the first page."
+#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:5 of
+msgid "The ``attach_info`` field from last call. Pass an empty string equals to call :meth:`.index`."
 msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds aioqzone.api.h5.model.QzoneH5API.index of
+#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds aioqzone.api.h5.model.QzoneH5API.index
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo of
 msgid "返回类型"
 msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:5 aioqzone.api.h5.model.QzoneH5API.index:4 of
+#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:7 aioqzone.api.h5.model.QzoneH5API.index:6
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:12 of
 msgid ":py:class:`~aioqzone.type.resp.h5.FeedPageResp`"
 msgstr ""
 
@@ -49,7 +51,7 @@ msgstr ""
 msgid "返回"
 msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:6 of
+#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:8 of
 msgid "If success, the ``data`` field of the response."
 msgstr ""
 
@@ -57,5 +59,42 @@ msgstr ""
 msgid "This api is the redirect page after h5 login, which is also the landing (main) page of h5 qzone."
 msgstr ""
 
+#: aioqzone.api.h5.model.QzoneH5API.index of
+msgid "抛出"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.index:3 of
+msgid "if any failure occurs in data parsing."
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:1 of
+msgid "This can be used to get the detailed summary of a feed."
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:4 of
+msgid "aka. cellid"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:6 of
+msgid "uin of the owner of the given feed"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:8 of
+msgid "appid of the given feed, default as 311"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:10 of
+msgid "optional encoded params"
+msgstr ""
+
 #~ msgid "Get next page."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Get next page. If :obj:`qzonetoken` is not parsed,"
+#~ " it will call :meth:`index` and return its "
+#~ "response."
+#~ msgstr ""
+
+#~ msgid "The ``attach_info`` field from last call. Pass an empty string if getting the first page."
 #~ msgstr ""
