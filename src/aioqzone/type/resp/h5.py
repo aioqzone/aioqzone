@@ -49,6 +49,13 @@ class FeedSummary(BaseModel):
     summary: str = ""
     hasmore: bool = False
 
+    @root_validator(pre=True)
+    def add_hasmore(cls, v: dict):
+        if "hasmore" not in v:
+            if len(v.get("summary", "")) >= 499:
+                v["hasmore"] = True
+        return v
+
 
 class LikeInfo(BaseModel):
     isliked: bool = False

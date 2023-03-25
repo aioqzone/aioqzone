@@ -102,6 +102,7 @@ class QzoneH5RawAPI:
             """
 
             with QzoneErrorDispatch() as qze, HTTPStatusErrorDispatch() as hse:
+                qze.dispatch(-3000, suppress=lambda e: "登录" in e.msg)  # -3000: 请先登录
                 qze.dispatch(-10000)
                 hse.dispatch(302, 403)
                 return await func(*args, **kwds)
@@ -228,6 +229,34 @@ class QzoneH5RawAPI:
         return self._rtext_handler(
             await retry_closure(), cb=False, errno_key=("code", "ret"), data_key="data"
         )
+
+    async def shuoshuo(self, fid: str, hostuin: int, appid=311, busi_param: str = ""):
+        """This can be used to get the detailed summary of a feed.
+
+        :param fid: aka. cellid
+        :param hostuin: uin of the owner of the given feed
+        :param appid: appid of the given feed, default as 311
+        :param busi_param: optional encoded params
+        """
+        data = dict(
+            format="json",
+            appid=appid,
+            uin=hostuin,
+            count=20,
+            refresh_type=31,
+            cellid=fid,
+            subid="",
+        )
+        if busi_param and len(busi_param) < 100:
+            data["busi_param"] = busi_param
+
+        @self._relogin_retry
+        async def retry_closure() -> StrDict:
+            async with self.host_get("/webapp/json/mqzone_detail/shuoshuo", data) as r:
+                r.raise_for_status()
+                return r.json()
+
+        return self._rtext_handler(await retry_closure(), cb=False, data_key="data")
 
     async def mfeeds_get_count(self) -> StrDict:
         @self._relogin_retry
