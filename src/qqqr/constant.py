@@ -42,6 +42,7 @@ class StatusCode(IntEnum):
     ForceQR = 10005
     NeedSmsVerify = 10009  # Means, notify the owner
     RiskyNetwork = 23003
+    RateLimit = 23011
 
 
 captcha_status_description = {
