@@ -11,8 +11,6 @@ from typing import List, Type, TypeVar
 
 from httpx import URL
 
-from ...constant import StatusCode
-from ...exception import TencentLoginError
 from ...utils.daug import du
 from ...utils.iter import first
 from ...utils.net import ClientAdapter
