@@ -260,7 +260,7 @@ class QzoneH5RawAPI:
                 r.raise_for_status()
                 return r.json()
 
-        self._rtext_handler(await retry_closure(), cb=False)
+        self._rtext_handler(await retry_closure(), errno_key=("ret",), cb=False)
         return True
 
     async def add_comment(self, ownuin: int, srcId: str, appid: int, content: str, private=False):

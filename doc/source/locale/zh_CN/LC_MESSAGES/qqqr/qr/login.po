@@ -8,56 +8,50 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 10:45+0800\n"
+"POT-Creation-Date: 2023-03-25 12:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.11.0\n"
+"Generated-By: Babel 2.12.1\n"
 
 #: ../../source/qqqr/qr/login.rst:2
 msgid "QrLogin and QrSession"
 msgstr ""
 
-#: of qqqr.qr.QrLogin._loop:1
+#: of qqqr.qr.QrLogin.login:1
 msgid ""
-"Loop until cookie is returned or max `refresh_times` exceeds. - This "
-"method will emit :meth:`QrEvent.QrFetched` event if a new qrcode is "
-"fetched. - If qr is not scanned after `refresh_times`, it will raise "
-":exc:`asyncio.TimeoutError`. - If :obj:`QrEvent.refresh_flag` is set, it "
-"will refresh qrcode at once without increasing expire counter. - If "
-":obj:`QrEvent.cancel_flag` is set, it will raise :exc:`UserBreak` before "
-"next polling."
+"Loop until cookie is returned or max `refresh_times` exceeds. - This method will emit "
+":meth:`QrEvent.QrFetched` event if a new qrcode is fetched. - If qr is not scanned after "
+"`refresh_times`, it will raise :exc:`asyncio.TimeoutError`. - If :obj:`QrEvent.refresh_flag` is "
+"set, it will refresh qrcode at once without increasing expire counter. - If "
+":obj:`QrEvent.cancel_flag` is set, it will raise :exc:`UserBreak` before next polling."
 msgstr ""
 
-#: of qqqr.qr.QrLogin._loop
+#: of qqqr.qr.QrLogin.login
 msgid "参数"
 msgstr ""
 
-#: of qqqr.qr.QrLogin._loop:9
+#: of qqqr.qr.QrLogin.login:9
 msgid "max qr expire times."
 msgstr ""
 
-#: of qqqr.qr.QrLogin._loop:11
+#: of qqqr.qr.QrLogin.login:11
 msgid "interval between two status polling, in seconds, default as 3."
 msgstr ""
 
-#: of qqqr.qr.QrLogin._loop qqqr.qr.QrLogin.poll
+#: of qqqr.qr.QrLogin.login qqqr.qr.QrLogin.poll
 msgid "抛出"
 msgstr ""
 
-#: of qqqr.qr.QrLogin._loop:13
+#: of qqqr.qr.QrLogin.login:13
 msgid "if qr is not scanned after `refresh_times` expires."
 msgstr ""
 
-#: of qqqr.qr.QrLogin._loop:14
+#: of qqqr.qr.QrLogin.login:14
 msgid "if :obj:`QrEvent.cancel_flag` is set."
-msgstr ""
-
-#: of qqqr.qr.QrLogin.login:1
-msgid ":meth:`._loop`"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.new:1
@@ -102,4 +96,7 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Block until cookie is received."
+#~ msgstr ""
+
+#~ msgid ":meth:`._loop`"
 #~ msgstr ""
