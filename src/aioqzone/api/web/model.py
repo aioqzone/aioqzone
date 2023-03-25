@@ -2,7 +2,8 @@
 Create an easy-to-use api from :mod:`.raw`.
 """
 import logging
-from typing import List, Optional
+from contextlib import suppress
+from typing import List, Optional, Type, TypeVar
 
 from pydantic import ValidationError
 
@@ -11,7 +12,17 @@ from aioqzone.type.resp import *
 
 from .raw import QzoneWebRawAPI
 
+_model = TypeVar("_model", bound=BaseModel)
+
 log = logging.getLogger(__name__)
+
+
+def _parse_obj(model: Type[_model], o: object) -> _model:
+    try:
+        return model.parse_obj(o)
+    except ValidationError:
+        log.debug(o)
+        raise
 
 
 class QzoneWebAPI(QzoneWebRawAPI):
@@ -42,7 +53,7 @@ class QzoneWebAPI(QzoneWebRawAPI):
             daylist=aux and aux.daylist or "",
             uinlist=aux and aux.uinlist or "",
         )
-        return FeedMoreResp.parse_obj(r)
+        return _parse_obj(FeedMoreResp, r)
 
     async def emotion_getcomments(self, uin: int, tid: str, feedstype: int) -> str:
         r = await super().emotion_getcomments(uin, tid, feedstype)
@@ -52,11 +63,11 @@ class QzoneWebAPI(QzoneWebRawAPI):
 
     async def emotion_msgdetail(self, owner: int, fid: str) -> FeedDetailRep:
         r = await super().emotion_msgdetail(owner, fid)
-        return FeedDetailRep.parse_obj(r)
+        return _parse_obj(FeedDetailRep, r)
 
     async def get_feeds_count(self) -> FeedsCount:
         r = await super().get_feeds_count()
-        return FeedsCount.parse_obj(r)
+        return _parse_obj(FeedsCount, r)
 
     async def floatview_photo_list(self, album: AlbumData, num: int) -> List[FloatViewPhoto]:
         r = await super().floatview_photo_list(album, num)
@@ -64,18 +75,15 @@ class QzoneWebAPI(QzoneWebRawAPI):
         assert isinstance(photos, list)
 
         ret = []
-        for i in photos:
-            try:
-                ret.append(FloatViewPhoto.parse_obj(i))
-            except ValidationError:
-                log.error(f"ValidationError parsing FloatViewPhoto: {i}")
-                continue
+        for photo in photos:
+            with suppress(ValidationError):
+                ret.append(_parse_obj(FloatViewPhoto, photo))
         return ret
 
     async def emotion_msglist(self, uin: int, num: int = 20, pos: int = 0) -> List[MsgListElm]:
         r = await super().emotion_msglist(uin, num, pos)
-        return [MsgListElm.parse_obj(i) for i in r]
+        return [_parse_obj(MsgListElm, i) for i in r]
 
     async def emotion_publish(self, content: str, right: int = 0) -> PublishResp:
         r = await super().emotion_publish(content, right)
-        return PublishResp.parse_obj(r)
+        return _parse_obj(PublishResp, r)
