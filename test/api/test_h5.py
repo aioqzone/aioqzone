@@ -71,6 +71,7 @@ class TestH5API:
             d = await api.index()
         except TencentLoginError:
             pytest.xfail("login failed")
+        context["first_page"] = d.vFeeds
         if d.hasmore:
             context["attach_info"] = d.attachinfo
 
@@ -80,6 +81,18 @@ class TestH5API:
         d = await api.get_active_feeds(context["attach_info"])
         if d.hasmore:
             context["attach_info"] = d.attachinfo
+
+    async def test_detail(self, api: QzoneH5API, context: dict):
+        if "first_page" not in context:
+            pytest.skip("have you run `test_index` before this test?")
+        first_page = context["first_page"]
+
+        f = next(filter(lambda d: d.common.appid == 311, first_page), None)
+        if f is None:
+            pytest.skip("no 311 feed in first page")
+
+        d = await api.shuoshuo(f.fid, f.userinfo.uin, f.common.appid)
+        assert len(d.summary.summary) >= len(f.summary.summary)
 
     async def test_heartbeat(self, api: QzoneH5API):
         try:

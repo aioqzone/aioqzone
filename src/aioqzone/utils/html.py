@@ -1,5 +1,9 @@
 """
-Use this module to get some data from Qzone html feed
+Use this module to get some data from Qzone html feed.
+
+.. versionchanged:: 0.13.0
+
+    Import this module needs extra ``lxml``.
 """
 import logging
 import re
