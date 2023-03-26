@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-25 14:33+0800\n"
+"POT-Creation-Date: 2023-03-26 21:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -42,8 +42,7 @@ msgstr ""
 msgid "返回类型"
 msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:7 aioqzone.api.h5.model.QzoneH5API.index:6
-#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:12 of
+#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:7 aioqzone.api.h5.model.QzoneH5API.index:6 of
 msgid ":py:class:`~aioqzone.type.resp.h5.FeedPageResp`"
 msgstr ""
 
@@ -85,6 +84,10 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:10 of
 msgid "optional encoded params"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:12 of
+msgid ":py:class:`~aioqzone.type.resp.h5.GetMoreResp`"
 msgstr ""
 
 #~ msgid "Get next page."

@@ -1,3 +1,9 @@
+"""
+.. versionchanged:: 0.13.0
+
+    Import this module needs extra ``captcha``.
+"""
+
 import io
 from os import environ as env
 from pathlib import Path

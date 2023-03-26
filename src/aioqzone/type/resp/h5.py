@@ -45,6 +45,10 @@ class UserInfo(BaseModel):
         return v
 
 
+class CellId(BaseModel):
+    cellid: str
+
+
 class FeedSummary(BaseModel):
     summary: str = ""
     hasmore: bool = False
@@ -181,6 +185,14 @@ class HasMedia(BaseModel):
     video: Optional[FeedVideo]
 
 
+class HasFid(BaseModel):
+    id: CellId
+
+    @property
+    def fid(self):
+        return self.id.cellid
+
+
 class ShareInfo(BaseModel):
     summary: str = ""
     title: str = ""
@@ -197,23 +209,13 @@ class Share(HasCommon):
     common: FeedCommon = Field(alias="cell_comm")
 
 
-class FeedOriginal(HasCommon, HasUserInfo, HasSummary, HasMedia):
-    cellid: str = ""
-    common: FeedCommon = Field(alias="cell_comm")
-    userinfo: UserInfo = Field(alias="cell_userinfo")
-    summary: FeedSummary = Field(alias="cell_summary")
-    pic: Optional[FeedPic] = Field(alias="cell_pic")
-    video: Optional[FeedVideo] = Field(alias="cell_video")
-
+class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
     @root_validator(pre=True)
-    def unpack_cellid(cls, v: dict):
-        if "cell_id" in v:
-            v["cellid"] = v["cell_id"]["cellid"]
-        return v
+    def remove_prefix(cls, v: dict):
+        return {k[5:] if str.startswith(k, "cell_") else k: i for k, i in v.items()}
 
 
-class FeedData(HasCommon, HasSummary, HasMedia, HasUserInfo):
-    cellid: str = ""
+class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
     common: FeedCommon = Field(alias="comm")
     like: LikeInfo = Field(default_factory=LikeInfo)
 
@@ -222,16 +224,19 @@ class FeedData(HasCommon, HasSummary, HasMedia, HasUserInfo):
     share_info: ShareInfo = Field(default_factory=ShareInfo)
 
     @root_validator(pre=True)
-    def unpack_cellid(cls, v: dict):
-        if "id" in v:
-            v["cellid"] = v["id"]["cellid"]
-        return v
-
-    @root_validator(pre=True)
     def unpack_share_info(cls, v: dict):
         if "operation" in v:
             v["share_info"] = v["operation"].get("share_info", {})
         return v
+
+
+class GetMoreResp(FeedData):
+    hasmore: bool = False
+    attach_info: str = ""
+
+    @root_validator(pre=True)
+    def remove_prefix(cls, v: dict):
+        return {k[5:] if str.startswith(k, "cell_") else k: i for k, i in v.items()}
 
 
 class FeedPageResp(BaseModel):
