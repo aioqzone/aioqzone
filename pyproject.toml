@@ -31,12 +31,18 @@ exclude = ["*.js"]
 python = "^3.8"
 httpx = "~0.23.0"
 pydantic = "^1.10.4"
-lxml = "^4.9.1"
-cssselect = "^1.1.0"
-numpy = "^1.22.3"
-pillow = "^9.4.0"
 rsa = "^4.8"
-exceptiongroup = { version="^1.1.1", python = "<3.11" }
+exceptiongroup = { version = "^1.1.1", python = "<3.11" }
+
+lxml = { version = "^4.9.1", optional = false }
+cssselect = { version = "^1.1.0", optional = false }
+
+numpy = { version = "^1.22.3", optional = false }
+pillow = { version = "^9.4.0", optional = false }
+
+[tool.poetry.extras]
+captcha = ["numpy", "pillow"]
+lxml = ["lxml", "cssselect"]
 
 # dependency groups
 [tool.poetry.group.test]

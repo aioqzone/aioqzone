@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-13 12:28+0800\n"
+"POT-Creation-Date: 2023-03-26 21:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #: ../../source/qqqr/up/captcha/jigsaw.rst:2
 msgid "Solving Jigsaw-Like Tcaptcha"
+msgstr ""
+
+#: of qqqr.up.captcha.jigsaw:3
+msgid "Import this module needs extra ``captcha``."
 msgstr ""
 
 #: of qqqr.up.captcha.jigsaw.Piece:1
