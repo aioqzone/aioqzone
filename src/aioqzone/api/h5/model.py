@@ -3,7 +3,7 @@ from typing import Type, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from aioqzone.type.resp.h5 import FeedCount, FeedPageResp
+from aioqzone.type.resp.h5 import FeedCount, FeedPageResp, GetMoreResp
 
 from .raw import QzoneH5RawAPI
 
@@ -29,8 +29,8 @@ class QzoneH5API(QzoneH5RawAPI):
 
     async def shuoshuo(
         self, fid: str, hostuin: int, appid=311, busi_param: str = ""
-    ) -> FeedPageResp:
-        return _parse_obj(FeedPageResp, await super().shuoshuo(fid, hostuin, appid, busi_param))
+    ) -> GetMoreResp:
+        return _parse_obj(GetMoreResp, await super().shuoshuo(fid, hostuin, appid, busi_param))
 
     async def mfeeds_get_count(self) -> FeedCount:
         return _parse_obj(FeedCount, await super().mfeeds_get_count())

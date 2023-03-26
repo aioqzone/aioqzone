@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, Generic, Optional, Set, Type, TypeVar, Union, get_args
+from typing import Any, Callable, Dict, Generic, Optional, Type, TypeVar, Union, get_args
 
 from httpx import HTTPStatusError
 
@@ -37,7 +37,8 @@ class CatchCodeDispatch(ABC, Generic[_E]):
         return self
 
     def __exit__(self, ty: Type[_E], e: _E, tb) -> bool:
-        if ty is not None and issubclass(ty, get_args(self.__orig_bases__[0])):  # type: ignore
+        exc_ty = getattr(self.__class__, "__orig_bases__")[0]
+        if ty is not None and issubclass(ty, get_args(exc_ty)):
             code = self.get_code(e)
             if dispatcher := self.code_dispatch.get(code):
                 dispatcher(e)
