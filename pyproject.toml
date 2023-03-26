@@ -25,7 +25,7 @@ exclude = ["*.js"]
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/aioqzone/aioqzone/issues"
-"Discussion" = "t.me/aioqzone_chatroom"
+"Discussion" = "https://t.me/aioqzone_chatroom"
 
 [tool.poetry.dependencies]
 python = "^3.8"
