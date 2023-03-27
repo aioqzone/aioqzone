@@ -76,7 +76,8 @@ class TestVM:
 
     async def testCollectData(self, vm: CollectEnv):
         xs, ys = imitate_drag(21, 230, 50)
-        vm.add_run("simulate_slide", xs, ys)
+        vm.run.append("async function main(){await simulate_slide(%s, %s)}" % (str(xs), str(ys)))
+        vm.add_run("main")
         d = await vm.get_data()
         assert d
         assert len(d) > 200
@@ -89,7 +90,8 @@ class TestVM:
 @pytest.mark.skip("this test should be called manually")
 async def test_decrypt(vm: CollectEnv, captcha: Captcha, sess: TcaptchaSession):
     xs, ys = imitate_drag(21, 230, 50)
-    vm.add_run("simulate_slide", xs, ys)
+    vm.run.append("async function main(){await simulate_slide(%s, %s)}" % (str(xs), str(ys)))
+    vm.add_run("main")
     collect = await vm.get_data()
 
     await captcha.get_tdc(sess, cls=DecryptTDC)

@@ -263,7 +263,10 @@ class Captcha:
         sess.set_captcha_answer(left, jig.top)
 
         xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], left, jig.top)
-        sess.tdc.add_run("simulate_slide", xs, ys)
+        sess.tdc.run.append(
+            "async function main(){await simulate_slide(%s, %s)}" % (str(xs), str(ys))
+        )
+        sess.tdc.add_run("main")
 
     async def verify(self):
         sess = await self.new()
