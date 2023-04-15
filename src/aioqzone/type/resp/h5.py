@@ -210,6 +210,8 @@ class Share(HasCommon):
 
 
 class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
+    common: FeedCommon = Field(alias="comm")
+
     @root_validator(pre=True)
     def remove_prefix(cls, v: dict):
         return {k[5:] if str.startswith(k, "cell_") else k: i for k, i in v.items()}
