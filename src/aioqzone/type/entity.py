@@ -4,9 +4,9 @@ and details the works of rich-text stringify.
 .. versionadded:: 0.5.0.dev0
 """
 
-from typing import List, Optional
+from typing import List, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 
 
 class HasContent(BaseModel):
@@ -54,6 +54,16 @@ class EmEntity(ConEntity):
 
     def __eq__(self, other):
         return isinstance(other, EmEntity) and self.eid == other.eid
+
+
+class LinkEntity(ConEntity):
+    """Link. like ``{url:https://example.com,text:网页链接}``
+
+    .. versionadded:: 0.12.13
+    """
+
+    url: Union[HttpUrl, str]
+    text: str = "网页链接"
 
 
 class HasConEntity(HasContent):
