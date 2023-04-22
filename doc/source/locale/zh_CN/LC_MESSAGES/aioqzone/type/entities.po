@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-09 11:53+0800\n"
+"POT-Creation-Date: 2023-04-22 10:09+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,7 +36,7 @@ msgid "Two objects of this class are considered equal, if their :obj:`uin` is eq
 msgstr ""
 
 #: aioqzone.type.entity.AtEntity aioqzone.type.entity.EmEntity aioqzone.type.entity.HasConEntity
-#: aioqzone.type.entity.HasContent aioqzone.type.entity.TextEntity of
+#: aioqzone.type.entity.HasContent aioqzone.type.entity.LinkEntity aioqzone.type.entity.TextEntity of
 msgid "Fields"
 msgstr ""
 
@@ -72,6 +72,18 @@ msgstr ""
 
 #: aioqzone.type.entity.HasContent:1 of
 msgid ":py:obj:`content (str) <aioqzone.type.entity.HasContent.content>`"
+msgstr ""
+
+#: aioqzone.type.entity.LinkEntity:1 of
+msgid "Link. like ``{url:https://example.com,text:网页链接}``"
+msgstr ""
+
+#: aioqzone.type.entity.LinkEntity:1 of
+msgid ":py:obj:`text (str) <aioqzone.type.entity.LinkEntity.text>`"
+msgstr ""
+
+#: aioqzone.type.entity.LinkEntity:1 of
+msgid ":py:obj:`url (pydantic.networks.HttpUrl | str) <aioqzone.type.entity.LinkEntity.url>`"
 msgstr ""
 
 #: aioqzone.type.entity.TextEntity:1 of
