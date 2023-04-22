@@ -3,7 +3,7 @@ from typing import List
 
 from lxml.html import HtmlElement
 
-from aioqzone.type.entity import AtEntity, ConEntity, EmEntity, TextEntity
+from aioqzone.type.entity import AtEntity, ConEntity, EmEntity, LinkEntity, TextEntity
 
 entity_rules = r"""
 (?P<em>\[em\])?     # emoji entity start
@@ -13,10 +13,23 @@ entity_rules = r"""
 
     |               # otherwise
 
-    @\{             # at entiry start
-        uin:(?P<uin>\d+),      # at uin
-        nick:(?P<nick>.+?)     # at nickname
-    \}              # at entiry end
+    (?P<at>@)?
+    (?(at)
+
+    \{                          # at entiry start
+        uin:(?P<uin>\d+),       # at uin
+        nick:(?P<nick>.+?)      # at nickname
+    \}                          # at entiry end
+
+    |
+
+    \{                          # link entity start
+        url:(?P<url>[^,]+),     # link url
+        text:(?P<text>[^\}]*)   # link text
+    \}
+
+    )
+
 )
 """
 
@@ -50,6 +63,8 @@ def finfo_box_entities(finfo: HtmlElement) -> List[ConEntity]:
                 nick = (e.text or "@")[1:]
                 entities.append(AtEntity(uin=int(uin.group(1)), nick=nick))
                 continue
+            entities.append(LinkEntity(url=e.get("href", ""), text=e.text))
+            continue
 
         # by default we add a text entity which content is the html text content
         entities.append(TextEntity(con=e.text_content()))
@@ -65,8 +80,10 @@ def split_entities(s: str) -> List[ConEntity]:
             entities.append(TextEntity(con=s[pos:start]))
         if m.group("em"):
             entities.append(EmEntity(eid=int(m.group("eid"))))
-        elif m.group("uin"):
+        elif m.group("at"):
             entities.append(AtEntity(nick=m.group("nick"), uin=int(m.group("uin"))))
+        elif m.group("url"):
+            entities.append(LinkEntity(url=m.group("url"), text=m.group("text")))
         pos = end
     if pos < len(s):
         entities.append(TextEntity(con=s[pos:]))
