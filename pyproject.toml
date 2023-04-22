@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.12.12.dev2"
+version = "0.12.13.dev1"
 description = "Python wrapper for Qzone login and Qzone HTTP APIs."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -29,7 +29,7 @@ exclude = ["*.js"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-httpx = "~0.23.0"
+httpx = ">=0.23.0,<0.25.0"
 pydantic = "^1.10.4"
 rsa = "^4.8"
 exceptiongroup = { version = "^1.1.1", python = "<3.11" }
