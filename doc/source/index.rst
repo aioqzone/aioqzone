@@ -17,7 +17,6 @@ aioqzone provides python interface to
    :glob:
 
    aioqzone/index
-   jssupport/index
    qqqr/index
    reference
 

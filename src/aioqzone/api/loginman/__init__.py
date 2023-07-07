@@ -11,7 +11,6 @@ from httpx import ConnectError, HTTPError
 
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from aioqzone.exception import LoginError, SkipLoginInterrupt
-from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constant import QzoneH5Proxy, StatusCode
 from qqqr.event import Emittable, EventManager
 from qqqr.exception import HookError, TencentLoginError, UserBreak
@@ -21,7 +20,6 @@ from qqqr.utils.net import ClientAdapter
 from ._base import Loginable
 
 log = logging.getLogger(__name__)
-JsError = JsRuntimeError, JsImportError, NodeNotFoundError
 
 
 class _NextMethodInterrupt(RuntimeError):
@@ -95,10 +93,6 @@ class UPLoginMan(Loginable, Emittable[UPEvent]):
             raise TencentLoginError(
                 StatusCode.NeedSmsVerify, "Dynamic code verify not implemented"
             ) from e
-        except JsError as e:
-            log.error(str(e), exc_info=e)
-            emit_hook(self.hook.LoginFailed(meth, "JS调用出错"))
-            raise TencentLoginError(StatusCode.NeedCaptcha, "Failed to pass captcha") from e
         except HookError as e:
             log.warning(f"HookError occured in {e.hook}", exc_info=e)
             emit_hook(self.hook.LoginFailed(meth, str(e)))

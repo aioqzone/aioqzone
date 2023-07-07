@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import io
 from typing import TYPE_CHECKING, List, Tuple, Type, cast
 from unittest.mock import patch
 
@@ -11,14 +12,11 @@ from httpx import ConnectError, HTTPError, Request
 import aioqzone.api.loginman as api
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from aioqzone.exception import LoginError, SkipLoginInterrupt
-from jssupport.exception import JsRuntimeError
 from qqqr.event.login import QrEvent, UpEvent
 from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.up import UpWebLogin
 from qqqr.utils.net import ClientAdapter
-
-from . import showqr
 
 if TYPE_CHECKING:
     from test.conftest import test_env
@@ -44,7 +42,12 @@ class UPEvent_Test(UPEvent):
 
 class QREvent_Test(QREvent):
     async def QrFetched(self, png: bytes, renew):
-        showqr(png)
+        try:
+            from PIL import Image as image
+        except ImportError:
+            pass
+        else:
+            image.open(io.BytesIO(png)).show()
         self.renew_flag = renew
 
     async def LoginSuccess(self, meth):
@@ -69,7 +72,6 @@ class TestUP:
         [
             (TencentLoginError(-3002, "mock"), TencentLoginError),
             (NotImplementedError(), TencentLoginError),
-            (JsRuntimeError(-1, "node", b"mock"), TencentLoginError),
             (GeneratorExit(), api._NextMethodInterrupt),
             (ConnectError("mock", request=_fake_request), api._NextMethodInterrupt),
             (_fake_http_error, api._NextMethodInterrupt),

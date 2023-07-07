@@ -4,6 +4,10 @@ import asyncio
 from typing import TYPE_CHECKING
 
 import pytest
+
+pytest.importorskip("numpy")
+pytest.importorskip("PIL")
+
 import pytest_asyncio
 
 from qqqr.constant import QzoneAppid, QzoneProxy

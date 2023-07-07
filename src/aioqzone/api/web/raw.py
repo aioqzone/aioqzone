@@ -17,8 +17,8 @@ from aioqzone.type.internal import AlbumData, LikeData
 from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import response_callback
 from aioqzone.utils.time import time_ms
-from jssupport.jsjson import JsonValue, json_loads
 from qqqr.utils.daug import du
+from qqqr.utils.jsjson import JsonValue, json_loads
 from qqqr.utils.net import ClientAdapter, raise_for_status
 
 logger = logging.getLogger(__name__)

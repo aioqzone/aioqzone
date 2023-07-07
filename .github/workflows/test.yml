@@ -21,12 +21,9 @@ jobs:
         python-version: ["3.11", "3.8"]
     steps:
       #----------------------------------------------
-      #   check-out repo and set-up node & python
+      #       check-out repo and set-up python
       #----------------------------------------------
       - uses: actions/checkout@v3
-      - uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
       - name: Install poetry
         run: pipx install poetry
       - name: Setup Python ${{ matrix.python-version }}
@@ -35,17 +32,30 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: poetry
 
-      - name: Install and Test
+      - name: Install and Test w/o Extras
         env:
           TEST_UIN: ${{ secrets.TEST_UIN }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
-          echo "::group::Install Dependencies"
+          echo "::group::Install Basic Dependencies"
           poetry install -n -vv
           echo "::endgroup::"
 
           echo "::group::pytest outputs"
           poetry run pytest test
+          echo "::endgroup::"
+
+      - name: Install and Test w/ Extras
+        env:
+          TEST_UIN: ${{ secrets.TEST_UIN }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: |
+          echo "::group::Install All Dependencies"
+          poetry install --all-extras -n -vv
+          echo "::endgroup::"
+
+          echo "::group::pytest outputs"
+          poetry run pytest test/login/test_captcha.py test/login/test_jigsaw.py
           echo "::endgroup::"
 
       - name: Request Changes

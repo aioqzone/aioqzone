@@ -1,3 +1,5 @@
+import io
+
 import pytest
 import pytest_asyncio
 
@@ -7,23 +9,27 @@ from qqqr.exception import HookError
 from qqqr.qr import QrLogin, QrSession
 from qqqr.utils.net import ClientAdapter
 
-from . import showqr as _showqr
-
 pytestmark = pytest.mark.asyncio
 
 
 @pytest_asyncio.fixture(scope="module")
 async def login(client: ClientAdapter):
     login = QrLogin(client, QzoneAppid, QzoneProxy)
-
-    async def __qr_fetched(png: bytes, times: int):
-        _showqr(png)
-        assert isinstance(times, int)
-
     hook = QrEvent()
-    hook.QrFetched = __qr_fetched
-    login.register_hook(hook)
 
+    try:
+        from PIL import Image as image
+    except ImportError:
+        pass
+    else:
+
+        async def __qr_fetched(png: bytes, times: int):
+            image.open(io.BytesIO(png)).show()
+            assert isinstance(times, int)
+
+        hook.QrFetched = __qr_fetched
+
+    login.register_hook(hook)
     yield login
 
 
