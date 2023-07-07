@@ -37,7 +37,7 @@ exceptiongroup = { version = "^1.1.1", python = "<3.11", source = "PyPI" }
 
 numpy = { version = "^1.22.3", optional = true, source = "PyPI" }
 pillow = { version = "^9.4.0", optional = true, source = "PyPI" }
-pychaosvm = { version = "^0.2.2", optional = true, source = "aioqzone-index" }
+pychaosvm = { version = "^0.2.3", optional = true, source = "aioqzone-index" }
 
 [tool.poetry.extras]
 captcha = ["numpy", "pillow", "pychaosvm"]

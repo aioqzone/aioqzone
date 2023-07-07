@@ -820,13 +820,13 @@ files = [
 
 [[package]]
 name = "pychaosvm"
-version = "0.2.2"
+version = "0.2.3"
 description = "A Python envirionment for Tencent ChaosVM."
 optional = true
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pychaosvm-0.2.2-py3-none-any.whl", hash = "sha256:8a48f9a34c89142893310cdc5198195d361fbe959d72e1872976134d408040ce"},
-    {file = "pychaosvm-0.2.2.tar.gz", hash = "sha256:54677de2697d7262c9347d3b0209f6008ad323d242c0b14a29b7d05e72b747ce"},
+    {file = "pychaosvm-0.2.3-py3-none-any.whl", hash = "sha256:4e7a8112447fe40582797bd58cee47df2648f6d942533a4f24cd59288c43dbb1"},
+    {file = "pychaosvm-0.2.3.tar.gz", hash = "sha256:5e79b3201c9d0cd4ad169e3b4a66a4148e765f445de8141e9bc68af0a1e05334"},
 ]
 
 [package.dependencies]
@@ -1349,4 +1349,4 @@ captcha = ["numpy", "pillow", "pychaosvm"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "494c02b8dd79ab77e00d1a4e98bb8f9555110339d25236a59f4daf077d17f285"
+content-hash = "870f9c484f074aae62ea9c65dcc2d80e57c2ad218cf0afba52ade4c0f6d56d3e"

@@ -7,7 +7,7 @@ from hashlib import md5
 from ipaddress import IPv4Address
 from random import random
 from time import time
-from typing import List, Type, TypeVar
+from typing import List
 
 from chaosvm import prepare
 from chaosvm.proxy.dom import TDC
@@ -271,11 +271,14 @@ class Captcha:
         self.solve_captcha(sess)
         await self.get_tdc(sess)
 
-        collect = sess.tdc.getData(None, True)
+        assert sess.piece_sprite.move_cfg
+        assert sess.piece_sprite.move_cfg.data_type
+
+        collect = str(sess.tdc.getData(None, True))  # BUG: maybe a String(), convert to str
 
         ans = dict(
             elem_id=1,
-            type=sess.piece_sprite.move_cfg.data_type[0],  # type: ignore
+            type=sess.piece_sprite.move_cfg.data_type[0],
             data="{0},{1}".format(*sess.jig_ans),
         )
         data = {
