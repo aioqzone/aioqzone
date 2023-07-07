@@ -3,7 +3,6 @@
 aioqzone封装了一些Qzone接口。
 
 [![python](https://img.shields.io/pypi/pyversions/aioqzone?logo=python&logoColor=white)][home]
-[![QQQR](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml)
 [![version](https://img.shields.io/pypi/v/aioqzone?logo=python)][pypi]
 [![style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![discuss](https://img.shields.io/badge/dynamic/xml?style=social&logo=telegram&label=Discuss&query=%2F%2Fdiv%5B%40class%3D%22tgme_page_extra%22%5D&url=https%3A%2F%2Ft.me%2Faioqzone_chatroom)](https://t.me/aioqzone_chatrooom)

@@ -37,12 +37,20 @@ jobs:
           TEST_UIN: ${{ secrets.TEST_UIN }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
-          echo "::group::Install Dependencies"
+          echo "::group::Install Basic Dependencies"
           poetry install -n -vv
           echo "::endgroup::"
 
           echo "::group::pytest outputs"
           poetry run pytest test
+          echo "::endgroup::"
+
+          echo "::group::Install All Dependencies"
+          poetry install --all-extras -n -vv
+          echo "::endgroup::"
+
+          echo "::group::pytest outputs"
+          poetry run pytest test/login/test_captcha.py test/login/test_jigsaw.py
           echo "::endgroup::"
 
       - name: Request Changes
