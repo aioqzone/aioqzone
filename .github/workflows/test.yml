@@ -32,7 +32,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: poetry
 
-      - name: Install and Test
+      - name: Install and Test w/o Extras
         env:
           TEST_UIN: ${{ secrets.TEST_UIN }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
@@ -45,6 +45,11 @@ jobs:
           poetry run pytest test
           echo "::endgroup::"
 
+      - name: Install and Test w/ Extras
+        env:
+          TEST_UIN: ${{ secrets.TEST_UIN }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: |
           echo "::group::Install All Dependencies"
           poetry install --all-extras -n -vv
           echo "::endgroup::"

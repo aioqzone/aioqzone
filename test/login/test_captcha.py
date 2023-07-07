@@ -33,9 +33,7 @@ async def captcha(client: ClientAdapter, env: test_env):
 
 @pytest_asyncio.fixture(scope="class")
 async def sess(captcha: Captcha):
-    sess = await captcha.new()
-    await captcha.get_tdc(sess)
-    yield sess
+    return await captcha.new()
 
 
 class TestCaptcha:
@@ -55,14 +53,22 @@ class TestCaptcha:
         captcha.solve_captcha(sess)
         assert sess.jig_ans[0]
         assert sess.jig_ans[1]
+        assert sess.mouse_track
+
+    async def test_tdc(self, captcha: Captcha, sess: TcaptchaSession):
+        await captcha.get_tdc(sess)
+        assert sess.tdc
+        assert callable(sess.tdc.getData)
+        assert callable(sess.tdc.getInfo)
 
     async def test_verify(self, captcha: Captcha):
         r = await captcha.verify()
         if r.code == 0:
             assert r.verifycode
             assert r.ticket
-        else:
-            pytest.xfail(captcha_status_description[r.code])
+            return
+
+        pytest.fail(msg=captcha_status_description.get(r.code))
 
 
 @pytest_asyncio.fixture(scope="class")
