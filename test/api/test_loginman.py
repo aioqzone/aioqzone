@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import io
 from typing import TYPE_CHECKING, List, Tuple, Type, cast
 from unittest.mock import patch
 
@@ -16,8 +17,6 @@ from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.up import UpWebLogin
 from qqqr.utils.net import ClientAdapter
-
-from . import showqr
 
 if TYPE_CHECKING:
     from test.conftest import test_env
@@ -43,7 +42,12 @@ class UPEvent_Test(UPEvent):
 
 class QREvent_Test(QREvent):
     async def QrFetched(self, png: bytes, renew):
-        showqr(png)
+        try:
+            from PIL import Image as image
+        except ImportError:
+            pass
+        else:
+            image.open(io.BytesIO(png)).show()
         self.renew_flag = renew
 
     async def LoginSuccess(self, meth):

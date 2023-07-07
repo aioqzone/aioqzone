@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 pytest.importorskip("numpy")
-pytest.importorskip("cv2")
+pytest.importorskip("PIL")
 pytest.importorskip("chaosvm")
 
 import pytest_asyncio
