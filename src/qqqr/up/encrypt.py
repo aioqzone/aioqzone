@@ -1,7 +1,6 @@
 """This module implements (or calls) qzone password encrypt algorithm."""
 
 import base64
-import re
 import struct
 from abc import ABC, abstractmethod
 from binascii import hexlify
@@ -11,8 +10,6 @@ from typing import Union
 
 from rsa import PublicKey
 from rsa import encrypt as rsa_encrypt
-
-from ..utils.net import ClientAdapter
 
 LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_login_2.js"
 PUBKEY = PublicKey(
@@ -33,42 +30,6 @@ class PasswdEncoder(ABC):
     @abstractmethod
     async def encode(self, salt: str, verifycode: str) -> str:
         pass
-
-
-class NodeEncoder(PasswdEncoder):
-    """Encoder using original js code by communicating with local :program:`Node.js <node>` progress.
-    Make sure this always work.
-    """
-
-    __env = None
-
-    def __init__(self, client: ClientAdapter, passwd: str) -> None:
-        super().__init__(passwd)
-        self.client = client
-
-    async def login_js(self):
-        async with self.client.get(LOGIN_JS) as r:
-            r.raise_for_status()
-            return r.text
-
-    async def encode(self, salt: str, verifycode: str) -> str:
-        from jssupport.execjs import ExecJS, Partial
-
-        if self.__env is None:
-            js = await self.login_js()
-            m = re.search(r"function\(module,exports,__webpack_require__\).*\}", js)
-            assert m
-            funcs = m.group(0)
-            env = ExecJS()
-            env.setup.append("var navigator = new Object; navigator.appName = 'Netscape'")
-            env.setup.append(f"var a=[{funcs}]")
-            env.setup.append("function n(k) {var t,e=new Object;return a[k](t,e,n),e}")
-            env.setup.append(
-                "function getEncryption(p,s,v){var t,e=new Object;return a[9](t,e,n),e['default'].getEncryption(p,s,v,undefined)}"
-            )
-            self.__env = env
-
-        return (await self.__env(Partial("getEncryption", self._passwd, salt, verifycode))).strip()
 
 
 class TeaEncoder(PasswdEncoder):

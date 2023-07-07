@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 from typing import TYPE_CHECKING
 
 import pytest
@@ -105,17 +106,21 @@ class TestH5API:
 async def test_h5_up_login(client: ClientAdapter, env: test_env):
     from aioqzone.api.loginman import QREvent, QRLoginMan
 
-    from . import showqr
-
     man = QRLoginMan(client, env.uin, h5=True)
     api = QzoneH5API(client, man)
 
     hook = QREvent()
 
-    async def __qr_fetched(png, times):
-        showqr(png)
+    try:
+        from PIL import Image as image
+    except ImportError:
+        pass
+    else:
 
-    hook.QrFetched = __qr_fetched
+        async def __qr_fetched(png, times):
+            image.open(io.BytesIO(png)).show()
+
+        hook.QrFetched = __qr_fetched
     man.register_hook(hook)
 
     d = await api.mfeeds_get_count()

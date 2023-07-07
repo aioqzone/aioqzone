@@ -1,7 +1,7 @@
 Parsing Javascript Dictionary
 ==================================
 
-.. currentmodule:: jssupport.jsjson
+.. currentmodule:: qqqr.utils.jsjson
 
-.. automodule:: jssupport.jsjson
+.. automodule:: qqqr.utils.jsjson
     :members:

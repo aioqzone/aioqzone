@@ -9,7 +9,7 @@ from aioqzone.api.loginman import Loginable
 from aioqzone.exception import QzoneError
 from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import entire_closing, response_callback
-from jssupport.jsjson import JsonValue, json_loads
+from qqqr.utils.jsjson import JsonValue, json_loads
 from qqqr.utils.net import ClientAdapter
 
 StrDict = Dict[str, JsonValue]

@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 20:48+0800\n"
+"POT-Creation-Date: 2023-07-07 16:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.11.0\n"
+"Generated-By: Babel 2.12.1\n"
 
 #: ../../source/qqqr/up/captcha/captcha.rst:2
 msgid "Captcha and TcaptchaSession"
@@ -51,7 +51,7 @@ msgstr ""
 msgid "captcha session"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.get_captcha_problem:7 qqqr.up.captcha.Captcha.get_tdc:7
+#: of qqqr.up.captcha.Captcha.get_captcha_problem:7 qqqr.up.captcha.Captcha.get_tdc:5
 #: qqqr.up.captcha.Captcha.solve_captcha:10 qqqr.up.captcha.TcaptchaSession.solve_workload:7
 msgid "None"
 msgstr ""
@@ -66,10 +66,6 @@ msgstr ""
 
 #: of qqqr.up.captcha.Captcha.get_tdc:1
 msgid "The get_tdc function is a coroutine that sets an instance of the :class:`TDC` class to `sess`."
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.get_tdc:6
-msgid "Specify the type of :class:`TDC` instance to be returned, default as :class:`TDC`."
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.iframe:1

@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 20:45+0800\n"
+"POT-Creation-Date: 2023-07-07 16:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.11.0\n"
+"Generated-By: Babel 2.12.1\n"
 
 #: ../../source/qqqr/up/login.rst:2
 msgid "UpLogin and UpSession"
@@ -23,10 +23,14 @@ msgstr ""
 
 #: of qqqr.up.web.UpWebLogin:3
 msgid ""
-"TeaEncoder is used as the default password encoder. A `legacy_encoder` paramater is added to "
+"`TeaEncoder` is used as the default password encoder. A `legacy_encoder` paramater is added to "
 "force using the former `NodeEncoder`. It can also be configured by set "
 ":envvar:`AIOQZONE_PWDENCODER` to \"node\". Note that the paramater in code, i.e. "
 "`legacy_encoder`, takes precedence."
+msgstr ""
+
+#: of qqqr.up.web.UpWebLogin:9
+msgid "`TeaEncoder` is the only encoder. ``NodeEncoder`` is removed."
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.captcha:1
@@ -207,5 +211,14 @@ msgstr ""
 #~ "using the former `NodeEncoder`. It can also be "
 #~ "configured by set :env:`AIOQZONE_PWDENCODER` to \"node\". "
 #~ "Note that the paramater in code, i.e. "
+#~ "`legacy_encoder`, takes precedence."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "TeaEncoder is used as the default password encoder."
+#~ " A `legacy_encoder` paramater is added to force "
+#~ "using the former `NodeEncoder`. It can also be "
+#~ "configured by set :envvar:`AIOQZONE_PWDENCODER` to \"node\"."
+#~ " Note that the paramater in code, i.e. "
 #~ "`legacy_encoder`, takes precedence."
 #~ msgstr ""

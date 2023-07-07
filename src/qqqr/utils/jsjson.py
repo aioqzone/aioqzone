@@ -10,41 +10,6 @@ JsonList = List["JsonValue"]
 JsonValue = Union[bool, int, str, JsonDict, JsonList]
 
 
-class NodeLoader:
-    """`NodeLoader` converts a string representation of JS/JSON data into a Python object.
-    It may use :js:meth:`JSON.stringify` to convert js to json.
-    """
-
-    @classmethod
-    async def json_loads(
-        cls, js: str, try_load_first: bool = True, parser: Callable[[str], JsonValue] = json.loads
-    ) -> JsonValue:
-        """
-        The json_loads function converts a string representation of JS/JSON data into a Python object.
-        It may use :js:meth:`JSON.stringify` to convert js to json.
-
-        :param js: Used to Pass in the json string.
-        :param try_load_first: Used to Specify whether to try loading the json string with the `parser` first.
-        :param parser: Used to Specify the function that will be used to parse the string.
-        :return: A python object that represents the same content as the js/json string.
-        """
-        if try_load_first:
-            try:
-                return parser(js)
-            except json.JSONDecodeError:
-                pass
-
-        from .execjs import Partial
-
-        json_str = await Partial("JSON.stringify", js)()
-        try:
-            return parser(json_str)
-        except json.JSONDecodeError as e:
-            logger.exception("Failed to decode json input!")
-            logger.debug("json_str=%s", json_str)
-            raise e
-
-
 class AstLoader:
     """`AstLoader` uses standard :mod:`ast` module to parse the js/json"""
 

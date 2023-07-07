@@ -3,13 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+
+pytest.importorskip("numpy")
+pytest.importorskip("PIL")
+pytest.importorskip("chaosvm")
+
 import pytest_asyncio
 
 from qqqr.constant import QzoneAppid, QzoneProxy, captcha_status_description
 from qqqr.up import UpWebLogin
-from qqqr.up.captcha import Captcha, CollectEnv, TcaptchaSession
-from qqqr.up.captcha.jigsaw import imitate_drag
-from qqqr.up.captcha.vm import DecryptTDC
+from qqqr.up.captcha import Captcha, TcaptchaSession
 
 if TYPE_CHECKING:
     from test.conftest import test_env
@@ -30,9 +33,7 @@ async def captcha(client: ClientAdapter, env: test_env):
 
 @pytest_asyncio.fixture(scope="class")
 async def sess(captcha: Captcha):
-    sess = await captcha.new()
-    await captcha.get_tdc(sess)
-    yield sess
+    return await captcha.new()
 
 
 class TestCaptcha:
@@ -52,48 +53,25 @@ class TestCaptcha:
         captcha.solve_captcha(sess)
         assert sess.jig_ans[0]
         assert sess.jig_ans[1]
+        assert sess.mouse_track
+
+    async def test_tdc(self, captcha: Captcha, sess: TcaptchaSession):
+        await captcha.get_tdc(sess)
+        assert sess.tdc
+        assert callable(sess.tdc.getData)
+        assert callable(sess.tdc.getInfo)
 
     async def test_verify(self, captcha: Captcha):
         r = await captcha.verify()
         if r.code == 0:
             assert r.verifycode
             assert r.ticket
-        else:
-            pytest.xfail(captcha_status_description[r.code])
+            return
+
+        pytest.fail(msg=captcha_status_description.get(r.code))
 
 
 @pytest_asyncio.fixture(scope="class")
 async def vm(captcha: Captcha, sess: TcaptchaSession):
     await captcha.get_tdc(sess)
     yield sess.tdc
-
-
-class TestVM:
-    async def testGetInfo(self, vm: CollectEnv):
-        d = await vm.get_info()
-        assert d
-        assert d["info"]
-
-    async def testCollectData(self, vm: CollectEnv):
-        xs, ys = imitate_drag(21, 230, 50)
-        vm.run.append("async function main(){await simulate_slide(%s, %s)}" % (str(xs), str(ys)))
-        vm.add_run("main")
-        d = await vm.get_data()
-        assert d
-        assert len(d) > 200
-
-    async def testGetCookie(self, vm: CollectEnv):
-        cookie = await vm.get_cookie()
-        assert "TDC_itoken" in cookie
-
-
-@pytest.mark.skip("this test should be called manually")
-async def test_decrypt(vm: CollectEnv, captcha: Captcha, sess: TcaptchaSession):
-    xs, ys = imitate_drag(21, 230, 50)
-    vm.run.append("async function main(){await simulate_slide(%s, %s)}" % (str(xs), str(ys)))
-    vm.add_run("main")
-    collect = await vm.get_data()
-
-    await captcha.get_tdc(sess, cls=DecryptTDC)
-    decrypt = await DecryptTDC.decrypt(sess.tdc, collect)  # type: ignore
-    print(decrypt)

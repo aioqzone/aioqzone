@@ -1,4 +1,4 @@
-from jssupport.jsjson import json_loads
+from qqqr.utils.jsjson import json_loads
 
 
 class TestJsJson:

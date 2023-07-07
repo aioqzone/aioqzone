@@ -47,6 +47,8 @@ class TestUpWeb:
         await web.check(sess)
         if sess.code == StatusCode.NeedCaptcha:
             sess = await web.pass_vc(sess)
+            if sess is None:
+                pytest.xfail("captcha extras is not installed, skipped.")
         if sess.code != 1:
             assert sess.verifycode
             assert sess.check_rst.salt
@@ -61,13 +63,15 @@ class TestUpWeb:
         except TencentLoginError as e:
             if e.code in [StatusCode.RiskyNetwork, StatusCode.ForceQR]:
                 pytest.skip(str(e))
-            elif (
-                e.code == StatusCode.NeedSmsVerify
-                and UpEvent.GetSmsCode.__name__ not in web.hook.__dict__
-            ):
-                pytest.skip(str(e))
-            else:
-                raise e
+            elif e.code == StatusCode.NeedCaptcha:
+                pytest.importorskip("numpy")
+                pytest.importorskip("PIL")
+                pytest.importorskip("chaosvm")
+            elif e.code == StatusCode.NeedSmsVerify:
+                if UpEvent.GetSmsCode.__name__ not in web.hook.__dict__:
+                    pytest.skip(str(e))
+
+            raise
 
 
 @pytest.fixture
@@ -89,10 +93,12 @@ async def test_h5_login(h5: UpH5Login):
     except TencentLoginError as e:
         if e.code in [StatusCode.RiskyNetwork, StatusCode.ForceQR]:
             pytest.skip(str(e))
-        elif (
-            e.code == StatusCode.NeedSmsVerify
-            and UpEvent.GetSmsCode.__name__ not in h5.hook.__dict__
-        ):
-            pytest.skip(str(e))
-        else:
-            raise
+        elif e.code == StatusCode.NeedCaptcha:
+            pytest.importorskip("numpy")
+            pytest.importorskip("PIL")
+            pytest.importorskip("chaosvm")
+        elif e.code == StatusCode.NeedSmsVerify:
+            if UpEvent.GetSmsCode.__name__ not in h5.hook.__dict__:
+                pytest.skip(str(e))
+
+        raise

@@ -3,7 +3,6 @@
 aioqzone封装了一些Qzone接口。
 
 [![python](https://img.shields.io/pypi/pyversions/aioqzone?logo=python&logoColor=white)][home]
-[![QQQR](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml/badge.svg?branch=beta&event=schedule)](https://github.com/aioqzone/aioqzone/actions/workflows/qqqr.yml)
 [![version](https://img.shields.io/pypi/v/aioqzone?logo=python)][pypi]
 [![style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![discuss](https://img.shields.io/badge/dynamic/xml?style=social&logo=telegram&label=Discuss&query=%2F%2Fdiv%5B%40class%3D%22tgme_page_extra%22%5D&url=https%3A%2F%2Ft.me%2Faioqzone_chatroom)](https://t.me/aioqzone_chatrooom)
@@ -40,19 +39,11 @@ __在做了:__
 
 - [ ] 完善的测试覆盖
 
-## node 依赖
-
-- `jssupport.jsjson.AstLoader` 不需要借助其他进程；
-- 要使用 `jssupport.execjs` 和 `jssupport.jsjson.NodeLoader`，您（至少）需要安装 `Node.js` >= v14；
-- 要使用 `jssupport.jsdom`，您需要安装 `jsdom` 和 `canvas` 两个 npm 包。
-- 验证码部分需要使用 `canvas`，因此您需要正确配置运行环境内的 font config ([#45](https://github.com/aioqzone/aioqzone/issues/45)).
-
 ## 包描述
 
 |包名    |简述  |
 |-----------|-------------------|
 |aioqzone   |封装Qzone API  |
-|jssupport  |执行JS            |
 |qqqr       |网页登录    |
 
 ## 例子
