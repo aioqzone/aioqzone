@@ -3,12 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+
+pytest.importorskip("numpy")
+pytest.importorskip("cv2")
+pytest.importorskip("chaosvm")
+
 import pytest_asyncio
 
 from qqqr.constant import QzoneAppid, QzoneProxy, captcha_status_description
 from qqqr.up import UpWebLogin
 from qqqr.up.captcha import Captcha, TcaptchaSession
-from qqqr.up.captcha.jigsaw import imitate_drag
 
 if TYPE_CHECKING:
     from test.conftest import test_env

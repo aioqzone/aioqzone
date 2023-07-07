@@ -246,9 +246,10 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
 
         if sess.code == StatusCode.NeedCaptcha:
             log.warning("需通过防水墙")
-            await self.pass_vc(sess)
+            if await self.pass_vc(sess) is None:
+                raise TencentLoginError(StatusCode.NeedCaptcha, "未安装依赖，无法识别验证码")
             if sess.verify_rst is None or not sess.verify_rst.ticket:
-                raise TencentLoginError(StatusCode.NeedCaptcha, "internal error when passing vc")
+                raise TencentLoginError(StatusCode.NeedCaptcha, "验证过程出现错误")
 
         while True:
             resp = await self.try_login(sess)
@@ -273,7 +274,7 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
                 except:
                     sess.sms_code = None
                 if sess.sms_code is None:
-                    raise TencentLoginError(resp.code, "未获得动态验证码")
+                    raise TencentLoginError(resp.code, "未获得动态(SMS)验证码")
             else:
                 raise TencentLoginError(resp.code, resp.msg)
 
@@ -284,10 +285,15 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
 
 
         :param sid: Pass the session id to the captcha function
-        :return: An instance of the captcha class
+        :return: An instance of the captcha class, or None if dependency not installed.
         """
 
-        from .captcha import Captcha
+        try:
+            from .captcha import Captcha
+        except ImportError:
+            log.warning("captcha extras not installed. Install `aioqzone[captcha]` and retry.")
+            log.debug("ImportError as follows:", exc_info=True)
+            return
 
         return Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
 
@@ -297,9 +303,12 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
         It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
 
         :param sess: the session object
-        :return: The session with :obj:`~UpWebSession.verify_rst` is set.
+        :return: The session with :obj:`~UpWebSession.verify_rst` is set, or None if :exc:`ImportError`.
         """
         solver = self.captcha(sess.check_rst.session)
+        if solver is None:
+            return
+
         for retry in range(4):
             sess.verify_rst = await solver.verify()
             if sess.verify_rst.ticket:
