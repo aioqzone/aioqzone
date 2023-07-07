@@ -16,7 +16,7 @@ from qqqr.type import APPID, PT_QR_APP, Proxy
 from qqqr.utils.daug import du
 from qqqr.utils.net import ClientAdapter
 
-from .encrypt import NodeEncoder, PasswdEncoder, TeaEncoder
+from .encrypt import PasswdEncoder, TeaEncoder
 from .type import CheckResp, LoginResp, VerifyResp
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
@@ -89,17 +89,12 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
         uin: int,
         pwd: str,
         info: Optional[PT_QR_APP] = None,
-        *,
-        legacy_encoder=LEGACY_ENCODER,
     ):
         super().__init__(client, app, proxy, info=info)
         assert pwd
         self.uin = uin
         self.pwd = pwd
-        if legacy_encoder:
-            self.pwder = NodeEncoder(client, pwd)
-        else:
-            self.pwder = TeaEncoder(pwd)
+        self.pwder = TeaEncoder(pwd)
 
     @property
     def login_page_url(self):

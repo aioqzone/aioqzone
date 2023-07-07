@@ -9,6 +9,8 @@ from random import random
 from time import time
 from typing import List, Type, TypeVar
 
+from chaosvm import prepare
+from chaosvm.proxy.dom import TDC
 from httpx import URL
 
 from ...utils.daug import du
@@ -16,7 +18,6 @@ from ...utils.iter import first
 from ...utils.net import ClientAdapter
 from ..type import PrehandleResp, VerifyResp
 from .jigsaw import Jigsaw, imitate_drag
-from .vm import CollectEnv
 
 PREHANDLE_URL = "https://t.captcha.qq.com/cap_union_prehandle"
 SHOW_NEW_URL = "https://t.captcha.qq.com/cap_union_new_show"
@@ -26,8 +27,6 @@ time_ms = lambda: int(1e3 * time())
 """+new Date"""
 rnd6 = lambda: str(random())[2:8]
 log = logging.getLogger(__name__)
-
-_TDC_TY = TypeVar("_TDC_TY", bound=CollectEnv)
 
 
 def hex_add(h: str, o: int):
@@ -56,8 +55,8 @@ class TcaptchaSession:
         self.cdn_imgs: List[bytes] = []
         self.piece_sprite = first(self.conf.render.sprites, lambda s: s.move_cfg)
 
-    def set_js_env(self, tdc: CollectEnv):
-        self.tdc = tdc
+    def set_drag_track(self, xs: List[float], ys: List[float]):
+        self.mouse_track = list(zip(xs, ys))
 
     def solve_workload(self, *, timeout: float = 30.0):
         """
@@ -87,6 +86,9 @@ class TcaptchaSession:
 
     def set_captcha_answer(self, left: int, top: int):
         self.jig_ans = left, top
+
+    def set_js_env(self, tdc: TDC):
+        self.tdc = tdc
 
     def _cdn(self, rel_path: str) -> URL:
         return URL("https://t.captcha.qq.com").join(rel_path)
@@ -194,28 +196,6 @@ class Captcha:
                     continue
         return ""
 
-    async def get_tdc(self, sess: TcaptchaSession, *, cls: Type[_TDC_TY] = CollectEnv):
-        """
-        The get_tdc function is a coroutine that sets an instance of the :class:`TDC` class to `sess`.
-
-        :param sess: captcha session
-        :param cls: Specify the type of :class:`TDC` instance to be returned, default as :class:`TDC`.
-        :return: None
-        """
-        js_url = sess.tdx_js_url()
-        tdc = cls(
-            xlogin_url=self.xlogin_url,
-            ipv4=await self.get_ipv4(),
-            ua=self.client.headers["User-Agent"],
-            # iframe=await self.iframe(),
-        )
-
-        async with self.client.get(js_url) as r:
-            r.raise_for_status()
-            tdc.load_vm(r.text)
-
-        sess.set_js_env(tdc)
-
     async def get_captcha_problem(self, sess: TcaptchaSession):
         """
         The get_captcha_problem function is a coroutine that accepts a TcaptchaSession object as an argument.
@@ -263,21 +243,35 @@ class Captcha:
         sess.set_captcha_answer(left, jig.top)
 
         xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], left, jig.top)
-        sess.tdc.run.append(
-            "async function main(){await simulate_slide(%s, %s)}" % (str(xs), str(ys))
-        )
-        sess.tdc.add_run("main")
+        sess.set_drag_track(xs, ys)  # type: ignore
+
+    async def get_tdc(self, sess: TcaptchaSession):
+        """
+        The get_tdc function is a coroutine that sets an instance of the :class:`TDC` class to `sess`.
+
+        :param sess: captcha session
+        :return: None
+        """
+        async with self.client.get(sess.tdx_js_url()) as r:
+            r.raise_for_status()
+            tdc = prepare(
+                r.text,
+                ip=await self.get_ipv4(),
+                ua=self.client.headers["User-Agent"],
+                mouse_track=sess.mouse_track,
+            )
+
+        sess.set_js_env(tdc)
 
     async def verify(self):
         sess = await self.new()
-        await self.get_tdc(sess)
-
-        sess.solve_workload()
 
         await self.get_captcha_problem(sess)
+        sess.solve_workload()
         self.solve_captcha(sess)
+        await self.get_tdc(sess)
 
-        collect = await sess.tdc.get_data()
+        collect = sess.tdc.getData(None, True)
 
         ans = dict(
             elem_id=1,
@@ -287,13 +281,13 @@ class Captcha:
         data = {
             "collect": collect,
             "tlg": len(collect),
-            "eks": (await sess.tdc.get_info())["info"],
+            "eks": sess.tdc.getInfo()["info"],
             "sess": sess.prehandle.sess,
             "ans": json.dumps(ans),
             "pow_answer": hex_add(sess.conf.common.pow_cfg.prefix, sess.pow_ans),
             "pow_calc_time": sess.duration,
         }
-        log.debug("verify post data:", data)
+        log.debug(f"verify post data: {data}")
 
         async with self.client.post(VERIFY_URL, data=data) as r:
             r = VerifyResp.parse_raw(r.text)

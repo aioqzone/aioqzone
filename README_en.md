@@ -39,19 +39,11 @@ __Working On:__
 
 - [ ] test coverage
 
-## Node Dependencies
-
-- `jssupport.jsjson.AstLoader` needn't outside processes.
-- To use `jssupport.execjs` and `jssupport.jsjson.NodeLoader`, you need to have `Node.js` >= v14 installed.
-- To use  `jssupport.jsdom`, you need to have npm packages `jsdom` and `canvas` to be installed.
-- Since `canvas` is used during passing captcha, you may need to config your font config properly. See [#45](https://github.com/aioqzone/aioqzone/issues/45) for details.
-
 ## Description
 
 |package    |brief description  |
 |-----------|-------------------|
 |aioqzone   |qzone api wrapper  |
-|jssupport  |communicate with node|
 |qqqr       |qzone web login    |
 
 ## Examples

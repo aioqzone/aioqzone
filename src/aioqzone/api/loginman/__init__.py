@@ -11,7 +11,6 @@ from httpx import ConnectError, HTTPError
 
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from aioqzone.exception import LoginError, SkipLoginInterrupt
-from jssupport.exception import JsImportError, JsRuntimeError, NodeNotFoundError
 from qqqr.constant import QzoneH5Proxy, StatusCode
 from qqqr.event import Emittable, EventManager
 from qqqr.exception import HookError, TencentLoginError, UserBreak
@@ -21,7 +20,6 @@ from qqqr.utils.net import ClientAdapter
 from ._base import Loginable
 
 log = logging.getLogger(__name__)
-JsError = JsRuntimeError, JsImportError, NodeNotFoundError
 
 
 class _NextMethodInterrupt(RuntimeError):

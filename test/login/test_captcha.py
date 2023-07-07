@@ -7,9 +7,8 @@ import pytest_asyncio
 
 from qqqr.constant import QzoneAppid, QzoneProxy, captcha_status_description
 from qqqr.up import UpWebLogin
-from qqqr.up.captcha import Captcha, CollectEnv, TcaptchaSession
+from qqqr.up.captcha import Captcha, TcaptchaSession
 from qqqr.up.captcha.jigsaw import imitate_drag
-from qqqr.up.captcha.vm import DecryptTDC
 
 if TYPE_CHECKING:
     from test.conftest import test_env
@@ -66,34 +65,3 @@ class TestCaptcha:
 async def vm(captcha: Captcha, sess: TcaptchaSession):
     await captcha.get_tdc(sess)
     yield sess.tdc
-
-
-class TestVM:
-    async def testGetInfo(self, vm: CollectEnv):
-        d = await vm.get_info()
-        assert d
-        assert d["info"]
-
-    async def testCollectData(self, vm: CollectEnv):
-        xs, ys = imitate_drag(21, 230, 50)
-        vm.run.append("async function main(){await simulate_slide(%s, %s)}" % (str(xs), str(ys)))
-        vm.add_run("main")
-        d = await vm.get_data()
-        assert d
-        assert len(d) > 200
-
-    async def testGetCookie(self, vm: CollectEnv):
-        cookie = await vm.get_cookie()
-        assert "TDC_itoken" in cookie
-
-
-@pytest.mark.skip("this test should be called manually")
-async def test_decrypt(vm: CollectEnv, captcha: Captcha, sess: TcaptchaSession):
-    xs, ys = imitate_drag(21, 230, 50)
-    vm.run.append("async function main(){await simulate_slide(%s, %s)}" % (str(xs), str(ys)))
-    vm.add_run("main")
-    collect = await vm.get_data()
-
-    await captcha.get_tdc(sess, cls=DecryptTDC)
-    decrypt = await DecryptTDC.decrypt(sess.tdc, collect)  # type: ignore
-    print(decrypt)

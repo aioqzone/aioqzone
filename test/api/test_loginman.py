@@ -11,7 +11,6 @@ from httpx import ConnectError, HTTPError, Request
 import aioqzone.api.loginman as api
 from aioqzone.event.login import LoginMethod, QREvent, UPEvent
 from aioqzone.exception import LoginError, SkipLoginInterrupt
-from jssupport.exception import JsRuntimeError
 from qqqr.event.login import QrEvent, UpEvent
 from qqqr.exception import HookError, TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
@@ -69,7 +68,6 @@ class TestUP:
         [
             (TencentLoginError(-3002, "mock"), TencentLoginError),
             (NotImplementedError(), TencentLoginError),
-            (JsRuntimeError(-1, "node", b"mock"), TencentLoginError),
             (GeneratorExit(), api._NextMethodInterrupt),
             (ConnectError("mock", request=_fake_request), api._NextMethodInterrupt),
             (_fake_http_error, api._NextMethodInterrupt),
