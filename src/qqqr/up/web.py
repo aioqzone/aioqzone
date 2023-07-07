@@ -22,7 +22,6 @@ from .type import CheckResp, LoginResp, VerifyResp
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
 
-LEGACY_ENCODER = env.get("AIOQZONE_PWDENCODER", "").strip().lower() == "node"
 
 log = logging.getLogger(__name__)
 
@@ -76,9 +75,13 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
     """
     .. versionchanged:: 0.12.4
 
-        TeaEncoder is used as the default password encoder. A `legacy_encoder` paramater is added to force
+        `TeaEncoder` is used as the default password encoder. A `legacy_encoder` paramater is added to force
         using the former `NodeEncoder`. It can also be configured by set :envvar:`AIOQZONE_PWDENCODER` to "node".
         Note that the paramater in code, i.e. `legacy_encoder`, takes precedence.
+
+    .. versionchanged:: 0.13.0.dev1
+
+        `TeaEncoder` is the only encoder. ``NodeEncoder`` is removed.
     """
 
     def __init__(

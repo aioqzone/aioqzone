@@ -21,7 +21,7 @@ jobs:
         python-version: ["3.11", "3.8"]
     steps:
       #----------------------------------------------
-      #   check-out repo and set-up node & python
+      #       check-out repo and set-up python
       #----------------------------------------------
       - uses: actions/checkout@v3
       - name: Install poetry
