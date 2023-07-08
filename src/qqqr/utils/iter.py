@@ -20,6 +20,10 @@ def first(
     it: Iterable[T], pred: Optional[Callable[[T], Union[object, None]]] = None, *, default: D = ...
 ) -> Union[T, D]:
     f = filter(pred, it)
-    if default == ...:
+    if default is ...:
         return next(f)
     return next(f, default)
+
+
+def firstn(it: Iterable[T], pred: Optional[Callable[[T], Union[object, None]]] = None):
+    return first(it, pred, default=None)

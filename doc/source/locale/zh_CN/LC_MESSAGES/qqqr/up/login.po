@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 16:16+0800\n"
+"POT-Creation-Date: 2023-07-08 10:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgid "返回"
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.captcha:7
-msgid "An instance of the captcha class"
+msgid "An instance of the captcha class, or None if dependency not installed."
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.deviceId:1
@@ -94,7 +94,7 @@ msgid "the session object"
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.pass_vc:6
-msgid "The session with :obj:`~UpWebSession.verify_rst` is set."
+msgid "The session with :obj:`~UpWebSession.verify_rst` is set, or None if :exc:`ImportError`."
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.send_sms_code:1
@@ -221,4 +221,7 @@ msgstr ""
 #~ "configured by set :envvar:`AIOQZONE_PWDENCODER` to \"node\"."
 #~ " Note that the paramater in code, i.e. "
 #~ "`legacy_encoder`, takes precedence."
+#~ msgstr ""
+
+#~ msgid "The session with :obj:`~UpWebSession.verify_rst` is set."
 #~ msgstr ""
