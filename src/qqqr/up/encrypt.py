@@ -4,6 +4,7 @@ import base64
 import struct
 from abc import ABC, abstractmethod
 from binascii import hexlify
+from contextlib import suppress
 from hashlib import md5
 from random import randint
 from typing import Union
@@ -121,11 +122,9 @@ class TeaEncoder(PasswdEncoder):
         """
         e = []
         for i in range(0, len(s), 2):
-            try:
+            with suppress(ValueError):
                 e.append(int(s[i : i + 2], 16))
                 continue
-            except ValueError:
-                pass
             try:
                 e.append(int(s[i : i + 1], 16))
             except ValueError:

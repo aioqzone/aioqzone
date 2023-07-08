@@ -3,6 +3,7 @@ import base64
 import json
 import logging
 import re
+from contextlib import suppress
 from hashlib import md5
 from ipaddress import IPv4Address
 from random import random
@@ -13,7 +14,6 @@ from chaosvm import prepare
 from chaosvm.proxy.dom import TDC
 from httpx import URL
 
-from ...utils.daug import du
 from ...utils.iter import first
 from ...utils.net import ClientAdapter
 from ..type import PrehandleResp, VerifyResp
@@ -165,7 +165,7 @@ class Captcha:
             "subsid": 1,
             "callback": CALLBACK,
         }
-        async with self.client.get(PREHANDLE_URL, params=du(const, data)) as r:
+        async with self.client.get(PREHANDLE_URL, params=data.update(const) or data) as r:
             r.raise_for_status()
             m = re.search(CALLBACK + r"\((\{.*\})\)", r.text)
 
@@ -189,11 +189,9 @@ class Captcha:
             # BUG: should always bypass client's proxy settings
             async with self.client.get("https://" + api) as r:
                 cand = r.text.strip()
-                try:
+                with suppress(ValueError):
                     IPv4Address(cand)
                     return cand
-                except ValueError:
-                    continue
         return ""
 
     async def get_captcha_problem(self, sess: TcaptchaSession):

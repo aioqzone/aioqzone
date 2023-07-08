@@ -4,7 +4,6 @@ import re
 from httpx import URL
 
 from qqqr.constant import StatusCode
-from qqqr.utils.daug import du
 
 from .type import CheckResp, LoginResp
 from .web import UpWebLogin, UpWebSession
@@ -93,7 +92,8 @@ class UpH5Login(UpWebLogin):
             data["pt_sms_code"] = sess.sms_code
         self.referer = "https://xui.ptlogin2.qq.com/"
 
-        async with self.client.get(LOGIN_URL, params=du(data, const)) as response:
+        data.update(const)
+        async with self.client.get(LOGIN_URL, params=data) as response:
             response.raise_for_status()
 
         rl = re.findall(r"'(.*?)'[,\)]", response.text)

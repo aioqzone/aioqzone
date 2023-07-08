@@ -7,12 +7,13 @@ Use this module to get some data from Qzone html feed.
 """
 import logging
 import re
+from contextlib import suppress
 from typing import Iterable, List, Optional, Union, cast
 
 from lxml.html import HtmlElement, fromstring
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, ValidationError
 
-from qqqr.utils.daug import di
+from qqqr.utils.iter import firstn
 
 from ..type.entity import ConEntity
 from ..type.internal import AlbumData
@@ -81,7 +82,7 @@ class HtmlContent(BaseModel):
         img_data = lambda a: {k[5:]: v for k, v in a.attrib.items() if k.startswith("data-")}
 
         def load_src(a: Iterable[HtmlElement]) -> Optional[HttpUrl]:
-            o: Optional[HtmlElement] = next(filter(lambda i: i.tag == "img", a), None)
+            o = firstn(a, lambda i: i.tag == "img")
             if o is None:
                 return
             src: str = o.get("src", "")
@@ -101,11 +102,11 @@ class HtmlContent(BaseModel):
 
         finfo: HtmlElement = mxsafe(root.cssselect("div.f-info"))
         lia: List[HtmlElement] = root.cssselect("div.f-ct a.img-item")
+        (d := img_data(lia[0]))["hostuin"] = hostuin
 
-        try:
-            album = AlbumData.parse_obj(di(img_data(lia[0]), hostuin=hostuin))
-        except:
-            album = None
+        album = None
+        with suppress(ValidationError):
+            album = AlbumData.parse_obj(d)
 
         pic = [
             PicRep(

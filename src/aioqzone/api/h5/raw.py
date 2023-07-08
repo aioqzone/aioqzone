@@ -9,6 +9,7 @@ from aioqzone.api.loginman import Loginable
 from aioqzone.exception import QzoneError
 from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import entire_closing, response_callback
+from qqqr.utils.iter import firstn
 from qqqr.utils.jsjson import JsonValue, json_loads
 from qqqr.utils.net import ClientAdapter
 
@@ -102,7 +103,8 @@ class QzoneH5RawAPI:
             """
 
             with QzoneErrorDispatch() as qze, HTTPStatusErrorDispatch() as hse:
-                qze.dispatch(-3000, suppress=lambda e: "登录" in e.msg)  # -3000: 请先登录
+                # NOTE: 尽管只有“-3000: 请先登录”明确要求重新登录，但似乎任何原因的-3000错误值都意味着cookie过期。因此移除了对message的校验
+                qze.dispatch(-3000)
                 qze.dispatch(-10000)
                 hse.dispatch(302, 403)
                 return await func(*args, **kwds)
@@ -150,13 +152,13 @@ class QzoneH5RawAPI:
 
         assert isinstance(r, dict)
 
-        err = next(filter(lambda i: i is not None, (r.get(i) for i in errno_key)), None)
+        err = firstn((r.get(i) for i in errno_key), lambda i: i is not None)
         assert err is not None, f"no {errno_key} in {r.keys()}"
         assert isinstance(err, (int, str))
         err = int(err)
 
         if err != 0:
-            msg = next(filter(None, (r.get(i) for i in msg_key)), None)
+            msg = firstn((r.get(i) for i in msg_key), lambda i: i is not None)
             if msg:
                 raise QzoneError(err, msg, rdict=r)
             else:
@@ -183,7 +185,7 @@ class QzoneH5RawAPI:
             raise RuntimeError("script tag not found")
 
         texts: List[str] = [s.text for s in scripts]
-        script = next(filter(lambda s: "shine0callback" in s, texts), None)
+        script = firstn(texts, lambda s: "shine0callback" in s)
         if not script:
             raise RuntimeError("data script not found")
 

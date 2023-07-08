@@ -13,7 +13,6 @@ from qqqr.event import Emittable
 from qqqr.event.login import UpEvent
 from qqqr.exception import TencentLoginError
 from qqqr.type import APPID, PT_QR_APP, Proxy
-from qqqr.utils.daug import du
 from qqqr.utils.net import ClientAdapter
 
 from .encrypt import PasswdEncoder, TeaEncoder
@@ -230,7 +229,8 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
             data["pt_sms_code"] = sess.sms_code
         self.referer = sess.login_referer
 
-        async with self.client.get(LOGIN_URL, params=du(data, const)) as response:
+        data.update(const)
+        async with self.client.get(LOGIN_URL, params=data) as response:
             response.raise_for_status()
 
         rl = re.findall(r"'(.*?)'[,\)]", response.text)
