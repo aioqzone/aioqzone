@@ -11,7 +11,6 @@ from ..constant import StatusCode
 from ..event import Emittable, hook_guard
 from ..event.login import QrEvent
 from ..exception import UserBreak
-from ..utils.daug import du
 from ..utils.encrypt import hash33
 
 log = logging.getLogger(__name__)
@@ -86,7 +85,7 @@ class QrLogin(LoginBase[QrSession], Emittable[QrEvent]):
             "daid": self.app.daid,
         }
 
-        async with self.client.get(POLL_QR, params=du(data, const)) as r:
+        async with self.client.get(POLL_QR, params=data.update(const) or data) as r:
             r.raise_for_status()
             rl = re.findall(r"'(.*?)'[,\)]", r.text)
 

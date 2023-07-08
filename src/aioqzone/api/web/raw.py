@@ -17,7 +17,7 @@ from aioqzone.type.internal import AlbumData, LikeData
 from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import response_callback
 from aioqzone.utils.time import time_ms
-from qqqr.utils.daug import du
+from qqqr.utils.iter import firstn
 from qqqr.utils.jsjson import JsonValue, json_loads
 from qqqr.utils.net import ClientAdapter, raise_for_status
 
@@ -156,13 +156,13 @@ class QzoneWebRawAPI:
         r = json_loads(rtext)
         assert isinstance(r, dict)
 
-        err = next(filter(lambda i: i is not None, (r.get(i) for i in errno_key)), None)
+        err = firstn((r.get(i) for i in errno_key), lambda i: i is not None)
         assert err is not None, f"no {errno_key} in {r.keys()}"
         assert isinstance(err, (int, str))
         err = int(err)
 
         if err != 0:
-            msg = next(filter(None, (r.get(i) for i in msg_key)), None)
+            msg = firstn((r.get(i) for i in msg_key), lambda i: i is not None)
             if msg:
                 raise QzoneError(err, msg, rdict=r)
             else:
@@ -238,10 +238,11 @@ class QzoneWebRawAPI:
             "usertime": time_ms(),
             "externparam": external,
         }
+        query.update(default)
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_get(const.feeds3_html_more, du(default, query)) as r:
+            async with self.host_get(const.feeds3_html_more, query) as r:
                 r.raise_for_status()
                 rtext = r.text
 
@@ -288,11 +289,12 @@ class QzoneWebRawAPI:
             "tid": tid,
             "feedsType": feedstype,
         }
-        logger.debug("emotion_getcomments post data:", body)
+        logger.debug(f"emotion_getcomments post data: {body}")
+        body.update(default)
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_post(const.emotion_getcomments, data=du(default, body)) as r:
+            async with self.host_post(const.emotion_getcomments, data=body) as r:
                 r.raise_for_status()
                 rtext = r.text
 
@@ -326,10 +328,11 @@ class QzoneWebRawAPI:
             "need_private_comment": 1,
         }
         query = {"uin": owner, "tid": fid}
+        query.update(default)
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_get(const.emotion_msgdetail, params=du(default, query)) as r:
+            async with self.host_get(const.emotion_msgdetail, params=query) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -387,12 +390,14 @@ class QzoneWebRawAPI:
             "abstime": likedata.abstime,
             "fid": likedata.fid,
         }
-        logger.debug("like_app post data:", body)
+        logger.debug(f"like_app post data: {body}")
+
+        body.update(default)
         url = const.internal_dolike_app if like else const.internal_unlike_app
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_post(url, data=du(default, body)) as r:
+            async with self.host_post(url, data=body) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text, errno_key=("code", "ret"))
 
@@ -454,10 +459,11 @@ class QzoneWebRawAPI:
             "t": randint(int(1e8), int(1e9 - 1))
             # The distribution is not consistent with photo.js; but the format is.
         }
+        query.update(default)
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_get(const.floatview_photo_list, du(default, query)) as r:
+            async with self.host_get(const.floatview_photo_list, query) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -506,9 +512,12 @@ class QzoneWebRawAPI:
             "need_private_comment": 1,
         }
 
+        if pos:
+            param.update(add)
+
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_get(const.emotion_msglist, du(param, add) if pos else param) as r:
+            async with self.host_get(const.emotion_msglist, param) as r:
                 r.raise_for_status()
                 rtext = r.text
             return self._rtext_handler(rtext)
@@ -551,11 +560,12 @@ class QzoneWebRawAPI:
             "feedversion": 1,
             "hostuin": self.login.uin,
         }
-        logger.debug("emotion_publish post data:", body)
+        logger.debug(f"emotion_publish post data: {body}")
+        body.update(default)
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_post(const.emotion_publish, data=du(default, body)) as r:
+            async with self.host_post(const.emotion_publish, data=body) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -649,11 +659,12 @@ class QzoneWebRawAPI:
             "hostuin": uin or self.login.uin,
             # 'pic_bo': ''
         }
-        logger.debug("emotion_update post data:", body)
+        logger.debug(f"emotion_update post data: {body}")
+        body.update(default)
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_post(const.emotion_update, data=du(default, body)) as r:
+            async with self.host_post(const.emotion_update, data=body) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 
@@ -706,11 +717,12 @@ class QzoneWebRawAPI:
             private=int(is_private),
             paramstr=1,
         )
-        logger.debug("emotion_re_feeds post data:", data)
+        logger.debug(f"emotion_re_feeds post data: {data}")
+        data.update(default)
 
         @self._relogin_retry
         async def retry_closure():
-            async with self.host_post(const.emotion_re_feeds, data=du(default, data)) as r:
+            async with self.host_post(const.emotion_re_feeds, data=data) as r:
                 r.raise_for_status()
                 return self._rtext_handler(r.text)
 

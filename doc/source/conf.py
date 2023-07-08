@@ -56,7 +56,7 @@ gettext_compact = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "furo"
 html_logo = "./_static/penguin-blob.webp"
 html_favicon = html_logo
 
