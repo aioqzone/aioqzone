@@ -42,9 +42,15 @@ jobs:
           poetry run sphinx-build doc/source doc/build/html -D release=$(poetry version -s)
           echo "::endgroup::"
 
+      - name: Fix permissions
+        run: |
+          chmod -c -R +rX "doc/build/html/" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+          
       - name: Upload artifact
         if: github.event_name == 'push'
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: doc/build/html
 
