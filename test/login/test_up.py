@@ -4,10 +4,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
+from tylisten import Emitter
 
+import qqqr._messages as MT
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
-from qqqr.up import UpEvent, UpH5Login, UpWebLogin
+from qqqr.up import UpH5Login, UpWebLogin
 
 if TYPE_CHECKING:
     from test.conftest import test_env
@@ -33,14 +35,16 @@ async def web(client: ClientAdapter, env: test_env):
 class TestUpWeb:
     @pytest.mark.skip("this test should be called manually")
     async def testRegisterSmsCodeGetter(self, web: UpWebLogin):
-        class ntdin(UpEvent):
-            async def GetSmsCode(self, phone: str, nickname: str):
-                assert phone
-                assert nickname
-                with open("tmp/ntdin.txt") as f:
-                    return int(f.readline().rstrip())
+        emitter = Emitter(MT.sms_code_input)
+        web.sms_code_input.connect(emitter)
 
-        web.register_hook(ntdin())
+        async def GetSmsCode(m: MT.sms_code_required):
+            assert m.phone
+            assert m.nickname
+            with open("tmp/ntdin.txt") as f:
+                await emitter.emit(uin=web.uin, sms_code=int(f.readline().rstrip()))
+
+        web.sms_code_required.listeners.append(GetSmsCode)
 
     async def test_encode_password(self, web: UpWebLogin):
         sess = await web.new()
@@ -68,7 +72,7 @@ class TestUpWeb:
                 pytest.importorskip("PIL")
                 pytest.importorskip("chaosvm")
             elif e.code == StatusCode.NeedSmsVerify:
-                if UpEvent.GetSmsCode.__name__ not in web.hook.__dict__:
+                if not web.sms_code_input.connected:
                     pytest.skip(str(e))
 
             raise
@@ -98,7 +102,7 @@ async def test_h5_login(h5: UpH5Login):
             pytest.importorskip("PIL")
             pytest.importorskip("chaosvm")
         elif e.code == StatusCode.NeedSmsVerify:
-            if UpEvent.GetSmsCode.__name__ not in h5.hook.__dict__:
+            if not h5.sms_code_input.connected:
                 pytest.skip(str(e))
 
         raise

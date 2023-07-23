@@ -3,13 +3,14 @@ from abc import ABC, abstractmethod
 from time import time
 from typing import Dict
 
+from tylisten import Emitter
+
+import aioqzone._messages as MT
 from qqqr.utils.encrypt import gtk
 
 
 class Loginable(ABC):
-    """Abstract class represents a login manager.
-    It is a :class:`Emittable` class which can emit :class:`LoginEvent`.
-    """
+    """Abstract class represents a login manager."""
 
     last_login: float = 0
     """Last login time stamp. 0 represents no login since created."""
@@ -19,6 +20,9 @@ class Loginable(ABC):
         self.uin = uin
         self._cookie = {}
         self.lock = asyncio.Lock()
+
+        self.login_success = Emitter(MT.login_success)
+        self.login_failed = Emitter(MT.login_failed)
 
     @property
     def cookie(self) -> Dict[str, str]:

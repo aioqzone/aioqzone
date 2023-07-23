@@ -1,47 +1,29 @@
+import asyncio
 import io
+from contextlib import suppress
 
 import pytest
 import pytest_asyncio
+from tylisten import Emitter
 
+import qqqr._messages as MT
 from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
-from qqqr.event.login import QrEvent
-from qqqr.exception import HookError
+from qqqr.exception import UserBreak
 from qqqr.qr import QrLogin, QrSession
 from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="class")
 async def login(client: ClientAdapter):
     login = QrLogin(client, QzoneAppid, QzoneProxy)
-    hook = QrEvent()
 
-    try:
+    with suppress(ImportError):
         from PIL import Image as image
-    except ImportError:
-        pass
-    else:
 
-        async def __qr_fetched(png: bytes, times: int):
-            image.open(io.BytesIO(png)).show()
-            assert isinstance(times, int)
+        login.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
 
-        hook.QrFetched = __qr_fetched
-
-    login.register_hook(hook)
-    yield login
-
-
-@pytest.fixture
-def trouble_hook(client: ClientAdapter):
-    login = QrLogin(client, QzoneAppid, QzoneProxy)
-
-    class trouble(QrEvent):
-        def QrFetched(self, png: bytes, times: int):
-            raise RuntimeError
-
-    login.register_hook(trouble())
     yield login
 
 
@@ -50,7 +32,7 @@ async def qrsess(login: QrLogin):
     yield await login.new()
 
 
-class TestProcedure:
+class TestSession:
     async def test_new(self, qrsess: QrSession):
         assert isinstance(qrsess.current_qr.sig, str)
 
@@ -59,12 +41,36 @@ class TestProcedure:
         assert poll
         assert poll.code == StatusCode.Waiting
 
-    async def test_guard(self, trouble_hook: QrLogin):
-        with pytest.raises(HookError):
-            cookie = await trouble_hook.login()
 
+class TestLoop:
+    @pytest.mark.skip("this test should be called manually")
+    async def test_loop(self, login: QrLogin):
+        cookie = await login.login()
+        assert cookie["p_skey"]
 
-@pytest.mark.skip("this test should be called manually")
-async def test_loop(login: QrLogin):
-    cookie = await login.login()
-    assert cookie["p_skey"]
+    async def test_resend_cancel(self, client: ClientAdapter, login: QrLogin):
+        hist = []
+        refresh_emitter = Emitter(MT.qr_refresh)
+        cancel_emitter = Emitter(MT.qr_cancelled)
+        login.qr_cancelled.listeners.append(lambda _: hist.append("cancel"))
+
+        login.cancel.connect(cancel_emitter)
+        login.refresh.connect(refresh_emitter)
+
+        async def __qr_fetched(m: MT.qr_fetched):
+            hist.append(m.png)
+            if len(hist) == 1:
+                await refresh_emitter.emit()
+            elif len(hist) == 2:
+                await cancel_emitter.emit()
+
+        login.qr_fetched.listeners.clear()
+        login.qr_fetched.listeners.append(__qr_fetched)
+        with pytest.raises(UserBreak):
+            await asyncio.wait_for(login.login(), timeout=3)
+
+        assert len(hist) == 3
+        assert hist[-1] == "cancel"
+        assert isinstance(hist[0], bytes)
+        assert isinstance(hist[1], bytes)
+        assert hist[0] != hist[1]

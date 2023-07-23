@@ -1,41 +1,31 @@
 import asyncio
+from os import environ
 from typing import List
 
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from pydantic import BaseSettings, Field, SecretStr, root_validator
-from pydantic.env_settings import SettingsSourceCallable
+from pydantic import BaseModel, SecretStr
 
-from aioqzone.api.loginman import LoginMethod, strategy_to_order
+from aioqzone._messages import LoginMethod
 from qqqr.ssl import ssl_context
 from qqqr.utils.net import ClientAdapter
 
 
-class test_env(BaseSettings):
-    uin: int = Field(env="TEST_UIN")
-    pwd: SecretStr = Field(env="TEST_PASSWORD")
-    order: List[LoginMethod] = Field(env="TEST_QRSTRATEGY")
-
-    @root_validator(pre=True)
-    def strategy_to_order(cls, v: dict):
-        v["order"] = strategy_to_order[v.get("order", "forbid")]
-        return v
-
-    class Config:
-        @classmethod
-        def customise_sources(
-            cls,
-            init_settings: SettingsSourceCallable,
-            env_settings: SettingsSourceCallable,
-            file_secret_settings: SettingsSourceCallable,
-        ):
-            return (env_settings,)
+class test_env(BaseModel):
+    uin: int
+    pwd: SecretStr
+    order: List[LoginMethod]
 
 
 @pytest.fixture(scope="session")
 def env():
-    return test_env()  # type: ignore
+    d = dict(
+        uin=environ["TEST_UIN"],
+        pwd=environ["TEST_PASSWORD"],
+        order=environ.get("TEST_QRSTRATEGY", ["up"]),
+    )
+    return test_env.model_validate(d)
 
 
 @pytest.fixture(scope="module")

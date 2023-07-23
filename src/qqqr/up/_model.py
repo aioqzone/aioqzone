@@ -78,7 +78,7 @@ class BgElemCfg(Sprite):
 class MoveCfg(BaseModel):
     track_limit: str
     move_factor: List[int]
-    data_type: Optional[List[str]]
+    data_type: Optional[List[str]] = None
 
 
 class FgElemCfg(Sprite):

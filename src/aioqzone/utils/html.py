@@ -13,11 +13,11 @@ from typing import Iterable, List, Optional, Union, cast
 from lxml.html import HtmlElement, fromstring
 from pydantic import BaseModel, HttpUrl, ValidationError
 
+from aioqzone.type.entity import ConEntity
+from aioqzone.type.internal import AlbumData
+from aioqzone.type.resp.web import PicRep
 from qqqr.utils.iter import firstn
 
-from ..type.entity import ConEntity
-from ..type.internal import AlbumData
-from ..type.resp import PicRep
 from .entity import finfo_box_entities
 
 logger = logging.getLogger(__name__)
@@ -106,7 +106,7 @@ class HtmlContent(BaseModel):
 
         album = None
         with suppress(ValidationError):
-            album = AlbumData.parse_obj(d)
+            album = AlbumData.model_validate(d)
 
         pic = [
             PicRep(

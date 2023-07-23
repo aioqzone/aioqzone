@@ -16,7 +16,7 @@ from httpx import URL
 
 from ...utils.iter import first
 from ...utils.net import ClientAdapter
-from ..type import PrehandleResp, VerifyResp
+from .._model import PrehandleResp, VerifyResp
 from .jigsaw import Jigsaw, imitate_drag
 
 PREHANDLE_URL = "https://t.captcha.qq.com/cap_union_prehandle"
@@ -55,7 +55,7 @@ class TcaptchaSession:
         self.cdn_imgs: List[bytes] = []
         self.piece_sprite = first(self.conf.render.sprites, lambda s: s.move_cfg)
 
-    def set_drag_track(self, xs: List[float], ys: List[float]):
+    def set_drag_track(self, xs: List[int], ys: List[int]):
         self.mouse_track = list(zip(xs, ys))
 
     def solve_workload(self, *, timeout: float = 30.0):
@@ -170,7 +170,7 @@ class Captcha:
             m = re.search(CALLBACK + r"\((\{.*\})\)", r.text)
 
         assert m
-        r = PrehandleResp.parse_raw(m.group(1))
+        r = PrehandleResp.model_validate_json(m.group(1))
         return TcaptchaSession(r)
 
     async def iframe(self):
@@ -241,7 +241,7 @@ class Captcha:
         sess.set_captcha_answer(left, jig.top)
 
         xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], left, jig.top)
-        sess.set_drag_track(xs, ys)  # type: ignore
+        sess.set_drag_track(xs, ys)
 
     async def get_tdc(self, sess: TcaptchaSession):
         """
@@ -291,6 +291,6 @@ class Captcha:
         log.debug(f"verify post data: {data}")
 
         async with self.client.post(VERIFY_URL, data=data) as r:
-            r = VerifyResp.parse_raw(r.text)
+            r = VerifyResp.model_validate_json(r.text)
 
         return r

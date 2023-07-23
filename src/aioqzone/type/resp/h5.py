@@ -1,6 +1,6 @@
 from typing import List, Optional, Set, Union
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, model_validator
 from pydantic.networks import HttpUrl
 
 
@@ -38,7 +38,7 @@ class UserInfo(BaseModel):
     nickname: str
     uin: int
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def unpack_user(cls, v: dict):
         if "user" in v:
             return v["user"]
@@ -53,7 +53,7 @@ class FeedSummary(BaseModel):
     summary: str = ""
     hasmore: bool = False
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def add_hasmore(cls, v: dict):
         if "hasmore" not in v:
             if len(v.get("summary", "")) >= 499:
@@ -91,7 +91,7 @@ class PhotoUrl(BaseModel):
 class PhotoUrls(BaseModel):
     urls: Set[PhotoUrl]
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def unpack_urls(cls, v: dict):
         return dict(urls=list(v.values()))
 
@@ -129,7 +129,7 @@ class PicData(BaseModel):
     origin_width: int
     origin_phototype: int = 0
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def remove_useless_data(cls, v: dict):
         if "videodata" in v:
             if not v["videodata"]["videourl"]:
@@ -198,7 +198,7 @@ class ShareInfo(BaseModel):
     title: str = ""
     photourl: Optional[PhotoUrls] = None
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def remove_empty_photourl(cls, v: dict):
         if not v.get("photourl"):
             v["photourl"] = None
@@ -212,7 +212,7 @@ class Share(HasCommon):
 class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
     common: FeedCommon = Field(alias="comm")
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def remove_prefix(cls, v: dict):
         return {k[5:] if str.startswith(k, "cell_") else k: i for k, i in v.items()}
 
@@ -225,7 +225,7 @@ class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
     original: Union[FeedOriginal, Share, None]
     share_info: ShareInfo = Field(default_factory=ShareInfo)
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def unpack_share_info(cls, v: dict):
         if "operation" in v:
             v["share_info"] = v["operation"].get("share_info", {})
@@ -236,7 +236,7 @@ class GetMoreResp(FeedData):
     hasmore: bool = False
     attach_info: str = ""
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def remove_prefix(cls, v: dict):
         return {k[5:] if str.startswith(k, "cell_") else k: i for k, i in v.items()}
 

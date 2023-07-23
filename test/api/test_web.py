@@ -10,7 +10,7 @@ from aioqzone.api.loginman import MixedLoginMan
 from aioqzone.api.web.raw import QzoneWebRawAPI
 from aioqzone.exception import LoginError, QzoneError
 from aioqzone.type.internal import LikeData
-from aioqzone.type.resp import FeedRep
+from aioqzone.type.resp.web import FeedRep
 from aioqzone.utils.html import HtmlContent, HtmlInfo
 from qqqr.utils.iter import first
 from qqqr.utils.net import ClientAdapter

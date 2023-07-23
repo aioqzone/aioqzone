@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.13.0.dev2"
+version = "0.14.0.dev1"
 description = "Python wrapper for Qzone login and Qzone HTTP APIs."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -29,15 +29,16 @@ exclude = ["*.js"]
 [tool.poetry.dependencies]
 python = "^3.8"
 httpx = "^0.24.0"
-pydantic = "^1.10.4"
+pydantic = "^2.0.3"
 rsa = "^4.8"
 lxml = "^4.9.1"
 cssselect = "^1.1.0"
+tylisten = { version = "~0.4.1", source = "aioqzone-index" }
 exceptiongroup = { version = "^1.1.1", python = "<3.11"}
 
 numpy = { version = "^1.22.3", optional = true}
 pillow = { version = "^9.4.0", optional = true}
-pychaosvm = { version = "^0.2.3", optional = true, source = "aioqzone-index" }
+pychaosvm = { version = "~0.2.3", optional = true, source = "aioqzone-index" }
 
 [tool.poetry.extras]
 captcha = ["numpy", "pillow", "pychaosvm"]
@@ -63,7 +64,7 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 Sphinx = "^7.0.1"
-autodoc-pydantic = "*"
+autodoc-pydantic = "*"  # autodoc-pydantic/#146 #162
 sphinx-autodoc-typehints = "^1.19.5"
 furo = "*"
 sphinx-intl = "*"
