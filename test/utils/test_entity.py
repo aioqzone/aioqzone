@@ -1,4 +1,4 @@
-from aioqzone.type.entity import *
+from aioqzone.models.entity import *
 from aioqzone.utils.entity import finfo_box_entities, split_entities
 
 

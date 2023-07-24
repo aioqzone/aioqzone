@@ -1,6 +1,6 @@
-Entities
+Internal Types
 =====================
 
-.. automodule:: aioqzone.type.entity
+.. automodule:: aioqzone.models.internal
     :members:
     :undoc-members:

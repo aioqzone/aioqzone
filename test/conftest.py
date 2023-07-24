@@ -8,7 +8,6 @@ from httpx import AsyncClient
 from pydantic import BaseModel, SecretStr
 
 from aioqzone._messages import LoginMethod
-from qqqr.ssl import ssl_context
 from qqqr.utils.net import ClientAdapter
 
 
@@ -37,6 +36,6 @@ def event_loop():
 
 @pytest_asyncio.fixture(scope="module")
 async def client():
-    async with AsyncClient(verify=ssl_context()) as client:
+    async with AsyncClient() as client:
         client = ClientAdapter(client)
         yield client

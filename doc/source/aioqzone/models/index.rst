@@ -1,7 +1,7 @@
 aioqzone Models
 ====================
 
-.. automodule:: aioqzone.type
+.. automodule:: aioqzone.models
 
 .. toctree::
     :maxdepth: 1

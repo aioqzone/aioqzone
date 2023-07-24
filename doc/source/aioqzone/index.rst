@@ -7,4 +7,4 @@ aioqzone
     api/index
     api/loginman
     exception
-    type/index
+    models/index

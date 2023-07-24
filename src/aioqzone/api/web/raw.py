@@ -13,7 +13,7 @@ from httpx import HTTPStatusError
 import aioqzone.api.web.constant as const
 from aioqzone.api.loginman import Loginable
 from aioqzone.exception import CorruptError, QzoneError
-from aioqzone.type.internal import AlbumData, LikeData
+from aioqzone.models.internal import AlbumData, LikeData
 from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import response_callback
 from aioqzone.utils.time import time_ms

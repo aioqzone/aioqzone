@@ -3,7 +3,7 @@ from typing import List
 
 from lxml.html import HtmlElement
 
-from aioqzone.type.entity import AtEntity, ConEntity, EmEntity, LinkEntity, TextEntity
+from aioqzone.models.entity import AtEntity, ConEntity, EmEntity, LinkEntity, TextEntity
 
 entity_rules = r"""
 (?P<em>\[em\])?     # emoji entity start

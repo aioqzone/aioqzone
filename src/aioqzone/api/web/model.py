@@ -7,8 +7,8 @@ from typing import List, Optional, Type, TypeVar
 
 from pydantic import ValidationError
 
-from aioqzone.type.internal import AlbumData
-from aioqzone.type.resp.web import *
+from aioqzone.models.internal import AlbumData
+from aioqzone.models.resp.web import *
 
 from .raw import QzoneWebRawAPI
 
