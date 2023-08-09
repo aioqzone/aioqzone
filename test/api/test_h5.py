@@ -9,7 +9,8 @@ import pytest_asyncio
 
 from aioqzone.api.h5 import QzoneH5API
 from aioqzone.api.h5.raw import QzoneH5RawAPI
-from aioqzone.api.loginman import QRLoginMan, UPLoginMan
+from aioqzone.api.loginman import UnifiedLoginManager
+from aioqzone.models.config import QrLoginConfig, UpLoginConfig
 from qqqr.exception import TencentLoginError
 
 if TYPE_CHECKING:
@@ -20,13 +21,18 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.asyncio
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="class")
 def h5(client: ClientAdapter, env: test_env):
-    yield UPLoginMan(client, env.uin, env.pwd.get_secret_value(), h5=True)
+    yield UnifiedLoginManager(
+        client,
+        up_config=UpLoginConfig(uin=env.uin, pwd=env.pwd),
+        qr_config=QrLoginConfig(uin=env.uin),
+        h5=True,
+    )
 
 
 @pytest_asyncio.fixture(scope="class")
-async def raw(client: ClientAdapter, h5: UPLoginMan):
+async def raw(client: ClientAdapter, h5: UnifiedLoginManager):
     yield QzoneH5RawAPI(client, h5)
 
 
@@ -60,7 +66,7 @@ class TestH5RawAPI:
 
 
 @pytest_asyncio.fixture(scope="class")
-async def api(client: ClientAdapter, h5: UPLoginMan):
+async def api(client: ClientAdapter, h5: UnifiedLoginManager):
     yield QzoneH5API(client, h5)
 
 
@@ -101,14 +107,14 @@ class TestH5API:
 
 
 @pytest.mark.skip("this test should be called manually")
-async def test_h5_up_login(client: ClientAdapter, env: test_env):
-    man = QRLoginMan(client, env.uin, h5=True)
-    api = QzoneH5API(client, man)
+async def test_h5_up_login(client: ClientAdapter, h5: UnifiedLoginManager):
+    h5.order = ["qr"]
+    api = QzoneH5API(client, h5)
 
     with suppress(ImportError):
         from PIL import Image as image
 
-        man.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
+        h5.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
 
     d = await api.mfeeds_get_count()
     print(d.active_cnt)

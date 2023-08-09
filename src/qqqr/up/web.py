@@ -94,14 +94,14 @@ class UpWebLogin(_UpEmitterMixin, LoginBase[UpWebSession]):
     def __init__(
         self,
         client: ClientAdapter,
-        app: APPID,
-        proxy: Proxy,
         uin: int,
         pwd: str,
+        h5=True,
+        app: Optional[APPID] = None,
+        proxy: Optional[Proxy] = None,
         info: Optional[PT_QR_APP] = None,
     ):
-        super().__init__(client, app, proxy, info=info)
-        assert pwd
+        super().__init__(client, h5=h5, app=app, proxy=proxy, info=info)
         self.uin = uin
         self.pwd = pwd
         self.pwder = TeaEncoder(pwd)

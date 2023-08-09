@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from aioqzone.api.loginman import MixedLoginMan
+from aioqzone.api.loginman import UnifiedLoginManager
+from aioqzone.models.config import QrLoginConfig, UpLoginConfig
 from qqqr.utils.net import ClientAdapter
 
 if TYPE_CHECKING:
@@ -15,11 +16,10 @@ if TYPE_CHECKING:
 
 @pytest.fixture(scope="module")
 def man(client: ClientAdapter, env: test_env):
-    man = MixedLoginMan(
+    man = UnifiedLoginManager(
         client,
-        env.uin,
-        env.order,  # forbid QR by default.
-        pwd=env.pwd.get_secret_value(),
+        up_config=UpLoginConfig(uin=env.uin, pwd=env.pwd),
+        qr_config=QrLoginConfig(uin=env.uin),
     )
     with suppress(ImportError):
         from PIL import Image as image

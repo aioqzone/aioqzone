@@ -1,30 +1,26 @@
 import asyncio
-from os import environ
 from typing import List
 
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from pydantic import BaseModel, SecretStr
+from pydantic import Field, SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from aioqzone._messages import LoginMethod
 from qqqr.utils.net import ClientAdapter
 
 
-class test_env(BaseModel):
-    uin: int
-    pwd: SecretStr
-    order: List[LoginMethod]
+class test_env(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="test_")
+    uin: int = 0
+    pwd: SecretStr = Field(default="")
+    order: List[LoginMethod] = ["qr"]
 
 
 @pytest.fixture(scope="session")
 def env():
-    d = dict(
-        uin=environ["TEST_UIN"],
-        pwd=environ["TEST_PASSWORD"],
-        order=environ.get("TEST_QRSTRATEGY", ["up"]),
-    )
-    return test_env.model_validate(d)
+    return test_env()
 
 
 @pytest.fixture(scope="module")

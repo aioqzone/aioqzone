@@ -6,7 +6,7 @@ import pytest_asyncio
 from httpx import HTTPStatusError
 
 from aioqzone.api import QzoneWebAPI
-from aioqzone.api.loginman import MixedLoginMan
+from aioqzone.api.loginman import UnifiedLoginManager
 from aioqzone.api.web.raw import QzoneWebRawAPI
 from aioqzone.exception import LoginError, QzoneError
 from aioqzone.models.internal import LikeData
@@ -24,7 +24,7 @@ def storage():
 
 
 @pytest_asyncio.fixture(scope="module")
-async def raw(client: ClientAdapter, man: MixedLoginMan):
+async def raw(client: ClientAdapter, man: UnifiedLoginManager):
     yield QzoneWebRawAPI(client, man)
 
 
@@ -143,7 +143,7 @@ class TestUpload:
 
 
 @pytest_asyncio.fixture(scope="class")
-async def api(client: ClientAdapter, man: MixedLoginMan):
+async def api(client: ClientAdapter, man: UnifiedLoginManager):
     yield QzoneWebAPI(client, man)
 
 

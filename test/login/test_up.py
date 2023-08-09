@@ -21,12 +21,8 @@ pytestmark = pytest.mark.asyncio
 
 @pytest_asyncio.fixture(scope="module")
 async def web(client: ClientAdapter, env: test_env):
-    from qqqr.constant import QzoneAppid, QzoneProxy
-
     yield UpWebLogin(
         client,
-        QzoneAppid,
-        QzoneProxy,
         env.uin,
         env.pwd.get_secret_value(),
     )
@@ -42,7 +38,7 @@ class TestUpWeb:
             assert m.phone
             assert m.nickname
             with open("tmp/ntdin.txt") as f:
-                await emitter.emit(uin=web.uin, sms_code=int(f.readline().rstrip()))
+                await emitter.emit(uin=web.uin, sms_code=f.readline().strip())
 
         web.sms_code_required.listeners.append(GetSmsCode)
 
@@ -84,8 +80,6 @@ def h5(client: ClientAdapter, env: test_env):
 
     yield UpH5Login(
         client,
-        QzoneH5Appid,
-        QzoneH5Proxy,
         env.uin,
         env.pwd.get_secret_value(),
     )

@@ -1,21 +1,26 @@
 """
 Collect some built-in login manager w/o caching.
 Users can inherit these managers and implement their own caching logic.
+
+.. versionchanged:: 0.14.0
+
+    Removed ``UPLoginMan`` and ``QRLoginMan``. Renamed ``MixedLoginMan`` to `.UnifiedLoginManager`.
+    For the removed to managers, use `.UnifiedLoginManager` instead.
 """
 
 import asyncio
 import logging
-from typing import Dict, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Union
 
 from httpx import ConnectError, HTTPError
-from tylisten import Emitter, VirtualEmitter, null_emitter, null_vemitter
 from tylisten.futstore import FutureStore
 
 import aioqzone._messages as MT
 from aioqzone.exception import LoginError, SkipLoginInterrupt
-from qqqr.constant import QzoneH5Proxy, StatusCode
+from aioqzone.models.config import QrLoginConfig, UpLoginConfig
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
+from qqqr.up import UpH5Login
 from qqqr.utils.net import ClientAdapter
 
 from ._base import Loginable
@@ -23,67 +28,84 @@ from ._base import Loginable
 log = logging.getLogger(__name__)
 
 
-class _NextMethodInterrupt(RuntimeError):
-    """Internal exception represents the condition that the login method is interrupted and the caller
-    could choose the next login method or just to raise a :exc:`.LoginError`.
-    """
-
-    pass
-
-
 class ConstLoginMan(Loginable):
-    """Only for test"""
+    """A basic login manager which uses external provided cookie."""
 
-    def __init__(self, uin: int, cookie: dict) -> None:
+    def __init__(self, uin: int, cookie: Dict[str, str]) -> None:
         super().__init__(uin)
         self._cookie = cookie
+
+    @Loginable.cookie.setter
+    def cookie(self, v: Dict[str, str]):
+        self._cookie = v
 
     async def _new_cookie(self) -> Dict[str, str]:
         return self._cookie
 
 
-class _external_futstore:
-    def __init__(self, *args, fs: Optional[FutureStore] = None, **kwds) -> None:
-        super().__init__(*args, **kwds)
-        self.login_notify_channel = fs or FutureStore()
+class UnifiedLoginManager(Loginable):
+    """A login manager that will try methods according to the given :obj:`.order`.
 
+    .. versionchanged:: 0.12.0
 
-class UPLoginMan(_external_futstore, Loginable):
-    """Login manager for username-password login.
-    This manager may trigger :meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and
-    :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook.
+        Make it a :class:`EventManager`.
+
+    .. versionchanged:: 0.14.0
     """
+
+    _order: List[MT.LoginMethod]
 
     def __init__(
         self,
         client: ClientAdapter,
-        uin: int,
-        pwd: str,
+        up_config: Optional[UpLoginConfig] = None,
+        qr_config: Optional[QrLoginConfig] = None,
         *,
-        h5=False,
-        fs: Optional[FutureStore] = None,
+        h5=True,
     ) -> None:
-        assert pwd
-        super().__init__(fs=fs, uin=uin)
-        self.client = client
+        self.up_config = up_config or UpLoginConfig()
+        self.qr_config = qr_config or QrLoginConfig()
+        super().__init__(self.up_config.uin or self.qr_config.uin)
+
+        self._order = []
+        self.channel = FutureStore()
+
         if h5:
-            from qqqr.constant import QzoneH5Appid as appid
-            from qqqr.constant import QzoneH5Proxy as proxy
-            from qqqr.up import UpH5Login as cls
+            cls = UpH5Login
         else:
-            from qqqr.constant import QzoneAppid as appid
-            from qqqr.constant import QzoneProxy as proxy
             from qqqr.up import UpWebLogin as cls
-        self.uplogin = cls(self.client, appid, proxy, self.uin, pwd)
+        self.uplogin = cls(
+            client=client, uin=self.up_config.uin, pwd=self.up_config.pwd.get_secret_value(), h5=h5
+        )
+        self.sms_code_required = self.uplogin.sms_code_required
+        self.sms_code_input = self.uplogin.sms_code_input
+        if self.up_config.uin > 0:
+            self._order.append("up")
 
-    # fmt: off
-    @property
-    def sms_code_required(self): return self.uplogin.sms_code_required
-    @property
-    def sms_code_input(self): return self.uplogin.sms_code_input
-    # fmt: on
+        self.qrlogin = QrLogin(client=client, h5=h5)
+        self.refresh_times = self.qr_config.max_refresh_times
+        self.poll_freq = self.qr_config.poll_freq
+        self.qr_fetched = self.qrlogin.qr_fetched
+        self.qr_cancelled = self.qrlogin.qr_cancelled
+        self.cancel_qr = self.qrlogin.cancel
+        self.refresh_qr = self.qrlogin.refresh
+        if self.qr_config.uin > 0:
+            self._order.append("qr")
 
-    async def _new_cookie(self) -> Dict[str, str]:
+    @property
+    def order(self):
+        return self._order
+
+    @order.setter
+    def order(self, v: Sequence[MT.LoginMethod]):
+        v = list(v)
+        if "qr" in v and self.qr_config.uin <= 0:
+            raise ValueError(self.qr_config)
+        if "up" in v and self.up_config.uin <= 0:
+            raise ValueError(self.up_config)
+        self._order = v
+
+    async def _try_up_login(self) -> Union[Dict[str, str], str]:
         """
         :meta public:
         :raise `~qqqr.exception.TencentLoginError`: login error when up login.
@@ -97,88 +119,27 @@ class UPLoginMan(_external_futstore, Loginable):
 
         :return: cookie dict
         """
-        emit_hook = lambda c: self.login_notify_channel.add_awaitable(c)
-        emit_fail = lambda exc: emit_hook(
-            self.login_failed.emit(uin=self.uin, method="up", exc=str(exc))
-        )
         try:
             cookie = await self.uplogin.login()
         except TencentLoginError as e:
-            log.warning(str(e))
-            emit_fail(e)
-            raise
+            log.warning(e := str(e))
+            return e
         except NotImplementedError as e:
             log.warning(str(e))
-            emit_fail("10009：需要手机验证")
-            raise TencentLoginError(
-                StatusCode.NeedSmsVerify, "Dynamic code verify not implemented"
-            ) from e
+            return "10009：需要手机验证"
         except (GeneratorExit, ConnectError, HTTPError) as e:
             omit_exc_info = isinstance(e, (GeneratorExit, ConnectError))
             log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
             log.debug(e.args, extra=e.__dict__)
-            emit_fail(e)
-            raise _NextMethodInterrupt from e
+            return str(e)
         except:
             log.fatal("密码登录抛出未捕获的异常.", exc_info=True)
-            emit_fail("密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
             raise
+            return "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
 
-        emit_hook(self.login_success.emit(uin=self.uin, method="up"))
         return cookie
 
-    def h5(self):
-        """Realloc a :class:`LoginBase` object.
-
-        .. versionadded:: 0.12.6
-        """
-        from qqqr.constant import QzoneH5Appid as appid
-        from qqqr.constant import QzoneH5Proxy as proxy
-        from qqqr.up import UpH5Login
-
-        self.uplogin = UpH5Login(self.client, appid, proxy, self.uin, self.uplogin.pwd)
-
-
-class QRLoginMan(_external_futstore, Loginable):
-    """Login manager for QR login.
-    This manager may trigger :meth:`~aioqzone.event.login.LoginEvent.LoginSuccess` and
-    :meth:`~aioqzone.event.login.LoginEvent.LoginFailed` hook.
-    """
-
-    def __init__(
-        self,
-        client: ClientAdapter,
-        uin: int,
-        *,
-        refresh_times: int = 6,
-        poll_freq: float = 3,
-        h5=False,
-        fs: Optional[FutureStore] = None,
-    ) -> None:
-        super().__init__(fs=fs, uin=uin)
-        self.client = client
-        self.refresh_times = refresh_times
-        self.poll_freq = poll_freq
-        if h5:
-            from qqqr.constant import QzoneH5Appid as appid
-            from qqqr.constant import QzoneH5Proxy as proxy
-        else:
-            from qqqr.constant import QzoneAppid as appid
-            from qqqr.constant import QzoneProxy as proxy
-        self.qrlogin = QrLogin(self.client, appid, proxy)
-
-    # fmt: off
-    @property
-    def qr_fetched(self): return self.qrlogin.qr_fetched
-    @property
-    def qr_cancelled(self): return self.qrlogin.qr_cancelled
-    @property
-    def cancel(self): return self.qrlogin.cancel
-    @property
-    def refresh(self): return self.qrlogin.refresh
-    # fmt: on
-
-    async def _new_cookie(self) -> Dict[str, str]:
+    async def _try_qr_login(self) -> Union[Dict[str, str], str]:
         """
         :meta public:
         :raise `~qqqr.exception.UserBreak`: qr polling task is canceled
@@ -192,116 +153,24 @@ class QRLoginMan(_external_futstore, Loginable):
 
         :return: cookie dict
         """
-        emit_hook = lambda c: self.login_notify_channel.add_awaitable(c)
-        emit_fail = lambda exc: emit_hook(
-            self.login_failed.emit(uin=self.uin, method="qr", exc=str(exc))
-        )
 
         try:
             cookie = await self.qrlogin.login(
                 refresh_times=self.refresh_times, poll_freq=self.poll_freq
             )
         except (UserBreak, KeyboardInterrupt, asyncio.CancelledError) as e:
-            emit_fail("用户取消了登录")
-            if isinstance(e, UserBreak):
-                raise
-            raise UserBreak from e
+            return "用户取消了登录"
         except (asyncio.TimeoutError, GeneratorExit, ConnectError, HTTPError) as e:
             omit_exc_info = isinstance(e, (ConnectError, GeneratorExit, asyncio.TimeoutError))
             log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
             log.debug(e.args, extra=e.__dict__)
-            emit_fail(e)
-            raise _NextMethodInterrupt from e
+            return str(e)
         except:
             log.fatal("Unexpected error in QR login.", exc_info=True)
-            emit_fail("二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助.")
             raise
+            return "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
 
-        emit_hook(self.login_success.emit(uin=self.uin, method="qr"))
         return cookie
-
-    def h5(self):
-        """Realloc a :class:`LoginBase` object.
-
-        .. versionadded:: 0.12.6
-        """
-        from qqqr.constant import QzoneH5Appid as appid
-        from qqqr.constant import QzoneH5Proxy as proxy
-
-        self.qrlogin = QrLogin(self.client, appid, proxy)
-
-
-class MixedLoginMan(Loginable):
-    """A login manager that will try methods according to the given :obj:`.order`.
-
-    .. versionchanged:: 0.12.0
-
-        Make it a :class:`EventManager`.
-    """
-
-    qr_fetched: Emitter[MT.qr_fetched]
-    qr_cancelled: Emitter[MT.qr_cancelled]
-    cancel_qr: VirtualEmitter[MT.qr_cancelled]
-    refresh_qr: VirtualEmitter[MT.qr_refresh]
-    sms_code_required: Emitter[MT.sms_code_required]
-    sms_code_input: VirtualEmitter[MT.sms_code_input]
-
-    def __init__(
-        self,
-        client: ClientAdapter,
-        uin: int,
-        order: Sequence[MT.LoginMethod],
-        pwd: Optional[str] = None,
-        *,
-        refresh_times: int = 6,
-        poll_freq: float = 3,
-        h5=False,
-    ) -> None:
-        super().__init__(uin)
-        self.order = tuple(dict.fromkeys(order))
-        self.loginables: Dict[MT.LoginMethod, Loginable] = {}
-        self.login_notify_channel = FutureStore()
-
-        if "qr" in self.order:
-            self.loginables["qr"] = c = QRLoginMan(
-                client=client,
-                uin=uin,
-                refresh_times=refresh_times,
-                poll_freq=poll_freq,
-                h5=h5,
-                fs=self.login_notify_channel,
-            )
-            c.login_success = self.login_success
-            c.login_failed = self.login_failed
-            self.qr_fetched = c.qr_fetched
-            self.qr_cancelled = c.qr_cancelled
-            self.cancel_qr = c.cancel
-            self.refresh_qr = c.refresh
-        else:
-            self.qr_fetched = self.qr_cancelled = null_emitter
-            self.cancel_qr = self.refresh_qr = null_vemitter
-
-        if "up" in self.order:
-            assert pwd
-            self.loginables["up"] = c = UPLoginMan(
-                client=client, uin=uin, pwd=pwd, h5=h5, fs=self.login_notify_channel
-            )
-            c.login_success = self.login_success
-            c.login_failed = self.login_failed
-            self.sms_code_required = c.sms_code_required
-            self.sms_code_input = c.sms_code_input
-        else:
-            self.sms_code_required = null_emitter
-            self.sms_code_input = null_vemitter
-
-    def ordered_methods(self) -> Sequence[MT.LoginMethod]:
-        """Subclasses can inherit this method to choose a subset of `._order` according to its own policy.
-
-        :return: a subset of `._order`.
-
-        .. versionadded:: 0.9.8.dev1
-        """
-        return list(self.order)
 
     async def _new_cookie(self) -> Dict[str, str]:
         """
@@ -313,37 +182,36 @@ class MixedLoginMan(Loginable):
 
         :return: cookie dict
         """
-        methods = self.ordered_methods()
+        methods = self.order.copy()
         if not methods:
             log.info("No method selected for this login, raise SkipLoginInterrupt.")
             raise SkipLoginInterrupt
 
-        user_break = None
         log.info(f"Methods selected for this login: {methods}")
+        loginables = dict(up=self._try_up_login, qr=self._try_qr_login)
+
+        msg = ""
+        methods_tried: List[MT.LoginMethod] = []
+        fail_with = lambda meth, msg: self.channel.add_awaitable(
+            self.login_failed.emit(uin=self.uin, method=meth, exc=str(msg))
+        )
 
         for m in methods:
-            c = self.loginables[m]
+            methods_tried.append(m)
             try:
-                return await c._new_cookie()
-            except (TencentLoginError, _NextMethodInterrupt) as e:
-                excname = e.__class__.__name__
-                log.info(f"Mixed loginman received {excname}, continue.")
-                log.debug(e.args)
-            except UserBreak as e:
-                user_break = e
-                log.info("Mixed loginman received UserBreak, continue.")
+                result = await loginables[m]()
+            except BaseException as e:
+                fail_with(m, e)
+                break
 
-        if user_break:
-            raise UserBreak from user_break
+            if isinstance(result, str):
+                fail_with(m, result)
+                meth_name = dict(qr="二维码登录", up="密码登录")[m]
+                msg += f"{meth_name}: {result}\n"
+            else:
+                return result
 
-        if "qr" not in methods:
-            hint = "您可能被限制账密登陆. 扫码登陆仍然可行."
-        elif "up" not in methods:
-            hint = "您可能已被限制登陆."
-        else:
-            hint = "你在睡觉！"
-
-        raise LoginError(hint, methods_tried=methods)
+        raise LoginError(msg, methods_tried=methods_tried)
 
     def h5(self):
         """Change all manager in :obj:`loginables` to h5 login proxy.
@@ -352,6 +220,10 @@ class MixedLoginMan(Loginable):
 
         .. versionadded:: 0.12.6
         """
-        for v in self.loginables.values():
-            if callable(h5 := getattr(v, "h5", None)):
-                h5()
+        self.qrlogin = QrLogin(client=self.qrlogin.client, uin=self.qr_config.uin, h5=True)
+        self.uplogin = UpH5Login(
+            client=self.uplogin.client,
+            uin=self.up_config.uin,
+            pwd=self.up_config.pwd.get_secret_value(),
+            h5=True,
+        )

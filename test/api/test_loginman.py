@@ -10,12 +10,11 @@ import pytest
 import pytest_asyncio
 from httpx import ConnectError, HTTPError, Request
 
-import aioqzone.api.loginman as api
 from aioqzone._messages import LoginMethod
+from aioqzone.api.loginman import UnifiedLoginManager
 from aioqzone.exception import LoginError, SkipLoginInterrupt
+from aioqzone.models.config import QrLoginConfig, UpLoginConfig
 from qqqr.exception import TencentLoginError, UserBreak
-from qqqr.qr import QrLogin
-from qqqr.up import UpWebLogin
 from qqqr.utils.net import ClientAdapter
 
 if TYPE_CHECKING:
@@ -32,34 +31,29 @@ _fake_http_error.request = _fake_request
 
 @pytest_asyncio.fixture
 async def up(client: ClientAdapter, env: test_env):
-    yield api.UPLoginMan(client, env.uin, env.pwd.get_secret_value())
+    man = UnifiedLoginManager(client, up_config=UpLoginConfig(uin=env.uin, pwd=env.pwd))
+    man.order = ["up"]
+    yield man
 
 
 class TestUP:
     @pytest.mark.parametrize(
-        ["exc2r", "exc2e"],
+        ["exc2r"],
         [
-            (TencentLoginError(-3002, "mock"), TencentLoginError),
-            (NotImplementedError(), TencentLoginError),
-            (GeneratorExit(), api._NextMethodInterrupt),
-            (ConnectError("mock", request=_fake_request), api._NextMethodInterrupt),
-            (_fake_http_error, api._NextMethodInterrupt),
-            (RuntimeError, RuntimeError),
+            (TencentLoginError(-3002, "mock"),),
+            (NotImplementedError(),),
+            (GeneratorExit(),),
+            (ConnectError("mock", request=_fake_request),),
+            (_fake_http_error,),
+            (RuntimeError,),
         ],
     )
-    async def test_exception(
-        self, up: api.UPLoginMan, exc2r: BaseException, exc2e: Type[BaseException]
-    ):
-        pool = []
-        up.login_failed.listeners.append(lambda m: pool.append(m.exc))
-        up.login_success.listeners.append(lambda m: pool.append("success"))
-        with pytest.raises(exc2e), patch.object(up.uplogin, "new", side_effect=exc2r):
-            await up.new_cookie()
-        await up.login_notify_channel.wait()
-        assert pool
-        assert "success" not in pool
+    async def test_exception(self, up: UnifiedLoginManager, exc2r: BaseException):
+        with patch.object(up.uplogin, "new", side_effect=exc2r):
+            r = await up._try_up_login()
+            assert isinstance(r, str)
 
-    async def test_newcookie(self, up: api.UPLoginMan):
+    async def test_newcookie(self, up: UnifiedLoginManager):
         pool = []
         up.login_success.listeners.append(lambda m: pool.append(m.uin))
         try:
@@ -75,39 +69,33 @@ class TestUP:
 
 @pytest_asyncio.fixture
 async def qr(client: ClientAdapter, env: test_env):
-    man = api.QRLoginMan(client, env.uin)
+    man = UnifiedLoginManager(client, qr_config=QrLoginConfig(uin=env.uin))
     with suppress(ImportError):
         from PIL import Image as image
 
         man.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
+    man.order = ["qr"]
     yield man
 
 
 class TestQR:
     @pytest.mark.parametrize(
-        "exc2r,exc2e",
+        ["exc2r"],
         [
-            (NotImplementedError(), NotImplementedError),
-            (asyncio.TimeoutError(), api._NextMethodInterrupt),
-            (GeneratorExit(), api._NextMethodInterrupt),
-            (ConnectError("mock", request=_fake_request), api._NextMethodInterrupt),
-            (_fake_http_error, api._NextMethodInterrupt),
+            (NotImplementedError(),),
+            (asyncio.TimeoutError(),),
+            (GeneratorExit(),),
+            (ConnectError("mock", request=_fake_request),),
+            (_fake_http_error,),
         ],
     )
-    async def test_exception(
-        self, qr: api.QRLoginMan, exc2r: BaseException, exc2e: Type[BaseException]
-    ):
-        pool = []
-        qr.login_success.listeners.append(lambda m: pool.append("success"))
-        qr.login_failed.listeners.append(lambda m: pool.append(m.exc))
-        with pytest.raises(exc2e), patch.object(qr.qrlogin, "new", side_effect=exc2r):
-            await qr.new_cookie()
-        await qr.login_notify_channel.wait()
-        assert pool
-        assert "success" not in pool
+    async def test_exception(self, qr: UnifiedLoginManager, exc2r: BaseException):
+        with patch.object(qr.qrlogin, "new", side_effect=exc2r):
+            r = await qr._try_qr_login()
+            assert isinstance(r, str)
 
     @pytest.mark.skip("this test should be called manually")
-    async def test_newcookie(self, qr: api.QRLoginMan):
+    async def test_newcookie(self, qr: UnifiedLoginManager):
         pool = []
         qr.login_success.listeners.append(lambda m: pool.append(m.uin))
         try:
@@ -121,61 +109,66 @@ class TestQR:
             assert qr.gtk >= 0
 
 
+@pytest.fixture
+def mix(client: ClientAdapter, env: test_env):
+    man = UnifiedLoginManager(
+        client,
+        up_config=UpLoginConfig(uin=env.uin, pwd=env.pwd),
+        qr_config=QrLoginConfig(uin=env.uin),
+    )
+    with suppress(ImportError):
+        from PIL import Image as image
+
+        man.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
+
+    yield man
+
+
 allow = ["up", "qr"]
 prefer = ["qr", "up"]
 mixed_loginman_exc_test_param = [
-    ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, allow, ["up", "qr"]),
-    ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, allow, ["up", "qr"]),
-    ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, allow, ["up", "qr"]),
-    ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, allow, ["up", "qr"]),
+    ((TencentLoginError(20003, "mock"), UserBreak()), allow, ["up", "qr"]),
+    ((TencentLoginError(20003, "mock"), GeneratorExit()), allow, ["up", "qr"]),
+    ((TencentLoginError(20003, "mock"), _fake_http_error), allow, ["up", "qr"]),
+    ((TencentLoginError(20003, "mock"), SystemExit()), allow, ["up", "qr"]),
     #
-    ((SystemExit(), UserBreak()), SystemExit, allow, ["up"]),
+    ((SystemExit(), UserBreak()), allow, ["up"]),
     #
-    ((TencentLoginError(20003, "mock"), UserBreak()), UserBreak, prefer, ["qr", "up"]),
-    ((TencentLoginError(20003, "mock"), GeneratorExit()), LoginError, prefer, ["qr", "up"]),
-    ((TencentLoginError(20003, "mock"), _fake_http_error), LoginError, prefer, ["qr", "up"]),
-    ((TencentLoginError(20003, "mock"), SystemExit()), SystemExit, prefer, ["qr"]),
+    ((TencentLoginError(20003, "mock"), UserBreak()), prefer, ["qr", "up"]),
+    ((TencentLoginError(20003, "mock"), GeneratorExit()), prefer, ["qr", "up"]),
+    ((TencentLoginError(20003, "mock"), _fake_http_error), prefer, ["qr", "up"]),
+    ((TencentLoginError(20003, "mock"), SystemExit()), prefer, ["qr"]),
     #
-    ((SystemExit(), UserBreak()), SystemExit, prefer, ["qr", "up"]),
-    ((SystemExit(), asyncio.TimeoutError()), SystemExit, prefer, ["qr", "up"]),
-    ((SystemExit(), GeneratorExit()), SystemExit, prefer, ["qr", "up"]),
-    ((SystemExit(), _fake_http_error), SystemExit, prefer, ["qr", "up"]),
-    ((SystemExit(), SystemExit()), SystemExit, prefer, ["qr"]),
+    ((SystemExit(), UserBreak()), prefer, ["qr", "up"]),
+    ((SystemExit(), asyncio.TimeoutError()), prefer, ["qr", "up"]),
+    ((SystemExit(), GeneratorExit()), prefer, ["qr", "up"]),
+    ((SystemExit(), _fake_http_error), prefer, ["qr", "up"]),
+    ((SystemExit(), SystemExit()), prefer, ["qr"]),
 ]
 
 
-@pytest.mark.parametrize(["exc2r", "exc2e", "order", "gt_hist"], mixed_loginman_exc_test_param)
+@pytest.mark.parametrize(["exc2r", "order", "gt_hist"], mixed_loginman_exc_test_param)
 async def test_mixed_loginman_exc(
-    client: ClientAdapter,
+    mix: UnifiedLoginManager,
     exc2r: Tuple[BaseException, BaseException],
-    exc2e: Type[BaseException],
     order: List[LoginMethod],
     gt_hist: List[LoginMethod],
 ):
+    mix.order = order
     meth_history = []
-    mix = api.MixedLoginMan(client, 1, order, "e")
     mix.login_failed.listeners.append(lambda m: meth_history.append(m.method))
 
     with ExitStack() as stack:
-        stack.enter_context(pytest.raises(exc2e))
-        if c := mix.loginables.get("up"):
-            assert isinstance(c, api.UPLoginMan)
-            stack.enter_context(patch.object(c.uplogin, "new", side_effect=exc2r[0]))
-        if c := mix.loginables.get("qr"):
-            assert isinstance(c, api.QRLoginMan)
-            stack.enter_context(patch.object(c.qrlogin, "new", side_effect=exc2r[1]))
-
+        stack.enter_context(pytest.raises(LoginError))
+        stack.enter_context(patch.object(mix.uplogin, "new", side_effect=exc2r[0]))
+        stack.enter_context(patch.object(mix.qrlogin, "new", side_effect=exc2r[1]))
         await mix.new_cookie()
 
-    await mix.login_notify_channel.wait()
+    await mix.channel.wait()
     assert meth_history == gt_hist
 
 
-async def test_mixed_loginman_skip(client: ClientAdapter):
-    class sub_mix_loginman(api.MixedLoginMan):
-        def ordered_methods(self):
-            return []
-
-    mix = sub_mix_loginman(client, 1, ["up", "qr"], "e")
+async def test_mixed_loginman_skip(mix: UnifiedLoginManager):
+    mix.order = []
     with pytest.raises(SkipLoginInterrupt):
         await mix._new_cookie()
