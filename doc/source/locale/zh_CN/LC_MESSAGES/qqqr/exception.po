@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-25 12:57+0800\n"
+"POT-Creation-Date: 2023-08-09 15:47+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,32 +21,6 @@ msgstr ""
 #, fuzzy
 msgid "QQQR Exceptions"
 msgstr "QQQR 异常"
-
-#: of qqqr.exception.HookError:1
-msgid ""
-"Once we await a hook, we expect that if the hook is broken, it will not mess up our own error "
-"handling. It is convenient to wrap an exception raise from hooks with this error."
-msgstr ""
-
-#: of qqqr.exception.HookError:4
-msgid ""
-"If the caller catches a `HookError`, it is recommended to omit the error. If something is broken"
-" by the hook, or something must be retrieved by the hook is not available, then it is "
-"recommended to reraise the exception."
-msgstr ""
-
-#: of qqqr.exception.HookError:8
-msgid ""
-"Omit the error if you can: >>> try: >>>     await hook_guard(inform_user)('hello') >>> except "
-"HookError as e: >>>     log.error(\"Hook raises an error\", exc_info=e.__cause__) # do not "
-"reraise"
-msgstr ""
-
-#: of qqqr.exception.HookError:14
-msgid ""
-"Reraise only when you have to: >>> try: >>>     need_input(await hook_guard(read_from_user)()) "
-">>> except HookError as e: >>>     raise e"
-msgstr ""
 
 #: of qqqr.exception.TencentLoginError:1
 #, fuzzy
@@ -61,3 +35,32 @@ msgstr "这个异常应当在用户主动停止 Qzone 登录时被抛出。"
 #: of qqqr.exception.UserBreak:5
 msgid "Do not inherit from :exc:`KeyboardInterrupt`."
 msgstr ""
+
+#~ msgid ""
+#~ "Once we await a hook, we expect that if "
+#~ "the hook is broken, it will not mess up "
+#~ "our own error handling. It is convenient to "
+#~ "wrap an exception raise from hooks with this "
+#~ "error."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If the caller catches a `HookError`, it is "
+#~ "recommended to omit the error. If something is "
+#~ "broken by the hook, or something must be "
+#~ "retrieved by the hook is not available, then "
+#~ "it is recommended to reraise the exception."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Omit the error if you can: >>> try: >>>"
+#~ "     await hook_guard(inform_user)('hello') >>> except HookError"
+#~ " as e: >>>     log.error(\"Hook raises an error\", "
+#~ "exc_info=e.__cause__) # do not reraise"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Reraise only when you have to: >>> try: >>>"
+#~ "     need_input(await hook_guard(read_from_user)()) >>> except "
+#~ "HookError as e: >>>     raise e"
+#~ msgstr ""

@@ -4,8 +4,8 @@ Users can inherit these managers and implement their own caching logic.
 
 .. versionchanged:: 0.14.0
 
-    Removed ``UPLoginMan`` and ``QRLoginMan``. Renamed ``MixedLoginMan`` to `.UnifiedLoginManager`.
-    For the removed to managers, use `.UnifiedLoginManager` instead.
+    Removed ``UPLoginMan`` and ``QRLoginMan``. Renamed ``MixedLoginMan`` to :class:`UnifiedLoginManager`.
+    For the removed managers, use :class:`.UnifiedLoginManager` instead.
 """
 
 import asyncio
@@ -51,6 +51,8 @@ class UnifiedLoginManager(Loginable):
         Make it a :class:`EventManager`.
 
     .. versionchanged:: 0.14.0
+
+        Renamed to ``UnifiedLoginManager``.
     """
 
     _order: List[MT.LoginMethod]
@@ -108,9 +110,6 @@ class UnifiedLoginManager(Loginable):
     async def _try_up_login(self) -> Union[Dict[str, str], str]:
         """
         :meta public:
-        :raise `~qqqr.exception.TencentLoginError`: login error when up login.
-        :raise `~aioqzone.api.loginman._NextMethodInterrupt`: if acceptable errors occured, for example, http errors.
-        :raise `~qqqr.exception.HookError`: an error is raised from hook
         :raises: Any unexpected exception will be reraise.
 
         .. versionchanged:: 0.12.9
@@ -142,9 +141,6 @@ class UnifiedLoginManager(Loginable):
     async def _try_qr_login(self) -> Union[Dict[str, str], str]:
         """
         :meta public:
-        :raise `~qqqr.exception.UserBreak`: qr polling task is canceled
-        :raise `~aioqzone.api.loginman._NextMethodInterrupt`: on exceptions do not break the system, such as timeout, Http errors, etc.
-        :raise `~qqqr.exception.HookError`: an error is raised from hook
         :raises: Any unexpected exception will be reraise.
 
         .. versionchanged:: 0.12.9
@@ -175,7 +171,6 @@ class UnifiedLoginManager(Loginable):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raise `qqqr.exception.UserBreak`: if qr login is canceled and no succeeding method exist and success.
         :raise `aioqzone.exception.SkipLoginInterrupt`: if all login methods are removed by subclasses.
         :raise `aioqzone.exception.LoginError`: if all login methods failed.
         :raises: Any unexpected exceptions.
@@ -214,9 +209,9 @@ class UnifiedLoginManager(Loginable):
         raise LoginError(msg, methods_tried=methods_tried)
 
     def h5(self):
-        """Change all manager in :obj:`loginables` to h5 login proxy.
+        """Change :obj:`.qrlogin` and :obj:`.uplogin` to h5 login proxy.
 
-        .. note:: This will remove existing login cookie in :obj:`.cookie`!
+        .. note:: This will remove existing login cookie in :obj:`~Loginable.cookie`!
 
         .. versionadded:: 0.12.6
         """

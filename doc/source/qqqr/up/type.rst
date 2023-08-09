@@ -1,8 +1,8 @@
 UpLogin Types
 ========================
 
-.. currentmodule:: qqqr.up.type
+.. currentmodule:: qqqr.up._model
 
-.. automodule:: qqqr.up.type
+.. automodule:: qqqr.up._model
     :members:
     :undoc-members:
