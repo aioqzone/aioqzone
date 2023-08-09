@@ -15,7 +15,7 @@ from typing import Dict, List, Optional, Sequence, Union
 from httpx import ConnectError, HTTPError
 from tylisten.futstore import FutureStore
 
-import aioqzone._messages as MT
+import aioqzone.message as MT
 from aioqzone.exception import LoginError, SkipLoginInterrupt
 from aioqzone.models.config import QrLoginConfig, UpLoginConfig
 from qqqr.exception import TencentLoginError, UserBreak

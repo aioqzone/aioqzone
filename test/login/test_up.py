@@ -6,7 +6,7 @@ import pytest
 import pytest_asyncio
 from tylisten import Emitter
 
-import qqqr._messages as MT
+import qqqr.message as MT
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.up import UpH5Login, UpWebLogin

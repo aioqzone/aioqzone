@@ -7,7 +7,7 @@ from typing import Optional
 
 from tylisten import Emitter, VirtualEmitter
 
-import qqqr._messages as MT
+import qqqr.message as MT
 from qqqr.base import LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak

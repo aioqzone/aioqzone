@@ -5,7 +5,7 @@ from typing import Dict
 
 from tylisten import Emitter
 
-import aioqzone._messages as MT
+import aioqzone.message as MT
 from qqqr.utils.encrypt import gtk
 
 

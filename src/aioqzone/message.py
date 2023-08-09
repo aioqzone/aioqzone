@@ -3,7 +3,7 @@ from typing import Literal, Union
 from pydantic import BaseModel
 from tylisten import BaseMessage
 
-from qqqr._messages import *
+from qqqr.message import *
 
 LoginMethod = Union[Literal["qr"], Literal["up"]]
 

@@ -6,5 +6,6 @@ aioqzone
 
     api/index
     api/loginman
-    exception
+    messages
     models/index
+    exception
