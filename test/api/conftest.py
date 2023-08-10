@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from aioqzone.api.loginman import UnifiedLoginManager
-from aioqzone.models.config import QrLoginConfig, UpLoginConfig
+from aioqzone.api import QrLoginConfig, UnifiedLoginManager, UpLoginConfig
 from qqqr.utils.net import ClientAdapter
 
 if TYPE_CHECKING:

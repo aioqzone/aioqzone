@@ -7,10 +7,9 @@ from typing import TYPE_CHECKING
 import pytest
 import pytest_asyncio
 
+from aioqzone.api import QrLoginConfig, UnifiedLoginManager, UpLoginConfig
 from aioqzone.api.h5 import QzoneH5API
 from aioqzone.api.h5.raw import QzoneH5RawAPI
-from aioqzone.api.loginman import UnifiedLoginManager
-from aioqzone.models.config import QrLoginConfig, UpLoginConfig
 from qqqr.exception import TencentLoginError
 
 if TYPE_CHECKING:

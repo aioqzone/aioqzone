@@ -13,9 +13,8 @@ from typing import Iterable, List, Optional, Union, cast
 from lxml.html import HtmlElement, fromstring
 from pydantic import BaseModel, HttpUrl, ValidationError
 
-from aioqzone.models.entity import ConEntity
-from aioqzone.models.internal import AlbumData
-from aioqzone.models.resp.web import PicRep
+from aioqzone.model import AlbumData, ConEntity
+from aioqzone.model.response.web import PicRep
 from qqqr.utils.iter import firstn
 
 from .entity import finfo_box_entities

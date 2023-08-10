@@ -5,12 +5,12 @@ import pytest
 import pytest_asyncio
 from httpx import HTTPStatusError
 
-from aioqzone.api import QzoneWebAPI
-from aioqzone.api.loginman import UnifiedLoginManager
+from aioqzone.api import UnifiedLoginManager
+from aioqzone.api.web import QzoneWebAPI
 from aioqzone.api.web.raw import QzoneWebRawAPI
 from aioqzone.exception import LoginError, QzoneError
-from aioqzone.models.internal import LikeData
-from aioqzone.models.resp.web import FeedRep
+from aioqzone.model import LikeData
+from aioqzone.model.response.web import FeedRep
 from aioqzone.utils.html import HtmlContent, HtmlInfo
 from qqqr.utils.iter import first
 from qqqr.utils.net import ClientAdapter

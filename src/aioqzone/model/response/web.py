@@ -7,7 +7,7 @@ from typing import List, Optional, Union
 from pydantic import BaseModel, Field
 from pydantic.networks import HttpUrl
 
-from ..entity import HasConEntity, HasContent
+from ..protocol import HasConEntity, HasContent
 
 
 # Below are the response reps of Qzone Apis.

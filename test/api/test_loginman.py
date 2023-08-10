@@ -10,10 +10,8 @@ import pytest
 import pytest_asyncio
 from httpx import ConnectError, HTTPError, Request
 
-from aioqzone.api.loginman import UnifiedLoginManager
+from aioqzone.api import LoginMethod, QrLoginConfig, UnifiedLoginManager, UpLoginConfig
 from aioqzone.exception import LoginError, SkipLoginInterrupt
-from aioqzone.message import LoginMethod
-from aioqzone.models.config import QrLoginConfig, UpLoginConfig
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.utils.net import ClientAdapter
 

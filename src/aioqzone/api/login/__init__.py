@@ -15,9 +15,9 @@ from typing import Dict, List, Optional, Sequence, Union
 from httpx import ConnectError, HTTPError
 from tylisten.futstore import FutureStore
 
-import aioqzone.message as MT
 from aioqzone.exception import LoginError, SkipLoginInterrupt
-from aioqzone.models.config import QrLoginConfig, UpLoginConfig
+from aioqzone.message import LoginMethod
+from aioqzone.model import QrLoginConfig, UpLoginConfig
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.up import UpH5Login
@@ -26,6 +26,8 @@ from qqqr.utils.net import ClientAdapter
 from ._base import Loginable
 
 log = logging.getLogger(__name__)
+
+__all__ = ["ConstLoginMan", "UnifiedLoginManager", "LoginMethod", "QrLoginConfig", "UpLoginConfig"]
 
 
 class ConstLoginMan(Loginable):
@@ -55,7 +57,7 @@ class UnifiedLoginManager(Loginable):
         Renamed to ``UnifiedLoginManager``.
     """
 
-    _order: List[MT.LoginMethod]
+    _order: List[LoginMethod]
 
     def __init__(
         self,
@@ -99,7 +101,7 @@ class UnifiedLoginManager(Loginable):
         return self._order
 
     @order.setter
-    def order(self, v: Sequence[MT.LoginMethod]):
+    def order(self, v: Sequence[LoginMethod]):
         v = list(v)
         if "qr" in v and self.qr_config.uin <= 0:
             raise ValueError(self.qr_config)
@@ -110,7 +112,9 @@ class UnifiedLoginManager(Loginable):
     async def _try_up_login(self) -> Union[Dict[str, str], str]:
         """
         :meta public:
-        :raises: Any unexpected exception will be reraise.
+        :raises:
+            Exceptions except for :exc:`TencentLoginError`, :exc:`NotImplementedError`,
+            :exc:`GeneratorExit`, :exc:`httpx.ConnectError`, :exc:`httpx.HTTPError`
 
         .. versionchanged:: 0.12.9
 
@@ -141,7 +145,9 @@ class UnifiedLoginManager(Loginable):
     async def _try_qr_login(self) -> Union[Dict[str, str], str]:
         """
         :meta public:
-        :raises: Any unexpected exception will be reraise.
+        :raises:
+            Exceptions except for :exc:`UserBreak`, :exc:`KeyboardInterrupt`, :exc:`asyncio.CancelledError`,
+            :exc:`asyncio.TimeoutError`, :exc:`GeneratorExit`, :exc:`httpx.ConnectError`, :exc:`httpx.HTTPError`
 
         .. versionchanged:: 0.12.9
 
@@ -173,7 +179,6 @@ class UnifiedLoginManager(Loginable):
         :meta public:
         :raise `aioqzone.exception.SkipLoginInterrupt`: if all login methods are removed by subclasses.
         :raise `aioqzone.exception.LoginError`: if all login methods failed.
-        :raises: Any unexpected exceptions.
 
         :return: cookie dict
         """
@@ -186,7 +191,7 @@ class UnifiedLoginManager(Loginable):
         loginables = dict(up=self._try_up_login, qr=self._try_qr_login)
 
         msg = ""
-        methods_tried: List[MT.LoginMethod] = []
+        methods_tried: List[LoginMethod] = []
         fail_with = lambda meth, msg: self.channel.add_awaitable(
             self.login_failed.emit(uin=self.uin, method=meth, exc=str(msg))
         )

@@ -3,7 +3,7 @@ from typing import Type, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from aioqzone.models.resp.h5 import FeedCount, FeedPageResp, GetMoreResp
+from aioqzone.model import FeedCount, FeedPageResp, GetMoreResp
 
 from .raw import QzoneH5RawAPI
 
