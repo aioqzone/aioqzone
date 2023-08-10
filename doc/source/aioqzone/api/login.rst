@@ -1,7 +1,7 @@
 Login Managers
 ================
 
-.. currentmodule:: aioqzone.api.loginman
+.. currentmodule:: aioqzone.api.login
 
-.. automodule:: aioqzone.api.loginman
+.. automodule:: aioqzone.api.login
     :members: Loginable, ConstLoginMan, UnifiedLoginManager
