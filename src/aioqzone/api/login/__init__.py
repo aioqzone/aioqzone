@@ -72,21 +72,15 @@ class UnifiedLoginManager(Loginable):
         super().__init__(self.up_config.uin or self.qr_config.uin)
 
         self._order = []
+        self.client = client
         self.channel = FutureStore()
 
-        if h5:
-            cls = UpH5Login
-        else:
-            from qqqr.up import UpWebLogin as cls
-        self.uplogin = cls(
-            client=client, uin=self.up_config.uin, pwd=self.up_config.pwd.get_secret_value(), h5=h5
-        )
+        self.h5(h5, clear_cookie=False)  # init uplogin and qrlogin
         self.sms_code_required = self.uplogin.sms_code_required
         self.sms_code_input = self.uplogin.sms_code_input
         if self.up_config.uin > 0:
             self._order.append("up")
 
-        self.qrlogin = QrLogin(client=client, h5=h5)
         self.refresh_times = self.qr_config.max_refresh_times
         self.poll_freq = self.qr_config.poll_freq
         self.qr_fetched = self.qrlogin.qr_fetched
@@ -111,7 +105,6 @@ class UnifiedLoginManager(Loginable):
 
     async def _try_up_login(self) -> Union[Dict[str, str], str]:
         """
-        :meta public:
         :raises:
             Exceptions except for :exc:`TencentLoginError`, :exc:`NotImplementedError`,
             :exc:`GeneratorExit`, :exc:`httpx.ConnectError`, :exc:`httpx.HTTPError`
@@ -144,7 +137,6 @@ class UnifiedLoginManager(Loginable):
 
     async def _try_qr_login(self) -> Union[Dict[str, str], str]:
         """
-        :meta public:
         :raises:
             Exceptions except for :exc:`UserBreak`, :exc:`KeyboardInterrupt`, :exc:`asyncio.CancelledError`,
             :exc:`asyncio.TimeoutError`, :exc:`GeneratorExit`, :exc:`httpx.ConnectError`, :exc:`httpx.HTTPError`
@@ -213,17 +205,28 @@ class UnifiedLoginManager(Loginable):
 
         raise LoginError(msg, methods_tried=methods_tried)
 
-    def h5(self):
+    def h5(self, enable=True, clear_cookie=True):
         """Change :obj:`.qrlogin` and :obj:`.uplogin` to h5 login proxy.
 
-        .. note:: This will remove existing login cookie in :obj:`~Loginable.cookie`!
+        :param enable: use h5 mode or not
+        :param clear_cookie: remove existing login cookie in :obj:`~Loginable.cookie`!
 
-        .. versionadded:: 0.12.6
+        .. versionchanged:: 0.14.1
+
+            Allow user to switch h5 back; Allow to skip clearing cookie.
         """
-        self.qrlogin = QrLogin(client=self.qrlogin.client, uin=self.qr_config.uin, h5=True)
-        self.uplogin = UpH5Login(
-            client=self.uplogin.client,
+        if clear_cookie:
+            self._cookie.clear()
+            self.client.client.cookies.clear()
+
+        if enable:
+            from qqqr.up import UpH5Login as cls
+        else:
+            from qqqr.up.web import UpWebLogin as cls
+        self.uplogin = cls(
+            client=self.client,
             uin=self.up_config.uin,
             pwd=self.up_config.pwd.get_secret_value(),
-            h5=True,
+            h5=enable,
         )
+        self.qrlogin = QrLogin(client=self.client, h5=enable)
