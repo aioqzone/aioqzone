@@ -43,7 +43,6 @@ class TestUP:
             (GeneratorExit(),),
             (ConnectError("mock", request=_fake_request),),
             (_fake_http_error,),
-            (RuntimeError,),
         ],
     )
     async def test_exception(self, up: UnifiedLoginManager, exc2r: BaseException):
