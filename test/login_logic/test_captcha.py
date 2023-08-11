@@ -10,7 +10,7 @@ pytest.importorskip("chaosvm")
 
 import pytest_asyncio
 
-from qqqr.constant import QzoneAppid, QzoneProxy, captcha_status_description
+from qqqr.constant import captcha_status_description
 from qqqr.up import UpWebLogin
 from qqqr.up.captcha import Captcha, TcaptchaSession
 

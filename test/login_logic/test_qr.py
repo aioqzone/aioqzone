@@ -7,7 +7,7 @@ import pytest_asyncio
 from tylisten import Emitter
 
 import qqqr.message as MT
-from qqqr.constant import QzoneAppid, QzoneProxy, StatusCode
+from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak
 from qqqr.qr import QrLogin, QrSession
 from qqqr.utils.net import ClientAdapter
@@ -17,7 +17,7 @@ pytestmark = pytest.mark.asyncio
 
 @pytest_asyncio.fixture(scope="class")
 async def login(client: ClientAdapter):
-    login = QrLogin(client, QzoneAppid, QzoneProxy)
+    login = QrLogin(client)
 
     with suppress(ImportError):
         from PIL import Image as image

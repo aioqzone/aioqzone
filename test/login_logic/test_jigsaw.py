@@ -10,7 +10,6 @@ pytest.importorskip("PIL")
 
 import pytest_asyncio
 
-from qqqr.constant import QzoneAppid, QzoneProxy
 from qqqr.up import UpWebLogin
 from qqqr.up.captcha import Captcha, TcaptchaSession
 from qqqr.up.captcha.jigsaw import Jigsaw, imitate_drag
