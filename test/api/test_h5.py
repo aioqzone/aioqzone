@@ -2,20 +2,15 @@ from __future__ import annotations
 
 import io
 from contextlib import suppress
-from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
 
-from aioqzone.api import QrLoginConfig, UnifiedLoginManager, UpLoginConfig
+from aioqzone.api import UnifiedLoginManager
 from aioqzone.api.h5 import QzoneH5API
 from aioqzone.api.h5.raw import QzoneH5RawAPI
 from aioqzone.exception import LoginError
-
-if TYPE_CHECKING:
-    from test.conftest import test_env
-
-    from qqqr.utils.net import ClientAdapter
+from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 
@@ -96,7 +91,7 @@ class TestH5API:
 
 
 @pytest.mark.skip("this test should be called manually")
-async def test_h5_up_login(client: ClientAdapter, man: UnifiedLoginManager):
+async def test_h5_qr_login(client: ClientAdapter, man: UnifiedLoginManager):
     man.order = ["qr"]
     api = QzoneH5API(client, man)
 

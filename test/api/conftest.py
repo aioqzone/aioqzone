@@ -20,6 +20,7 @@ def man(client: ClientAdapter, env: test_env):
         up_config=UpLoginConfig(uin=env.uin, pwd=env.password),
         qr_config=QrLoginConfig(uin=env.uin),
     )
+    man.order = env.order
     with suppress(ImportError):
         from PIL import Image as image
 
