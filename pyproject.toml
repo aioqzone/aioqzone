@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "0.14.1.dev4"
+version = "0.14.1.dev5"
 description = "Python wrapper for Qzone login and Qzone HTTP APIs."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -34,7 +34,7 @@ pydantic-settings = "^2.0.2"
 rsa = "^4.8"
 lxml = "^4.9.1"
 cssselect = "^1.1.0"
-tylisten = { version = "~0.5.0", source = "aioqzone-index" }
+tylisten = { version = "~0.5.1", source = "aioqzone-index" }
 exceptiongroup = { version = "^1.1.1", python = "<3.11"}
 
 numpy = { version = "^1.22.3", optional = true}

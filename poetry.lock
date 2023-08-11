@@ -1473,13 +1473,13 @@ files = [
 
 [[package]]
 name = "tylisten"
-version = "0.5.0"
+version = "0.5.1"
 description = "A fully typed async emitter-listener library."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "tylisten-0.5.0-py3-none-any.whl", hash = "sha256:61239df0b0046b1d18623b914aa3afd6f0fd888476907e97858f4c1cb768ebc4"},
-    {file = "tylisten-0.5.0.tar.gz", hash = "sha256:c3b49476465ad1ac498f504ced0f48e1b29cca7797457eb32c62cc7c9b89effa"},
+    {file = "tylisten-0.5.1-py3-none-any.whl", hash = "sha256:5015e83262eb29912c41bab1daca2ca1352f4a2cdd372b4064ff7c02047bf437"},
+    {file = "tylisten-0.5.1.tar.gz", hash = "sha256:00827a33a574643d96b30bb1134fcaf420f61e86f6e5cdce6f95e0dda7570cff"},
 ]
 
 [package.dependencies]
@@ -1559,4 +1559,4 @@ captcha = ["numpy", "pillow", "pychaosvm"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "82ef4fc4401adecbebb2c040d3d9b8067ac5cedf11e9df84cc72553c4409266a"
+content-hash = "843d65066827971d6164654dfcaa221f37eb63d3b95ac9d00f05f334ab80a309"
