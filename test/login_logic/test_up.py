@@ -24,7 +24,7 @@ async def web(client: ClientAdapter, env: test_env):
     yield UpWebLogin(
         client,
         env.uin,
-        env.pwd.get_secret_value(),
+        env.password.get_secret_value(),
     )
 
 
@@ -48,7 +48,7 @@ class TestUpWeb:
         if sess.code == StatusCode.NeedCaptcha:
             sess = await web.pass_vc(sess)
             if sess is None:
-                pytest.xfail("captcha extras is not installed, skipped.")
+                pytest.skip("captcha extras is not installed, skipped.")
         if sess.code != 1:
             assert sess.verifycode
             assert sess.check_rst.salt
@@ -76,12 +76,10 @@ class TestUpWeb:
 
 @pytest.fixture
 def h5(client: ClientAdapter, env: test_env):
-    from qqqr.constant import QzoneH5Appid, QzoneH5Proxy
-
     yield UpH5Login(
         client,
         env.uin,
-        env.pwd.get_secret_value(),
+        env.password.get_secret_value(),
     )
 
 

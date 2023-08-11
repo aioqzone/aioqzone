@@ -10,7 +10,7 @@ import pytest_asyncio
 from aioqzone.api import QrLoginConfig, UnifiedLoginManager, UpLoginConfig
 from aioqzone.api.h5 import QzoneH5API
 from aioqzone.api.h5.raw import QzoneH5RawAPI
-from qqqr.exception import TencentLoginError
+from aioqzone.exception import LoginError
 
 if TYPE_CHECKING:
     from test.conftest import test_env
@@ -24,7 +24,7 @@ pytestmark = pytest.mark.asyncio
 def h5(client: ClientAdapter, env: test_env):
     yield UnifiedLoginManager(
         client,
-        up_config=UpLoginConfig(uin=env.uin, pwd=env.pwd),
+        up_config=UpLoginConfig(uin=env.uin, pwd=env.password),
         qr_config=QrLoginConfig(uin=env.uin),
         h5=True,
     )
@@ -44,8 +44,8 @@ class TestH5RawAPI:
     async def test_index(self, raw: QzoneH5RawAPI, context: dict):
         try:
             d = await raw.index()
-        except TencentLoginError:
-            pytest.xfail("login failed")
+        except LoginError:
+            pytest.skip("login failed")
         if d["hasmore"]:
             context["attach_info"] = d["attachinfo"]
 
@@ -59,8 +59,8 @@ class TestH5RawAPI:
     async def test_heartbeat(self, raw: QzoneH5RawAPI):
         try:
             d = await raw.mfeeds_get_count()
-        except TencentLoginError:
-            pytest.xfail("login failed")
+        except LoginError:
+            pytest.skip("login failed")
         assert "active_cnt" in d
 
 
@@ -73,8 +73,8 @@ class TestH5API:
     async def test_index(self, api: QzoneH5API, context: dict):
         try:
             d = await api.index()
-        except TencentLoginError:
-            pytest.xfail("login failed")
+        except LoginError:
+            pytest.skip("login failed")
         context["first_page"] = d.vFeeds
         if d.hasmore:
             context["attach_info"] = d.attachinfo
@@ -101,8 +101,8 @@ class TestH5API:
     async def test_heartbeat(self, api: QzoneH5API):
         try:
             await api.mfeeds_get_count()
-        except TencentLoginError:
-            pytest.xfail("login failed")
+        except LoginError:
+            pytest.skip("login failed")
 
 
 @pytest.mark.skip("this test should be called manually")

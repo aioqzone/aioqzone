@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import io
 from contextlib import ExitStack, suppress
-from typing import TYPE_CHECKING, List, Tuple, Type, cast
+from typing import TYPE_CHECKING, List, Tuple, cast
 from unittest.mock import patch
 
 import pytest
@@ -29,7 +29,7 @@ _fake_http_error.request = _fake_request
 
 @pytest_asyncio.fixture
 async def up(client: ClientAdapter, env: test_env):
-    man = UnifiedLoginManager(client, up_config=UpLoginConfig(uin=env.uin, pwd=env.pwd))
+    man = UnifiedLoginManager(client, up_config=UpLoginConfig(uin=env.uin, pwd=env.password))
     man.order = ["up"]
     yield man
 
@@ -56,7 +56,7 @@ class TestUP:
         up.login_success.listeners.append(lambda m: pool.append(m.uin))
         try:
             cookie = await up.new_cookie()
-        except TencentLoginError as e:
+        except LoginError as e:
             pytest.skip(str(e))
         else:
             assert "p_skey" in cookie
@@ -98,7 +98,7 @@ class TestQR:
         qr.login_success.listeners.append(lambda m: pool.append(m.uin))
         try:
             cookie = await qr.new_cookie()
-        except TencentLoginError as e:
+        except LoginError as e:
             pytest.skip(str(e))
         else:
             assert "p_skey" in cookie
@@ -111,7 +111,7 @@ class TestQR:
 def mix(client: ClientAdapter, env: test_env):
     man = UnifiedLoginManager(
         client,
-        up_config=UpLoginConfig(uin=env.uin, pwd=env.pwd),
+        up_config=UpLoginConfig(uin=env.uin, pwd=env.password),
         qr_config=QrLoginConfig(uin=env.uin),
     )
     with suppress(ImportError):

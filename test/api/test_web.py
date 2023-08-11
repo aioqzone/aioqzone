@@ -34,7 +34,7 @@ class TestWebRawAPI:
             f = await raw.feeds3_html_more(0)
             r = await asyncio.gather(*(raw.feeds3_html_more(i) for i in range(1, 3)))
         except LoginError:
-            pytest.xfail("Login failed")
+            pytest.skip("Login failed")
         for i in [f] + list(r):
             assert isinstance(i["data"], list)
             storage.extend(i["data"])
@@ -124,7 +124,7 @@ async def published(raw: QzoneWebRawAPI):
 class TestUpload:
     async def test_publish(self, published: Optional[dict]):
         if published is None:
-            pytest.xfail("login failed")
+            pytest.skip("login failed")
             # should fail this entire class
 
     async def test_comment(self, raw: QzoneWebRawAPI, published: Optional[dict]):
@@ -152,14 +152,14 @@ class TestWebAPI:
         try:
             assert await api.get_feeds_count()
         except LoginError:
-            pytest.xfail("Login failed")
+            pytest.skip("Login failed")
 
     async def test_more(self, api: QzoneWebAPI, storage: list):
         try:
             f = await api.feeds3_html_more(0)
             r = await asyncio.gather(*(api.feeds3_html_more(i) for i in range(1, 3)))
         except LoginError:
-            pytest.xfail("Login failed")
+            pytest.skip("Login failed")
         for i in [f] + list(r):
             assert isinstance(i.feeds, list)
             assert i.aux.dayspac >= 0
@@ -169,7 +169,7 @@ class TestWebAPI:
     @pytest.mark.skip("this test fails by chance for upstream reason")
     async def test_complete(self, api: QzoneWebAPI, storage: List[FeedRep]):
         if not storage:
-            pytest.xfail("storage is empty")
+            pytest.skip("storage is empty")
         f: Optional[FeedRep] = first(storage, default=None)
         assert f
         from aioqzone.utils.html import HtmlInfo
@@ -179,7 +179,7 @@ class TestWebAPI:
 
     async def test_detail(self, api: QzoneWebAPI, storage: List[FeedRep]):
         if not storage:
-            pytest.xfail("storage is empty")
+            pytest.skip("storage is empty")
         for f in storage:
             try:
                 assert await api.emotion_msgdetail(f.uin, f.fid)
@@ -188,7 +188,7 @@ class TestWebAPI:
 
     async def test_photo_list(self, api: QzoneWebAPI, storage: List[FeedRep]):
         if not storage:
-            pytest.xfail("storage is empty")
+            pytest.skip("storage is empty")
         f: Optional[HtmlContent] = first(
             (HtmlContent.from_html(i.html, i.uin) for i in storage),
             lambda t: bool(t.pic),

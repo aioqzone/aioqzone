@@ -24,7 +24,7 @@ pytestmark = pytest.mark.asyncio
 
 @pytest_asyncio.fixture(scope="module")
 async def captcha(client: ClientAdapter, env: test_env):
-    login = UpWebLogin(client, env.uin, env.pwd.get_secret_value())
+    login = UpWebLogin(client, env.uin, env.password.get_secret_value())
     upsess = await login.new()
     await login.check(upsess)
     captcha = login.captcha(upsess.check_rst.session)

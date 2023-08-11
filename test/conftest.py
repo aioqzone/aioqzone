@@ -14,8 +14,8 @@ from qqqr.utils.net import ClientAdapter
 class test_env(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="test_")
     uin: int = 0
-    pwd: SecretStr = Field(default="")
-    order: List[LoginMethod] = ["qr"]
+    password: SecretStr = Field(default="")
+    order: List[LoginMethod] = ["up"]
 
 
 @pytest.fixture(scope="session")

@@ -33,7 +33,6 @@ class LoginError(RuntimeError):
         msg: str,
         methods_tried: Sequence,
     ) -> None:
-        msg = "登陆失败: " + msg
         super().__init__(msg, methods_tried)
         self.msg = msg
         self.methods_tried = tuple(methods_tried or ())
