@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../../source/aioqzone/messages.rst:2
 msgid "Messages"
-msgstr ""
+msgstr "消息"
 
 #: aioqzone.message.login_failed aioqzone.message.login_success of qqqr.message.qr_fetched
 #: qqqr.message.sms_code_input qqqr.message.sms_code_required

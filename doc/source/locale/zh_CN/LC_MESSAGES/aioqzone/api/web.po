@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../../source/aioqzone/api/web.rst:2
 msgid "Qzone Web API"
-msgstr ""
+msgstr "Qzone Web 接口"
 
 #: aioqzone.api.web.model.QzoneWebAPI:1 of
 msgid ""
@@ -32,7 +32,7 @@ msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI:5 of
 msgid "rename to ``QzoneWebAPI``"
-msgstr ""
+msgstr "更名为 ``QzoneWebAPI``"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments:1 of
 msgid "Get complete html of a given feed"

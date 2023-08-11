@@ -26,10 +26,7 @@ class Loginable(ABC):
 
     @property
     def cookie(self) -> Dict[str, str]:
-        """Get a cookie dict using any method. Allows cached cookie.
-
-        :return: cookie. Cached cookie is preferable.
-        """
+        """Cached cookie."""
         return self._cookie
 
     @abstractmethod
@@ -64,7 +61,7 @@ class Loginable(ABC):
 
     @property
     def gtk(self) -> int:
-        """Calculate ``gtk`` using ``pskey`` filed in the cookie.
+        """Calculate ``gtk`` using ``pskey`` field in the cookie.
 
         :return: gtk
 

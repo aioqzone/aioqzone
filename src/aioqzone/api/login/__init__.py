@@ -1,6 +1,6 @@
 """
-Collect some built-in login manager w/o caching.
-Users can inherit these managers and implement their own caching logic.
+Collect some built-in login manager without persistant cookie.
+Users can inherit these managers and implement their own persistance logic.
 
 .. versionchanged:: 0.14.0
 
@@ -48,10 +48,6 @@ class ConstLoginMan(Loginable):
 class UnifiedLoginManager(Loginable):
     """A login manager that will try methods according to the given :obj:`.order`.
 
-    .. versionchanged:: 0.12.0
-
-        Make it a :class:`EventManager`.
-
     .. versionchanged:: 0.14.0
 
         Renamed to ``UnifiedLoginManager``.
@@ -92,6 +88,8 @@ class UnifiedLoginManager(Loginable):
 
     @property
     def order(self):
+        """Returns order of :obj:`LoginMethod`. Assign a :obj:`LoginMethod` :obj:`Sequence` to this to
+        change the order of :obj:`LoginMethod`."""
         return self._order
 
     @order.setter
@@ -169,7 +167,7 @@ class UnifiedLoginManager(Loginable):
     async def _new_cookie(self) -> Dict[str, str]:
         """
         :meta public:
-        :raise `aioqzone.exception.SkipLoginInterrupt`: if all login methods are removed by subclasses.
+        :raise `aioqzone.exception.SkipLoginInterrupt`: if :obj:`.order` returns an empty list.
         :raise `aioqzone.exception.LoginError`: if all login methods failed.
 
         :return: cookie dict

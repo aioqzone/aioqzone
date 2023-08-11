@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-10 13:52+0800\n"
+"POT-Creation-Date: 2023-08-11 16:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -21,28 +21,20 @@ msgstr ""
 
 #: ../../source/aioqzone/api/login.rst:2
 msgid "Login Managers"
+msgstr "登陆管理器"
+
+#: ../../source/aioqzone/api/login.rst:7
+#, fuzzy
+msgid "Loginable"
 msgstr ""
 
-#: aioqzone.api.login:1 of
-msgid ""
-"Collect some built-in login manager w/o caching. Users can inherit these managers and implement "
-"their own caching logic."
-msgstr ""
-
-#: aioqzone.api.login:6 of
-msgid ""
-"Removed ``UPLoginMan`` and ``QRLoginMan``. Renamed ``MixedLoginMan`` to "
-":class:`UnifiedLoginManager`. For the removed managers, use :class:`.UnifiedLoginManager` "
-"instead."
-msgstr ""
-
-#: aioqzone.api.login.ConstLoginMan:1 of
-msgid "A basic login manager which uses external provided cookie."
-msgstr ""
+#: aioqzone.api.login._base.Loginable:1 of
+msgid "Abstract class represents a login manager."
+msgstr "登陆管理器的抽象类"
 
 #: aioqzone.api.login.ConstLoginMan._new_cookie:1 aioqzone.api.login._base.Loginable._new_cookie:1 of
 msgid "Subclasses *must* implement this method to return a cookie dict."
-msgstr ""
+msgstr "子类必须实现此方法，返回一个 **非缓存的** cookie 字典。"
 
 #: aioqzone.api.login.ConstLoginMan._new_cookie aioqzone.api.login.UnifiedLoginManager._new_cookie
 #: aioqzone.api.login._base.Loginable._new_cookie of
@@ -54,9 +46,8 @@ msgstr ""
 msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
 msgstr ""
 
-#: aioqzone.api.login.ConstLoginMan._new_cookie aioqzone.api.login.ConstLoginMan.cookie
-#: aioqzone.api.login.Loginable.cookie aioqzone.api.login.Loginable.gtk
-#: aioqzone.api.login.UnifiedLoginManager._new_cookie aioqzone.api.login._base.Loginable._new_cookie
+#: aioqzone.api.login.ConstLoginMan._new_cookie aioqzone.api.login.UnifiedLoginManager._new_cookie
+#: aioqzone.api.login._base.Loginable._new_cookie aioqzone.api.login._base.Loginable.gtk
 #: aioqzone.api.login._base.Loginable.new_cookie of
 msgid "返回"
 msgstr ""
@@ -64,84 +55,96 @@ msgstr ""
 #: aioqzone.api.login.ConstLoginMan._new_cookie:5 aioqzone.api.login.UnifiedLoginManager._new_cookie:6
 #: aioqzone.api.login._base.Loginable._new_cookie:5 of
 msgid "cookie dict"
-msgstr ""
+msgstr "cookie 字典"
 
-#: aioqzone.api.login.ConstLoginMan.cookie:1 aioqzone.api.login.Loginable.cookie:1 of
-msgid "Get a cookie dict using any method. Allows cached cookie."
-msgstr ""
+#: aioqzone.api.login.ConstLoginMan.cookie:1 aioqzone.api.login._base.Loginable.cookie:1 of
+msgid "Cached cookie."
+msgstr "缓存的 cookie"
 
-#: aioqzone.api.login.ConstLoginMan.cookie:3 aioqzone.api.login.Loginable.cookie:3 of
-msgid "cookie. Cached cookie is preferable."
-msgstr ""
+#: aioqzone.api.login._base.Loginable.gtk:1 of
+#, fuzzy
+msgid "Calculate ``gtk`` using ``pskey`` field in the cookie."
+msgstr "使用 cookie 中的 ``pskey`` 字段计算 gtk。"
 
-#: aioqzone.api.login._base.Loginable:1 of
-msgid "Abstract class represents a login manager."
-msgstr ""
-
-#: aioqzone.api.login.Loginable.gtk:1 of
-msgid "Calculate ``gtk`` using ``pskey`` filed in the cookie."
-msgstr ""
-
-#: aioqzone.api.login.Loginable.gtk:3 of
+#: aioqzone.api.login._base.Loginable.gtk:3 of
 msgid "gtk"
 msgstr ""
 
-#: aioqzone.api.login.Loginable.gtk:5 of
+#: aioqzone.api.login._base.Loginable.gtk:5 of
 msgid "``0`` denotes no existing login."
-msgstr ""
+msgstr "``0`` 表示登录失效/不存在。"
 
-#: aioqzone.api.login.Loginable.gtk:6 of
+#: aioqzone.api.login._base.Loginable.gtk:6 of
 msgid ":meth:`qqqr.utils.encrypt.gtk`"
 msgstr ""
 
-#: ../../../docstring aioqzone.api.login.Loginable.last_login:1 of
+#: ../../../docstring aioqzone.api.login._base.Loginable.last_login:1 of
 msgid "Last login time stamp. 0 represents no login since created."
-msgstr ""
+msgstr "上次登录的时间戳。0表示自初始化以来未曾登录。"
 
 #: aioqzone.api.login._base.Loginable.new_cookie:1 of
 msgid ""
 "Get a new cookie dict, which means cached cookie is not allowed. Generally, this will trigger a "
 "login."
-msgstr ""
+msgstr "获得新 cookie，即不允许返回缓存的 cookie。通常来说，这意味着触发登录。"
 
 #: aioqzone.api.login._base.Loginable.new_cookie:4 of
 msgid ""
 "This method uses :class:`asyncio.Lock` to ensure that only one request can trigger an actual "
 "login at the same time, other requests will block until the first is complete and share the "
 "cookie from this single login."
-msgstr ""
+msgstr "此方法使用 :class:`asyncio.Lock` 确保只有一个请求会真正地出发登录，期间的其余请求会被阻塞，在登录结束后复用其返回值。"
 
 #: aioqzone.api.login._base.Loginable.new_cookie:8 of
 msgid "cookie. Shouldn't be a cached one."
-msgstr ""
+msgstr "cookie 字典。不允许返回缓存的 cookie。"
+
+#: ../../source/aioqzone/api/login.rst:13
+#, fuzzy
+msgid "Built-in Login Managers"
+msgstr "内建的登陆管理器"
+
+#: aioqzone.api.login:1 of
+msgid ""
+"Collect some built-in login manager without persistant cookie. Users can inherit these managers "
+"and implement their own persistance logic."
+msgstr "包含了一些内建的登陆管理器，这些管理器没有 cookie 持久化的功能。用户可以继承这些管理器并自行实现 cookie 持久化。"
+
+#: aioqzone.api.login:6 of
+msgid ""
+"Removed ``UPLoginMan`` and ``QRLoginMan``. Renamed ``MixedLoginMan`` to "
+":class:`UnifiedLoginManager`. For the removed managers, use :class:`.UnifiedLoginManager` "
+"instead."
+msgstr "移除 ``UPLoginMan`` 和 ``QRLoginMan``, ``MixedLoginMan`` 改名为 :class:`UnifiedLoginManager`。移除的登录器可以由"
+" :class:`UnifiedLoginManager` 替代。"
+
+#: aioqzone.api.login.ConstLoginMan:1 of
+msgid "A basic login manager which uses external provided cookie."
+msgstr "一个使用外部提供的 cookie 的登录管理器。"
 
 #: aioqzone.api.login.UnifiedLoginManager:1 of
 msgid "A login manager that will try methods according to the given :obj:`.order`."
-msgstr ""
+msgstr "一个根据给定 :obj:`.order` 尝试登录的登录管理器。"
 
 #: aioqzone.api.login.UnifiedLoginManager:5 of
-msgid "Make it a :class:`EventManager`."
-msgstr ""
-
-#: aioqzone.api.login.UnifiedLoginManager:9 of
 msgid "Renamed to ``UnifiedLoginManager``."
-msgstr ""
+msgstr "更名为 ``UnifiedLoginManager``"
 
 #: aioqzone.api.login.UnifiedLoginManager._new_cookie of
 msgid "抛出"
 msgstr ""
 
 #: aioqzone.api.login.UnifiedLoginManager._new_cookie:2 of
-msgid "if all login methods are removed by subclasses."
-msgstr ""
+msgid "if :obj:`.order` returns an empty list."
+msgstr "若 :obj:`.order` 返回了空列表。"
 
 #: aioqzone.api.login.UnifiedLoginManager._new_cookie:3 of
 msgid "if all login methods failed."
-msgstr ""
+msgstr "若所有登录方法均失败。"
 
 #: aioqzone.api.login.UnifiedLoginManager.h5:1 of
 msgid "Change :obj:`.qrlogin` and :obj:`.uplogin` to h5 login proxy."
-msgstr ""
+msgstr "将 :obj:`.qrlogin` 和 :obj:`.uplogin` 切换到H5登录。"
 
 #: aioqzone.api.login.UnifiedLoginManager.h5 of
 msgid "参数"
@@ -149,12 +152,73 @@ msgstr ""
 
 #: aioqzone.api.login.UnifiedLoginManager.h5:4 of
 msgid "use h5 mode or not"
-msgstr ""
+msgstr "是否以H5登录"
 
 #: aioqzone.api.login.UnifiedLoginManager.h5:6 of
 msgid "remove existing login cookie in :obj:`~Loginable.cookie`!"
-msgstr ""
+msgstr "移除 :obj:`~Loginable.cookie` 中缓存的 cookie！"
 
 #: aioqzone.api.login.UnifiedLoginManager.h5:10 of
 msgid "Allow user to switch h5 back; Allow to skip clearing cookie."
-msgstr ""
+msgstr "允许用户切换到web登录；允许跳过清除 cookie。"
+
+#: aioqzone.api.login.UnifiedLoginManager.order:1 of
+#, fuzzy
+msgid ""
+"Returns order of :obj:`LoginMethod`. Assign a :obj:`LoginMethod` :obj:`Sequence` to this to "
+"change the order of :obj:`LoginMethod`."
+msgstr "返回 :obj:`LoginMethod` 的顺序。也可以赋值一个 :obj:`LoginMethod` 的 :obj:`Sequence` 来改变此顺序。"
+
+#~ msgid ""
+#~ "Collect some built-in login manager w/o caching."
+#~ " Users can inherit these managers and implement "
+#~ "their own caching logic."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Removed ``UPLoginMan`` and ``QRLoginMan``. Renamed "
+#~ "``MixedLoginMan`` to :class:`UnifiedLoginManager`. For the "
+#~ "removed managers, use :class:`.UnifiedLoginManager` instead."
+#~ msgstr ""
+
+#~ msgid "A basic login manager which uses external provided cookie."
+#~ msgstr ""
+
+#~ msgid "A login manager that will try methods according to the given :obj:`.order`."
+#~ msgstr ""
+
+#~ msgid "Make it a :class:`EventManager`."
+#~ msgstr ""
+
+#~ msgid "Renamed to ``UnifiedLoginManager``."
+#~ msgstr ""
+
+#~ msgid "抛出"
+#~ msgstr ""
+
+#~ msgid "if all login methods are removed by subclasses."
+#~ msgstr ""
+
+#~ msgid "if all login methods failed."
+#~ msgstr ""
+
+#~ msgid "Change :obj:`.qrlogin` and :obj:`.uplogin` to h5 login proxy."
+#~ msgstr ""
+
+#~ msgid "参数"
+#~ msgstr ""
+
+#~ msgid "use h5 mode or not"
+#~ msgstr ""
+
+#~ msgid "remove existing login cookie in :obj:`~Loginable.cookie`!"
+#~ msgstr ""
+
+#~ msgid "Allow user to switch h5 back; Allow to skip clearing cookie."
+#~ msgstr ""
+
+#~ msgid "Get a cookie dict using any method. Allows cached cookie."
+#~ msgstr "获取 cookie 字典，允许返回缓存的 cookie。"
+
+#~ msgid "cookie. Cached cookie is preferable."
+#~ msgstr ""
