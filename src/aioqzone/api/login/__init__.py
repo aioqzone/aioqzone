@@ -180,14 +180,12 @@ class UnifiedLoginManager(Loginable):
         log.info(f"Methods selected for this login: {methods}")
         loginables = dict(up=self._try_up_login, qr=self._try_qr_login)
 
-        msg = ""
-        methods_tried: List[LoginMethod] = []
+        reasons: Dict[LoginMethod, str] = {}
         fail_with = lambda meth, msg: self.channel.add_awaitable(
             self.login_failed.emit(uin=self.uin, method=meth, exc=str(msg))
         )
 
         for m in methods:
-            methods_tried.append(m)
             try:
                 result = await loginables[m]()
             except BaseException as e:
@@ -196,12 +194,11 @@ class UnifiedLoginManager(Loginable):
 
             if isinstance(result, str):
                 fail_with(m, result)
-                meth_name = dict(qr="二维码登录", up="密码登录")[m]
-                msg += f"{meth_name}: {result}\n"
+                reasons[m] = result
             else:
                 return result
 
-        raise LoginError(msg, methods_tried=methods_tried)
+        raise LoginError(reasons=reasons)
 
     def h5(self, enable=True, clear_cookie=True):
         """Change :obj:`.qrlogin` and :obj:`.uplogin` to h5 login proxy.

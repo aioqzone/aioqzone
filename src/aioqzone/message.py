@@ -1,11 +1,18 @@
-from typing import Literal, Union
-
 from pydantic import BaseModel
 from tylisten import BaseMessage
 
+from aioqzone.model import LoginMethod
 from qqqr.message import *
 
-LoginMethod = Union[Literal["qr"], Literal["up"]]
+__all__ = [
+    "qr_cancelled",
+    "qr_fetched",
+    "qr_refresh",
+    "sms_code_input",
+    "sms_code_required",
+    "login_success",
+    "login_failed",
+]
 
 
 class login_success(BaseModel, BaseMessage):

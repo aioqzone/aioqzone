@@ -7,7 +7,7 @@ from httpx import AsyncClient
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from aioqzone.message import LoginMethod
+from aioqzone.model import LoginMethod
 from qqqr.utils.net import ClientAdapter
 
 

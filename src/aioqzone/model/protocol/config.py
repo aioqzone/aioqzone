@@ -1,5 +1,9 @@
+from typing import Literal, Union
+
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings
+
+LoginMethod = Union[Literal["qr"], Literal["up"]]
 
 
 class LoginConfig(BaseSettings):
