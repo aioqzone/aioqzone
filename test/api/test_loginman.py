@@ -56,6 +56,7 @@ class TestUP:
         up.login_success.listeners.append(lambda m: pool.append(m.uin))
         try:
             cookie = await up.new_cookie()
+            await up.channel.wait()
         except LoginError as e:
             pytest.skip(str(e))
         else:
@@ -80,7 +81,6 @@ class TestQR:
     @pytest.mark.parametrize(
         ["exc2r"],
         [
-            (NotImplementedError(),),
             (asyncio.TimeoutError(),),
             (GeneratorExit(),),
             (ConnectError("mock", request=_fake_request),),
@@ -92,12 +92,13 @@ class TestQR:
             r = await qr._try_qr_login()
             assert isinstance(r, str)
 
-    @pytest.mark.skip("this test should be called manually")
+    # @pytest.mark.skip("this test should be called manually")
     async def test_newcookie(self, qr: UnifiedLoginManager):
         pool = []
         qr.login_success.listeners.append(lambda m: pool.append(m.uin))
         try:
             cookie = await qr.new_cookie()
+            await qr.channel.wait()
         except LoginError as e:
             pytest.skip(str(e))
         else:

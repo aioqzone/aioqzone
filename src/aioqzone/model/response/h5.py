@@ -181,8 +181,8 @@ class HasSummary(BaseModel):
 
 
 class HasMedia(BaseModel):
-    pic: Optional[FeedPic]
-    video: Optional[FeedVideo]
+    pic: Optional[FeedPic] = None
+    video: Optional[FeedVideo] = None
 
 
 class HasFid(BaseModel):
@@ -222,7 +222,7 @@ class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
     like: LikeInfo = Field(default_factory=LikeInfo)
 
     comment: FeedComment = Field(default_factory=FeedComment)
-    original: Union[FeedOriginal, Share, None]
+    original: Union[FeedOriginal, Share, None] = None
     share_info: ShareInfo = Field(default_factory=ShareInfo)
 
     @model_validator(mode="before")

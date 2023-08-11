@@ -20,19 +20,9 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.asyncio
 
 
-@pytest.fixture(scope="class")
-def h5(client: ClientAdapter, env: test_env):
-    yield UnifiedLoginManager(
-        client,
-        up_config=UpLoginConfig(uin=env.uin, pwd=env.password),
-        qr_config=QrLoginConfig(uin=env.uin),
-        h5=True,
-    )
-
-
 @pytest_asyncio.fixture(scope="class")
-async def raw(client: ClientAdapter, h5: UnifiedLoginManager):
-    yield QzoneH5RawAPI(client, h5)
+async def raw(client: ClientAdapter, man: UnifiedLoginManager):
+    yield QzoneH5RawAPI(client, man)
 
 
 @pytest.fixture(scope="class")
@@ -65,8 +55,8 @@ class TestH5RawAPI:
 
 
 @pytest_asyncio.fixture(scope="class")
-async def api(client: ClientAdapter, h5: UnifiedLoginManager):
-    yield QzoneH5API(client, h5)
+async def api(client: ClientAdapter, man: UnifiedLoginManager):
+    yield QzoneH5API(client, man)
 
 
 class TestH5API:
@@ -106,14 +96,14 @@ class TestH5API:
 
 
 @pytest.mark.skip("this test should be called manually")
-async def test_h5_up_login(client: ClientAdapter, h5: UnifiedLoginManager):
-    h5.order = ["qr"]
-    api = QzoneH5API(client, h5)
+async def test_h5_up_login(client: ClientAdapter, man: UnifiedLoginManager):
+    man.order = ["qr"]
+    api = QzoneH5API(client, man)
 
     with suppress(ImportError):
         from PIL import Image as image
 
-        h5.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
+        man.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
 
     d = await api.mfeeds_get_count()
     print(d.active_cnt)
