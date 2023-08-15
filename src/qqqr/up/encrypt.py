@@ -25,7 +25,6 @@ PUBKEY = PublicKey(
 class PasswdEncoder(ABC):
     def __init__(self, passwd: str) -> None:
         super().__init__()
-        assert passwd, "password should not be empty"
         self._passwd = passwd
 
     @abstractmethod
@@ -132,6 +131,7 @@ class TeaEncoder(PasswdEncoder):
         return bytes(e)
 
     async def encode(self, salt: str, verifycode: str, *, is_safe=False) -> str:
+        assert len(self._passwd) >= 8, "password.length in [8, 16]"
         # verifycode先转换为大写，然后转换为bytes
         vcode = hexlify(verifycode.upper().encode())
 

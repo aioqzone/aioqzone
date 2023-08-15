@@ -5,6 +5,7 @@ aioqzone
     :maxdepth: 2
 
     api/index
-    api/loginman
+    api/login
+    messages
+    model/index
     exception
-    type/index

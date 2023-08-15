@@ -5,7 +5,7 @@ from typing import Callable, Dict, List, Optional, Tuple, Union
 
 from lxml.html import fromstring
 
-from aioqzone.api.loginman import Loginable
+from aioqzone.api.login import Loginable
 from aioqzone.exception import QzoneError
 from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import entire_closing, response_callback
@@ -99,7 +99,11 @@ class QzoneH5RawAPI:
             The exceptions this wrapper may raise depends on the login manager you passed in.
             Any exceptions irrelevent to "login needed" will be passed through w/o any change.
 
-            :raises: All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager you passed in.
+            :raises:
+                All errors that may be raised from :meth:`Loginable.new_cookie`, which depends on
+                the login manager you are using. If you use our built-in manager,
+                :class:`aioqzone.api.loginman.UnifiedLoginManager`,
+                :exc:`SkipLoginInterrupt` and :exc:`LoginError` may be raised.
             """
 
             with QzoneErrorDispatch() as qze, HTTPStatusErrorDispatch() as hse:
@@ -145,7 +149,7 @@ class QzoneH5RawAPI:
             if cb:
                 match = response_callback.search(robj)
                 assert match
-                robj = match.group(1)
+                robj = str(match.group(1))
             r = json_loads(robj)
         else:
             r = robj
@@ -169,7 +173,7 @@ class QzoneH5RawAPI:
     async def index(self) -> StrDict:
         """This api is the redirect page after h5 login, which is also the landing (main) page of h5 qzone.
 
-        :raise RuntimeError: if any failure occurs in data parsing.
+        :raise `RuntimeError`: if any failure occurs in data parsing.
         """
 
         @self._relogin_retry
@@ -203,8 +207,8 @@ class QzoneH5RawAPI:
         return self._rtext_handler(data, cb=False, errno_key=("code", "ret"), data_key="data")
 
     async def get_active_feeds(self, attach_info: str) -> StrDict:
-        """Get next page. If :obj:`.qzonetoken` is not parsed or `attach_info` is empty,
-        it will call :meth:`index` and return its response.
+        """Get next page. If :obj:`.qzonetoken` is not parsed or :obj:`attach_info` is empty,
+        it will call :meth:`.index` and return its response.
 
         :param attach_info: The ``attach_info`` field from last call.
             Pass an empty string equals to call :meth:`.index`.
@@ -235,7 +239,7 @@ class QzoneH5RawAPI:
     async def shuoshuo(self, fid: str, hostuin: int, appid=311, busi_param: str = ""):
         """This can be used to get the detailed summary of a feed.
 
-        :param fid: aka. cellid
+        :param fid: aka. ``cellid``
         :param hostuin: uin of the owner of the given feed
         :param appid: appid of the given feed, default as 311
         :param busi_param: optional encoded params

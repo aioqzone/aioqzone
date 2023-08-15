@@ -1,4 +1,4 @@
 from .h5 import UpH5Login
-from .web import UpEvent, UpWebLogin
+from .web import UpWebLogin
 
-__all__ = ["UpEvent", "UpH5Login", "UpWebLogin"]
+__all__ = ["UpH5Login", "UpWebLogin"]

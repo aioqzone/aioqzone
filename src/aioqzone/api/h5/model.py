@@ -3,7 +3,7 @@ from typing import Type, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from aioqzone.type.resp.h5 import FeedCount, FeedPageResp, GetMoreResp
+from aioqzone.model import FeedCount, FeedPageResp, GetMoreResp
 
 from .raw import QzoneH5RawAPI
 
@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 def _parse_obj(model: Type[_model], o: object) -> _model:
     try:
-        return model.parse_obj(o)
+        return model.model_validate(o)
     except ValidationError:
         log.debug(o)
         raise

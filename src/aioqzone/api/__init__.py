@@ -1,5 +1,12 @@
 from .h5 import QzoneH5API
-from .loginman import Loginable, MixedLoginMan
-from .web import QzoneWebAPI
+from .login import *
+from .login._base import Loginable
 
-__all__ = ["Loginable", "MixedLoginMan", "QzoneH5API", "QzoneWebAPI"]
+__all__ = [
+    "UnifiedLoginManager",
+    "LoginMethod",
+    "QrLoginConfig",
+    "UpLoginConfig",
+    "Loginable",
+    "QzoneH5API",
+]

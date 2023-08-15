@@ -5,7 +5,7 @@ from httpx import URL
 
 from qqqr.constant import StatusCode
 
-from .type import CheckResp, LoginResp
+from ._model import CheckResp, LoginResp
 from .web import UpWebLogin, UpWebSession
 
 log = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ class UpH5Login(UpWebLogin):
                 rl,
             )
         )
-        sess.set_check_result(CheckResp.parse_obj(rdict))
+        sess.set_check_result(CheckResp.model_validate(rdict))
 
     async def try_login(self, sess: UpWebSession):
         """
@@ -97,7 +97,7 @@ class UpH5Login(UpWebLogin):
             response.raise_for_status()
 
         rl = re.findall(r"'(.*?)'[,\)]", response.text)
-        resp = LoginResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
+        resp = LoginResp.model_validate(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
         if resp.code == StatusCode.NeedSmsVerify:
             sess.sms_ticket = response.cookies.get("pt_sms_ticket") or ""
         log.debug(resp)

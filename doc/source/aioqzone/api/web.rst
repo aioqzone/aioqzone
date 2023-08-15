@@ -1,5 +1,5 @@
 Qzone Web API
 =======================================
 
-.. autoclass:: aioqzone.api.QzoneWebAPI
+.. autoclass:: aioqzone.api.web.QzoneWebAPI
     :members:

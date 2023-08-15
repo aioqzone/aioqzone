@@ -42,7 +42,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::pytest outputs"
-          poetry run pytest test
+          poetry run pytest test --log-cli-level=WARNING
           echo "::endgroup::"
 
       - name: Install and Test w/ Extras
@@ -55,7 +55,9 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::pytest outputs"
-          poetry run pytest test/login/test_captcha.py test/login/test_jigsaw.py
+          poetry run pytest --log-cli-level=WARNING \
+            test/login_logic/test_captcha.py \
+            test/login_logic/test_jigsaw.py
           echo "::endgroup::"
 
       - name: Request Changes
