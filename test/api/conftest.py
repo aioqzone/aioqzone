@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 from contextlib import suppress
+from os import environ
 from typing import TYPE_CHECKING
 
 import pytest
@@ -21,6 +22,11 @@ def man(client: ClientAdapter, env: test_env):
         qr_config=QrLoginConfig(uin=env.uin),
     )
     man.order = env.order
+
+    if environ.get("CI"):
+        yield man
+        return
+
     with suppress(ImportError):
         from PIL import Image as image
 

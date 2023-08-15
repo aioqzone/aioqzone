@@ -1,6 +1,7 @@
 import asyncio
 import io
 from contextlib import suppress
+from os import environ
 
 import pytest
 import pytest_asyncio
@@ -13,6 +14,7 @@ from qqqr.qr import QrLogin, QrSession
 from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
+skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 
 @pytest_asyncio.fixture(scope="class")
@@ -43,7 +45,7 @@ class TestSession:
 
 
 class TestLoop:
-    @pytest.mark.skip("this test should be called manually")
+    @skip_ci
     async def test_loop(self, login: QrLogin):
         cookie = await login.login()
         assert cookie["p_skey"]

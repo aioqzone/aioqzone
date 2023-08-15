@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import io
 from contextlib import ExitStack, suppress
+from os import environ
 from typing import TYPE_CHECKING, List, Tuple, cast
 from unittest.mock import patch
 
@@ -21,6 +22,7 @@ if TYPE_CHECKING:
     from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
+skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 _fake_request = cast(Request, ...)
 _fake_http_error = HTTPError("mock")
@@ -91,7 +93,7 @@ class TestQR:
             r = await qr._try_qr_login()
             assert isinstance(r, str)
 
-    # @pytest.mark.skip("this test should be called manually")
+    @skip_ci
     async def test_newcookie(self, qr: UnifiedLoginManager):
         pool = []
         qr.login_success.listeners.append(lambda m: pool.append(m.uin))

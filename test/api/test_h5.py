@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 from contextlib import suppress
+from os import environ
 
 import pytest
 import pytest_asyncio
@@ -13,6 +14,7 @@ from aioqzone.exception import LoginError
 from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
+skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 
 @pytest_asyncio.fixture(scope="class")
@@ -90,7 +92,7 @@ class TestH5API:
             pytest.skip("login failed")
 
 
-@pytest.mark.skip("this test should be called manually")
+@skip_ci
 async def test_h5_qr_login(client: ClientAdapter, man: UnifiedLoginManager):
     man.order = ["qr"]
     api = QzoneH5API(client, man)
