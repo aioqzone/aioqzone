@@ -1,4 +1,8 @@
-from typing import Sequence
+from typing import Mapping
+
+from aioqzone.model import LoginMethod
+
+_meth_name = dict(up="密码登录", qr="二维码登录")  # type: dict[LoginMethod, str]
 
 
 class QzoneError(RuntimeError):
@@ -22,24 +26,27 @@ class LoginError(RuntimeError):
 
     .. versionchanged:: 0.12.9
 
-        :.obj:`.methods_tried` is not optional.
-    """
+        ``methods_tried`` is not optional.
 
-    methods_tried: tuple
-    """Login methods that have been tried in this login."""
+    .. versionchanged:: 0.14.1
+
+        ``msg`` and ``methods_tried`` is merged to a single parameter :obj:`reasons`.
+    """
 
     def __init__(
         self,
-        msg: str,
-        methods_tried: Sequence,
+        reasons: Mapping[LoginMethod, str],
     ) -> None:
-        msg = "登陆失败: " + msg
-        super().__init__(msg, methods_tried)
-        self.msg = msg
-        self.methods_tried = tuple(methods_tried or ())
+        super().__init__(reasons)
+        self.reasons = reasons
+
+    @property
+    def methods_tried(self):
+        """Login methods that have been tried in this login."""
+        return tuple(self.reasons.keys())
 
     def __str__(self) -> str:
-        return f"{self.msg} (tried={self.methods_tried})"
+        return "；".join(f"{_meth_name[k]}：{v}" for k, v in self.reasons.items())
 
 
 class CorruptError(ValueError):

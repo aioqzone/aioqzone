@@ -19,4 +19,4 @@ msgstr ""
 
 #: ../../source/aioqzone/api/index.rst:2
 msgid "Qzone APIs"
-msgstr ""
+msgstr "Qzone 接口"

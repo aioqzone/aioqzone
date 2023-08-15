@@ -1,22 +1,23 @@
+import asyncio
 import logging
 import re
-from os import environ as env
+from contextlib import suppress
 from random import choice, random
 from time import time_ns
 from typing import List, Optional
 
 from httpx import URL
+from tylisten import Emitter, VirtualEmitter
 
+import qqqr.message as MT
 from qqqr.base import LoginBase, LoginSession
 from qqqr.constant import StatusCode
-from qqqr.event import Emittable
-from qqqr.event.login import UpEvent
 from qqqr.exception import TencentLoginError
 from qqqr.type import APPID, PT_QR_APP, Proxy
 from qqqr.utils.net import ClientAdapter
 
+from ._model import CheckResp, LoginResp, VerifyResp
 from .encrypt import PasswdEncoder, TeaEncoder
-from .type import CheckResp, LoginResp, VerifyResp
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
@@ -70,7 +71,14 @@ class UpWebSession(LoginSession):
         return self.check_rst.verifysession
 
 
-class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
+class _UpEmitterMixin:
+    def __init__(self, *args, **kwds) -> None:
+        super().__init__(*args, **kwds)
+        self.sms_code_required = Emitter(MT.sms_code_required)
+        self.sms_code_input: VirtualEmitter[MT.sms_code_input] = VirtualEmitter()
+
+
+class UpWebLogin(_UpEmitterMixin, LoginBase[UpWebSession]):
     """
     .. versionchanged:: 0.12.4
 
@@ -86,14 +94,14 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
     def __init__(
         self,
         client: ClientAdapter,
-        app: APPID,
-        proxy: Proxy,
         uin: int,
         pwd: str,
+        h5=True,
+        app: Optional[APPID] = None,
+        proxy: Optional[Proxy] = None,
         info: Optional[PT_QR_APP] = None,
     ):
-        super().__init__(client, app, proxy, info=info)
-        assert pwd
+        super().__init__(client, h5=h5, app=app, proxy=proxy, info=info)
         self.uin = uin
         self.pwd = pwd
         self.pwder = TeaEncoder(pwd)
@@ -169,7 +177,7 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
                 rl,
             )
         )
-        sess.set_check_result(CheckResp.parse_obj(rdict))
+        sess.set_check_result(CheckResp.model_validate(rdict))
 
     async def send_sms_code(self, sess: UpWebSession):
         """Send verify sms (to get dynamic code)
@@ -234,7 +242,7 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
             response.raise_for_status()
 
         rl = re.findall(r"'(.*?)'[,\)]", response.text)
-        resp = LoginResp.parse_obj(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
+        resp = LoginResp.model_validate(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
         if resp.code == StatusCode.NeedSmsVerify:
             sess.sms_ticket = response.cookies.get("pt_sms_ticket") or ""
         log.debug(resp)
@@ -262,17 +270,19 @@ class UpWebLogin(LoginBase[UpWebSession], Emittable[UpEvent]):
                 log.warning("需用户短信验证")
                 if pastcode == StatusCode.NeedSmsVerify:
                     raise TencentLoginError(resp.code, "重复要求动态验证码")
-                if UpEvent.GetSmsCode.__name__ in self.hook.__dict__:
+                if not self.sms_code_input.connected:
                     # fast return so we won't always request smscode which may risk test account.
                     raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
-                if self.hook.GetSmsCode.__qualname__ == UpEvent.GetSmsCode.__qualname__:
-                    # TODO: bad condition
-                    raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 await self.send_sms_code(sess)
-                try:
-                    sess.sms_code = await self.hook.GetSmsCode(resp.msg, resp.nickname)
-                except:
-                    sess.sms_code = None
+                await self.sms_code_required.emit(
+                    uin=self.uin, phone=resp.msg, nickname=resp.nickname
+                )
+                with suppress(BaseException):
+                    smscode_input_msg = await asyncio.wait_for(
+                        self.sms_code_input.wait(), timeout=60
+                    )
+                    if smscode_input_msg is not None:
+                        sess.sms_code = smscode_input_msg.sms_code
                 if sess.sms_code is None:
                     raise TencentLoginError(resp.code, "未获得动态(SMS)验证码")
             else:

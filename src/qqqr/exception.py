@@ -18,7 +18,8 @@ class TencentLoginError(RuntimeError):
         super().__init__(*args)
 
     def __str__(self) -> str:
-        return f"Code {self.code}({self.subcode}): {self.msg}"
+        subcode = "" if self.subcode is ... else f"({self.subcode})"
+        return f"Code {self.code}{subcode}: {self.msg}"
 
 
 class UserBreak(RuntimeError):
@@ -31,29 +32,3 @@ class UserBreak(RuntimeError):
 
     def __init__(self) -> None:
         super().__init__()
-
-
-class HookError(RuntimeError):
-    """Once we await a hook, we expect that if the hook is broken, it will not mess up our
-    own error handling. It is convenient to wrap an exception raise from hooks with this error.
-
-    If the caller catches a `HookError`, it is recommended to omit the error. If something is broken
-    by the hook, or something must be retrieved by the hook is not available, then it is recommended to
-    reraise the exception.
-
-    Omit the error if you can:
-    >>> try:
-    >>>     await hook_guard(inform_user)('hello')
-    >>> except HookError as e:
-    >>>     log.error("Hook raises an error", exc_info=e.__cause__) # do not reraise
-
-    Reraise only when you have to:
-    >>> try:
-    >>>     need_input(await hook_guard(read_from_user)())
-    >>> except HookError as e:
-    >>>     raise e
-    """
-
-    def __init__(self, hook: Callable) -> None:
-        self.hook = hook
-        super().__init__(f"Error in hook: {hook.__qualname__}")

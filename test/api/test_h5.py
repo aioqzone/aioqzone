@@ -1,35 +1,25 @@
 from __future__ import annotations
 
 import io
-from typing import TYPE_CHECKING
+from contextlib import suppress
+from os import environ
 
 import pytest
 import pytest_asyncio
 
+from aioqzone.api import UnifiedLoginManager
 from aioqzone.api.h5 import QzoneH5API
 from aioqzone.api.h5.raw import QzoneH5RawAPI
-from aioqzone.api.loginman import UPLoginMan
-from aioqzone.event import UPEvent
-from qqqr.exception import TencentLoginError
-
-if TYPE_CHECKING:
-    from test.conftest import test_env
-
-    from qqqr.utils.net import ClientAdapter
+from aioqzone.exception import LoginError
+from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
-
-
-@pytest.fixture(scope="module")
-def h5(client: ClientAdapter, env: test_env):
-    man = UPLoginMan(client, env.uin, env.pwd.get_secret_value(), h5=True)
-    man.register_hook(UPEvent())
-    yield man
+skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 
 @pytest_asyncio.fixture(scope="class")
-async def raw(client: ClientAdapter, h5: UPLoginMan):
-    yield QzoneH5RawAPI(client, h5)
+async def raw(client: ClientAdapter, man: UnifiedLoginManager):
+    yield QzoneH5RawAPI(client, man)
 
 
 @pytest.fixture(scope="class")
@@ -41,8 +31,8 @@ class TestH5RawAPI:
     async def test_index(self, raw: QzoneH5RawAPI, context: dict):
         try:
             d = await raw.index()
-        except TencentLoginError:
-            pytest.xfail("login failed")
+        except LoginError:
+            pytest.skip("login failed")
         if d["hasmore"]:
             context["attach_info"] = d["attachinfo"]
 
@@ -56,22 +46,22 @@ class TestH5RawAPI:
     async def test_heartbeat(self, raw: QzoneH5RawAPI):
         try:
             d = await raw.mfeeds_get_count()
-        except TencentLoginError:
-            pytest.xfail("login failed")
+        except LoginError:
+            pytest.skip("login failed")
         assert "active_cnt" in d
 
 
 @pytest_asyncio.fixture(scope="class")
-async def api(client: ClientAdapter, h5: UPLoginMan):
-    yield QzoneH5API(client, h5)
+async def api(client: ClientAdapter, man: UnifiedLoginManager):
+    yield QzoneH5API(client, man)
 
 
 class TestH5API:
     async def test_index(self, api: QzoneH5API, context: dict):
         try:
             d = await api.index()
-        except TencentLoginError:
-            pytest.xfail("login failed")
+        except LoginError:
+            pytest.skip("login failed")
         context["first_page"] = d.vFeeds
         if d.hasmore:
             context["attach_info"] = d.attachinfo
@@ -98,30 +88,19 @@ class TestH5API:
     async def test_heartbeat(self, api: QzoneH5API):
         try:
             await api.mfeeds_get_count()
-        except TencentLoginError:
-            pytest.xfail("login failed")
+        except LoginError:
+            pytest.skip("login failed")
 
 
-@pytest.mark.skip("this test should be called manually")
-async def test_h5_up_login(client: ClientAdapter, env: test_env):
-    from aioqzone.api.loginman import QREvent, QRLoginMan
-
-    man = QRLoginMan(client, env.uin, h5=True)
+@skip_ci
+async def test_h5_qr_login(client: ClientAdapter, man: UnifiedLoginManager):
+    man.order = ["qr"]
     api = QzoneH5API(client, man)
 
-    hook = QREvent()
-
-    try:
+    with suppress(ImportError):
         from PIL import Image as image
-    except ImportError:
-        pass
-    else:
 
-        async def __qr_fetched(png, times):
-            image.open(io.BytesIO(png)).show()
-
-        hook.QrFetched = __qr_fetched
-    man.register_hook(hook)
+        man.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
 
     d = await api.mfeeds_get_count()
     print(d.active_cnt)

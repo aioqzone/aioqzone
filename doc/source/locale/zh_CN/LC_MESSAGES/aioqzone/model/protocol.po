@@ -1,0 +1,211 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2023, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-10 14:00+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.12.1\n"
+
+#: ../../source/aioqzone/model/protocol.rst:2
+msgid "Protocol Types"
+msgstr ""
+
+#: ../../source/aioqzone/model/protocol.rst:4
+msgid ""
+"These types are not responses from Qzone server. They are protocol types which are used "
+"internally or exposed to users."
+msgstr ""
+
+#: ../../source/aioqzone/model/protocol.rst:8
+msgid "Internal Types"
+msgstr ""
+
+#: aioqzone.model.protocol:1 of
+msgid ""
+"This module defines types that are used internally by aioqzone and its plugins. These types are "
+"not designed to represent responses from Qzone."
+msgstr ""
+
+#: aioqzone.model.protocol.AlbumData aioqzone.model.protocol.LikeData
+#: aioqzone.model.protocol.config.LoginConfig aioqzone.model.protocol.config.QrLoginConfig
+#: aioqzone.model.protocol.config.UpLoginConfig aioqzone.model.protocol.entity.AtEntity
+#: aioqzone.model.protocol.entity.EmEntity aioqzone.model.protocol.entity.HasConEntity
+#: aioqzone.model.protocol.entity.HasContent aioqzone.model.protocol.entity.LinkEntity
+#: aioqzone.model.protocol.entity.TextEntity of
+msgid "Fields"
+msgstr ""
+
+#: aioqzone.model.protocol.AlbumData:1 of
+msgid ":py:obj:`hostuin (int) <aioqzone.model.protocol.AlbumData.hostuin>`"
+msgstr ""
+
+#: aioqzone.model.protocol.AlbumData:1 of
+msgid ":py:obj:`pickey (str) <aioqzone.model.protocol.AlbumData.pickey>`"
+msgstr ""
+
+#: aioqzone.model.protocol.AlbumData:1 of
+msgid ":py:obj:`topicid (str) <aioqzone.model.protocol.AlbumData.topicid>`"
+msgstr ""
+
+#: aioqzone.model.protocol.LikeData:1 of
+msgid ":py:obj:`abstime (int) <aioqzone.model.protocol.LikeData.abstime>`"
+msgstr ""
+
+#: aioqzone.model.protocol.LikeData:1 of
+msgid ":py:obj:`appid (int) <aioqzone.model.protocol.LikeData.appid>`"
+msgstr ""
+
+#: aioqzone.model.protocol.LikeData:1 of
+msgid ":py:obj:`curkey (str) <aioqzone.model.protocol.LikeData.curkey>`"
+msgstr ""
+
+#: aioqzone.model.protocol.LikeData:1 of
+msgid ":py:obj:`fid (str) <aioqzone.model.protocol.LikeData.fid>`"
+msgstr ""
+
+#: aioqzone.model.protocol.LikeData:1 of
+msgid ":py:obj:`typeid (int) <aioqzone.model.protocol.LikeData.typeid>`"
+msgstr ""
+
+#: aioqzone.model.protocol.LikeData:1 of
+msgid ":py:obj:`unikey (str) <aioqzone.model.protocol.LikeData.unikey>`"
+msgstr ""
+
+#: ../../source/aioqzone/model/protocol.rst:15
+msgid "Entities"
+msgstr ""
+
+#: aioqzone.model.protocol.entity:1 of
+msgid ""
+"This module defines feed text entities. Entities take place of \"contents\" since this "
+"simplifies and details the works of rich-text stringify."
+msgstr ""
+
+#: aioqzone.model.protocol.entity.AtEntity:1 of
+msgid "Mention. like: ``@{uin:123456,nick:foobar}``, ``@foobar``"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.AtEntity:3 of
+msgid "Two objects of this class are considered equal, if their :obj:`uin` is equal."
+msgstr ""
+
+#: aioqzone.model.protocol.entity.AtEntity:1 of
+msgid ":py:obj:`nick (str) <aioqzone.model.protocol.entity.AtEntity.nick>`"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.AtEntity:1 of
+msgid ":py:obj:`uin (int) <aioqzone.model.protocol.entity.AtEntity.uin>`"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.ConEntity:1 of
+msgid "Base class for all content entities. All entities has a numeric :obj:`type`."
+msgstr ""
+
+#: aioqzone.model.protocol.entity.EmEntity:1 of
+msgid "Emoji. like: ``[em]e100[/em]``"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.EmEntity:3 of
+msgid "Two objects of this class are considered equal, if their :obj:`eid` is equal."
+msgstr ""
+
+#: aioqzone.model.protocol.entity.EmEntity:1 of
+msgid ":py:obj:`eid (int) <aioqzone.model.protocol.entity.EmEntity.eid>`"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.HasConEntity:1 of
+msgid ""
+":py:obj:`entities (List[aioqzone.model.protocol.entity.ConEntity] | None) "
+"<aioqzone.model.protocol.entity.HasConEntity.entities>`"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.HasContent:1 of
+msgid ":py:obj:`content (str) <aioqzone.model.protocol.entity.HasContent.content>`"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.LinkEntity:1 of
+msgid "Link. like ``{url:https://example.com,text:网页链接}``"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.LinkEntity:1 of
+msgid ":py:obj:`text (str) <aioqzone.model.protocol.entity.LinkEntity.text>`"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.LinkEntity:1 of
+msgid ""
+":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] | str) "
+"<aioqzone.model.protocol.entity.LinkEntity.url>`"
+msgstr ""
+
+#: aioqzone.model.protocol.entity.TextEntity:1 of
+msgid "Text."
+msgstr ""
+
+#: aioqzone.model.protocol.entity.TextEntity:3 of
+msgid "Two objects of this class are considered equal, if their :obj:`con` is equal."
+msgstr ""
+
+#: aioqzone.model.protocol.entity.TextEntity:1 of
+msgid ":py:obj:`con (str) <aioqzone.model.protocol.entity.TextEntity.con>`"
+msgstr ""
+
+#: ../../source/aioqzone/model/protocol.rst:22
+msgid "Login Configs"
+msgstr ""
+
+#: aioqzone.model.protocol.config.LoginConfig:1 of
+msgid ""
+":py:obj:`min_login_interval (float) "
+"<aioqzone.model.protocol.config.LoginConfig.min_login_interval>`"
+msgstr ""
+
+#: aioqzone.model.protocol.config.LoginConfig:1 of
+msgid ":py:obj:`uin (int) <aioqzone.model.protocol.config.LoginConfig.uin>`"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.protocol.config.LoginConfig.min_login_interval:1 of
+msgid "Minimum login interval, in second."
+msgstr ""
+
+#: ../../../docstring aioqzone.model.protocol.config.LoginConfig.uin:1 of
+msgid "Login uin (qq)."
+msgstr ""
+
+#: aioqzone.model.protocol.config.QrLoginConfig:1 of
+msgid ""
+":py:obj:`max_refresh_times (int) "
+"<aioqzone.model.protocol.config.QrLoginConfig.max_refresh_times>`"
+msgstr ""
+
+#: aioqzone.model.protocol.config.QrLoginConfig:1 of
+msgid ":py:obj:`poll_freq (float) <aioqzone.model.protocol.config.QrLoginConfig.poll_freq>`"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.protocol.config.QrLoginConfig.max_refresh_times:1 of
+msgid "Maximum QR code refresh times."
+msgstr ""
+
+#: ../../../docstring aioqzone.model.protocol.config.QrLoginConfig.poll_freq:1 of
+msgid "QR status polling interval."
+msgstr ""
+
+#: aioqzone.model.protocol.config.UpLoginConfig:1 of
+msgid ":py:obj:`pwd (pydantic.types.SecretStr) <aioqzone.model.protocol.config.UpLoginConfig.pwd>`"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.protocol.config.UpLoginConfig.pwd:1 of
+msgid "User password."
+msgstr ""
