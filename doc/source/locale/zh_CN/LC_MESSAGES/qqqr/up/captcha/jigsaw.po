@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-26 21:17+0800\n"
+"POT-Creation-Date: 2023-08-23 12:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Represents the jigsaw piece."
 msgstr ""
 
-#: ../../docstring of qqqr.up.captcha.jigsaw.Piece.bbox:1
+#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.bbox:1
 msgid "The bounding box of the jigsaw piece in [x, y, w, h]"
 msgstr ""
 
@@ -67,7 +67,7 @@ msgstr ""
 msgid "generated piece image."
 msgstr ""
 
-#: ../../docstring of qqqr.up.captcha.jigsaw.Piece.cont:1
+#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.cont:1
 msgid "The contour of the jigsaw piece in [N, 1, 2]i4, the last axis represents (x,y)."
 msgstr ""
 
@@ -81,11 +81,11 @@ msgstr ""
 msgid "Use ::obj`.bbox` to get bounding box of the piece, and :obj:`.padding` to get padding size."
 msgstr ""
 
-#: ../../docstring of qqqr.up.captcha.jigsaw.Piece.img:1
+#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.img:1
 msgid "BGR channel of the jigsaw piece, which is masked by :obj:`.mask`"
 msgstr ""
 
-#: ../../docstring of qqqr.up.captcha.jigsaw.Piece.mask:1
+#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.mask:1
 msgid "The alpha channel of the jigsaw piece, which is used as mask."
 msgstr ""
 
@@ -306,4 +306,42 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Two lists consist of the x coordinate and y coordinate"
+#~ msgstr ""
+
+#~ msgid "Import this module needs extra ``captcha``."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This method attempts to generate a piece view "
+#~ "like that on the puzzle by dimming the "
+#~ "original piece. In order to get an accurate "
+#~ "result."
+#~ msgstr ""
+
+#~ msgid "coeff to be multiplied with the image in order to dim it, default as 0.36"
+#~ msgstr ""
+
+#~ msgid "Generate a mask for :meth:`corr_norm_mask_match` since the piece is in an irregular shape."
+#~ msgstr ""
+
+#~ msgid "f8 array, with the shape of `x.shape - (k.shape - 1)`"
+#~ msgstr ""
+
+#~ msgid "``TM_CCORR_NORMED`` mode in opecv matchTemplate."
+#~ msgstr ""
+
+#~ msgid "data mat. dtype should be int/uint."
+#~ msgstr ""
+
+#~ msgid "template mat. dtype should be the same with that of `x`."
+#~ msgstr ""
+
+#~ msgid "a binary mask mat in ``{0, 1}``. dtype should be int/uint."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "R(x,y)= \\frac{\\sum_{x',y'} (T(x',y') \\cdot I(x+x',y+y') "
+#~ "\\cdot M(x',y')^2)}{\\sqrt{\\sum_{x',y'} \\left( T(x',y') \\cdot "
+#~ "M(x',y') \\right)^2 \\cdot \\sum_{x',y'} \\left( I(x+x',y+y')"
+#~ " \\cdot M(x',y') \\right)^2}}"
 #~ msgstr ""

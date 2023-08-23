@@ -55,13 +55,13 @@ class UnifiedLoginManager(Loginable):
     """
 
     _order: List[LoginMethod]
-    last_qr_login: float = 0
-    """Timestamp of the last QR login, 0 represents no QR login since created.
+    last_qr_attempt: float = 0
+    """Timestamp of the last QR login attempt, 0 represents no QR login since created.
 
     .. versionadded:: 0.14.2
     """
-    last_up_login: float = 0
-    """Timestamp of the last UP login, 0 represents no UP login since created.
+    last_up_attempt: float = 0
+    """Timestamp of the last UP login attempt, 0 represents no UP login since created.
 
     .. versionadded:: 0.14.2
     """
@@ -144,7 +144,7 @@ class UnifiedLoginManager(Loginable):
             raise
             return "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
         finally:
-            self.last_up_login = time()
+            self.last_up_attempt = time()
 
         return cookie
 
@@ -177,7 +177,7 @@ class UnifiedLoginManager(Loginable):
             raise
             return "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
         finally:
-            self.last_qr_login = time()
+            self.last_qr_attempt = time()
 
         return cookie
 
@@ -195,9 +195,15 @@ class UnifiedLoginManager(Loginable):
         """
         methods = self.order.copy()
         if not self.disable_suppress:
-            if "qr" in methods and self.last_qr_login + self.qr_config.min_login_interval > time():
+            if (
+                "qr" in methods
+                and self.last_qr_attempt + self.qr_config.min_login_interval > time()
+            ):
                 methods.remove("qr")
-            if "up" in methods and self.last_up_login + self.up_config.min_login_interval > time():
+            if (
+                "up" in methods
+                and self.last_up_attempt + self.up_config.min_login_interval > time()
+            ):
                 methods.remove("up")
 
         if not methods:

@@ -179,7 +179,7 @@ async def test_suppress(mix: UnifiedLoginManager):
     with patch.object(mix.qrlogin, "new", side_effect=_fake_http_error):
         with pytest.raises(LoginError):
             await mix.new_cookie()
-        assert mix.last_qr_login
+        assert mix.last_qr_attempt
 
         with pytest.raises(SkipLoginInterrupt):
             await mix.new_cookie()

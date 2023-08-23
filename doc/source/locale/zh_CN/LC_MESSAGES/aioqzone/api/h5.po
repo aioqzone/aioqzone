@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-11 14:53+0800\n"
+"POT-Creation-Date: 2023-08-23 12:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -28,9 +28,7 @@ msgstr "Qzone H5 接口"
 msgid ""
 "Get next page. If :obj:`.qzonetoken` is not parsed or :obj:`attach_info` is empty, it will call "
 ":meth:`.index` and return its response."
-msgstr ""
-"获取下一页。如果 :obj:`.qzonetoken` 尚未解析或者 :obj:`attach_info` 为空，此函数将调用"
-":meth:`index` 并返回其结果。"
+msgstr "获取下一页。如果 :obj:`.qzonetoken` 尚未解析或者 :obj:`attach_info` 为空，此函数将调用:meth:`index` 并返回其结果。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds aioqzone.api.h5.model.QzoneH5API.shuoshuo of
 msgid "参数"
@@ -38,7 +36,7 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:5 of
 #, fuzzy
-msgid "The :obj:`attach_info` field from last call. Pass an empty string equals to call :meth:`.index`."
+msgid "The ``attach_info`` field from last call. Pass an empty string equals to call :meth:`.index`."
 msgstr "上一次调用返回值中的``attach_info``域。如果传入一个空串，将会调用:meth:`index`。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds aioqzone.api.h5.model.QzoneH5API.index
