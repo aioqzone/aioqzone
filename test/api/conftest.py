@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 def man(client: ClientAdapter, env: test_env):
     man = UnifiedLoginManager(
         client,
-        up_config=UpLoginConfig(uin=env.uin, pwd=env.password),
+        up_config=UpLoginConfig(uin=env.uin, pwd=env.password, min_login_interval=0),
         qr_config=QrLoginConfig(uin=env.uin),
     )
     man.order = env.order
