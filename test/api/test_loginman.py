@@ -168,7 +168,21 @@ async def test_mixed_loginman_exc(
     assert meth_history == gt_hist
 
 
-async def test_mixed_loginman_skip(mix: UnifiedLoginManager):
+async def test_unified_loginman_skip(mix: UnifiedLoginManager):
     mix.order = []
     with pytest.raises(SkipLoginInterrupt):
-        await mix._new_cookie()
+        await mix.new_cookie()
+
+
+async def test_suppress(mix: UnifiedLoginManager):
+    mix.order = ["qr"]
+    with patch.object(mix.qrlogin, "new", side_effect=_fake_http_error):
+        with pytest.raises(LoginError):
+            await mix.new_cookie()
+        assert mix.last_qr_login
+
+        with pytest.raises(SkipLoginInterrupt):
+            await mix.new_cookie()
+
+        with pytest.raises(LoginError), mix.force_login():
+            await mix.new_cookie()

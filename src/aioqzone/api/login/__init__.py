@@ -10,6 +10,8 @@ Users can inherit these managers and implement their own persistance logic.
 
 import asyncio
 import logging
+from contextlib import contextmanager
+from time import time
 from typing import Dict, List, Optional, Sequence, Union
 
 from httpx import ConnectError, HTTPError
@@ -20,7 +22,6 @@ from aioqzone.message import LoginMethod
 from aioqzone.model import QrLoginConfig, UpLoginConfig
 from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.qr import QrLogin
-from qqqr.up import UpH5Login
 from qqqr.utils.net import ClientAdapter
 
 from ._base import Loginable
@@ -54,6 +55,18 @@ class UnifiedLoginManager(Loginable):
     """
 
     _order: List[LoginMethod]
+    last_qr_login: float = 0
+    """Timestamp of the last QR login, 0 represents no QR login since created.
+
+    .. versionadded:: 0.14.2
+    """
+    last_up_login: float = 0
+    """Timestamp of the last UP login, 0 represents no UP login since created.
+
+    .. versionadded:: 0.14.2
+    """
+    disable_suppress: bool = False
+    """A flag represents that a login is not optional. This will change some behavior of this login manager."""
 
     def __init__(
         self,
@@ -88,8 +101,8 @@ class UnifiedLoginManager(Loginable):
 
     @property
     def order(self):
-        """Returns order of :obj:`LoginMethod`. Assign a :obj:`LoginMethod` :obj:`Sequence` to this to
-        change the order of :obj:`LoginMethod`."""
+        """Returns order of :obj:`LoginMethod`. Assign a :obj:`LoginMethod` :obj:`Sequence` to this field
+        to change the order of :obj:`LoginMethod`."""
         return self._order
 
     @order.setter
@@ -130,6 +143,8 @@ class UnifiedLoginManager(Loginable):
             log.fatal("密码登录抛出未捕获的异常.", exc_info=True)
             raise
             return "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
+        finally:
+            self.last_up_login = time()
 
         return cookie
 
@@ -161,6 +176,8 @@ class UnifiedLoginManager(Loginable):
             log.fatal("Unexpected error in QR login.", exc_info=True)
             raise
             return "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
+        finally:
+            self.last_qr_login = time()
 
         return cookie
 
@@ -171,8 +188,18 @@ class UnifiedLoginManager(Loginable):
         :raise `aioqzone.exception.LoginError`: if all login methods failed.
 
         :return: cookie dict
+
+        .. versionchanged:: 0.14.2
+
+        Check :obj:`LoginConfig.min_login_interval` of methods in `.order`.
         """
         methods = self.order.copy()
+        if not self.disable_suppress:
+            if "qr" in methods and self.last_qr_login + self.qr_config.min_login_interval > time():
+                methods.remove("qr")
+            if "up" in methods and self.last_up_login + self.up_config.min_login_interval > time():
+                methods.remove("up")
+
         if not methods:
             log.info("No method selected for this login, raise SkipLoginInterrupt.")
             raise SkipLoginInterrupt
@@ -225,3 +252,9 @@ class UnifiedLoginManager(Loginable):
             h5=enable,
         )
         self.qrlogin = QrLogin(client=self.client, h5=enable)
+
+    @contextmanager
+    def force_login(self):
+        self.disable_suppress = True
+        yield self
+        self.disable_suppress = False
