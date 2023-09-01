@@ -114,6 +114,20 @@ class UnifiedLoginManager(Loginable):
             raise ValueError(self.up_config)
         self._order = v
 
+    @property
+    def qr_suppress_end_time(self):
+        """Get the end of suppress duration.
+
+        .. versionadded:: 0.14.3"""
+        return self.last_qr_attempt + self.qr_config.min_login_interval
+
+    @property
+    def up_suppress_end_time(self):
+        """Get the end of suppress duration.
+
+        .. versionadded:: 0.14.3"""
+        return self.last_up_attempt + self.up_config.min_login_interval
+
     async def _try_up_login(self) -> Union[Dict[str, str], str]:
         """
         :raises:
@@ -195,15 +209,9 @@ class UnifiedLoginManager(Loginable):
         """
         methods = self.order.copy()
         if not self.disable_suppress:
-            if (
-                "qr" in methods
-                and self.last_qr_attempt + self.qr_config.min_login_interval > time()
-            ):
+            if "qr" in methods and self.qr_suppress_end_time > time():
                 methods.remove("qr")
-            if (
-                "up" in methods
-                and self.last_up_attempt + self.up_config.min_login_interval > time()
-            ):
+            if "up" in methods and self.up_suppress_end_time > time():
                 methods.remove("up")
 
         if not methods:
