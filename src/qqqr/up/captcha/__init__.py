@@ -170,7 +170,7 @@ class Captcha:
             m = re.search(CALLBACK + r"\((\{.*\})\)", r.text)
 
         assert m
-        r = PrehandleResp.model_validate_json(m.group(1))
+        r = PrehandleResp.model_validate_json(m.group(1))  # TODO: retry if ValidationError
         return TcaptchaSession(r)
 
     async def iframe(self):

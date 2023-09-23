@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
-from tylisten import Emitter
 
 import qqqr.message as MT
 from qqqr.constant import StatusCode
@@ -31,16 +30,13 @@ async def web(client: ClientAdapter, env: test_env):
 class TestUpWeb:
     @pytest.mark.skip("this test should be called manually")
     async def testRegisterSmsCodeGetter(self, web: UpWebLogin):
-        emitter = Emitter(MT.sms_code_input)
-        web.sms_code_input.connect(emitter)
-
-        async def GetSmsCode(m: MT.sms_code_required):
-            assert m.phone
-            assert m.nickname
+        async def GetSmsCode(uin: int, phone: str, nickname: str):
+            assert phone
+            assert nickname
             with open("tmp/ntdin.txt") as f:
-                await emitter.emit(uin=web.uin, sms_code=f.readline().strip())
+                return f.readline().strip()
 
-        web.sms_code_required.listeners.append(GetSmsCode)
+        web.sms_code_input.add_impl(GetSmsCode)
 
     async def test_encode_password(self, web: UpWebLogin):
         sess = await web.new()
@@ -68,7 +64,7 @@ class TestUpWeb:
                 pytest.importorskip("PIL")
                 pytest.importorskip("chaosvm")
             elif e.code == StatusCode.NeedSmsVerify:
-                if not web.sms_code_input.connected:
+                if not web.sms_code_input.has_impl:
                     pytest.skip(str(e))
 
             raise
@@ -94,7 +90,7 @@ async def test_h5_login(h5: UpH5Login):
             pytest.importorskip("PIL")
             pytest.importorskip("chaosvm")
         elif e.code == StatusCode.NeedSmsVerify:
-            if not h5.sms_code_input.connected:
+            if not h5.sms_code_input.has_impl:
                 pytest.skip(str(e))
 
         raise

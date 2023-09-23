@@ -5,9 +5,7 @@ from os import environ
 
 import pytest
 import pytest_asyncio
-from tylisten import Emitter
 
-import qqqr.message as MT
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak
 from qqqr.qr import QrLogin, QrSession
@@ -24,7 +22,7 @@ async def login(client: ClientAdapter):
     with suppress(ImportError):
         from PIL import Image as image
 
-        login.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
+        login.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
 
     yield login
 
@@ -52,22 +50,17 @@ class TestLoop:
 
     async def test_resend_cancel(self, client: ClientAdapter, login: QrLogin):
         hist = []
-        refresh_emitter = Emitter(MT.qr_refresh)
-        cancel_emitter = Emitter(MT.qr_cancelled)
-        login.qr_cancelled.listeners.append(lambda _: hist.append("cancel"))
+        login.qr_cancelled.add_impl(lambda: hist.append("cancel"))
 
-        login.cancel.connect(cancel_emitter)
-        login.refresh.connect(refresh_emitter)
-
-        async def __qr_fetched(m: MT.qr_fetched):
-            hist.append(m.png)
+        async def __qr_fetched(png: bytes, times: int):
+            hist.append(png)
             if len(hist) == 1:
-                await refresh_emitter.emit()
+                login.refresh.set()
             elif len(hist) == 2:
-                await cancel_emitter.emit()
+                login.cancel.set()
 
-        login.qr_fetched.listeners.clear()
-        login.qr_fetched.listeners.append(__qr_fetched)
+        login.qr_fetched.impls.clear()
+        login.qr_fetched.add_impl(__qr_fetched)
         with pytest.raises(UserBreak):
             await asyncio.wait_for(login.login(), timeout=3)
 

@@ -54,7 +54,7 @@ class TestUP:
 
     async def test_newcookie(self, up: UnifiedLoginManager):
         pool = []
-        up.login_success.listeners.append(lambda m: pool.append(m.uin))
+        up.login_success.add_impl(lambda uin, method: pool.append(uin))
         try:
             cookie = await up.new_cookie()
             await up.channel.wait()
@@ -73,7 +73,7 @@ async def qr(client: ClientAdapter, env: test_env):
     with suppress(ImportError):
         from PIL import Image as image
 
-        man.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
+        man.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
     man.order = ["qr"]
     yield man
 
@@ -96,7 +96,7 @@ class TestQR:
     @skip_ci
     async def test_newcookie(self, qr: UnifiedLoginManager):
         pool = []
-        qr.login_success.listeners.append(lambda m: pool.append(m.uin))
+        qr.login_success.add_impl(lambda uin, method: pool.append(uin))
         try:
             cookie = await qr.new_cookie()
             await qr.channel.wait()
@@ -119,7 +119,7 @@ def mix(client: ClientAdapter, env: test_env):
     with suppress(ImportError):
         from PIL import Image as image
 
-        man.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
+        man.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
 
     yield man
 
@@ -156,7 +156,7 @@ async def test_mixed_loginman_exc(
 ):
     mix.order = order
     meth_history = []
-    mix.login_failed.listeners.append(lambda m: meth_history.append(m.method))
+    mix.login_failed.add_impl(lambda uin, method, exc: meth_history.append(method))
 
     with ExitStack() as stack:
         stack.enter_context(pytest.raises(LoginError))

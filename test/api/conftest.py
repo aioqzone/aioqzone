@@ -30,6 +30,6 @@ def man(client: ClientAdapter, env: test_env):
     with suppress(ImportError):
         from PIL import Image as image
 
-        man.qr_fetched.listeners.append(lambda m: image.open(io.BytesIO(m.png)).show())
+        man.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
 
     yield man
