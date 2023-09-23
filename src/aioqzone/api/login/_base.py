@@ -3,8 +3,6 @@ from abc import ABC, abstractmethod
 from time import time
 from typing import Dict
 
-from tylisten import Emitter
-
 import aioqzone.message as MT
 from qqqr.utils.encrypt import gtk
 
@@ -21,8 +19,8 @@ class Loginable(ABC):
         self._cookie = {}
         self.lock = asyncio.Lock()
 
-        self.login_success = Emitter(MT.login_success)
-        self.login_failed = Emitter(MT.login_failed)
+        self.login_success = MT.login_success.new()
+        self.login_failed = MT.login_failed.new()
 
     @property
     def cookie(self) -> Dict[str, str]:

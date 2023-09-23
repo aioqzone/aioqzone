@@ -3,18 +3,13 @@ import logging
 import re
 from dataclasses import dataclass
 from random import random
-from typing import Optional
-
-from tylisten import Emitter, VirtualEmitter
 
 import qqqr.message as MT
 from qqqr.base import LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak
 from qqqr.qr.type import PollResp
-from qqqr.type import APPID, PT_QR_APP, Proxy
 from qqqr.utils.encrypt import hash33
-from qqqr.utils.net import ClientAdapter
 
 log = logging.getLogger(__name__)
 
@@ -42,16 +37,16 @@ class QrSession(LoginSession):
         self.refreshed += 1
 
 
-class _QrEmitterMixin:
+class _QrHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
-        self.qr_fetched = Emitter(MT.qr_fetched)
-        self.qr_cancelled = Emitter(MT.qr_cancelled)
-        self.cancel: VirtualEmitter[MT.qr_cancelled] = VirtualEmitter()
-        self.refresh: VirtualEmitter[MT.qr_refresh] = VirtualEmitter()
+        self.qr_fetched = MT.qr_fetched.new()
+        self.qr_cancelled = MT.qr_cancelled.new()
+        self.cancel = asyncio.Event()
+        self.refresh = asyncio.Event()
 
 
-class QrLogin(_QrEmitterMixin, LoginBase[QrSession]):
+class QrLogin(_QrHookMixin, LoginBase[QrSession]):
     async def new(self) -> QrSession:
         return QrSession(await self.show())
 
@@ -124,44 +119,19 @@ class QrLogin(_QrEmitterMixin, LoginBase[QrSession]):
         :raise `asyncio.TimeoutError`: if qr is not scanned after `refresh_times` expires.
         :raise `UserBreak`: if :obj:`QrEvent.cancel_flag` is set.
         """
-        refresh_flag = asyncio.Event()
-        cancel_flag = asyncio.Event()
-        refresh = lambda _: refresh_flag.set()
-        cancel = lambda _: cancel_flag.set()
+        self.refresh.clear()
+        self.cancel.clear()
 
-        if self.refresh.listeners is not None:
-            self.refresh.listeners.append(refresh)
-        if self.cancel.listeners is not None:
-            self.cancel.listeners.append(cancel)
-
-        try:
-            return await self._login_loop(
-                refresh_flag, cancel_flag, refresh_times=refresh_times, poll_freq=poll_freq
-            )
-        finally:
-            if self.refresh.listeners is not None:
-                self.refresh.listeners.remove(refresh)
-            if self.cancel.listeners is not None:
-                self.cancel.listeners.remove(cancel)
-
-    async def _login_loop(
-        self,
-        refresh_flag: asyncio.Event,
-        cancel_flag: asyncio.Event,
-        *,
-        refresh_times: int = 6,
-        poll_freq: float = 3,
-    ):
         expired = 0
         sess = await self.new()
 
         while expired < refresh_times:
             # BUG: should we omit HookError here?
-            await self.qr_fetched.emit(png=sess.current_qr.png, times=expired)
+            await self.qr_fetched.results(png=sess.current_qr.png, times=expired)
 
-            while not refresh_flag.is_set():
-                if cancel_flag.is_set():
-                    await self.qr_cancelled.emit()
+            while not self.refresh.is_set():
+                if self.cancel.is_set():
+                    await self.qr_cancelled.results()
                     raise UserBreak
 
                 await asyncio.sleep(poll_freq)
@@ -174,6 +144,6 @@ class QrLogin(_QrEmitterMixin, LoginBase[QrSession]):
                     return await self._get_login_url(sess)
 
             sess.new_qr(await self.show())
-            refresh_flag.clear()
+            self.refresh.clear()
 
         raise asyncio.TimeoutError
