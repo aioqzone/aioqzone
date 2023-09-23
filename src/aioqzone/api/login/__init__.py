@@ -15,7 +15,7 @@ from time import time
 from typing import Dict, List, Optional, Sequence, Union
 
 from httpx import ConnectError, HTTPError
-from tylisten.futstore import FutureStore
+from tylisten import FutureStore
 
 from aioqzone.exception import LoginError, SkipLoginInterrupt
 from aioqzone.message import LoginMethod
@@ -85,7 +85,7 @@ class UnifiedLoginManager(Loginable):
         self.channel = FutureStore()
 
         self.h5(h5, clear_cookie=False)  # init uplogin and qrlogin
-        self.sms_code_required = self.uplogin.sms_code_required
+        self.sms_code_required = self.uplogin.sms_code_input
         self.sms_code_input = self.uplogin.sms_code_input
         if self.up_config.uin > 0:
             self._order.append("up")
@@ -223,7 +223,7 @@ class UnifiedLoginManager(Loginable):
 
         reasons: Dict[LoginMethod, str] = {}
         fail_with = lambda meth, msg: self.channel.add_awaitable(
-            self.login_failed.emit(uin=self.uin, method=meth, exc=str(msg))
+            self.login_failed.results(uin=self.uin, method=meth, exc=str(msg))
         )
 
         for m in methods:

@@ -7,7 +7,6 @@ from time import time_ns
 from typing import List, Optional
 
 from httpx import URL
-from tylisten import Emitter, VirtualEmitter
 
 import qqqr.message as MT
 from qqqr.base import LoginBase, LoginSession
@@ -71,14 +70,13 @@ class UpWebSession(LoginSession):
         return self.check_rst.verifysession
 
 
-class _UpEmitterMixin:
+class _UpHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
-        self.sms_code_required = Emitter(MT.sms_code_required)
-        self.sms_code_input: VirtualEmitter[MT.sms_code_input] = VirtualEmitter()
+        self.sms_code_input = MT.sms_code_input.new()
 
 
-class UpWebLogin(_UpEmitterMixin, LoginBase[UpWebSession]):
+class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
     """
     .. versionchanged:: 0.12.4
 
@@ -270,19 +268,17 @@ class UpWebLogin(_UpEmitterMixin, LoginBase[UpWebSession]):
                 log.warning("需用户短信验证")
                 if pastcode == StatusCode.NeedSmsVerify:
                     raise TencentLoginError(resp.code, "重复要求动态验证码")
-                if not self.sms_code_input.connected:
+                if not self.sms_code_input.has_impl:
                     # fast return so we won't always request smscode which may risk test account.
                     raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 await self.send_sms_code(sess)
-                await self.sms_code_required.emit(
-                    uin=self.uin, phone=resp.msg, nickname=resp.nickname
-                )
                 with suppress(BaseException):
-                    smscode_input_msg = await asyncio.wait_for(
-                        self.sms_code_input.wait(), timeout=60
+                    sms_code = await asyncio.wait_for(
+                        self.sms_code_input(uin=self.uin, phone=resp.msg, nickname=resp.nickname),
+                        timeout=60,
                     )
-                    if smscode_input_msg is not None:
-                        sess.sms_code = smscode_input_msg.sms_code
+                    if sms_code and len(sms_code := sms_code.strip()) >= 4:
+                        sess.sms_code = sms_code
                 if sess.sms_code is None:
                     raise TencentLoginError(resp.code, "未获得动态(SMS)验证码")
             else:
