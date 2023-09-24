@@ -371,13 +371,13 @@ files = [
 
 [[package]]
 name = "httpcore"
-version = "0.17.3"
+version = "0.18.0"
 description = "A minimal low-level HTTP client."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "httpcore-0.17.3-py3-none-any.whl", hash = "sha256:c2789b767ddddfa2a5782e3199b2b7f6894540b17b16ec26b2c4d8e103510b87"},
-    {file = "httpcore-0.17.3.tar.gz", hash = "sha256:a6f30213335e34c1ade7be6ec7c47f19f50c56db36abef1a9dfa3815b1cb3888"},
+    {file = "httpcore-0.18.0-py3-none-any.whl", hash = "sha256:adc5398ee0a476567bf87467063ee63584a8bce86078bf748e48754f60202ced"},
+    {file = "httpcore-0.18.0.tar.gz", hash = "sha256:13b5e5cd1dca1a6636a6aaea212b19f4f85cd88c366a2b82304181b769aab3c9"},
 ]
 
 [package.dependencies]
@@ -392,18 +392,18 @@ socks = ["socksio (==1.*)"]
 
 [[package]]
 name = "httpx"
-version = "0.24.1"
+version = "0.25.0"
 description = "The next generation HTTP client."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "httpx-0.24.1-py3-none-any.whl", hash = "sha256:06781eb9ac53cde990577af654bd990a4949de37a28bdb4a230d434f3a30b9bd"},
-    {file = "httpx-0.24.1.tar.gz", hash = "sha256:5853a43053df830c20f8110c5e69fe44d035d850b2dfe795e196f00fdb774bdd"},
+    {file = "httpx-0.25.0-py3-none-any.whl", hash = "sha256:181ea7f8ba3a82578be86ef4171554dd45fec26a02556a744db029a0a27b7100"},
+    {file = "httpx-0.25.0.tar.gz", hash = "sha256:47ecda285389cb32bb2691cc6e069e3ab0205956f681c5b2ad2325719751d875"},
 ]
 
 [package.dependencies]
 certifi = "*"
-httpcore = ">=0.15.0,<0.18.0"
+httpcore = ">=0.18.0,<0.19.0"
 idna = "*"
 sniffio = "*"
 
@@ -1467,13 +1467,13 @@ files = [
 
 [[package]]
 name = "tylisten"
-version = "1.1.0"
+version = "1.1.1"
 description = "A fully typed async hook library."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "tylisten-1.1.0-py3-none-any.whl", hash = "sha256:de6e27981da43242a77f2e0817b1e696176b3c9f3b0bf3cb58c9cbc2aa7ab796"},
-    {file = "tylisten-1.1.0.tar.gz", hash = "sha256:6863c89839b0af8c15571dfbe40c520b55980930a74ff244e781799c4edee749"},
+    {file = "tylisten-1.1.1-py3-none-any.whl", hash = "sha256:50c991e6d6fb09694973ef37b0d51af4aea7fa7f3f618813c35c69beb7e52ad2"},
+    {file = "tylisten-1.1.1.tar.gz", hash = "sha256:e5a296833a058da7f61440fa1f9db4071b5b8a3b139d792d3d3b488957b5cd94"},
 ]
 
 [package.dependencies]
@@ -1553,4 +1553,4 @@ captcha = ["numpy", "pillow", "pychaosvm"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "606bd80092306f3b1822d14dd8f893f658ff0c6c07e99bf5e6fa88344435d86c"
+content-hash = "14a136c5da0f78652404f9d005b4900ef81f44b8c3839b90ed433acd6651724d"
