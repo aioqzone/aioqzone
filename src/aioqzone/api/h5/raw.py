@@ -72,7 +72,7 @@ class QzoneH5RawAPI:
         host = host or self.host
         return self.client.post(self.host + path, params=params, data=data, **kw)
 
-    def _relogin_retry(self, func: Callable):
+    def _relogin_retry(self, func: Callable[_P, _T]) -> Callable[_P, _T]:
         """A decorator which will relogin and retry given func if cookie expired.
 
         'cookie expired' is indicated by:
@@ -116,7 +116,7 @@ class QzoneH5RawAPI:
             log.info(f"Cookie expire in {func.__qualname__}. Relogin...")
             cookie = await self.login.new_cookie()
             try:
-                self.client.cookies.update(cookie)
+                self.client.cookie_jar.update_cookies(cookie)
             except:
                 log.error("Error when updating client cookies", exc_info=True)
                 # since actually we often use the same client in loginman and QzoneAPI,
@@ -180,7 +180,7 @@ class QzoneH5RawAPI:
         async def retry_closure():
             async with self.host_get("/mqzone/index", attach_token=False) as r:
                 r.raise_for_status()
-                return r.text
+                return await r.text()
 
         html = await retry_closure()
         scripts: List = fromstring(html).xpath('body/script[@type="application/javascript"]')
@@ -230,7 +230,7 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_post("/webapp/json/mqzone_feeds/getActiveFeeds", data=data) as r:
                 r.raise_for_status()
-                return r.json()
+                return await r.json()
 
         return self._rtext_handler(
             await retry_closure(), cb=False, errno_key=("code", "ret"), data_key="data"
@@ -260,7 +260,7 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_get("/webapp/json/mqzone_detail/shuoshuo", data) as r:
                 r.raise_for_status()
-                return r.json()
+                return await r.json()
 
         return self._rtext_handler(await retry_closure(), cb=False, data_key="data")
 
@@ -271,7 +271,7 @@ class QzoneH5RawAPI:
                 "/feeds/mfeeds_get_count", dict(format="json"), host="https://mobile.qzone.qq.com"
             ) as r:
                 r.raise_for_status()
-                return r.json()
+                return await r.json()
 
         return self._rtext_handler(await retry_closure(), cb=False, data_key="data")
 
@@ -293,7 +293,7 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_get(path, data) as r:
                 r.raise_for_status()
-                return r.json()
+                return await r.json()
 
         self._rtext_handler(await retry_closure(), errno_key=("ret",), cb=False)
         return True
@@ -318,7 +318,7 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_post("/webapp/json/qzoneOperation/addComment", data=data) as r:
                 r.raise_for_status()
-                return r.json()
+                return await r.json()
 
         return self._rtext_handler(
             await retry_closure(), cb=False, errno_key=("ret",), data_key="data"
