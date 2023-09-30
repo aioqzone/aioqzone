@@ -12,7 +12,7 @@ from typing import List
 
 from chaosvm import prepare
 from chaosvm.proxy.dom import TDC
-from httpx import URL
+from yarl import URL
 
 from ...utils.iter import first
 from ...utils.net import ClientAdapter
@@ -91,11 +91,11 @@ class TcaptchaSession:
         self.tdc = tdc
 
     def _cdn(self, rel_path: str) -> URL:
-        return URL("https://t.captcha.qq.com").join(rel_path)
+        return URL("https://t.captcha.qq.com").with_path(rel_path)
 
     def tdx_js_url(self):
         assert self.conf
-        return URL("https://t.captcha.qq.com").join(self.conf.common.tdc_path)
+        return URL("https://t.captcha.qq.com").with_path(self.conf.common.tdc_path)
 
     def vmslide_js_url(self):
         raise NotImplementedError
@@ -128,7 +128,7 @@ class Captcha:
         :return: A string containing the base64 encoded user agent
         """
 
-        return base64.b64encode(self.client.ua.encode()).decode()
+        return base64.b64encode(self.client.headers["User-Agent"].encode()).decode()
 
     async def new(self):
         """``prehandle``. Call this method to generate a new verify session.
@@ -167,7 +167,7 @@ class Captcha:
         }
         async with self.client.get(PREHANDLE_URL, params=data.update(const) or data) as r:
             r.raise_for_status()
-            m = re.search(CALLBACK + r"\((\{.*\})\)", r.text)
+            m = re.search(CALLBACK + r"\((\{.*\})\)", await r.text())
 
         assert m
         r = PrehandleResp.model_validate_json(m.group(1))  # TODO: retry if ValidationError
@@ -253,7 +253,7 @@ class Captcha:
         async with self.client.get(sess.tdx_js_url()) as r:
             r.raise_for_status()
             tdc = prepare(
-                r.text,
+                await r.text(),
                 ip=await self.get_ipv4(),
                 ua=self.client.headers["User-Agent"],
                 mouse_track=sess.mouse_track,
@@ -291,6 +291,6 @@ class Captcha:
         log.debug(f"verify post data: {data}")
 
         async with self.client.post(VERIFY_URL, data=data) as r:
-            r = VerifyResp.model_validate_json(r.text)
+            r = VerifyResp.model_validate_json(await r.text())
 
         return r

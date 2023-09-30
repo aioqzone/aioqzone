@@ -4,11 +4,12 @@ from functools import wraps
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
 from lxml.html import fromstring
+from tenacity import before_log, retry, stop_after_attempt
 
 from aioqzone.api.login import Loginable
 from aioqzone.exception import QzoneError
-from aioqzone.utils.catch import HTTPStatusErrorDispatch, QzoneErrorDispatch
 from aioqzone.utils.regex import entire_closing, response_callback
+from aioqzone.utils.retry import retry_if_qzone_code, retry_if_status
 from qqqr.utils.iter import firstn
 from qqqr.utils.jsjson import JsonValue, json_loads
 from qqqr.utils.net import ClientAdapter
@@ -30,6 +31,27 @@ class QzoneH5RawAPI:
         super().__init__()
         self.client = client
         self.login = loginman
+        self._relogin_retry = retry(
+            stop=stop_after_attempt(2),
+            retry=retry_if_status(302, 403) | retry_if_qzone_code(-3000, -10000),
+            after=before_log(log, logging.INFO),
+            sleep=self._update_cookie_safe,
+        )
+        """A decorator which will relogin and retry given func if cookie expired.
+
+        'cookie expired' is indicated by:
+
+        - `aioqzone.exception.QzoneError` code -3000/-10000
+        - HTTP response code 302/403
+
+        :meta public:
+
+        .. note:: Decorate code as less as possible
+        .. warning::
+
+                You *SHOULD* **NOT** wrap a function with mutable input. If you change the mutable
+                var in the first attempt, in the second attempt the var saves the changed value.
+        """
 
     def host_get(
         self,
@@ -72,58 +94,14 @@ class QzoneH5RawAPI:
         host = host or self.host
         return self.client.post(self.host + path, params=params, data=data, **kw)
 
-    def _relogin_retry(self, func: Callable[_P, _T]) -> Callable[_P, _T]:
-        """A decorator which will relogin and retry given func if cookie expired.
-
-        'cookie expired' is indicated by:
-
-        - `aioqzone.exception.QzoneError` code -3000 or -4002
-        - HTTP response code 403
-
-        :meta public:
-        :param func: a callable, which should be rerun after login expired and relogin.
-
-        .. note:: Decorate code as less as possible
-        .. warning::
-
-                You *SHOULD* **NOT** wrap a function with mutable input. If you change the mutable
-                var in the first attempt, in the second attempt the var saves the changed value.
-        """
-
-        @wraps(func)
-        async def relogin_wrapper(*args, **kwds):
-            """
-            This wrapper will call :meth:`aioqzone.event.login.Loginable.new_cookie` if the wrapped
-            function raises an error indicating that a new login is required.
-
-            The exceptions this wrapper may raise depends on the login manager you passed in.
-            Any exceptions irrelevent to "login needed" will be passed through w/o any change.
-
-            :raises:
-                All errors that may be raised from :meth:`Loginable.new_cookie`, which depends on
-                the login manager you are using. If you use our built-in manager,
-                :class:`aioqzone.api.loginman.UnifiedLoginManager`,
-                :exc:`SkipLoginInterrupt` and :exc:`LoginError` may be raised.
-            """
-
-            with QzoneErrorDispatch() as qze, HTTPStatusErrorDispatch() as hse:
-                # NOTE: 尽管只有“-3000: 请先登录”明确要求重新登录，但似乎任何原因的-3000错误值都意味着cookie过期。因此移除了对message的校验
-                qze.dispatch(-3000)
-                qze.dispatch(-10000)
-                hse.dispatch(302, 403)
-                return await func(*args, **kwds)
-
-            log.info(f"Cookie expire in {func.__qualname__}. Relogin...")
-            cookie = await self.login.new_cookie()
-            try:
-                self.client.cookie_jar.update_cookies(cookie)
-            except:
-                log.error("Error when updating client cookies", exc_info=True)
-                # since actually we often use the same client in loginman and QzoneAPI,
-                # it is not essential to update cookies.
-            return await func(*args, **kwds)
-
-        return relogin_wrapper
+    async def _update_cookie_safe(self, *_) -> None:
+        cookie = await self.login.new_cookie()
+        try:
+            self.client.cookie_jar.update_cookies(cookie)
+        except:
+            log.error("Error when updating client cookies", exc_info=True)
+            # since actually we often use the same client in loginman and QzoneAPI,
+            # it is not essential to update cookies.
 
     def _rtext_handler(
         self,

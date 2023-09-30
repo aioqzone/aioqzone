@@ -1,7 +1,7 @@
 import pytest
 
 from aioqzone.exception import QzoneError
-from aioqzone.utils.catch import QzoneErrorDispatch
+from aioqzone.utils.retry import retry_if_qzone_code
 
 
 class mock_error(BaseException):
@@ -12,7 +12,7 @@ class mock_error(BaseException):
 
 def test_dispatch():
     r = []
-    e = QzoneErrorDispatch()
+    e = retry_if_qzone_code()
     e.dispatch(-3000, dispatcher=lambda e: r.clear())
     e.dispatch(-3001, -3002, dispatcher=lambda e: r.append(e.code))
 
@@ -30,7 +30,7 @@ def test_dispatch():
 
 
 def test_suppress():
-    e = QzoneErrorDispatch()
+    e = retry_if_qzone_code()
     e.dispatch(-3000, suppress=False)
     e.dispatch(-3001, -3002, suppress=lambda e: e.code == -3002)
 

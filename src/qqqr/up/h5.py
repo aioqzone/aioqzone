@@ -1,7 +1,7 @@
 import logging
 import re
 
-from httpx import URL
+from yarl import URL
 
 from qqqr.constant import StatusCode
 
@@ -26,7 +26,7 @@ class UpH5Login(UpWebLogin):
             daid=self.app.daid,
             s_url=self.proxy.s_url,
         )
-        return URL("https://ui.ptlogin2.qq.com/cgi-bin/login").copy_with(params=params)
+        return URL("https://ui.ptlogin2.qq.com/cgi-bin/login").with_query(params)
 
     async def check(self, sess: UpWebSession):
         data = dict(
@@ -41,7 +41,7 @@ class UpH5Login(UpWebLogin):
         )
         async with self.client.get(CHECK_URL, params=data) as r:
             r.raise_for_status()
-            rl = re.findall(r"'(.*?)'[,\)]", r.text)
+            rl = re.findall(r"'(.*?)'[,\)]", await r.text())
 
         rdict = dict(
             zip(
@@ -51,15 +51,7 @@ class UpH5Login(UpWebLogin):
         )
         sess.set_check_result(CheckResp.model_validate(rdict))
 
-    async def try_login(self, sess: UpWebSession):
-        """
-        Check if current session meets the login condition.
-        It takes a session object and returns response of this try.
-
-        :param sess: Store the session information
-        :return: A login response
-        """
-
+    async def _make_login_param(self, sess: UpWebSession):
         const = {
             "regmaster": "",
             "h": 1,
@@ -87,18 +79,5 @@ class UpH5Login(UpWebLogin):
             "sid": sess.check_rst.session,
             "o1vId": await self.deviceId(),
         }
-
-        if sess.sms_code:
-            data["pt_sms_code"] = sess.sms_code
-        self.referer = "https://xui.ptlogin2.qq.com/"
-
         data.update(const)
-        async with self.client.get(LOGIN_URL, params=data) as response:
-            response.raise_for_status()
-
-        rl = re.findall(r"'(.*?)'[,\)]", response.text)
-        resp = LoginResp.model_validate(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
-        if resp.code == StatusCode.NeedSmsVerify:
-            sess.sms_ticket = response.cookies.get("pt_sms_ticket") or ""
-        log.debug(resp)
-        return resp
+        return data

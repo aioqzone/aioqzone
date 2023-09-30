@@ -63,7 +63,7 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
             "pt_3rd_aid": 0,
         }
         async with self.client.get(SHOW_QR, params=data) as r:
-            return QR(r.content, r.cookies["qrsig"])
+            return QR(await r.content.read(), r.cookies["qrsig"].value)
 
     async def poll(self, sess: QrSession) -> PollResp:
         """Poll QR status.
@@ -94,7 +94,7 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
 
         async with self.client.get(POLL_QR, params=data.update(const) or data) as r:
             r.raise_for_status()
-            rl = re.findall(r"'(.*?)'[,\)]", r.text)
+            rl = re.findall(r"'(.*?)'[,\)]", await r.text())
 
         resp = PollResp.model_validate(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
         log.debug(resp)
