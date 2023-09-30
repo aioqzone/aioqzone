@@ -31,3 +31,9 @@ def raise_for_status(response: Response, *accept_code: int):
 def get_all_cookie(response: Response) -> Dict[str, str]:
     """An adapter to get all response cookies from a response object."""
     return {k: v.value for k, v in response.cookies.items() if v.value}
+
+
+def use_mobile_ua(client: ClientAdapter):
+    from ..constant import AndroidUA
+
+    client.headers["User-Agent"] = AndroidUA

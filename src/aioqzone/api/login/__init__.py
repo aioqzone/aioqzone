@@ -14,7 +14,7 @@ from contextlib import contextmanager
 from time import time
 from typing import Dict, List, Optional, Sequence, Union
 
-from httpx import ConnectError, HTTPError
+from aiohttp import ClientError
 from tylisten import FutureStore
 
 from aioqzone.exception import LoginError, SkipLoginInterrupt
@@ -148,8 +148,8 @@ class UnifiedLoginManager(Loginable):
         except NotImplementedError as e:
             log.warning(str(e))
             return "10009：需要手机验证"
-        except (GeneratorExit, ConnectError, HTTPError) as e:
-            omit_exc_info = isinstance(e, (GeneratorExit, ConnectError))
+        except (GeneratorExit, ClientError) as e:
+            omit_exc_info = isinstance(e, (GeneratorExit, ClientError))
             log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
             log.debug(e.args, extra=e.__dict__)
             return str(e)
@@ -181,8 +181,8 @@ class UnifiedLoginManager(Loginable):
             )
         except (UserBreak, KeyboardInterrupt, asyncio.CancelledError) as e:
             return "用户取消了登录"
-        except (asyncio.TimeoutError, GeneratorExit, ConnectError, HTTPError) as e:
-            omit_exc_info = isinstance(e, (ConnectError, GeneratorExit, asyncio.TimeoutError))
+        except (asyncio.TimeoutError, GeneratorExit, ClientError) as e:
+            omit_exc_info = isinstance(e, (ClientError, GeneratorExit, asyncio.TimeoutError))
             log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
             log.debug(e.args, extra=e.__dict__)
             return str(e)
@@ -253,7 +253,7 @@ class UnifiedLoginManager(Loginable):
         """
         if clear_cookie:
             self._cookie.clear()
-            self.client.client.cookies.clear()
+            self.client.cookie_jar.clear()
 
         if enable:
             from qqqr.up import UpH5Login as cls

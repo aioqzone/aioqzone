@@ -4,7 +4,7 @@ from typing import Dict, Generic, Optional, TypeVar
 
 from .constant import QzoneAppid, QzoneH5Appid, QzoneH5Proxy, QzoneProxy
 from .type import APPID, PT_QR_APP, Proxy
-from .utils.net import ClientAdapter, get_all_cookie, raise_for_status
+from .utils.net import ClientAdapter, get_all_cookie, raise_for_status, use_mobile_ua
 
 
 class LoginSession(ABC):
@@ -52,13 +52,13 @@ class LoginBase(ABC, Generic[_S]):
 
         self.client.headers["DNT"] = "1"
         if h5 or self.app.appid == QzoneH5Appid.appid:
-            self.client.use_mobile_ua()
+            use_mobile_ua(self.client)
         else:
             from .constant import UA
 
-            ua = self.client.ua.lower()
+            ua = self.client.headers["User-Agent"].lower()
             if any(i in ua for i in ["python", "httpx", "aiohttp"]):
-                self.ua = UA
+                client.headers["User-Agent"] = UA
 
     @abstractmethod
     async def login(self) -> Dict[str, str]:
