@@ -1687,6 +1687,20 @@ lint = ["docutils-stubs", "flake8", "mypy"]
 test = ["pytest"]
 
 [[package]]
+name = "tenacity"
+version = "8.2.3"
+description = "Retry code until it succeeds"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "tenacity-8.2.3-py3-none-any.whl", hash = "sha256:ce510e327a630c9e1beaf17d42e6ffacc88185044ad85cf74c0a8887c6a0f88c"},
+    {file = "tenacity-8.2.3.tar.gz", hash = "sha256:5398ef0d78e63f40007c1fb4c0bff96e1911394d2fa8d194f77619c05ff6cc8a"},
+]
+
+[package.extras]
+doc = ["reno", "sphinx", "tornado (>=4.5)"]
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -1872,4 +1886,4 @@ captcha = ["numpy", "pillow", "pychaosvm"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "943eb42ce9c50e5ff64a5bad0b51402f26f8d000be44ac9b44dfa6fb8437fcf5"
+content-hash = "708ef4c9e7d56b9a5b298691f2a51bcf65be77055be0fea5ffc9def8fea75a45"
