@@ -9,7 +9,9 @@ from unittest.mock import patch
 
 import pytest
 import pytest_asyncio
-from httpx import ConnectError, HTTPError, Request
+from aiohttp import ClientConnectionError as ConnectError
+from aiohttp import ClientResponseError
+from aiohttp import RequestInfo as Request
 
 from aioqzone.api import LoginMethod, QrLoginConfig, UnifiedLoginManager, UpLoginConfig
 from aioqzone.exception import LoginError, SkipLoginInterrupt
@@ -25,8 +27,7 @@ pytestmark = pytest.mark.asyncio
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 _fake_request = cast(Request, ...)
-_fake_http_error = HTTPError("mock")
-_fake_http_error.request = _fake_request
+_fake_http_error = ClientResponseError(_fake_request, (), code=403)
 
 
 @pytest_asyncio.fixture
@@ -43,7 +44,7 @@ class TestUP:
             (TencentLoginError(-3002, "mock"),),
             (NotImplementedError(),),
             (GeneratorExit(),),
-            (ConnectError("mock", request=_fake_request),),
+            (ConnectError("mock"),),
             (_fake_http_error,),
         ],
     )
@@ -84,7 +85,7 @@ class TestQR:
         [
             (asyncio.TimeoutError(),),
             (GeneratorExit(),),
-            (ConnectError("mock", request=_fake_request),),
+            (ConnectError("mock"),),
             (_fake_http_error,),
         ],
     )

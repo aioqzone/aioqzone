@@ -3,7 +3,6 @@ from typing import List
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -32,6 +31,5 @@ def event_loop():
 
 @pytest_asyncio.fixture(scope="module")
 async def client():
-    async with AsyncClient() as client:
-        client = ClientAdapter(client)
+    async with ClientAdapter() as client:
         yield client

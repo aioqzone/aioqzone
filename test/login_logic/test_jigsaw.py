@@ -33,10 +33,10 @@ async def captcha(client: ClientAdapter, env: test_env):
 async def sess(client: ClientAdapter, captcha: Captcha):
     sess = await captcha.new()
 
-    async def r(url):
+    async def r(url) -> bytes:
         async with client.get(url) as r:
             r.raise_for_status()
-            return r.content
+            return await r.content.read()
 
     sess.cdn_imgs = list(await asyncio.gather(*(r(i) for i in sess.cdn_urls)))
     yield sess
