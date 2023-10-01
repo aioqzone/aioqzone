@@ -249,7 +249,7 @@ class QzoneH5RawAPI:
                 "/feeds/mfeeds_get_count", dict(format="json"), host="https://mobile.qzone.qq.com"
             ) as r:
                 r.raise_for_status()
-                return await r.json()
+                return await r.json(content_type=None)
 
         return self._rtext_handler(await retry_closure(), cb=False, data_key="data")
 

@@ -68,7 +68,7 @@ class LoginBase(ABC, Generic[_S]):
     async def _get_login_url(self, sess: _S):
         assert sess.login_url
         assert not sess.logined, "This session is logined."
-        async with self.client.get(sess.login_url, follow_redirects=False) as r:
+        async with self.client.get(sess.login_url, allow_redirects=False) as r:
             raise_for_status(r, 302)
             r = get_all_cookie(r)
             sess.logined = True

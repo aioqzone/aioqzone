@@ -1,3 +1,4 @@
+from http.cookies import SimpleCookie
 from typing import Dict
 
 from aiohttp import ClientResponse as Response
@@ -30,7 +31,11 @@ def raise_for_status(response: Response, *accept_code: int):
 
 def get_all_cookie(response: Response) -> Dict[str, str]:
     """An adapter to get all response cookies from a response object."""
-    return {k: v.value for k, v in response.cookies.items() if v.value}
+    cookies = SimpleCookie()
+    for i in response.headers.getall("Set-Cookie"):
+        if not "=;" in i:
+            cookies.load(i)
+    return {k: v.value for k, v in cookies.items() if v.value}
 
 
 def use_mobile_ua(client: ClientAdapter):
