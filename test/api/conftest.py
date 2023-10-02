@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from test.conftest import test_env
 
 loginman_list = ["up"]
-if environ.get("CI"):
+if environ.get("CI") is None:
     loginman_list.append("qr")
 
 

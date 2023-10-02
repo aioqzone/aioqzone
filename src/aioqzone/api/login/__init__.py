@@ -82,7 +82,7 @@ class UpLoginManager(Loginable):
             raise TencentLoginError(StatusCode.NeedSmsVerify, "需要手机验证")
         except (GeneratorExit, ClientError) as e:
             omit_exc_info = isinstance(e, (GeneratorExit, ClientError))
-            log.warning(f"密码登录：{type(e).__name__}，重试", exc_info=not omit_exc_info)
+            log.warning(f"密码登录：{type(e).__name__}，重试", exc_info=True)
             log.debug(e.args, extra=e.__dict__)
             raise TryAgain from e
         except BaseException as e:
@@ -143,7 +143,7 @@ class QrLoginManager(Loginable):
         except (KeyboardInterrupt, asyncio.CancelledError) as e:
             raise UserBreak from e
         except (GeneratorExit, ClientError) as e:
-            log.warning(f"二维码登录：{type(e).__name__}，重试")
+            log.warning(f"二维码登录：{type(e).__name__}，重试", exc_info=True)
             log.debug(e.args, extra=e.__dict__)
             raise TryAgain
         except BaseException as e:

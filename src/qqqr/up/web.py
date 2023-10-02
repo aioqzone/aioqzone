@@ -238,8 +238,8 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             LOGIN_URL, params=await self._make_login_param(sess)
         ) as response:
             response.raise_for_status()
+            rl = re.findall(r"'(.*?)'[,\)]", await response.text())
 
-        rl = re.findall(r"'(.*?)'[,\)]", await response.text())
         resp = LoginResp.model_validate(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
         if resp.code == StatusCode.NeedSmsVerify:
             sess.sms_ticket = ""
