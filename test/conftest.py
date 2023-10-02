@@ -6,7 +6,6 @@ import pytest_asyncio
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from aioqzone.model import LoginMethod
 from qqqr.utils.net import ClientAdapter
 
 
@@ -14,7 +13,6 @@ class test_env(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="test_")
     uin: int = 0
     password: SecretStr = Field(default="")
-    order: List[LoginMethod] = ["up"]
 
 
 @pytest.fixture(scope="session")

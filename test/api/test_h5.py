@@ -6,11 +6,11 @@ from os import environ
 
 import pytest
 import pytest_asyncio
+from tenacity import RetryError
 
-from aioqzone.api import UnifiedLoginManager
+from aioqzone.api import Loginable
 from aioqzone.api.h5 import QzoneH5API
 from aioqzone.api.h5.raw import QzoneH5RawAPI
-from aioqzone.exception import LoginError
 from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
@@ -18,7 +18,7 @@ skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI
 
 
 @pytest_asyncio.fixture(scope="class")
-async def raw(client: ClientAdapter, man: UnifiedLoginManager):
+async def raw(client: ClientAdapter, man: Loginable):
     yield QzoneH5RawAPI(client, man)
 
 
@@ -31,7 +31,7 @@ class TestH5RawAPI:
     async def test_index(self, raw: QzoneH5RawAPI, context: dict):
         try:
             d = await raw.index()
-        except LoginError:
+        except RetryError:
             pytest.skip("login failed")
         if d["hasmore"]:
             context["attach_info"] = d["attachinfo"]
@@ -46,13 +46,13 @@ class TestH5RawAPI:
     async def test_heartbeat(self, raw: QzoneH5RawAPI):
         try:
             d = await raw.mfeeds_get_count()
-        except LoginError:
+        except RetryError:
             pytest.skip("login failed")
         assert "active_cnt" in d
 
 
 @pytest_asyncio.fixture(scope="class")
-async def api(client: ClientAdapter, man: UnifiedLoginManager):
+async def api(client: ClientAdapter, man: Loginable):
     yield QzoneH5API(client, man)
 
 
@@ -60,7 +60,7 @@ class TestH5API:
     async def test_index(self, api: QzoneH5API, context: dict):
         try:
             d = await api.index()
-        except LoginError:
+        except RetryError:
             pytest.skip("login failed")
         context["first_page"] = d.vFeeds
         if d.hasmore:
@@ -88,19 +88,5 @@ class TestH5API:
     async def test_heartbeat(self, api: QzoneH5API):
         try:
             await api.mfeeds_get_count()
-        except LoginError:
+        except RetryError:
             pytest.skip("login failed")
-
-
-@skip_ci
-async def test_h5_qr_login(client: ClientAdapter, man: UnifiedLoginManager):
-    man.order = ["qr"]
-    api = QzoneH5API(client, man)
-
-    with suppress(ImportError):
-        from PIL import Image as image
-
-        man.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
-
-    d = await api.mfeeds_get_count()
-    print(d.active_cnt)

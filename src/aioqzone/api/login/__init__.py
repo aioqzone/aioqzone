@@ -56,6 +56,7 @@ class UpLoginManager(Loginable):
         stop=stop_after_attempt(2),
         wait=wait_exponential(min=1, max=6),
         retry=retry_if_exception_type(TryAgain),
+        reraise=True,
     )
     async def _new_cookie(self) -> Dict[str, str]:
         """
