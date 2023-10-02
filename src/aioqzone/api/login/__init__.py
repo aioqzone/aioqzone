@@ -10,17 +10,14 @@ Users can inherit these managers and implement their own persistance logic.
 
 import asyncio
 import logging
-from contextlib import contextmanager
-from time import time
-from typing import Dict, List, Optional, Sequence, Union
+from typing import Dict
 
-from httpx import ConnectError, HTTPError
-from tylisten import FutureStore
+from aiohttp import ClientError
+from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
-from aioqzone.exception import LoginError, SkipLoginInterrupt
-from aioqzone.message import LoginMethod
+from aioqzone.exception import UnexpectedLoginError
 from aioqzone.model import QrLoginConfig, UpLoginConfig
-from qqqr.exception import TencentLoginError, UserBreak
+from qqqr.exception import TencentLoginError, UnexpectedInteraction, UserBreak
 from qqqr.qr import QrLogin
 from qqqr.utils.net import ClientAdapter
 
@@ -28,7 +25,13 @@ from ._base import Loginable
 
 log = logging.getLogger(__name__)
 
-__all__ = ["ConstLoginMan", "UnifiedLoginManager", "LoginMethod", "QrLoginConfig", "UpLoginConfig"]
+__all__ = [
+    "ConstLoginMan",
+    "UpLoginManager",
+    "QrLoginManager",
+    "QrLoginConfig",
+    "UpLoginConfig",
+]
 
 
 class ConstLoginMan(Loginable):
@@ -36,239 +39,132 @@ class ConstLoginMan(Loginable):
 
     def __init__(self, uin: int, cookie: Dict[str, str]) -> None:
         super().__init__(uin)
-        self._cookie = cookie
-
-    @Loginable.cookie.setter
-    def cookie(self, v: Dict[str, str]):
-        self._cookie = v
+        self.cookie = cookie
 
     async def _new_cookie(self) -> Dict[str, str]:
-        return self._cookie
+        return self.cookie
 
 
-class UnifiedLoginManager(Loginable):
-    """A login manager that will try methods according to the given :obj:`.order`.
-
-    .. versionchanged:: 0.14.0
-
-        Renamed to ``UnifiedLoginManager``.
-    """
-
-    _order: List[LoginMethod]
-    last_qr_attempt: float = 0
-    """Timestamp of the last QR login attempt, 0 represents no QR login since created.
-
-    .. versionadded:: 0.14.2
-    """
-    last_up_attempt: float = 0
-    """Timestamp of the last UP login attempt, 0 represents no UP login since created.
-
-    .. versionadded:: 0.14.2
-    """
-    disable_suppress: bool = False
-    """A flag represents that a login is not optional. This will change some behavior of this login manager."""
-
-    def __init__(
-        self,
-        client: ClientAdapter,
-        up_config: Optional[UpLoginConfig] = None,
-        qr_config: Optional[QrLoginConfig] = None,
-        *,
-        h5=True,
-    ) -> None:
-        self.up_config = up_config or UpLoginConfig()
-        self.qr_config = qr_config or QrLoginConfig()
-        super().__init__(self.up_config.uin or self.qr_config.uin)
-
-        self._order = []
+class UpLoginManager(Loginable):
+    def __init__(self, client: ClientAdapter, config: UpLoginConfig, *, h5=True) -> None:
+        super().__init__(config.uin)
         self.client = client
-        self.channel = FutureStore()
+        self.config = config
+        self.h5(h5, clear_cookie=False)  # init uplogin
 
-        self.h5(h5, clear_cookie=False)  # init uplogin and qrlogin
-        self.sms_code_required = self.uplogin.sms_code_input
-        self.sms_code_input = self.uplogin.sms_code_input
-        if self.up_config.uin > 0:
-            self._order.append("up")
-
-        self.refresh_times = self.qr_config.max_refresh_times
-        self.poll_freq = self.qr_config.poll_freq
-        self.qr_fetched = self.qrlogin.qr_fetched
-        self.qr_cancelled = self.qrlogin.qr_cancelled
-        self.cancel_qr = self.qrlogin.cancel
-        self.refresh_qr = self.qrlogin.refresh
-        if self.qr_config.uin > 0:
-            self._order.append("qr")
-
-    @property
-    def order(self):
-        """Returns order of :obj:`LoginMethod`. Assign a :obj:`LoginMethod` :obj:`Sequence` to this field
-        to change the order of :obj:`LoginMethod`."""
-        return self._order
-
-    @order.setter
-    def order(self, v: Sequence[LoginMethod]):
-        v = list(v)
-        if "qr" in v and self.qr_config.uin <= 0:
-            raise ValueError(self.qr_config)
-        if "up" in v and self.up_config.uin <= 0:
-            raise ValueError(self.up_config)
-        self._order = v
-
-    @property
-    def qr_suppress_end_time(self):
-        """Get the end of suppress duration.
-
-        .. versionadded:: 0.14.3"""
-        return self.last_qr_attempt + self.qr_config.min_login_interval
-
-    @property
-    def up_suppress_end_time(self):
-        """Get the end of suppress duration.
-
-        .. versionadded:: 0.14.3"""
-        return self.last_up_attempt + self.up_config.min_login_interval
-
-    async def _try_up_login(self) -> Union[Dict[str, str], str]:
+    @retry(
+        stop=stop_after_attempt(2),
+        wait=wait_exponential(min=1, max=6),
+        retry=retry_if_exception_type(TryAgain),
+        reraise=True,
+    )
+    async def _new_cookie(self) -> Dict[str, str]:
         """
-        :raises:
-            Exceptions except for :exc:`TencentLoginError`, :exc:`NotImplementedError`,
-            :exc:`GeneratorExit`, :exc:`httpx.ConnectError`, :exc:`httpx.HTTPError`
+        :raise `TencentLoginError`: Qzone login error.
+        :raise `TryAgain`: Network error, or qzone login expired.
+        :raise `UnexpectedLoginError`: All uncaught exceptions are wrapped by :exc:`UnexpectedLoginError`.
 
-        .. versionchanged:: 0.12.9
+        .. versionchanged:: 1.1.0
 
-            Do not raise :exc:`SystemExit` any more. Any unexpected error will be reraised.
+            尽可能减少异常类型。未捕获的异常统一抛出为 :exc:`UnexpectedLoginError`
 
         :return: cookie dict
         """
         try:
             cookie = await self.uplogin.login()
         except TencentLoginError as e:
-            log.warning(e := str(e))
-            return e
-        except NotImplementedError as e:
-            log.warning(str(e))
-            return "10009：需要手机验证"
-        except (GeneratorExit, ConnectError, HTTPError) as e:
-            omit_exc_info = isinstance(e, (GeneratorExit, ConnectError))
-            log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
-            log.debug(e.args, extra=e.__dict__)
-            return str(e)
-        except:
-            log.fatal("密码登录抛出未捕获的异常.", exc_info=True)
+            if e.code in (-3000, -10000):
+                raise TryAgain from e
             raise
-            return "密码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
-        finally:
-            self.last_up_attempt = time()
+        except NotImplementedError:
+            from qqqr.constant import StatusCode
+
+            raise TencentLoginError(StatusCode.NeedSmsVerify, "需要手机验证")
+        except (GeneratorExit, ClientError) as e:
+            omit_exc_info = isinstance(e, (GeneratorExit, ClientError))
+            log.warning(f"密码登录：{type(e).__name__}，重试", exc_info=True)
+            log.debug(e.args, extra=e.__dict__)
+            raise TryAgain from e
+        except BaseException as e:
+            log.fatal("密码登录异常", exc_info=True)
+            raise UnexpectedLoginError from e
 
         return cookie
-
-    async def _try_qr_login(self) -> Union[Dict[str, str], str]:
-        """
-        :raises:
-            Exceptions except for :exc:`UserBreak`, :exc:`KeyboardInterrupt`, :exc:`asyncio.CancelledError`,
-            :exc:`asyncio.TimeoutError`, :exc:`GeneratorExit`, :exc:`httpx.ConnectError`, :exc:`httpx.HTTPError`
-
-        .. versionchanged:: 0.12.9
-
-            Do not raise :exc:`SystemExit` any more. Any unexpected error will be reraised.
-
-        :return: cookie dict
-        """
-
-        try:
-            cookie = await self.qrlogin.login(
-                refresh_times=self.refresh_times, poll_freq=self.poll_freq
-            )
-        except (UserBreak, KeyboardInterrupt, asyncio.CancelledError) as e:
-            return "用户取消了登录"
-        except (asyncio.TimeoutError, GeneratorExit, ConnectError, HTTPError) as e:
-            omit_exc_info = isinstance(e, (ConnectError, GeneratorExit, asyncio.TimeoutError))
-            log.warning(f"{type(e).__name__} captured, continue.", exc_info=not omit_exc_info)
-            log.debug(e.args, extra=e.__dict__)
-            return str(e)
-        except:
-            log.fatal("Unexpected error in QR login.", exc_info=True)
-            raise
-            return "二维码登录期间出现奇怪的错误😰请检查日志以便寻求帮助."
-        finally:
-            self.last_qr_attempt = time()
-
-        return cookie
-
-    async def _new_cookie(self) -> Dict[str, str]:
-        """
-        :meta public:
-        :raise `aioqzone.exception.SkipLoginInterrupt`: if :obj:`.order` returns an empty list.
-        :raise `aioqzone.exception.LoginError`: if all login methods failed.
-
-        :return: cookie dict
-
-        .. versionchanged:: 0.14.2
-
-        Check :obj:`LoginConfig.min_login_interval` of methods in `.order`.
-        """
-        methods = self.order.copy()
-        if not self.disable_suppress:
-            if "qr" in methods and self.qr_suppress_end_time > time():
-                methods.remove("qr")
-            if "up" in methods and self.up_suppress_end_time > time():
-                methods.remove("up")
-
-        if not methods:
-            log.info("No method selected for this login, raise SkipLoginInterrupt.")
-            raise SkipLoginInterrupt
-
-        log.info(f"Methods selected for this login: {methods}")
-        loginables = dict(up=self._try_up_login, qr=self._try_qr_login)
-
-        reasons: Dict[LoginMethod, str] = {}
-        fail_with = lambda meth, msg: self.channel.add_awaitable(
-            self.login_failed.results(uin=self.uin, method=meth, exc=str(msg))
-        )
-
-        for m in methods:
-            try:
-                result = await loginables[m]()
-            except BaseException as e:
-                fail_with(m, e)
-                break
-
-            if isinstance(result, str):
-                fail_with(m, result)
-                reasons[m] = result
-            else:
-                return result
-
-        raise LoginError(reasons=reasons)
 
     def h5(self, enable=True, clear_cookie=True):
-        """Change :obj:`.qrlogin` and :obj:`.uplogin` to h5 login proxy.
+        """Change :obj:`.uplogin` to h5 login proxy.
 
         :param enable: use h5 mode or not
         :param clear_cookie: remove existing login cookie in :obj:`~Loginable.cookie`!
-
-        .. versionchanged:: 0.14.1
-
-            Allow user to switch h5 back; Allow to skip clearing cookie.
         """
         if clear_cookie:
-            self._cookie.clear()
-            self.client.client.cookies.clear()
+            self.cookie.clear()
+            self.client.cookie_jar.clear()
 
         if enable:
             from qqqr.up import UpH5Login as cls
         else:
             from qqqr.up.web import UpWebLogin as cls
+
         self.uplogin = cls(
             client=self.client,
-            uin=self.up_config.uin,
-            pwd=self.up_config.pwd.get_secret_value(),
+            uin=self.config.uin,
+            pwd=self.config.pwd.get_secret_value(),
             h5=enable,
         )
+        self.sms_code_input = self.uplogin.sms_code_input
+
+
+class QrLoginManager(Loginable):
+    def __init__(self, client: ClientAdapter, config: QrLoginConfig, *, h5=True) -> None:
+        super().__init__(config.uin)
+        self.client = client
+        self.config = config
+        self.h5(h5, clear_cookie=False)  # init uplogin
+
+    async def _new_cookie(self) -> Dict[str, str]:
+        """
+        :raise `UnexpectedInteraction`: All exceptions caused by user, such as cancelling the login, or not scanning the QRcode.
+        :raise `TryAgain`: Network error, or qzone login expired.
+        :raise `UnexpectedLoginError`: All uncaught exceptions are wrapped by :exc:`UnexpectedLoginError`.
+
+        .. versionchanged:: 1.1.0
+
+            尽可能减少异常类型。未捕获的异常统一抛出为 :exc:`UnexpectedLoginError`
+
+        :return: cookie dict
+        """
+        try:
+            cookie = await self.qrlogin.login(
+                refresh_times=self.config.max_refresh_times, poll_freq=self.config.poll_freq
+            )
+        except UnexpectedInteraction:
+            raise
+        except (KeyboardInterrupt, asyncio.CancelledError) as e:
+            raise UserBreak from e
+        except (GeneratorExit, ClientError) as e:
+            log.warning(f"二维码登录：{type(e).__name__}，重试", exc_info=True)
+            log.debug(e.args, extra=e.__dict__)
+            raise TryAgain
+        except BaseException as e:
+            log.fatal("二维码登录异常", exc_info=True)
+            raise UnexpectedLoginError from e
+
+        return cookie
+
+    def h5(self, enable=True, clear_cookie=True):
+        """Change :obj:`.qrlogin` to h5 login proxy.
+
+        :param enable: use h5 mode or not
+        :param clear_cookie: remove existing login cookie in :obj:`~Loginable.cookie`!
+        """
+        if clear_cookie:
+            self.cookie.clear()
+            self.client.cookie_jar.clear()
+
         self.qrlogin = QrLogin(client=self.client, h5=enable)
 
-    @contextmanager
-    def force_login(self):
-        self.disable_suppress = True
-        yield self
-        self.disable_suppress = False
+        self.qr_fetched = self.qrlogin.qr_fetched
+        self.qr_cancelled = self.qrlogin.qr_cancelled
+        self.cancel_qr = self.qrlogin.cancel
+        self.refresh_qr = self.qrlogin.refresh

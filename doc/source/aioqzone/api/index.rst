@@ -5,5 +5,4 @@ Qzone APIs
     :maxdepth: 1
 
     login
-    web
     h5

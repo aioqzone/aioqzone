@@ -9,17 +9,20 @@ aioqzone封装了一些Qzone接口。
 
 [English](README_en.md) | 简体中文
 
-> 1. ⚠️ aioqzone 仍在开发阶段，任何功能和接口都有可能在未来的版本中发生变化。
-> 2. 🆘 **欢迎有意协助开发/维护的中文开发者**。不仅限于本仓库，[aioqzone][org] 所属的任何仓库都需要您的帮助。
+> [!WARNING]
+> aioqzone 仍在开发阶段，任何功能和接口都有可能在未来的版本中发生变化。
+
+> [!IMPORTANT]
+> **欢迎有意协助开发/维护的中文开发者**。不仅限于本仓库，[aioqzone][org] 所属的任何仓库都需要您的帮助。
 
 ## 功能和特点
 
 ### Qzone 功能
 
-- [x] 二维码登录
-- [x] 密码登录 (受限)
-- [x] 计算验证码答案
-- [ ] 通过网络环境检测
+- [x] [二维码登录](src/qqqr/qr/)
+- [x] [密码登录](src/qqqr/up/) (受限)
+- [x] [计算验证码答案](src/qqqr/up/captcha/jigsaw.py)
+- [ ] [通过网络环境检测][pychaosvm]
 - [x] 爬取HTML说说
 - [x] 爬取说说详细内容
 - [x] 爬取空间相册
@@ -57,7 +60,7 @@ __在做了:__
 ## 许可证
 
 ```
-Copyright (C) 2022 aioqzone.
+Copyright (C) 2022-2023 aioqzone.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
@@ -79,5 +82,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
 [aioqzone-feed]: https://github.com/aioqzone/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
+[pychaosvm]: https://github.com/aioqzone/pychaosvm "A Python envirionment for Tencent ChaosVM."
 [pypi]: https://pypi.org/project/aioqzone
 [org]: https://github.com/aioqzone

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-09 15:47+0800\n"
+"POT-Creation-Date: 2023-10-02 10:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,14 +27,23 @@ msgstr "QQQR 异常"
 msgid "This exception represents that an error occured in Qzone **login**, with at least an error code."
 msgstr "这个异常表示 Qzone 登录期间发生了一个错误。此异常至少包含一个来自 Qzone 的错误码。"
 
+#: of qqqr.exception.UnexpectedInteraction:1
+msgid "Represents that user didn't interact as expected."
+msgstr ""
+
 #: of qqqr.exception.UserBreak:1
 #, fuzzy
 msgid "Represents that user cancels the login spontaneously."
 msgstr "这个异常应当在用户主动停止 Qzone 登录时被抛出。"
 
 #: of qqqr.exception.UserBreak:5
-msgid "Do not inherit from :exc:`KeyboardInterrupt`."
+msgid "Inherit from :exc:`UnexpectedInteraction`."
 msgstr ""
+
+#: of qqqr.exception.UserTimeout:1
+#, fuzzy
+msgid "Represents that user doesn't interact as expected in a time."
+msgstr "这个异常应当在用户主动停止 Qzone 登录时被抛出。"
 
 #~ msgid ""
 #~ "Once we await a hook, we expect that if "
@@ -63,4 +72,7 @@ msgstr ""
 #~ "Reraise only when you have to: >>> try: >>>"
 #~ "     need_input(await hook_guard(read_from_user)()) >>> except "
 #~ "HookError as e: >>>     raise e"
+#~ msgstr ""
+
+#~ msgid "Do not inherit from :exc:`KeyboardInterrupt`."
 #~ msgstr ""

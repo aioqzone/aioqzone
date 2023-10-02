@@ -9,16 +9,17 @@ aioqzone is a python package handling Qzone web login and wrapping some common Q
 
 English | [简体中文](README.md)
 
+> [!WARNING]
 > aioqzone is under active development. Any functionality and interface may be changed.
 
 ## Features
 
 ### Qzone Feature
 
-- [x] QR login
-- [x] password login (limited)
-- [x] solve captcha
-- [ ] pass network environment verification
+- [x] [QR login](src/qqqr/qr/)
+- [x] [password login](src/qqqr/up/) (limited)
+- [x] [solve captcha](src/qqqr/up/captcha/jigsaw.py)
+- [ ] [pass network environment verification][pychaosvm]
 - [x] get complete html feeds
 - [x] get feed details
 - [x] get Qzone album
@@ -57,7 +58,7 @@ You can look for these repos for examples in practice.
 ## License
 
 ```
-Copyright (C) 2022 aioqzone.
+Copyright (C) 2022-2023 aioqzone.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
@@ -79,4 +80,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
 [aioqzone-feed]: https://github.com/aioqzone/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
+[pychaosvm]: https://github.com/aioqzone/pychaosvm "A Python envirionment for Tencent ChaosVM."
 [pypi]: https://pypi.org/project/aioqzone

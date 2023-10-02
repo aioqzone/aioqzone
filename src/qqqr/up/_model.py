@@ -96,7 +96,7 @@ class FgBindingCfg(BaseModel):
 class CaptchaDisplay(BaseModel):
     bg: BgElemCfg = Field(alias="bg_elem_cfg")
     """Background (puzzle)"""
-    fg_binding_list: List[FgBindingCfg]
+    fg_binding_list: List[FgBindingCfg] = Field(default=[])
     sprites: List[FgElemCfg] = Field(alias="fg_elem_list")
     """Foreground sprites"""
     sprite_url: str

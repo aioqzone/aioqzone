@@ -1,7 +1,9 @@
 import asyncio
 from abc import ABC, abstractmethod
 from time import time
-from typing import Dict
+from typing import Dict, Optional
+
+from tylisten import FutureStore
 
 import aioqzone.message as MT
 from qqqr.utils.encrypt import gtk
@@ -13,19 +15,16 @@ class Loginable(ABC):
     last_login: float = 0
     """Last login time stamp. 0 represents no login since created."""
 
-    def __init__(self, uin: int) -> None:
+    def __init__(self, uin: int, ch_login_notify: Optional[FutureStore] = None) -> None:
         super().__init__()
         self.uin = uin
-        self._cookie = {}
+        self.cookie: Dict[str, str] = {}
+        """Cached cookie."""
         self.lock = asyncio.Lock()
+        self.ch_login_notify = ch_login_notify or FutureStore()
 
         self.login_success = MT.login_success.new()
         self.login_failed = MT.login_failed.new()
-
-    @property
-    def cookie(self) -> Dict[str, str]:
-        """Cached cookie."""
-        return self._cookie
 
     @abstractmethod
     async def _new_cookie(self) -> Dict[str, str]:
@@ -36,7 +35,7 @@ class Loginable(ABC):
         """
         return
 
-    async def new_cookie(self):
+    async def new_cookie(self) -> bool:
         """Get a new cookie dict, which means cached cookie is not allowed.
         Generally, this will trigger a login.
 
@@ -47,15 +46,22 @@ class Loginable(ABC):
         :return: cookie. Shouldn't be a cached one.
         """
         if self.lock.locked():
-            # if there is other requests trying to update cookie, reuse the result.
+            last_gtk = self.gtk
             async with self.lock:
-                return self.cookie
+                return last_gtk == self.gtk
         else:
             # let the first request get result from Qzone.
             async with self.lock:
-                self._cookie = await self._new_cookie()
-                self.last_login = time()
-                return self._cookie
+                try:
+                    self.cookie = await self._new_cookie()
+                except BaseException as e:
+                    self.ch_login_notify.add_awaitable(self.login_failed.emit(self.uin, e))
+                    return False
+                else:
+                    self.ch_login_notify.add_awaitable(self.login_success.emit(self.uin))
+                    return True
+                finally:
+                    self.last_login = time()
 
     @property
     def gtk(self) -> int:

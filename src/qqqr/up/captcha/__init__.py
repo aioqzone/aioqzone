@@ -12,7 +12,9 @@ from typing import List
 
 from chaosvm import prepare
 from chaosvm.proxy.dom import TDC
-from httpx import URL
+from pydantic import ValidationError
+from tenacity import retry, retry_if_exception_type, stop_after_attempt
+from yarl import URL
 
 from ...utils.iter import first
 from ...utils.net import ClientAdapter
@@ -91,11 +93,11 @@ class TcaptchaSession:
         self.tdc = tdc
 
     def _cdn(self, rel_path: str) -> URL:
-        return URL("https://t.captcha.qq.com").join(rel_path)
+        return URL("https://t.captcha.qq.com").with_path(rel_path, encoded=True)
 
     def tdx_js_url(self):
         assert self.conf
-        return URL("https://t.captcha.qq.com").join(self.conf.common.tdc_path)
+        return URL("https://t.captcha.qq.com").with_path(self.conf.common.tdc_path, encoded=True)
 
     def vmslide_js_url(self):
         raise NotImplementedError
@@ -128,7 +130,7 @@ class Captcha:
         :return: A string containing the base64 encoded user agent
         """
 
-        return base64.b64encode(self.client.ua.encode()).decode()
+        return base64.b64encode(self.client.headers["User-Agent"].encode()).decode()
 
     async def new(self):
         """``prehandle``. Call this method to generate a new verify session.
@@ -165,13 +167,18 @@ class Captcha:
             "subsid": 1,
             "callback": CALLBACK,
         }
-        async with self.client.get(PREHANDLE_URL, params=data.update(const) or data) as r:
-            r.raise_for_status()
-            m = re.search(CALLBACK + r"\((\{.*\})\)", r.text)
+        data.update(const)
 
-        assert m
-        r = PrehandleResp.model_validate_json(m.group(1))  # TODO: retry if ValidationError
-        return TcaptchaSession(r)
+        @retry(stop=stop_after_attempt(2), retry=retry_if_exception_type(ValidationError))
+        async def retry_closure():
+            async with self.client.get(PREHANDLE_URL, params=data) as r:
+                r.raise_for_status()
+                m = re.search(CALLBACK + r"\((\{.*\})\)", await r.text())
+
+            assert m
+            return PrehandleResp.model_validate_json(m.group(1))
+
+        return TcaptchaSession(await retry_closure())
 
     async def iframe(self):
         """call this right after calling :meth:`.prehandle`"""
@@ -187,8 +194,10 @@ class Captcha:
         :return: ipv4 str, or empty str if all apis failed."""
         for api in ["ifconfig.me/ip", "api.ipify.org", "v4.ident.me"]:
             # BUG: should always bypass client's proxy settings
-            async with self.client.get("https://" + api) as r:
-                cand = r.text.strip()
+            async with self.client.get("https://" + api, ssl=False) as r:
+                if r.status != 200:
+                    continue
+                cand = (await r.text()).strip()
                 with suppress(ValueError):
                     IPv4Address(cand)
                     return cand
@@ -204,10 +213,10 @@ class Captcha:
         :return: None
         """
 
-        async def r(url):
+        async def r(url) -> bytes:
             async with self.client.get(url) as r:
                 r.raise_for_status()
-                return r.content
+                return await r.content.read()
 
         sess.cdn_imgs = list(await asyncio.gather(*(r(i) for i in sess.cdn_urls)))
 
@@ -253,7 +262,7 @@ class Captcha:
         async with self.client.get(sess.tdx_js_url()) as r:
             r.raise_for_status()
             tdc = prepare(
-                r.text,
+                await r.text(),
                 ip=await self.get_ipv4(),
                 ua=self.client.headers["User-Agent"],
                 mouse_track=sess.mouse_track,
@@ -291,6 +300,6 @@ class Captcha:
         log.debug(f"verify post data: {data}")
 
         async with self.client.post(VERIFY_URL, data=data) as r:
-            r = VerifyResp.model_validate_json(r.text)
+            r = VerifyResp.model_validate_json(await r.text())
 
         return r

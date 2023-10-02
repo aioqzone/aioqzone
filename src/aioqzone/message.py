@@ -1,6 +1,7 @@
+import typing as t
+
 from tylisten import hookdef
 
-from aioqzone.model import LoginMethod
 from qqqr.message import *
 
 __all__ = [
@@ -14,10 +15,10 @@ __all__ = [
 
 
 @hookdef
-def login_success(uin: int, method: LoginMethod):
+def login_success(uin: int):
     ...
 
 
 @hookdef
-def login_failed(uin: int, method: LoginMethod, exc: str):
+def login_failed(uin: int, exc: t.Union[BaseException, str]):
     ...

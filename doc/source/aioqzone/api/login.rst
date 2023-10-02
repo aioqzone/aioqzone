@@ -13,4 +13,4 @@ Built-in Login Managers
 ----------------------------------
 
 .. automodule:: aioqzone.api.login
-    :members: ConstLoginMan, UnifiedLoginManager
+    :members: ConstLoginMan, UpLoginManager, QrLoginManager
