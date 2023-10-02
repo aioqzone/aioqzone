@@ -7,7 +7,7 @@ from random import random
 import qqqr.message as MT
 from qqqr.base import LoginBase, LoginSession
 from qqqr.constant import StatusCode
-from qqqr.exception import UserBreak
+from qqqr.exception import UserBreak, UserTimeout
 from qqqr.qr.type import PollResp
 from qqqr.utils.encrypt import hash33
 
@@ -116,7 +116,7 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
         :param refresh_times: max qr expire times.
         :param poll_freq: interval between two status polling, in seconds, default as 3.
 
-        :raise `asyncio.TimeoutError`: if qr is not scanned after `refresh_times` expires.
+        :raise `UserTimeout`: if qr is not scanned after `refresh_times` expires.
         :raise `UserBreak`: if :obj:`QrEvent.cancel_flag` is set.
         """
         self.refresh.clear()
@@ -146,4 +146,4 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
             sess.new_qr(await self.show())
             self.refresh.clear()
 
-        raise asyncio.TimeoutError
+        raise UserTimeout("qrscan")

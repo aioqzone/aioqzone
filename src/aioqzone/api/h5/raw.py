@@ -95,13 +95,12 @@ class QzoneH5RawAPI:
         return self.client.post(self.host + path, params=params, data=data, **kw)
 
     async def _update_cookie_safe(self, *_) -> None:
-        cookie = await self.login.new_cookie()
+        await self.login.new_cookie()
+        # update cookies is optional.
         try:
-            self.client.cookie_jar.update_cookies(cookie)
+            self.client.cookie_jar.update_cookies(self.login.cookie)
         except:
-            log.error("Error when updating client cookies", exc_info=True)
-            # since actually we often use the same client in loginman and QzoneAPI,
-            # it is not essential to update cookies.
+            log.warning("Error when updating client cookies", exc_info=True)
 
     def _rtext_handler(
         self,

@@ -1,6 +1,3 @@
-from typing import Callable
-
-
 class TencentLoginError(RuntimeError):
     """This exception represents that an error occured in Qzone **login**,
     with at least an error code."""
@@ -22,13 +19,31 @@ class TencentLoginError(RuntimeError):
         return f"Code {self.code}{subcode}: {self.msg}"
 
 
-class UserBreak(RuntimeError):
+class UnexpectedInteraction(RuntimeError):
+    """Represents that user didn't interact as expected."""
+
+    def __init__(self, description: str, *args) -> None:
+        super().__init__(description, *args)
+
+
+class UserBreak(UnexpectedInteraction):
     """Represents that user cancels the login spontaneously.
 
-    .. versionchanged:: 0.12.10
+    .. versionchanged:: 1.1.0
 
-        Do not inherit from :exc:`KeyboardInterrupt`.
+        Inherit from :exc:`UnexpectedInteraction`.
     """
 
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__("用户取消了登录")
+
+
+class UserTimeout(UnexpectedInteraction):
+    """Represents that user doesn't interact as expected in a time.
+
+    .. versionadded:: 1.1.0
+    """
+
+    def __init__(self, expected_interaction: str = "") -> None:
+        super().__init__("用户未响应请求")
+        self.expected_interaction = expected_interaction
