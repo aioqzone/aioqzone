@@ -6,7 +6,7 @@ from random import choice, random
 from time import time_ns
 from typing import List, Optional
 
-from httpx import URL
+from yarl import URL
 
 import qqqr.message as MT
 from qqqr.base import LoginBase, LoginSession
@@ -130,7 +130,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             if self.info.help:
                 params["pt_qr_help_link"] = self.info.help
 
-        return URL("https://xui.ptlogin2.qq.com/cgi-bin/xlogin").copy_with(params=params)
+        return URL("https://xui.ptlogin2.qq.com/cgi-bin/xlogin").with_query(params)
 
     async def deviceId(self) -> str:
         """a js fingerprint.
@@ -149,7 +149,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         """
         async with self.client.get(self.login_page_url) as r:
             r.raise_for_status()
-            return UpWebSession(r.cookies["pt_login_sig"], str(r.url))
+            return UpWebSession(r.cookies["pt_login_sig"].value, str(r.url))
 
     async def check(self, sess: UpWebSession):
         data = {
@@ -167,7 +167,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         }
         async with self.client.get(CHECK_URL, params=data) as r:
             r.raise_for_status()
-            rl = re.findall(r"'(.*?)'[,\)]", r.text)
+            rl = re.findall(r"'(.*?)'[,\)]", await r.text())
 
         rdict = dict(
             zip(
@@ -191,20 +191,12 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         async with self.client.get(
             "https://ui.ptlogin2.qq.com/ssl/send_sms_code", params=data
         ) as r:
-            rl = re.findall(r"'(.*?)'[,\)]", r.text)
+            rl = re.findall(r"'(.*?)'[,\)]", await r.text())
         # ptui_sendSMS_CB('10012', '短信发送成功！')
         if int(rl[0]) != 10012:
             raise TencentLoginError(sess.pastcode, rl[1])
 
-    async def try_login(self, sess: UpWebSession):
-        """
-        Check if current session meets the login condition.
-        It takes a session object and returns response of this try.
-
-        :param sess: Store the session information
-        :return: A login response
-        """
-
+    async def _make_login_param(self, sess: UpWebSession):
         const = {
             "h": 1,
             "t": 1,
@@ -231,18 +223,28 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             "sid": sess.check_rst.session,
             "o1vId": await self.deviceId(),
         }
-        if sess.sms_code:
-            data["pt_sms_code"] = sess.sms_code
-        self.referer = sess.login_referer
-
         data.update(const)
-        async with self.client.get(LOGIN_URL, params=data) as response:
-            response.raise_for_status()
+        return data
 
-        rl = re.findall(r"'(.*?)'[,\)]", response.text)
+    async def try_login(self, sess: UpWebSession):
+        """
+        Check if current session meets the login condition.
+        It takes a session object and returns response of this try.
+
+        :param sess: Store the session information
+        :return: A login response
+        """
+        async with self.client.get(
+            LOGIN_URL, params=await self._make_login_param(sess)
+        ) as response:
+            response.raise_for_status()
+            rl = re.findall(r"'(.*?)'[,\)]", await response.text())
+
         resp = LoginResp.model_validate(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
         if resp.code == StatusCode.NeedSmsVerify:
-            sess.sms_ticket = response.cookies.get("pt_sms_ticket") or ""
+            sess.sms_ticket = ""
+            if m := response.cookies.get("pt_sms_ticket"):
+                sess.sms_ticket = m.value
         log.debug(resp)
         return resp
 

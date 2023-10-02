@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-09 16:23+0800\n"
+"POT-Creation-Date: 2023-10-01 15:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -23,80 +23,59 @@ msgstr ""
 msgid "Messages"
 msgstr "消息"
 
-#: aioqzone.message.login_failed aioqzone.message.login_success of qqqr.message.qr_fetched
-#: qqqr.message.sms_code_input qqqr.message.sms_code_required
-msgid "Fields"
-msgstr ""
+#~ msgid "Fields"
+#~ msgstr ""
 
-#: aioqzone.message.login_failed:1 of
-msgid ":py:obj:`exc (str) <aioqzone.message.login_failed.exc>`"
-msgstr ""
+#~ msgid ":py:obj:`exc (str) <aioqzone.message.login_failed.exc>`"
+#~ msgstr ""
 
-#: aioqzone.message.login_failed:1 of
-msgid ":py:obj:`method (Literal['qr'] | Literal['up']) <aioqzone.message.login_failed.method>`"
-msgstr ""
+#~ msgid ":py:obj:`method (Literal['qr'] | Literal['up']) <aioqzone.message.login_failed.method>`"
+#~ msgstr ""
 
-#: aioqzone.message.login_failed:1 of
-msgid ":py:obj:`uin (int) <aioqzone.message.login_failed.uin>`"
-msgstr ""
+#~ msgid ":py:obj:`uin (int) <aioqzone.message.login_failed.uin>`"
+#~ msgstr ""
 
-#: aioqzone.message.login_success:1 of
-msgid ":py:obj:`method (Literal['qr'] | Literal['up']) <aioqzone.message.login_success.method>`"
-msgstr ""
+#~ msgid ":py:obj:`method (Literal['qr'] | Literal['up']) <aioqzone.message.login_success.method>`"
+#~ msgstr ""
 
-#: aioqzone.message.login_success:1 of
-msgid ":py:obj:`uin (int) <aioqzone.message.login_success.uin>`"
-msgstr ""
+#~ msgid ":py:obj:`uin (int) <aioqzone.message.login_success.uin>`"
+#~ msgstr ""
 
-#: of qqqr.message.qr_fetched:1
-msgid ":py:obj:`png (bytes) <qqqr.message.qr_fetched.png>`"
-msgstr ""
+#~ msgid ":py:obj:`png (bytes) <qqqr.message.qr_fetched.png>`"
+#~ msgstr ""
 
-#: of qqqr.message.qr_fetched:1
-msgid ":py:obj:`times (int) <qqqr.message.qr_fetched.times>`"
-msgstr ""
+#~ msgid ":py:obj:`times (int) <qqqr.message.qr_fetched.times>`"
+#~ msgstr ""
 
-#: ../../../docstring aioqzone.message.qr_fetched.png:1 of
-msgid "QR bytes (png format)"
-msgstr ""
+#~ msgid "QR bytes (png format)"
+#~ msgstr ""
 
-#: ../../../docstring aioqzone.message.qr_fetched.times:1 of
-msgid "QR **expire** times in this session"
-msgstr ""
+#~ msgid "QR **expire** times in this session"
+#~ msgstr ""
 
-#: of qqqr.message.sms_code_input:1
-msgid ":py:obj:`sms_code (str) <qqqr.message.sms_code_input.sms_code>`"
-msgstr ""
+#~ msgid ":py:obj:`sms_code (str) <qqqr.message.sms_code_input.sms_code>`"
+#~ msgstr ""
 
-#: of qqqr.message.sms_code_input:1
-msgid ":py:obj:`uin (int) <qqqr.message.sms_code_input.uin>`"
-msgstr ""
+#~ msgid ":py:obj:`uin (int) <qqqr.message.sms_code_input.uin>`"
+#~ msgstr ""
 
-#: ../../../docstring aioqzone.message.sms_code_input.sms_code:1 of
-msgid "User received SMS verify code."
-msgstr ""
+#~ msgid "User received SMS verify code."
+#~ msgstr ""
 
-#: ../../../docstring aioqzone.message.sms_code_input.uin:1 aioqzone.message.sms_code_required.uin:1
-#: of
-msgid "uin"
-msgstr ""
+#~ msgid "uin"
+#~ msgstr ""
 
-#: of qqqr.message.sms_code_required:1
-msgid ":py:obj:`nickname (str) <qqqr.message.sms_code_required.nickname>`"
-msgstr ""
+#~ msgid ":py:obj:`nickname (str) <qqqr.message.sms_code_required.nickname>`"
+#~ msgstr ""
 
-#: of qqqr.message.sms_code_required:1
-msgid ":py:obj:`phone (str) <qqqr.message.sms_code_required.phone>`"
-msgstr ""
+#~ msgid ":py:obj:`phone (str) <qqqr.message.sms_code_required.phone>`"
+#~ msgstr ""
 
-#: of qqqr.message.sms_code_required:1
-msgid ":py:obj:`uin (int) <qqqr.message.sms_code_required.uin>`"
-msgstr ""
+#~ msgid ":py:obj:`uin (int) <qqqr.message.sms_code_required.uin>`"
+#~ msgstr ""
 
-#: ../../../docstring aioqzone.message.sms_code_required.nickname:1 of
-msgid "Nickname of current login user."
-msgstr ""
+#~ msgid "Nickname of current login user."
+#~ msgstr ""
 
-#: ../../../docstring aioqzone.message.sms_code_required.phone:1 of
-msgid "User's binded phone number."
-msgstr ""
+#~ msgid "User's binded phone number."
+#~ msgstr ""

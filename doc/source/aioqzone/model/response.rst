@@ -7,10 +7,3 @@ H5 Responses
 .. automodule:: aioqzone.model.response.h5
     :members:
     :undoc-members:
-
-Web Responses
-------------------------------
-
-.. automodule:: aioqzone.model.response.web
-    :members:
-    :undoc-members:
