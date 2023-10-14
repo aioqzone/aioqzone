@@ -28,7 +28,7 @@ pytestmark = pytest.mark.asyncio
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 _fake_request = cast(Request, ...)
-_fake_http_error = ClientResponseError(_fake_request, (), code=403)
+_fake_http_error = ClientResponseError(_fake_request, (), status=403)
 
 
 @pytest_asyncio.fixture
@@ -80,7 +80,9 @@ async def qr(client: ClientAdapter, env: test_env):
     with suppress(ImportError):
         from PIL import Image as image
 
-        man.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
+        man.qr_fetched.add_impl(
+            lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
+        )
     yield man
 
 

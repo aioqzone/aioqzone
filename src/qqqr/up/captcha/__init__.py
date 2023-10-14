@@ -18,7 +18,7 @@ from yarl import URL
 
 from ...utils.iter import first
 from ...utils.net import ClientAdapter
-from .._model import PrehandleResp, VerifyResp
+from .._model import PrehandleResp, SlideCaptchaDisplay, VerifyResp
 from .jigsaw import Jigsaw, imitate_drag
 
 PREHANDLE_URL = "https://t.captcha.qq.com/cap_union_prehandle"
@@ -50,6 +50,8 @@ class TcaptchaSession:
 
     def set_captcha(self):
         self.conf = self.prehandle.captcha
+        if not isinstance(self.conf.render, SlideCaptchaDisplay):
+            raise NotImplementedError(self.conf.render)
         self.cdn_urls = (
             self._cdn(self.conf.render.bg.img_url),
             self._cdn(self.conf.render.sprite_url),
@@ -135,6 +137,7 @@ class Captcha:
     async def new(self):
         """``prehandle``. Call this method to generate a new verify session.
 
+        :raises NotImplementedError: if not a slide captcha.
         :return: a tcaptcha session
         """
         CALLBACK = "_aq_596882"
@@ -271,6 +274,9 @@ class Captcha:
         sess.set_js_env(tdc)
 
     async def verify(self):
+        """
+        :raise NotImplementedError: from :meth:`.new`.
+        """
         sess = await self.new()
 
         await self.get_captcha_problem(sess)

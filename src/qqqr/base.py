@@ -15,12 +15,12 @@ class LoginSession(ABC):
     logined: bool = False
     """whether this session is logined."""
 
-    def __init__(self, *, create_time: float = ...) -> None:
+    def __init__(self, *, create_time: Optional[float] = None) -> None:
         """
         :param create_time: Set the default value of create_time to the current time when an instance is created
         """
         super().__init__()
-        self.create_time = time() if create_time == ... else create_time
+        self.create_time = time() if create_time is None else create_time
 
 
 _S = TypeVar("_S", bound=LoginSession)

@@ -31,7 +31,10 @@ async def captcha(client: ClientAdapter, env: test_env):
 
 @pytest_asyncio.fixture(scope="module")
 async def sess(client: ClientAdapter, captcha: Captcha):
-    sess = await captcha.new()
+    try:
+        sess = await captcha.new()
+    except NotImplementedError:
+        pytest.xfail("not a slide captcha")
 
     async def r(url) -> bytes:
         async with client.get(url) as r:
