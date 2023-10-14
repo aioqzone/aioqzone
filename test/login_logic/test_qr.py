@@ -22,7 +22,9 @@ async def login(client: ClientAdapter):
     with suppress(ImportError):
         from PIL import Image as image
 
-        login.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
+        login.qr_fetched.add_impl(
+            lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
+        )
 
     yield login
 
@@ -52,7 +54,7 @@ class TestLoop:
         hist = []
         login.qr_cancelled.add_impl(lambda: hist.append("cancel"))
 
-        async def __qr_fetched(png: bytes, times: int):
+        async def __qr_fetched(png: bytes, times: int, qr_renew=False):
             hist.append(png)
             if len(hist) == 1:
                 login.refresh.set()

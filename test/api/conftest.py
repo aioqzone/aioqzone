@@ -33,6 +33,8 @@ def man(request, client: ClientAdapter, env: test_env):
         with suppress(ImportError):
             from PIL import Image as image
 
-            man.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
+            man.qr_fetched.add_impl(
+                lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
+            )
 
         return man

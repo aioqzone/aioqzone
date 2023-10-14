@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import re
+import typing as t
 from dataclasses import dataclass
 from random import random
 
@@ -26,7 +27,9 @@ class QR:
 
 
 class QrSession(LoginSession):
-    def __init__(self, first_qr: QR, *, create_time: float = ..., refresh_times: int = 0) -> None:
+    def __init__(
+        self, first_qr: QR, *, create_time: t.Optional[float] = None, refresh_times: int = 0
+    ) -> None:
         super().__init__(create_time=create_time)
         self.refreshed = refresh_times
         self.current_qr = first_qr
@@ -122,28 +125,29 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
         self.refresh.clear()
         self.cancel.clear()
 
-        expired = 0
+        cnt_expire = 0
         sess = await self.new()
 
-        while expired < refresh_times:
-            # BUG: should we omit HookError here?
-            await self.qr_fetched.results(png=sess.current_qr.png, times=expired)
+        while cnt_expire < refresh_times:
+            await self.qr_fetched.emit(
+                png=sess.current_qr.png, times=cnt_expire, qr_renew=self.refresh.is_set()
+            )
+            self.refresh.clear()
 
             while not self.refresh.is_set():
                 if self.cancel.is_set():
-                    await self.qr_cancelled.results()
+                    await self.qr_cancelled.emit()
                     raise UserBreak
 
                 await asyncio.sleep(poll_freq)
                 stat = await self.poll(sess)
                 if stat.code == StatusCode.Expired:
-                    expired += 1
+                    cnt_expire += 1
                     break
                 elif stat.code == StatusCode.Authenticated:
                     sess.login_url = str(stat.url)
                     return await self._get_login_url(sess)
 
             sess.new_qr(await self.show())
-            self.refresh.clear()
 
         raise UserTimeout("qrscan")
