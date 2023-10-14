@@ -50,15 +50,19 @@ class TestLoop:
         cookie = await login.login()
         assert cookie["p_skey"]
 
-    async def test_resend_cancel(self, client: ClientAdapter, login: QrLogin):
+    async def test_resend_cancel(self, login: QrLogin):
         hist = []
         login.qr_cancelled.add_impl(lambda: hist.append("cancel"))
 
         async def __qr_fetched(png: bytes, times: int, qr_renew=False):
             hist.append(png)
             if len(hist) == 1:
+                assert times == 0
+                assert not qr_renew
                 login.refresh.set()
             elif len(hist) == 2:
+                assert times == 0
+                assert qr_renew
                 login.cancel.set()
 
         login.qr_fetched.impls.clear()

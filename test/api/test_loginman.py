@@ -28,7 +28,7 @@ pytestmark = pytest.mark.asyncio
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 _fake_request = cast(Request, ...)
-_fake_http_error = ClientResponseError(_fake_request, (), code=403)
+_fake_http_error = ClientResponseError(_fake_request, (), status=403)
 
 
 @pytest_asyncio.fixture

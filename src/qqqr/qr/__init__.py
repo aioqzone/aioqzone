@@ -126,13 +126,13 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
         self.cancel.clear()
 
         cnt_expire = 0
+        renew = False
         sess = await self.new()
 
         while cnt_expire < refresh_times:
-            await self.qr_fetched.emit(
-                png=sess.current_qr.png, times=cnt_expire, qr_renew=self.refresh.is_set()
-            )
-            self.refresh.clear()
+            # BUG: should we wrap hook errors here?
+            await self.qr_fetched.emit(png=sess.current_qr.png, times=cnt_expire, qr_renew=renew)
+            renew = False
 
             while not self.refresh.is_set():
                 if self.cancel.is_set():
@@ -147,6 +147,9 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
                 elif stat.code == StatusCode.Authenticated:
                     sess.login_url = str(stat.url)
                     return await self._get_login_url(sess)
+            else:
+                self.refresh.clear()
+                renew = True
 
             sess.new_qr(await self.show())
 
