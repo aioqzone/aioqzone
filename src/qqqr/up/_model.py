@@ -2,7 +2,9 @@
 
 from typing import List, Optional, Union
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, model_validator
+
+from qqqr.utils.jsjson import json_loads
 
 
 class CheckResp(BaseModel):
@@ -57,8 +59,6 @@ class Sprite(BaseModel):
     """sprite size (w, h)"""
     sprite_pos: List[int]
     """sprite position on material (x, y)"""
-    init_pos: List[int]
-    """sprite init position on captcha (x, y)"""
 
     @property
     def height(self):
@@ -69,10 +69,21 @@ class Sprite(BaseModel):
         return self.size_2d[0]
 
 
-class BgElemCfg(Sprite):
+class SlideBgElemCfg(Sprite):
     img_url: str
     """relative url to get jigsaw puzzle image (background with dimmed piece shape)."""
     init_pos: List[int] = Field(default=[0, 0])
+    """sprite init position on captcha (x, y)"""
+
+
+class ClickCfg(BaseModel):
+    mark_style: str
+    data_type: List[str]
+
+
+class SelectBgElemCfg(Sprite):
+    click_cfg: ClickCfg
+    img_url: str
 
 
 class MoveCfg(BaseModel):
@@ -83,6 +94,7 @@ class MoveCfg(BaseModel):
 
 class FgElemCfg(Sprite):
     id: int
+    init_pos: List[int]
     move_cfg: Optional[MoveCfg] = None
 
 
@@ -93,8 +105,8 @@ class FgBindingCfg(BaseModel):
     bind_factor: int
 
 
-class CaptchaDisplay(BaseModel):
-    bg: BgElemCfg = Field(alias="bg_elem_cfg")
+class SlideCaptchaDisplay(BaseModel):
+    bg: SlideBgElemCfg = Field(alias="bg_elem_cfg")
     """Background (puzzle)"""
     fg_binding_list: List[FgBindingCfg] = Field(default=[])
     sprites: List[FgElemCfg] = Field(alias="fg_elem_list")
@@ -103,9 +115,33 @@ class CaptchaDisplay(BaseModel):
     """relative url to get jigsaw piece (and handle) image."""
 
 
+class SelectRegion(BaseModel):
+    id: int
+    range: List[int]
+
+
+class SelectJsonPayload(BaseModel):
+    select_region_list: List[SelectRegion]
+    prompt_id: int
+    picture_ids: List[int]
+
+
+class SelectCaptchaDisplay(BaseModel):
+    instruction: str
+    bg: SelectBgElemCfg = Field(alias="bg_elem_cfg")
+    verify_trigger_cfg: dict
+    color_scheme: str  # pydantic_extra_types.color
+    json_payload: SelectJsonPayload
+
+    @model_validator(mode="before")
+    def parse_json(cls, v: dict):
+        v["json_payload"] = json_loads(v["json_payload"])
+        return v
+
+
 class CaptchaData(BaseModel):
     common: CommonCaptchaConf = Field(alias="comm_captcha_cfg")
-    render: CaptchaDisplay = Field(alias="dyn_show_info")
+    render: Union[SlideCaptchaDisplay, SelectCaptchaDisplay] = Field(alias="dyn_show_info")
 
 
 class PrehandleResp(BaseModel):

@@ -33,7 +33,10 @@ async def captcha(client: ClientAdapter, env: test_env):
 
 @pytest_asyncio.fixture(scope="class")
 async def sess(captcha: Captcha):
-    return await captcha.new()
+    try:
+        return await captcha.new()
+    except NotImplementedError:
+        pytest.xfail("not a slide captcha")
 
 
 class TestCaptcha:
@@ -62,7 +65,10 @@ class TestCaptcha:
         assert callable(sess.tdc.getInfo)
 
     async def test_verify(self, captcha: Captcha):
-        r = await captcha.verify()
+        try:
+            r = await captcha.verify()
+        except NotImplementedError:
+            pytest.xfail("not a slide captcha")
         if r.code == 0:
             assert r.verifycode
             assert r.ticket

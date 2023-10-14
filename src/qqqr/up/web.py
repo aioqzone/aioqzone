@@ -305,7 +305,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
 
         return Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
 
-    async def pass_vc(self, sess: UpWebSession):
+    async def pass_vc(self, sess: UpWebSession) -> t.Optional[UpWebSession]:
         """
         The `pass_vc` function is used to pass the verification tcaptcha.
         It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
@@ -318,7 +318,10 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             return
 
         for retry in range(4):
-            sess.verify_rst = await solver.verify()
+            try:
+                sess.verify_rst = await solver.verify()
+            except NotImplementedError:
+                return
             if sess.verify_rst.ticket:
                 break
             log.warning(f"ticket is empty. retry={retry}")
