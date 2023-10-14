@@ -22,7 +22,9 @@ async def login(client: ClientAdapter):
     with suppress(ImportError):
         from PIL import Image as image
 
-        login.qr_fetched.add_impl(lambda png, times: image.open(io.BytesIO(png)).show())
+        login.qr_fetched.add_impl(
+            lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
+        )
 
     yield login
 
@@ -48,15 +50,19 @@ class TestLoop:
         cookie = await login.login()
         assert cookie["p_skey"]
 
-    async def test_resend_cancel(self, client: ClientAdapter, login: QrLogin):
+    async def test_resend_cancel(self, login: QrLogin):
         hist = []
         login.qr_cancelled.add_impl(lambda: hist.append("cancel"))
 
-        async def __qr_fetched(png: bytes, times: int):
+        async def __qr_fetched(png: bytes, times: int, qr_renew=False):
             hist.append(png)
             if len(hist) == 1:
+                assert times == 0
+                assert not qr_renew
                 login.refresh.set()
             elif len(hist) == 2:
+                assert times == 0
+                assert qr_renew
                 login.cancel.set()
 
         login.qr_fetched.impls.clear()

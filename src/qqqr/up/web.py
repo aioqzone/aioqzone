@@ -1,10 +1,10 @@
 import asyncio
 import logging
 import re
+import typing as t
 from contextlib import suppress
 from random import choice, random
 from time import time_ns
-from typing import List, Optional
 
 from yarl import URL
 
@@ -31,16 +31,16 @@ class UpWebSession(LoginSession):
         login_sig: str,
         login_referer: str,
         *,
-        create_time: float = ...,
+        create_time: t.Optional[float] = None,
     ) -> None:
         super().__init__(create_time=create_time)
         self.login_sig = login_sig
         self.login_referer = login_referer
         """url fetched in `new`."""
-        self.verify_rst: Optional[VerifyResp] = None
+        self.verify_rst: t.Optional[VerifyResp] = None
         self.sms_ticket = ""
-        self.sms_code: Optional[str] = None
-        self.login_history: List[LoginResp] = []
+        self.sms_code: t.Optional[str] = None
+        self.login_history: t.List[LoginResp] = []
 
     def set_check_result(self, check: CheckResp):
         self.check_rst = check
@@ -95,9 +95,9 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         uin: int,
         pwd: str,
         h5=True,
-        app: Optional[APPID] = None,
-        proxy: Optional[Proxy] = None,
-        info: Optional[PT_QR_APP] = None,
+        app: t.Optional[APPID] = None,
+        proxy: t.Optional[Proxy] = None,
+        info: t.Optional[PT_QR_APP] = None,
     ):
         super().__init__(client, h5=h5, app=app, proxy=proxy, info=info)
         self.uin = uin
@@ -305,7 +305,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
 
         return Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
 
-    async def pass_vc(self, sess: UpWebSession):
+    async def pass_vc(self, sess: UpWebSession) -> t.Optional[UpWebSession]:
         """
         The `pass_vc` function is used to pass the verification tcaptcha.
         It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
@@ -318,7 +318,10 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             return
 
         for retry in range(4):
-            sess.verify_rst = await solver.verify()
+            try:
+                sess.verify_rst = await solver.verify()
+            except NotImplementedError:
+                return
             if sess.verify_rst.ticket:
                 break
             log.warning(f"ticket is empty. retry={retry}")

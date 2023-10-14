@@ -1,13 +1,12 @@
+import typing as t
+
+
 class TencentLoginError(RuntimeError):
     """This exception represents that an error occured in Qzone **login**,
     with at least an error code."""
 
     def __init__(
-        self,
-        code: int,
-        msg: str,
-        *args: object,
-        subcode: int = ...,
+        self, code: int, msg: str, *args: object, subcode: t.Optional[int] = None
     ) -> None:
         self.code = code
         self.msg = msg
@@ -15,7 +14,7 @@ class TencentLoginError(RuntimeError):
         super().__init__(*args)
 
     def __str__(self) -> str:
-        subcode = "" if self.subcode is ... else f"({self.subcode})"
+        subcode = "" if self.subcode is None else f"({self.subcode})"
         return f"Code {self.code}{subcode}: {self.msg}"
 
 
