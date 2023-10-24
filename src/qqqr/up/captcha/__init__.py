@@ -8,7 +8,7 @@ from hashlib import md5
 from ipaddress import IPv4Address
 from random import random
 from time import time
-from typing import List
+from typing import List, Tuple
 
 from chaosvm import prepare
 from chaosvm.proxy.dom import TDC
@@ -50,6 +50,7 @@ class TcaptchaSession:
 
     def set_captcha(self):
         self.conf = self.prehandle.captcha
+        self.ip = self.prehandle.uip
         if not isinstance(self.conf.render, SlideCaptchaDisplay):
             raise NotImplementedError(self.conf.render)
         self.cdn_urls = (
@@ -191,21 +192,6 @@ class Captcha:
     prehandle = new
     """alias of :meth:`.new`"""
 
-    async def get_ipv4(self):
-        """Get the client's public IP(v4) address.
-
-        :return: ipv4 str, or empty str if all apis failed."""
-        for api in ["ifconfig.me/ip", "api.ipify.org", "v4.ident.me"]:
-            # BUG: should always bypass client's proxy settings
-            async with self.client.get("https://" + api, ssl=False) as r:
-                if r.status != 200:
-                    continue
-                cand = (await r.text()).strip()
-                with suppress(ValueError):
-                    IPv4Address(cand)
-                    return cand
-        return ""
-
     async def get_captcha_problem(self, sess: TcaptchaSession):
         """
         The get_captcha_problem function is a coroutine that accepts a TcaptchaSession object as an argument.
@@ -238,13 +224,11 @@ class Captcha:
 
         assert sess.cdn_imgs
 
-        piece_pos = tuple(
-            slice(
-                sess.piece_sprite.sprite_pos[i],
-                sess.piece_sprite.sprite_pos[i] + sess.piece_sprite.size_2d[i],
-            )
-            for i in range(2)
+        get_slice = lambda i: slice(
+            sess.piece_sprite.sprite_pos[i],
+            sess.piece_sprite.sprite_pos[i] + sess.piece_sprite.size_2d[i],
         )
+        piece_pos = get_slice(0), get_slice(1)
 
         jig = Jigsaw(*sess.cdn_imgs, piece_pos=piece_pos, top=sess.piece_sprite.init_pos[1])
         # BUG: +1 to ensure left > init_pos[0], otherwise it's >=.
@@ -266,7 +250,7 @@ class Captcha:
             r.raise_for_status()
             tdc = prepare(
                 await r.text(),
-                ip=await self.get_ipv4(),
+                ip=sess.ip,
                 ua=self.client.headers["User-Agent"],
                 mouse_track=sess.mouse_track,
             )
