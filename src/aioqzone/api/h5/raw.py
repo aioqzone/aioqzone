@@ -157,19 +157,22 @@ class QzoneH5RawAPI:
         async def retry_closure():
             async with self.host_get("/mqzone/index", attach_token=False) as r:
                 r.raise_for_status()
-                return await r.text()
 
-        html = await retry_closure()
-        scripts: List = fromstring(html).xpath('body/script[@type="application/javascript"]')
-        if not scripts:
-            log.debug(html)
-            raise RuntimeError("script tag not found")
+                html = await r.text()
+                scripts: List = fromstring(html).xpath(
+                    'body/script[@type="application/javascript"]'
+                )
+                if not scripts:
+                    log.debug("jump to %s", str(r.url))
+                    raise QzoneError(-3000, "script tag not found")
 
-        texts: List[str] = [s.text for s in scripts]
-        script = firstn(texts, lambda s: "shine0callback" in s)
-        if not script:
-            raise RuntimeError("data script not found")
+                texts: List[str] = [s.text for s in scripts]
+                script = firstn(texts, lambda s: "shine0callback" in s)
+                if not script:
+                    raise QzoneError(-3000, "data script not found")
+                return script
 
+        script = await retry_closure()
         m = re.search(r'window\.shine0callback.*return "([0-9a-f]+?)";', script)
         if m is None:
             raise RuntimeError("data script not found")
