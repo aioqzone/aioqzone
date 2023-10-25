@@ -254,7 +254,11 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
 
         if sess.code == StatusCode.NeedCaptcha:
             log.warning("需通过防水墙")
-            if await self.pass_vc(sess) is None:
+            try:
+                sess = await self.pass_vc(sess)
+            except NotImplementedError:
+                raise TencentLoginError(StatusCode.NeedCaptcha, "非滑动验证码，无法自动通过")
+            if sess is None:
                 raise TencentLoginError(StatusCode.NeedCaptcha, "未安装依赖，无法识别验证码")
             if sess.verify_rst is None or not sess.verify_rst.ticket:
                 raise TencentLoginError(StatusCode.NeedCaptcha, "验证过程出现错误")
@@ -311,6 +315,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
 
         :param sess: the session object
+        :raise NotImplementedError: if not a slide captcha
         :return: The session with :obj:`~UpWebSession.verify_rst` is set, or None if :exc:`ImportError`.
         """
         solver = self.captcha(sess.check_rst.session)
@@ -318,10 +323,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             return
 
         for retry in range(4):
-            try:
-                sess.verify_rst = await solver.verify()
-            except NotImplementedError:
-                return
+            sess.verify_rst = await solver.verify()
             if sess.verify_rst.ticket:
                 break
             log.warning(f"ticket is empty. retry={retry}")

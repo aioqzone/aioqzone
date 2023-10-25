@@ -1,5 +1,4 @@
 import asyncio
-from typing import List
 
 import pytest
 import pytest_asyncio
@@ -24,6 +23,7 @@ def env():
 def event_loop():
     loop = asyncio.new_event_loop()
     yield loop
+    loop.run_until_complete(loop.shutdown_asyncgens())
     loop.close()
 
 
