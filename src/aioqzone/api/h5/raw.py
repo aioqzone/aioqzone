@@ -158,7 +158,7 @@ class QzoneH5RawAPI:
             async with self.host_get("/mqzone/index", attach_token=False) as r:
                 r.raise_for_status()
 
-                html = await retry_closure()
+                html = await r.text()
                 scripts: List = fromstring(html).xpath(
                     'body/script[@type="application/javascript"]'
                 )
