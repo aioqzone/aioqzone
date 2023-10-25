@@ -201,17 +201,18 @@ test = ["coverage (>=7,<8)", "pytest (>=7,<8)"]
 
 [[package]]
 name = "babel"
-version = "2.13.0"
+version = "2.13.1"
 description = "Internationalization utilities"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "Babel-2.13.0-py3-none-any.whl", hash = "sha256:fbfcae1575ff78e26c7449136f1abbefc3c13ce542eeb13d43d50d8b047216ec"},
-    {file = "Babel-2.13.0.tar.gz", hash = "sha256:04c3e2d28d2b7681644508f836be388ae49e0cfe91465095340395b60d00f210"},
+    {file = "Babel-2.13.1-py3-none-any.whl", hash = "sha256:7077a4984b02b6727ac10f1f7294484f737443d7e2e66c5e4380e41a3ae0b4ed"},
+    {file = "Babel-2.13.1.tar.gz", hash = "sha256:33e0952d7dd6374af8dbf6768cc4ddf3ccfefc244f9986d4074704f2fbd18900"},
 ]
 
 [package.dependencies]
 pytz = {version = ">=2015.7", markers = "python_version < \"3.9\""}
+setuptools = {version = "*", markers = "python_version >= \"3.12\""}
 
 [package.extras]
 dev = ["freezegun (>=1.0,<2.0)", "pytest (>=6.0)", "pytest-cov"]
@@ -1122,19 +1123,19 @@ files = [
 
 [[package]]
 name = "pychaosvm"
-version = "0.2.3"
+version = "0.2.4"
 description = "A Python envirionment for Tencent ChaosVM."
 optional = true
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pychaosvm-0.2.3-py3-none-any.whl", hash = "sha256:4e7a8112447fe40582797bd58cee47df2648f6d942533a4f24cd59288c43dbb1"},
-    {file = "pychaosvm-0.2.3.tar.gz", hash = "sha256:5e79b3201c9d0cd4ad169e3b4a66a4148e765f445de8141e9bc68af0a1e05334"},
+    {file = "pychaosvm-0.2.4-py3-none-any.whl", hash = "sha256:fea75cd7cca7527b00097f8be81fc872a7caf0bcffca7c67a5cb249ed7108b15"},
+    {file = "pychaosvm-0.2.4.tar.gz", hash = "sha256:be68c4ec22e1afd7acf63f1d185c474f12dbd166d931d7161e2ed063f795a61c"},
 ]
 
 [package.dependencies]
 lxml = ">=4.9.2,<5.0.0"
 pyjsparser = ">=2.7.1,<3.0.0"
-typing-extensions = ">=4.5.0,<5.0.0"
+typing-extensions = ">=4.6.0"
 
 [package.source]
 type = "legacy"
@@ -1320,13 +1321,13 @@ files = [
 
 [[package]]
 name = "pytest"
-version = "7.4.2"
+version = "7.4.3"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pytest-7.4.2-py3-none-any.whl", hash = "sha256:1d881c6124e08ff0a1bb75ba3ec0bfd8b5354a01c194ddd5a0a870a48d99b002"},
-    {file = "pytest-7.4.2.tar.gz", hash = "sha256:a766259cfab564a2ad52cb1aae1b881a75c3eb7e34ca3779697c23ed47c47069"},
+    {file = "pytest-7.4.3-py3-none-any.whl", hash = "sha256:0d009c083ea859a71b76adf7c1d502e4bc170b80a8ef002da5806527b9591fac"},
+    {file = "pytest-7.4.3.tar.gz", hash = "sha256:d989d136982de4e3b29dabcc838ad581c64e8ed52c11fbe86ddebd9da0818cd5"},
 ]
 
 [package.dependencies]
