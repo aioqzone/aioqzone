@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 10:15+0800\n"
+"POT-Creation-Date: 2023-10-26 21:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../source/qqqr/up/login.rst:2
 msgid "UpLogin and UpSession"
@@ -39,7 +39,7 @@ msgid ""
 " is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance."
 msgstr ""
 
-#: of qqqr.up.h5.UpH5Login.try_login qqqr.up.web.UpWebLogin.captcha qqqr.up.web.UpWebLogin.pass_vc
+#: of qqqr.up.web.UpWebLogin.captcha qqqr.up.web.UpWebLogin.pass_vc
 #: qqqr.up.web.UpWebLogin.send_sms_code qqqr.up.web.UpWebLogin.try_login
 msgid "参数"
 msgstr ""
@@ -48,8 +48,8 @@ msgstr ""
 msgid "Pass the session id to the captcha function"
 msgstr ""
 
-#: of qqqr.up.h5.UpH5Login.try_login qqqr.up.web.UpWebLogin.captcha qqqr.up.web.UpWebLogin.new
-#: qqqr.up.web.UpWebLogin.pass_vc qqqr.up.web.UpWebLogin.try_login
+#: of qqqr.up.web.UpWebLogin.captcha qqqr.up.web.UpWebLogin.new qqqr.up.web.UpWebLogin.pass_vc
+#: qqqr.up.web.UpWebLogin.try_login
 msgid "返回"
 msgstr ""
 
@@ -75,7 +75,7 @@ msgid ""
 "whether this login needs a captcha, sms verification, etc."
 msgstr ""
 
-#: of qqqr.up.web.UpWebLogin.new
+#: of qqqr.up.web.UpWebLogin.new qqqr.up.web.UpWebLogin.pass_vc
 msgid "抛出"
 msgstr ""
 
@@ -94,6 +94,18 @@ msgid "the session object"
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.pass_vc:6
+msgid "if cannot solve this captcha"
+msgstr ""
+
+#: of qqqr.up.web.UpWebLogin.pass_vc
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.up.web.UpWebLogin.pass_vc:7
+msgid ":py:data:`~typing.Optional`\\[:py:class:`~qqqr.up.web.UpWebSession`]"
+msgstr ""
+
+#: of qqqr.up.web.UpWebLogin.pass_vc:8
 msgid "The session with :obj:`~UpWebSession.verify_rst` is set, or None if :exc:`ImportError`."
 msgstr ""
 
@@ -105,17 +117,17 @@ msgstr ""
 msgid "The up login session to send sms code"
 msgstr ""
 
-#: of qqqr.up.h5.UpH5Login.try_login:1 qqqr.up.web.UpWebLogin.try_login:1
+#: of qqqr.up.web.UpWebLogin.try_login:1
 msgid ""
 "Check if current session meets the login condition. It takes a session object and returns "
 "response of this try."
 msgstr ""
 
-#: of qqqr.up.h5.UpH5Login.try_login:5 qqqr.up.web.UpWebLogin.try_login:5
+#: of qqqr.up.web.UpWebLogin.try_login:5
 msgid "Store the session information"
 msgstr ""
 
-#: of qqqr.up.h5.UpH5Login.try_login:6 qqqr.up.web.UpWebLogin.try_login:6
+#: of qqqr.up.web.UpWebLogin.try_login:6
 msgid "A login response"
 msgstr ""
 

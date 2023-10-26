@@ -21,7 +21,8 @@ aioqzone封装了一些Qzone接口。
 
 - [x] [二维码登录](src/qqqr/qr/)
 - [x] [密码登录](src/qqqr/up/) (受限)
-- [x] [计算验证码答案](src/qqqr/up/captcha/jigsaw.py)
+- [x] [通过滑动验证码](src/qqqr/up/captcha/slide)
+- [x] [解析图片选择验证码](src/qqqr/up/captcha/select)
 - [ ] [通过网络环境检测][pychaosvm]
 - [x] 爬取HTML说说
 - [x] 爬取说说详细内容

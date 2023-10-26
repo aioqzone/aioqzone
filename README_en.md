@@ -18,7 +18,8 @@ English | [简体中文](README.md)
 
 - [x] [QR login](src/qqqr/qr/)
 - [x] [password login](src/qqqr/up/) (limited)
-- [x] [solve captcha](src/qqqr/up/captcha/jigsaw.py)
+- [x] [solve slide captcha](src/qqqr/up/captcha/slide)
+- [x] [parse select captcha](src/qqqr/up/captcha/select)
 - [ ] [pass network environment verification][pychaosvm]
 - [x] get complete html feeds
 - [x] get feed details
