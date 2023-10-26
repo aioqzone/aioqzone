@@ -12,7 +12,7 @@ import pytest_asyncio
 
 from qqqr.up import UpWebLogin
 from qqqr.up.captcha import Captcha, TcaptchaSession
-from qqqr.up.captcha.jigsaw import Jigsaw, imitate_drag
+from qqqr.up.captcha.slide import *
 
 if TYPE_CHECKING:
     from test.conftest import test_env
@@ -31,10 +31,9 @@ async def captcha(client: ClientAdapter, env: test_env):
 
 @pytest_asyncio.fixture(scope="module")
 async def sess(client: ClientAdapter, captcha: Captcha):
-    try:
-        sess = await captcha.new()
-    except NotImplementedError:
-        pytest.xfail("not a slide captcha")
+    sess = await captcha.new()
+    if not isinstance(sess, SlideCaptchaSession):
+        pytest.skip("not a slide captcha")
 
     async def r(url) -> bytes:
         async with client.get(url) as r:
@@ -46,14 +45,12 @@ async def sess(client: ClientAdapter, captcha: Captcha):
 
 
 @pytest.fixture(scope="module")
-def jigsaw(sess: TcaptchaSession):
-    piece_pos = tuple(
-        slice(
-            sess.piece_sprite.sprite_pos[i],
-            sess.piece_sprite.sprite_pos[i] + sess.piece_sprite.size_2d[i],
-        )
-        for i in range(2)
+def jigsaw(sess: SlideCaptchaSession):
+    get_slice = lambda i: slice(
+        sess.piece_sprite.sprite_pos[i],
+        sess.piece_sprite.sprite_pos[i] + sess.piece_sprite.size_2d[i],
     )
+    piece_pos = get_slice(0), get_slice(1)
     yield Jigsaw(*sess.cdn_imgs, piece_pos=piece_pos, top=sess.piece_sprite.init_pos[1])
 
 
@@ -79,7 +76,7 @@ def test_solve(jigsaw: Jigsaw):
     assert left > 0
 
 
-def test_imitate(sess: TcaptchaSession, jigsaw: Jigsaw):
+def test_imitate(sess: SlideCaptchaSession, jigsaw: Jigsaw):
     left = jigsaw.solve() - jigsaw.piece.padding[0]
     xs, ys = imitate_drag(sess.piece_sprite.init_pos[0], left, sess.piece_sprite.init_pos[1])
     assert len(xs) == len(ys)

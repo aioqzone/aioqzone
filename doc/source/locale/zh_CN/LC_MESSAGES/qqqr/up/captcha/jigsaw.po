@@ -8,162 +8,65 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 12:49+0800\n"
+"POT-Creation-Date: 2023-10-26 21:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../source/qqqr/up/captcha/jigsaw.rst:2
-msgid "Solving Jigsaw-Like Tcaptcha"
+msgid "Solving Slide Tcaptcha"
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw:3
+#: of qqqr.up.captcha.slide.jigsaw:3
 msgid "Import this module needs extra ``captcha``."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.Piece:1
-msgid "Represents the jigsaw piece."
-msgstr ""
-
-#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.bbox:1
-msgid "The bounding box of the jigsaw piece in [x, y, w, h]"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.build_template:1
-msgid ""
-"This method attempts to generate a piece view like that on the puzzle by dimming the original "
-"piece. In order to get an accurate result."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.corr_norm_mask_match
-#: qqqr.up.captcha.jigsaw.imitate_drag
-msgid "参数"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.build_template:5
-msgid "coeff to be multiplied with the image in order to dim it, default as 0.36"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.Piece.strip
-#: qqqr.up.captcha.jigsaw.Piece.strip_mask qqqr.up.captcha.jigsaw.imitate_drag
-msgid "返回类型"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.build_template:6 qqqr.up.captcha.jigsaw.Piece.strip:7
-#: qqqr.up.captcha.jigsaw.Piece.strip_mask:4
-msgid ":py:class:`~numpy.ndarray`"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.build_template qqqr.up.captcha.jigsaw.conv2d
-#: qqqr.up.captcha.jigsaw.imitate_drag
-msgid "返回"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.build_template:7
-msgid "generated piece image."
-msgstr ""
-
-#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.cont:1
-msgid "The contour of the jigsaw piece in [N, 1, 2]i4, the last axis represents (x,y)."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.find_bbox:1
-msgid ""
-"The crop method crops the image and saves the contour of the jigsaw piece. It also saves a "
-"bounding box for that contour, and calculates padding to be used in cropping."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.find_bbox:4
-msgid "Use ::obj`.bbox` to get bounding box of the piece, and :obj:`.padding` to get padding size."
-msgstr ""
-
-#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.img:1
-msgid "BGR channel of the jigsaw piece, which is masked by :obj:`.mask`"
-msgstr ""
-
-#: ../../../docstring of qqqr.up.captcha.jigsaw.Piece.mask:1
-msgid "The alpha channel of the jigsaw piece, which is used as mask."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.padding:1
-msgid "The padding of the jigsaw piece sprite in [left, top, right, bottom]"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.strip:1
-msgid "The strip method crops the image and returns exactly the piece w/o any padding."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.strip:3
-msgid ""
-"Once cropped, use `.bbox` to get bounding box of the piece, and use `.padding` to get padding "
-"size."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.Piece.strip_mask:1
-msgid "Generate a mask for :meth:`corr_norm_mask_match` since the piece is in an irregular shape."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.conv2d:1
-msgid "f8 array, with the shape of `x.shape - (k.shape - 1)`"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:1
-msgid "``TM_CCORR_NORMED`` mode in opecv matchTemplate."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:4
-msgid "data mat. dtype should be int/uint."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:6
-msgid "template mat. dtype should be the same with that of `x`."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:8
-msgid "a binary mask mat in ``{0, 1}``. dtype should be int/uint."
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.corr_norm_mask_match:10
-msgid ""
-"R(x,y)= \\frac{\\sum_{x',y'} (T(x',y') \\cdot I(x+x',y+y') \\cdot "
-"M(x',y')^2)}{\\sqrt{\\sum_{x',y'} \\left( T(x',y') \\cdot M(x',y') \\right)^2 \\cdot "
-"\\sum_{x',y'} \\left( I(x+x',y+y') \\cdot M(x',y') \\right)^2}}"
-msgstr ""
-
-#: of qqqr.up.captcha.jigsaw.imitate_drag:1
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag:1
 msgid "The imitate_drag function simulates a drag event."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.imitate_drag:3
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag:3
 msgid ""
 "The function takes one argument, x, which is the number of pixels that the user drags. The "
 "function returns a tuple of lists containing three integers: [x_coordinate, y_coordinate]. Each "
 "coordinate and time value is randomly generated according to corresponding rules."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.imitate_drag:8
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag
+msgid "参数"
+msgstr ""
+
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag:8
 msgid "Specify the position that the drag starts."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.imitate_drag:10
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag:10
 msgid "Specify the position that the drag ends."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.imitate_drag:12
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag:12
 msgid "Specify the y-coordinate."
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.imitate_drag:13
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag:13
 msgid ""
 ":py:data:`~typing.Tuple`\\[:py:class:`~typing.List`\\[:py:class:`int`], "
 ":py:class:`~typing.List`\\[:py:class:`int`]]"
 msgstr ""
 
-#: of qqqr.up.captcha.jigsaw.imitate_drag:14
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag
+msgid "返回"
+msgstr ""
+
+#: of qqqr.up.captcha.slide.jigsaw.imitate_drag:14
 msgid "Two lists consist of the x coordinate and y coordinate"
 msgstr ""
 
@@ -344,4 +247,7 @@ msgstr ""
 #~ "\\cdot M(x',y')^2)}{\\sqrt{\\sum_{x',y'} \\left( T(x',y') \\cdot "
 #~ "M(x',y') \\right)^2 \\cdot \\sum_{x',y'} \\left( I(x+x',y+y')"
 #~ " \\cdot M(x',y') \\right)^2}}"
+#~ msgstr ""
+
+#~ msgid "Solving Jigsaw-Like Tcaptcha"
 #~ msgstr ""

@@ -3,9 +3,7 @@ import re
 
 from yarl import URL
 
-from qqqr.constant import StatusCode
-
-from ._model import CheckResp, LoginResp
+from ._model import CheckResp
 from .web import UpWebLogin, UpWebSession
 
 log = logging.getLogger(__name__)
