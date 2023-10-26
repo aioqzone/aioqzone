@@ -11,7 +11,7 @@ pytest.importorskip("chaosvm")
 import pytest_asyncio
 
 from qqqr.constant import captcha_status_description
-from qqqr.up import UpWebLogin
+from qqqr.up import UpH5Login
 from qqqr.up.captcha import Captcha, TcaptchaSession
 
 if TYPE_CHECKING:
@@ -24,7 +24,7 @@ pytestmark = pytest.mark.asyncio
 
 @pytest_asyncio.fixture(scope="module")
 async def captcha(client: ClientAdapter, env: test_env):
-    login = UpWebLogin(client, env.uin, env.password.get_secret_value())
+    login = UpH5Login(client, env.uin, env.password.get_secret_value())
     upsess = await login.new()
     await login.check(upsess)
     captcha = login.captcha(upsess.check_rst.session)
@@ -51,15 +51,13 @@ class TestCaptcha:
         sess.solve_workload()
         assert ans == sess.pow_ans, f"{ans} != {sess.pow_ans}"
 
-    async def test_puzzle(self, captcha: Captcha, sess: TcaptchaSession):
-        await captcha.get_captcha_problem(sess)
-        captcha.solve_captcha(sess)
-        assert sess.jig_ans[0]
-        assert sess.jig_ans[1]
-        assert sess.mouse_track
+    async def test_puzzle(self, client: ClientAdapter, sess: TcaptchaSession):
+        await sess.get_captcha_problem(client)
+        ans = (await sess.solve_captcha()).split(",")[0]
+        assert ans.isdigit()
 
-    async def test_tdc(self, captcha: Captcha, sess: TcaptchaSession):
-        await captcha.get_tdc(sess)
+    async def test_tdc(self, client: ClientAdapter, sess: TcaptchaSession):
+        await sess.get_tdc(client)
         assert sess.tdc
         assert callable(sess.tdc.getData)
         assert callable(sess.tdc.getInfo)
@@ -78,6 +76,6 @@ class TestCaptcha:
 
 
 @pytest_asyncio.fixture(scope="class")
-async def vm(captcha: Captcha, sess: TcaptchaSession):
-    await captcha.get_tdc(sess)
+async def vm(client: ClientAdapter, sess: TcaptchaSession):
+    await sess.get_tdc(client)
     yield sess.tdc
