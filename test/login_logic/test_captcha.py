@@ -12,7 +12,7 @@ import pytest_asyncio
 
 from qqqr.constant import captcha_status_description
 from qqqr.up import UpH5Login
-from qqqr.up.captcha import Captcha, TcaptchaSession
+from qqqr.up.captcha import Captcha, SelectCaptchaSession, TcaptchaSession
 
 if TYPE_CHECKING:
     from test.conftest import test_env
@@ -51,7 +51,10 @@ class TestCaptcha:
     async def test_puzzle(self, client: ClientAdapter, sess: TcaptchaSession):
         await sess.get_captcha_problem(client)
         ans = (await sess.solve_captcha()).split(",")[0]
-        assert ans.isdigit()
+        if isinstance(sess, SelectCaptchaSession) and not sess.select_captcha_input.has_impl:
+            assert not ans
+        else:
+            assert ans.isdigit()
 
     async def test_tdc(self, client: ClientAdapter, sess: TcaptchaSession):
         await sess.get_tdc(client)
