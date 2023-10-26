@@ -140,7 +140,7 @@ class Captcha:
         ans = dict(
             elem_id=1,
             type=sess.data_type,
-            data=sess.solve_captcha(),
+            data=await sess.solve_captcha(),
         )
         if not ans["data"]:
             raise NotImplementedError
