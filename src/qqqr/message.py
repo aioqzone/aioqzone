@@ -32,3 +32,15 @@ def sms_code_input(uin: int, phone: str, nickname: str) -> t.Optional[str]:
     :param nickname: Nickname of current login user.
     :return: User received SMS verify code.
     """
+
+
+@hookdef
+def select_captcha_input(prompt: str, imgs: t.Tuple[bytes, ...]) -> int:
+    """This hook asks answers for a select captcha.
+
+    :param prompt: the question of the select captcha
+    :param imgs: the choice images of the select captcha
+
+    :return: the image index which satisfy the question. Out-of-range index will be treated as no answer.
+    """
+    return -1

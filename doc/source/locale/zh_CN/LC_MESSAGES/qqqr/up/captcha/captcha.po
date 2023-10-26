@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 12:49+0800\n"
+"POT-Creation-Date: 2023-10-26 21:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../source/qqqr/up/captcha/captcha.rst:2
 msgid "Captcha and TcaptchaSession"
@@ -25,47 +25,12 @@ msgstr ""
 msgid "The base64_ua function encodes the User-Agent header in base64."
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.base64_ua qqqr.up.captcha.Captcha.get_captcha_problem
-#: qqqr.up.captcha.Captcha.get_ipv4 qqqr.up.captcha.Captcha.get_tdc qqqr.up.captcha.Captcha.new
-#: qqqr.up.captcha.Captcha.solve_captcha qqqr.up.captcha.TcaptchaSession.solve_workload
+#: of qqqr.up.captcha.Captcha.base64_ua qqqr.up.captcha.Captcha.new
 msgid "返回"
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.base64_ua:3
 msgid "A string containing the base64 encoded user agent"
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.get_captcha_problem:1
-msgid ""
-"The get_captcha_problem function is a coroutine that accepts a TcaptchaSession object as an "
-"argument. It then uses the session to make an HTTP GET request to the captcha images (the "
-"problem). The images will be stored in the given session."
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.get_captcha_problem qqqr.up.captcha.Captcha.get_tdc
-#: qqqr.up.captcha.Captcha.solve_captcha qqqr.up.captcha.TcaptchaSession.solve_workload
-msgid "参数"
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.get_captcha_problem:6 qqqr.up.captcha.Captcha.get_tdc:4
-msgid "captcha session"
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.get_captcha_problem:7 qqqr.up.captcha.Captcha.get_tdc:5
-#: qqqr.up.captcha.Captcha.solve_captcha:10 qqqr.up.captcha.TcaptchaSession.solve_workload:7
-msgid "None"
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.get_ipv4:1
-msgid "Get the client's public IP(v4) address."
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.get_ipv4:3
-msgid "ipv4 str, or empty str if all apis failed."
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.get_tdc:1
-msgid "The get_tdc function is a coroutine that sets an instance of the :class:`TDC` class to `sess`."
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.iframe:1
@@ -76,7 +41,23 @@ msgstr ""
 msgid "``prehandle``. Call this method to generate a new verify session."
 msgstr ""
 
+#: of qqqr.up.captcha.Captcha.new qqqr.up.captcha.Captcha.verify
+msgid "抛出"
+msgstr ""
+
 #: of qqqr.up.captcha.Captcha.new:3
+msgid "if not a slide captcha."
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.new
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.new:4
+msgid ":py:class:`~qqqr.up.captcha.capsess.BaseTcaptchaSession`"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.new:5
 msgid "a tcaptcha session"
 msgstr ""
 
@@ -84,34 +65,8 @@ msgstr ""
 msgid "alias of :meth:`.new`"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.solve_captcha:1
-msgid ""
-"The solve_captcha function solves the captcha problem. It assumes that "
-":obj:`TcaptchaSession.cdn_imgs` is already initialized, so call :meth:`.get_captcha_problem` "
-"firstly."
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.solve_captcha:4
-msgid "It then solve the captcha as that in :class:`.Jigsaw`. The answer is saved into `sess`."
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.solve_captcha:6
-msgid "This function will also call :meth:`TDC.set_data` to imitate human behavior when solving captcha."
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.solve_captcha:9
-msgid "Store the information of the current session"
-msgstr ""
-
-#: of qqqr.up.captcha.TcaptchaSession.solve_workload:1
-msgid ""
-"The solve_workload function solves the workload from Tcaptcha: It solves "
-"md5(:obj:`PowCfg.prefix` + str(?)) == :obj:`PowCfg.md5`. The result and the calculating duration"
-" will be saved into this session."
-msgstr ""
-
-#: of qqqr.up.captcha.TcaptchaSession.solve_workload:6
-msgid "Calculating timeout, default as 30 seconds."
+#: of qqqr.up.captcha.Captcha.verify:1
+msgid "cannot solve captcha"
 msgstr ""
 
 #~ msgid "Returns"

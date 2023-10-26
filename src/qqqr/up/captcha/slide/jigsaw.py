@@ -4,34 +4,17 @@
     Import this module needs extra ``captcha``.
 """
 
-import io
 from os import environ as env
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 import numpy as np
 from numpy.fft import fft2, ifft2
 from PIL import Image as image
 
-if TYPE_CHECKING:
-    mat_u1 = np.ndarray[Any, np.dtype[np.uint8]]
-    mat_i2 = np.ndarray[Any, np.dtype[np.int16]]
-    mat_i4 = np.ndarray[Any, np.dtype[np.int32]]
-else:
-    mat_u1 = mat_i2 = mat_i4 = np.ndarray
+from ..img_utils import *
 
 debug = bool(env.get("AIOQZONE_JIGSAW_DEBUG"))
-
-
-def frombytes(b: bytes, dtype=np.uint8) -> mat_u1:
-    buf = io.BytesIO(b)
-    return np.asarray(image.open(buf), dtype=dtype)
-
-
-def tobytes(img: mat_u1, format="png") -> bytes:
-    buf = io.BytesIO()
-    image.fromarray(img).save(buf, format)
-    return buf.getvalue()
 
 
 def conv2d(x: np.ndarray, k: np.ndarray, axes=(0, 1)):

@@ -74,6 +74,7 @@ class _UpHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
         self.sms_code_input = MT.sms_code_input.new()
+        self.select_captcha_input = MT.select_captcha_input.new()
 
 
 class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
@@ -257,7 +258,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             try:
                 sess = await self.pass_vc(sess)
             except NotImplementedError:
-                raise TencentLoginError(StatusCode.NeedCaptcha, "非滑动验证码，无法自动通过")
+                raise TencentLoginError(StatusCode.NeedCaptcha, "未能识别验证码")
             if sess is None:
                 raise TencentLoginError(StatusCode.NeedCaptcha, "未安装依赖，无法识别验证码")
             if sess.verify_rst is None or not sess.verify_rst.ticket:
@@ -307,7 +308,9 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             log.debug("ImportError as follows:", exc_info=True)
             return
 
-        return Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
+        solver = Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
+        solver.select_captcha_input = self.select_captcha_input
+        return solver
 
     async def pass_vc(self, sess: UpWebSession) -> t.Optional[UpWebSession]:
         """
@@ -315,7 +318,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
 
         :param sess: the session object
-        :raise NotImplementedError: if not a slide captcha
+        :raise NotImplementedError: if cannot solve this captcha
         :return: The session with :obj:`~UpWebSession.verify_rst` is set, or None if :exc:`ImportError`.
         """
         solver = self.captcha(sess.check_rst.session)

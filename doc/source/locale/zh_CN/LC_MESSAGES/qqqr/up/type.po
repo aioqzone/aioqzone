@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-09 15:53+0800\n"
+"POT-Creation-Date: 2023-10-26 21:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../source/qqqr/up/type.rst:2
 msgid "UpLogin Types"
@@ -25,65 +25,8 @@ msgstr ""
 msgid "Response validation in `qqqr.up.captcha`"
 msgstr ""
 
-#: of qqqr.up._model.BgElemCfg qqqr.up._model.CaptchaData qqqr.up._model.CaptchaDisplay
-#: qqqr.up._model.CheckResp qqqr.up._model.CommonCaptchaConf qqqr.up._model.FgBindingCfg
-#: qqqr.up._model.FgElemCfg qqqr.up._model.LoginResp qqqr.up._model.MoveCfg qqqr.up._model.PowCfg
-#: qqqr.up._model.PrehandleResp qqqr.up._model.Sprite qqqr.up._model.VerifyResp
+#: of qqqr.up._model.CheckResp qqqr.up._model.LoginResp qqqr.up._model.VerifyResp
 msgid "Fields"
-msgstr ""
-
-#: of qqqr.up._model.BgElemCfg:1
-msgid ":py:obj:`img_url (str) <qqqr.up._model.BgElemCfg.img_url>`"
-msgstr ""
-
-#: of qqqr.up._model.BgElemCfg:1
-msgid ":py:obj:`init_pos (List[int]) <qqqr.up._model.BgElemCfg.init_pos>`"
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.BgElemCfg.img_url:1
-msgid "relative url to get jigsaw puzzle image (background with dimmed piece shape)."
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.BgElemCfg.init_pos:1 qqqr.up._model.Sprite.init_pos:1
-msgid "sprite init position on captcha (x, y)"
-msgstr ""
-
-#: of qqqr.up._model.CaptchaData:1
-msgid ":py:obj:`common (qqqr.up._model.CommonCaptchaConf) <qqqr.up._model.CaptchaData.common>`"
-msgstr ""
-
-#: of qqqr.up._model.CaptchaData:1
-msgid ":py:obj:`render (qqqr.up._model.CaptchaDisplay) <qqqr.up._model.CaptchaData.render>`"
-msgstr ""
-
-#: of qqqr.up._model.CaptchaDisplay:1
-msgid ":py:obj:`bg (qqqr.up._model.BgElemCfg) <qqqr.up._model.CaptchaDisplay.bg>`"
-msgstr ""
-
-#: of qqqr.up._model.CaptchaDisplay:1
-msgid ""
-":py:obj:`fg_binding_list (List[qqqr.up._model.FgBindingCfg]) "
-"<qqqr.up._model.CaptchaDisplay.fg_binding_list>`"
-msgstr ""
-
-#: of qqqr.up._model.CaptchaDisplay:1
-msgid ":py:obj:`sprite_url (str) <qqqr.up._model.CaptchaDisplay.sprite_url>`"
-msgstr ""
-
-#: of qqqr.up._model.CaptchaDisplay:1
-msgid ":py:obj:`sprites (List[qqqr.up._model.FgElemCfg]) <qqqr.up._model.CaptchaDisplay.sprites>`"
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.CaptchaDisplay.bg:1
-msgid "Background (puzzle)"
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.CaptchaDisplay.sprite_url:1
-msgid "relative url to get jigsaw piece (and handle) image."
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.CaptchaDisplay.sprites:1
-msgid "Foreground sprites"
 msgstr ""
 
 #: of qqqr.up._model.CheckResp:1
@@ -118,46 +61,6 @@ msgstr ""
 msgid "code = 0/2/3 hideVC; code = 1 showVC"
 msgstr ""
 
-#: of qqqr.up._model.CommonCaptchaConf:1
-msgid ":py:obj:`pow_cfg (qqqr.up._model.PowCfg) <qqqr.up._model.CommonCaptchaConf.pow_cfg>`"
-msgstr ""
-
-#: of qqqr.up._model.CommonCaptchaConf:1
-msgid ":py:obj:`tdc_path (str) <qqqr.up._model.CommonCaptchaConf.tdc_path>`"
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.CommonCaptchaConf.pow_cfg:1
-msgid "Ians, duration = match_md5(pow_cfg)"
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.CommonCaptchaConf.tdc_path:1
-msgid "relative path to get tdc.js"
-msgstr ""
-
-#: of qqqr.up._model.FgBindingCfg:1
-msgid ":py:obj:`bind_factor (int) <qqqr.up._model.FgBindingCfg.bind_factor>`"
-msgstr ""
-
-#: of qqqr.up._model.FgBindingCfg:1
-msgid ":py:obj:`bind_type (str) <qqqr.up._model.FgBindingCfg.bind_type>`"
-msgstr ""
-
-#: of qqqr.up._model.FgBindingCfg:1
-msgid ":py:obj:`master (int) <qqqr.up._model.FgBindingCfg.master>`"
-msgstr ""
-
-#: of qqqr.up._model.FgBindingCfg:1
-msgid ":py:obj:`slave (int) <qqqr.up._model.FgBindingCfg.slave>`"
-msgstr ""
-
-#: of qqqr.up._model.FgElemCfg:1
-msgid ":py:obj:`id (int) <qqqr.up._model.FgElemCfg.id>`"
-msgstr ""
-
-#: of qqqr.up._model.FgElemCfg:1
-msgid ":py:obj:`move_cfg (qqqr.up._model.MoveCfg | None) <qqqr.up._model.FgElemCfg.move_cfg>`"
-msgstr ""
-
 #: of qqqr.up._model.LoginResp:1
 msgid ":py:obj:`code (int) <qqqr.up._model.LoginResp.code>`"
 msgstr ""
@@ -174,106 +77,6 @@ msgstr ""
 msgid ""
 ":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] | str) "
 "<qqqr.up._model.LoginResp.url>`"
-msgstr ""
-
-#: of qqqr.up._model.MoveCfg:1
-msgid ":py:obj:`data_type (List[str] | None) <qqqr.up._model.MoveCfg.data_type>`"
-msgstr ""
-
-#: of qqqr.up._model.MoveCfg:1
-msgid ":py:obj:`move_factor (List[int]) <qqqr.up._model.MoveCfg.move_factor>`"
-msgstr ""
-
-#: of qqqr.up._model.MoveCfg:1
-msgid ":py:obj:`track_limit (str) <qqqr.up._model.MoveCfg.track_limit>`"
-msgstr ""
-
-#: of qqqr.up._model.PowCfg:1
-msgid ":py:obj:`md5 (str) <qqqr.up._model.PowCfg.md5>`"
-msgstr ""
-
-#: of qqqr.up._model.PowCfg:1
-msgid ":py:obj:`prefix (str) <qqqr.up._model.PowCfg.prefix>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`capclass (int) <qqqr.up._model.PrehandleResp.capclass>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`captcha (qqqr.up._model.CaptchaData) <qqqr.up._model.PrehandleResp.captcha>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`log_js (str) <qqqr.up._model.PrehandleResp.log_js>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`randstr (str) <qqqr.up._model.PrehandleResp.randstr>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`sess (str) <qqqr.up._model.PrehandleResp.sess>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`sid (str) <qqqr.up._model.PrehandleResp.sid>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`src_1 (str) <qqqr.up._model.PrehandleResp.src_1>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`src_2 (str) <qqqr.up._model.PrehandleResp.src_2>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`src_3 (str) <qqqr.up._model.PrehandleResp.src_3>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`state (int) <qqqr.up._model.PrehandleResp.state>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`subcapclass (int) <qqqr.up._model.PrehandleResp.subcapclass>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`ticket (str) <qqqr.up._model.PrehandleResp.ticket>`"
-msgstr ""
-
-#: of qqqr.up._model.PrehandleResp:1
-msgid ":py:obj:`uip (str) <qqqr.up._model.PrehandleResp.uip>`"
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.PrehandleResp.uip:1
-msgid "ipv6"
-msgstr ""
-
-#: of qqqr.up._model.Sprite:1
-msgid "Represents a sprite from a source material."
-msgstr ""
-
-#: of qqqr.up._model.Sprite:1
-msgid ":py:obj:`init_pos (List[int]) <qqqr.up._model.Sprite.init_pos>`"
-msgstr ""
-
-#: of qqqr.up._model.Sprite:1
-msgid ":py:obj:`size_2d (List[int]) <qqqr.up._model.Sprite.size_2d>`"
-msgstr ""
-
-#: of qqqr.up._model.Sprite:1
-msgid ":py:obj:`sprite_pos (List[int]) <qqqr.up._model.Sprite.sprite_pos>`"
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.Sprite.size_2d:1
-msgid "sprite size (w, h)"
-msgstr ""
-
-#: ../../../docstring of qqqr.up._model.Sprite.sprite_pos:1
-msgid "sprite position on material (x, y)"
 msgstr ""
 
 #: of qqqr.up._model.VerifyResp:1
@@ -506,4 +309,117 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ":py:obj:`data_type (List[str] | None) <qqqr.up.type.MoveCfg.data_type>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`img_url (str) <qqqr.up._model.BgElemCfg.img_url>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`init_pos (List[int]) <qqqr.up._model.BgElemCfg.init_pos>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`common (qqqr.up._model.CommonCaptchaConf) <qqqr.up._model.CaptchaData.common>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`render (qqqr.up._model.CaptchaDisplay) <qqqr.up._model.CaptchaData.render>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`bg (qqqr.up._model.BgElemCfg) <qqqr.up._model.CaptchaDisplay.bg>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`fg_binding_list (List[qqqr.up._model.FgBindingCfg]) "
+#~ "<qqqr.up._model.CaptchaDisplay.fg_binding_list>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`sprite_url (str) <qqqr.up._model.CaptchaDisplay.sprite_url>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`sprites (List[qqqr.up._model.FgElemCfg]) <qqqr.up._model.CaptchaDisplay.sprites>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`pow_cfg (qqqr.up._model.PowCfg) <qqqr.up._model.CommonCaptchaConf.pow_cfg>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`tdc_path (str) <qqqr.up._model.CommonCaptchaConf.tdc_path>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`bind_factor (int) <qqqr.up._model.FgBindingCfg.bind_factor>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`bind_type (str) <qqqr.up._model.FgBindingCfg.bind_type>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`master (int) <qqqr.up._model.FgBindingCfg.master>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`slave (int) <qqqr.up._model.FgBindingCfg.slave>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`id (int) <qqqr.up._model.FgElemCfg.id>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`move_cfg (qqqr.up._model.MoveCfg | None) <qqqr.up._model.FgElemCfg.move_cfg>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`data_type (List[str] | None) <qqqr.up._model.MoveCfg.data_type>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`move_factor (List[int]) <qqqr.up._model.MoveCfg.move_factor>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`track_limit (str) <qqqr.up._model.MoveCfg.track_limit>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`md5 (str) <qqqr.up._model.PowCfg.md5>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`prefix (str) <qqqr.up._model.PowCfg.prefix>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`capclass (int) <qqqr.up._model.PrehandleResp.capclass>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`captcha (qqqr.up._model.CaptchaData) <qqqr.up._model.PrehandleResp.captcha>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`log_js (str) <qqqr.up._model.PrehandleResp.log_js>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`randstr (str) <qqqr.up._model.PrehandleResp.randstr>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`sess (str) <qqqr.up._model.PrehandleResp.sess>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`sid (str) <qqqr.up._model.PrehandleResp.sid>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`src_1 (str) <qqqr.up._model.PrehandleResp.src_1>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`src_2 (str) <qqqr.up._model.PrehandleResp.src_2>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`src_3 (str) <qqqr.up._model.PrehandleResp.src_3>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`state (int) <qqqr.up._model.PrehandleResp.state>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`subcapclass (int) <qqqr.up._model.PrehandleResp.subcapclass>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`ticket (str) <qqqr.up._model.PrehandleResp.ticket>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`uip (str) <qqqr.up._model.PrehandleResp.uip>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`init_pos (List[int]) <qqqr.up._model.Sprite.init_pos>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`size_2d (List[int]) <qqqr.up._model.Sprite.size_2d>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`sprite_pos (List[int]) <qqqr.up._model.Sprite.sprite_pos>`"
 #~ msgstr ""
