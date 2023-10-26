@@ -72,7 +72,7 @@ class SelectCaptchaSession(BaseTcaptchaSession):
         ]
 
     async def solve_captcha(self) -> str:
-        if not select_captcha_input.has_impl:
+        if not self.select_captcha_input.has_impl:
             log.warning("select_captcha_input has no impls.")
             return ""
 
