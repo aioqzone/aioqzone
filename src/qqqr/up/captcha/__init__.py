@@ -112,7 +112,10 @@ class Captcha:
             assert m
             return PrehandleResp.model_validate_json(m.group(1))
 
-        return TcaptchaSession.factory(await retry_closure())
+        sess = TcaptchaSession.factory(await retry_closure())
+        if isinstance(sess, SelectCaptchaSession):
+            sess.select_captcha_input = self.select_captcha_input
+        return sess
 
     async def iframe(self):
         """call this right after calling :meth:`.prehandle`"""
@@ -127,8 +130,6 @@ class Captcha:
         :raise NotImplementedError: cannot solve captcha
         """
         sess = await self.new()
-        if isinstance(sess, SelectCaptchaSession):
-            sess.select_captcha_input = self.select_captcha_input
 
         await sess.get_captcha_problem(self.client)
         sess.solve_workload()
