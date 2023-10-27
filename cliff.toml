@@ -44,6 +44,7 @@ commit_parsers = [
     { message = "^feat", group = "Features"},
     { message = "^fix", group = "Bug Fixes"},
     { message = "^doc", group = "Documentation"},
+    { message = "^fmt", group = "Styling"},
     { message = "^perf", group = "Performance"},
     { message = "^proj", group = "Project"},
     { message = "^chore", group = "Miscellaneous"},

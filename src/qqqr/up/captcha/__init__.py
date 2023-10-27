@@ -133,7 +133,6 @@ class Captcha:
 
         await sess.get_captcha_problem(self.client)
         sess.solve_workload()
-        await sess.solve_captcha()
         await sess.get_tdc(self.client)
 
         collect = str(sess.tdc.getData(None, True))  # BUG: maybe a String(), convert to str
