@@ -76,9 +76,5 @@ class SelectCaptchaSession(BaseTcaptchaSession):
             log.warning("select_captcha_input has no impls.")
             return ""
 
-        i = await self.select_captcha_input(self.render.instruction, tuple(self.cdn_imgs))
-        if 0 <= i < len(self.render.json_payload):
-            return str(self.render.json_payload.picture_ids[i])
-
-        log.warning(f"Invalid answer {i}")
-        return ""
+        ans = await self.select_captcha_input(self.render.instruction, tuple(self.cdn_imgs))
+        return ",".join(str(i) for i in ans)
