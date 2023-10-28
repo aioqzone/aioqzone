@@ -6,6 +6,7 @@ from contextlib import suppress
 from random import choice, random
 from time import time_ns
 
+from tenacity import RetryError
 from yarl import URL
 
 import qqqr.message as MT
@@ -325,12 +326,9 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         if solver is None:
             return
 
-        for retry in range(4):
+        try:
             sess.verify_rst = await solver.verify()
-            if sess.verify_rst.ticket:
-                break
-            log.warning(f"ticket is empty. retry={retry}")
-        else:
+        except RetryError as e:
             from qqqr.constant import captcha_status_description
 
             r = sess.verify_rst
@@ -339,7 +337,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
                 StatusCode.NeedCaptcha,
                 captcha_status_description.get(r.code, r.errMessage),
                 subcode=r.code,
-            )
+            ) from e.last_attempt.result()
 
         log.info("verify success!")
         return sess

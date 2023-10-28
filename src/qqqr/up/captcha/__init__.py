@@ -1,4 +1,3 @@
-import asyncio
 import base64
 import json
 import logging
@@ -8,7 +7,7 @@ from random import random
 from time import time
 
 from pydantic import ValidationError
-from tenacity import retry, retry_if_exception_type, stop_after_attempt
+from tenacity import after_log, retry, retry_if_exception_type, retry_if_result, stop_after_attempt
 
 from ...utils.net import ClientAdapter
 from .._model import VerifyResp
@@ -125,6 +124,11 @@ class Captcha:
     prehandle = new
     """alias of :meth:`.new`"""
 
+    @retry(
+        stop=stop_after_attempt(2),
+        retry=retry_if_result(lambda rst: not rst.ticket),
+        after=after_log(log, logging.WARNING),
+    )
     async def verify(self):
         """
         :raise NotImplementedError: cannot solve captcha
