@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Tuple
 
 import pytest
 
@@ -22,9 +22,15 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.asyncio
 
 
+def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
+    r = []
+    return r
+
+
 @pytest_asyncio.fixture(scope="module")
 async def captcha(client: ClientAdapter, env: test_env):
     login = UpH5Login(client, env.uin, env.password.get_secret_value())
+    login.select_captcha_input.add_impl(select_captcha_input)
     upsess = await login.new()
     await login.check(upsess)
     captcha = login.captcha(upsess.check_rst.session)
@@ -50,11 +56,22 @@ class TestCaptcha:
 
     async def test_puzzle(self, client: ClientAdapter, sess: TcaptchaSession):
         await sess.get_captcha_problem(client)
-        ans = (await sess.solve_captcha()).split(",")[0]
-        if isinstance(sess, SelectCaptchaSession) and not sess.select_captcha_input.has_impl:
-            assert not ans
-        else:
-            assert ans.isdigit()
+
+        def _23(prompt: str, imgs: Tuple[bytes, ...]):
+            return [2, 3]
+
+        if isinstance(sess, SelectCaptchaSession):
+            sess.select_captcha_input.impls.insert(0, _23)
+
+        ans = (await sess.solve_captcha()).split(",")
+        assert all(i.isdigit() for i in ans)
+
+        if isinstance(sess, SelectCaptchaSession):
+            sess.select_captcha_input.impls.pop(0)
+            assert ans == [
+                str(sess.render.json_payload.picture_ids[1]),
+                str(sess.render.json_payload.picture_ids[2]),
+            ]
 
     async def test_tdc(self, client: ClientAdapter, sess: TcaptchaSession):
         await sess.get_tdc(client)
