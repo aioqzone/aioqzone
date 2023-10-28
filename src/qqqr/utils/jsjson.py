@@ -1,8 +1,7 @@
 import ast
-import json
 import logging
 from textwrap import dedent
-from typing import Callable, Dict, List, Union
+from typing import Dict, List, Union
 
 logger = logging.getLogger(__name__)
 JsonDict = Dict[Union[str, int], "JsonValue"]
