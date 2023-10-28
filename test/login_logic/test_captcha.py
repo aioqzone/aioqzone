@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Tuple
 
 import pytest
 
@@ -22,9 +22,15 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.asyncio
 
 
+def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
+    r = []
+    return r
+
+
 @pytest_asyncio.fixture(scope="module")
 async def captcha(client: ClientAdapter, env: test_env):
     login = UpH5Login(client, env.uin, env.password.get_secret_value())
+    login.select_captcha_input.add_impl(select_captcha_input)
     upsess = await login.new()
     await login.check(upsess)
     captcha = login.captcha(upsess.check_rst.session)
