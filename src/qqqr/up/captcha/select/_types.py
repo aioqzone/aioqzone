@@ -4,6 +4,7 @@ import typing as t
 from pydantic import AliasPath, BaseModel, Field, model_validator
 
 from qqqr.message import solve_select_captcha
+from qqqr.utils.iter import first
 from qqqr.utils.jsjson import json_loads
 from qqqr.utils.net import ClientAdapter
 
@@ -79,5 +80,8 @@ class SelectCaptchaSession(BaseTcaptchaSession):
             log.warning("solve_captcha_hook has no impls.")
             return ""
 
-        ans = await self.solve_captcha_hook(self.render.instruction, tuple(self.cdn_imgs))
+        hook_results = await self.solve_captcha_hook.results(
+            self.render.instruction, tuple(self.cdn_imgs)
+        )
+        ans = first(hook_results, lambda i: bool(i), default=())
         return ",".join(str(self.render.json_payload.picture_ids[i - 1]) for i in ans)

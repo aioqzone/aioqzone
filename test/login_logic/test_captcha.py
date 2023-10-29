@@ -73,13 +73,13 @@ class TestCaptcha:
             return [2, 3]
 
         if isinstance(sess, SelectCaptchaSession):
-            sess.select_captcha_input.impls.insert(0, _23)
+            sess.solve_captcha_hook.impls.insert(0, _23)
 
         ans = (await sess.solve_captcha()).split(",")
         assert all(i.isdigit() for i in ans)
 
         if isinstance(sess, SelectCaptchaSession):
-            sess.select_captcha_input.impls.pop(0)
+            sess.solve_captcha_hook.impls.pop(0)
             assert ans == [
                 str(sess.render.json_payload.picture_ids[1]),
                 str(sess.render.json_payload.picture_ids[2]),
