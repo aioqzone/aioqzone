@@ -38,7 +38,7 @@ class Captcha:
     # (c_login_2.js)showNewVC-->prehandle
     # prehandle(recall)--call tcapcha-frame.*.js-->new_show
     # new_show(html)--js in html->loadImg(url)
-    select_captcha_input: _TyHook
+    solve_select_captcha: _TyHook
 
     def __init__(self, client: ClientAdapter, appid: int, sid: str, xlogin_url: str):
         """
@@ -114,7 +114,7 @@ class Captcha:
 
         sess = TcaptchaSession.factory(await retry_closure())
         if isinstance(sess, SelectCaptchaSession):
-            sess.select_captcha_input = self.select_captcha_input
+            sess.solve_captcha_hook = self.solve_select_captcha
         return sess
 
     prehandle = new

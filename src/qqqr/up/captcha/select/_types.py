@@ -3,7 +3,7 @@ import typing as t
 
 from pydantic import AliasPath, BaseModel, Field, model_validator
 
-from qqqr.message import select_captcha_input
+from qqqr.message import solve_select_captcha
 from qqqr.utils.jsjson import json_loads
 from qqqr.utils.net import ClientAdapter
 
@@ -11,7 +11,7 @@ from .._model import ClickCfg, PrehandleResp, Sprite
 from ..capsess import BaseTcaptchaSession
 
 log = logging.getLogger(__name__)
-_TyHook = type(select_captcha_input)
+_TyHook = type(solve_select_captcha)
 
 
 class SelectBgElemCfg(Sprite):
@@ -50,7 +50,7 @@ class SelectCaptchaDisplay(BaseModel):
 
 
 class SelectCaptchaSession(BaseTcaptchaSession):
-    select_captcha_input: _TyHook
+    solve_captcha_hook: _TyHook
 
     def __init__(self, prehandle: PrehandleResp) -> None:
         super().__init__(prehandle)
@@ -75,9 +75,9 @@ class SelectCaptchaSession(BaseTcaptchaSession):
         self.cdn_imgs = [imgs[i] for i in self.render.json_payload.picture_ids]
 
     async def solve_captcha(self) -> str:
-        if not self.select_captcha_input.has_impl:
-            log.warning("select_captcha_input has no impls.")
+        if not self.solve_captcha_hook.has_impl:
+            log.warning("solve_captcha_hook has no impls.")
             return ""
 
-        ans = await self.select_captcha_input(self.render.instruction, tuple(self.cdn_imgs))
+        ans = await self.solve_captcha_hook(self.render.instruction, tuple(self.cdn_imgs))
         return ",".join(str(self.render.json_payload.picture_ids[i - 1]) for i in ans)

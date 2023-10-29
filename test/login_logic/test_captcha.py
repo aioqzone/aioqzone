@@ -35,7 +35,7 @@ def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
 @pytest_asyncio.fixture(scope="module")
 async def login(client: ClientAdapter, env: test_env):
     login = UpH5Login(client, env.uin, env.password.get_secret_value())
-    login.select_captcha_input.add_impl(select_captcha_input)
+    login.solve_select_captcha.add_impl(select_captcha_input)
     yield login
 
 

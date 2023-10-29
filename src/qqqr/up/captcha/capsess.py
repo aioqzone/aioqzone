@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from hashlib import md5
 from time import time
 
+from tylisten import HookSpec
 from yarl import URL
 
 from qqqr.utils.net import ClientAdapter
@@ -14,6 +15,7 @@ from ._model import PrehandleResp
 class BaseTcaptchaSession(ABC):
     data_type: str = "DynAnswerType_UC"
     mouse_track: "asyncio.Future[t.Optional[t.List[t.Tuple[int, int]]]]"
+    solve_captcha_hook: HookSpec
 
     def __init__(
         self,

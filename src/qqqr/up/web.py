@@ -101,7 +101,7 @@ class _UpHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
         self.sms_code_input = MT.sms_code_input.new()
-        self.select_captcha_input = MT.select_captcha_input.new()
+        self.solve_select_captcha = MT.solve_select_captcha.new()
 
 
 class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
@@ -343,5 +343,5 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             sid = sid.sid
 
         solver = Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
-        solver.select_captcha_input = self.select_captcha_input
+        solver.solve_select_captcha = self.solve_select_captcha
         return solver
