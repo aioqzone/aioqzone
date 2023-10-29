@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, Tuple
 
 import pytest
@@ -23,17 +24,28 @@ pytestmark = pytest.mark.asyncio
 
 
 def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
+    if (root := Path("data/debug")).exists():
+        for i, b in enumerate(imgs, start=1):
+            with open(root / f"{i}.png", "wb") as f:
+                f.write(b)
     r = []
     return r
 
 
 @pytest_asyncio.fixture(scope="module")
-async def captcha(client: ClientAdapter, env: test_env):
+async def login(client: ClientAdapter, env: test_env):
     login = UpH5Login(client, env.uin, env.password.get_secret_value())
     login.select_captcha_input.add_impl(select_captcha_input)
+    yield login
+
+
+@pytest_asyncio.fixture(scope="class")
+async def captcha(login: UpH5Login):
     upsess = await login.new()
     await login.check(upsess)
-    captcha = login.captcha(upsess.check_rst.session)
+    captcha = login.captcha_solver(upsess.check_rst.session)
+    if captcha is None:
+        pytest.skip("deps not installed")
     yield captcha
 
 
@@ -90,9 +102,3 @@ class TestCaptcha:
             return
 
         pytest.fail(msg=captcha_status_description.get(r.code))
-
-
-@pytest_asyncio.fixture(scope="class")
-async def vm(client: ClientAdapter, sess: TcaptchaSession):
-    await sess.get_tdc(client)
-    yield sess.tdc
