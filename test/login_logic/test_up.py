@@ -42,9 +42,13 @@ class TestUpWeb:
         sess = await web.new()
         await web.check(sess)
         if sess.code == StatusCode.NeedCaptcha:
-            sess = await web.pass_vc(sess)
-            if sess is None:
+            solver = web.captcha_solver(sess)
+            if solver is None:
                 pytest.skip("captcha extras is not installed, skipped.")
+            try:
+                await sess.pass_vc(solver)
+            except NotImplementedError:
+                pytest.xfail("cannot solve captcha")
         if sess.code != 1:
             assert sess.verifycode
             assert sess.check_rst.salt

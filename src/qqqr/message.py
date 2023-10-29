@@ -35,7 +35,7 @@ def sms_code_input(uin: int, phone: str, nickname: str) -> t.Optional[str]:
 
 
 @hookdef
-def select_captcha_input(prompt: str, imgs: t.Tuple[bytes, ...]) -> t.Sequence[int]:
+def solve_select_captcha(prompt: str, imgs: t.Tuple[bytes, ...]) -> t.Sequence[int]:
     """This hook asks answers for a select captcha.
 
     :param prompt: the question of the select captcha
