@@ -21,8 +21,6 @@ from .encrypt import PasswdEncoder, TeaEncoder
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"
-
-
 log = logging.getLogger(__name__)
 
 
@@ -53,6 +51,10 @@ class UpWebSession(LoginSession):
         return 0
 
     @property
+    def sid(self) -> str:
+        return self.check_rst.session
+
+    @property
     def code(self):
         if self.verify_rst:
             return self.verify_rst.code
@@ -69,6 +71,29 @@ class UpWebSession(LoginSession):
         if self.verify_rst:
             return self.verify_rst.ticket
         return self.check_rst.verifysession
+
+    async def pass_vc(self, solver) -> None:
+        """
+        The `pass_vc` function is used to pass the verification tcaptcha.
+        It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
+
+        :param solver: the :class:`Captcha` object
+        :raise NotImplementedError: if cannot solve this captcha
+        :raise TencentLoginError: if failed to pass captcha
+        """
+        try:
+            self.verify_rst = await solver.verify()
+        except RetryError as e:
+            from qqqr.constant import captcha_status_description
+
+            r: VerifyResp = e.last_attempt.result()
+            raise TencentLoginError(
+                StatusCode.NeedCaptcha,
+                captcha_status_description.get(r.code, r.errMessage),
+                subcode=r.code,
+            ) from e.last_attempt.exception()
+
+        log.info("成功通过验证码")
 
 
 class _UpHookMixin:
@@ -139,7 +164,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
 
         .. seealso:: https://github.com/fingerprintjs/fingerprintjs
         """
-        return ""
+        return ""  # TODO
 
     async def new(self):
         """Create a :class:`UpWebSession`. This will call `check` api of Qzone, and receive result
@@ -256,12 +281,14 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
 
         if sess.code == StatusCode.NeedCaptcha:
             log.warning("需通过防水墙")
+
+            if (solver := self.captcha_solver(sess.sid)) is None:
+                raise TencentLoginError(StatusCode.NeedCaptcha, "未安装依赖，无法识别验证码")
+
             try:
-                sess = await self.pass_vc(sess)
+                await sess.pass_vc(solver)
             except NotImplementedError:
                 raise TencentLoginError(StatusCode.NeedCaptcha, "未能识别验证码")
-            if sess is None:
-                raise TencentLoginError(StatusCode.NeedCaptcha, "未安装依赖，无法识别验证码")
             if sess.verify_rst is None or not sess.verify_rst.ticket:
                 raise TencentLoginError(StatusCode.NeedCaptcha, "验证过程出现错误")
 
@@ -292,7 +319,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             else:
                 raise TencentLoginError(resp.code, resp.msg)
 
-    def captcha(self, sid: str):
+    def captcha_solver(self, sid: t.Union[str, UpWebSession]):
         """
         The `captcha` function is used to build a :class:`Captcha` instance.
         It takes in a string, which is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance.
@@ -309,35 +336,9 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             log.debug("ImportError as follows:", exc_info=True)
             return
 
+        if isinstance(sid, UpWebSession):
+            sid = sid.sid
+
         solver = Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
         solver.select_captcha_input = self.select_captcha_input
         return solver
-
-    async def pass_vc(self, sess: UpWebSession) -> t.Optional[UpWebSession]:
-        """
-        The `pass_vc` function is used to pass the verification tcaptcha.
-        It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
-
-        :param sess: the session object
-        :raise NotImplementedError: if cannot solve this captcha
-        :return: The session with :obj:`~UpWebSession.verify_rst` is set, or None if :exc:`ImportError`.
-        """
-        solver = self.captcha(sess.check_rst.session)
-        if solver is None:
-            return
-
-        try:
-            sess.verify_rst = await solver.verify()
-        except RetryError as e:
-            from qqqr.constant import captcha_status_description
-
-            r = sess.verify_rst
-            assert r
-            raise TencentLoginError(
-                StatusCode.NeedCaptcha,
-                captcha_status_description.get(r.code, r.errMessage),
-                subcode=r.code,
-            ) from e.last_attempt.result()
-
-        log.info("verify success!")
-        return sess
