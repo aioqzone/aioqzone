@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 from typing import TYPE_CHECKING
 
 import pytest
@@ -10,8 +9,8 @@ pytest.importorskip("PIL")
 
 import pytest_asyncio
 
-from qqqr.up import UpWebLogin
-from qqqr.up.captcha import Captcha, TcaptchaSession
+from qqqr.up import UpH5Login
+from qqqr.up.captcha import Captcha
 from qqqr.up.captcha.slide import *
 
 if TYPE_CHECKING:
@@ -21,11 +20,16 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture(scope="module")
-async def captcha(client: ClientAdapter, env: test_env):
-    login = UpWebLogin(client, env.uin, env.password.get_secret_value())
+async def login(client: ClientAdapter, env: test_env):
+    login = UpH5Login(client, env.uin, env.password.get_secret_value())
+    yield login
+
+
+@pytest_asyncio.fixture(scope="module")
+async def captcha(login: UpH5Login):
     upsess = await login.new()
     await login.check(upsess)
-    captcha = login.captcha(upsess.check_rst.session)
+    captcha = login.captcha_solver(upsess.check_rst.session)
     yield captcha
 
 
@@ -35,23 +39,13 @@ async def sess(client: ClientAdapter, captcha: Captcha):
     if not isinstance(sess, SlideCaptchaSession):
         pytest.skip("not a slide captcha")
 
-    async def r(url) -> bytes:
-        async with client.get(url) as r:
-            r.raise_for_status()
-            return await r.content.read()
-
-    sess.cdn_imgs = list(await asyncio.gather(*(r(i) for i in sess.cdn_urls)))
+    await sess.get_captcha_problem(client)
     yield sess
 
 
 @pytest.fixture(scope="module")
 def jigsaw(sess: SlideCaptchaSession):
-    get_slice = lambda i: slice(
-        sess.piece_sprite.sprite_pos[i],
-        sess.piece_sprite.sprite_pos[i] + sess.piece_sprite.size_2d[i],
-    )
-    piece_pos = get_slice(0), get_slice(1)
-    yield Jigsaw(*sess.cdn_imgs, piece_pos=piece_pos, top=sess.piece_sprite.init_pos[1])
+    yield sess.get_jigsaw_solver()
 
 
 class TestPiece:

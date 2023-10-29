@@ -43,9 +43,6 @@ class SlideCaptchaSession(BaseTcaptchaSession):
         if self.piece_sprite.move_cfg.data_type:
             self.data_type = self.piece_sprite.move_cfg.data_type[0]
 
-    def set_drag_track(self, xs: t.List[int], ys: t.List[int]):
-        self.mouse_track = list(zip(xs, ys))
-
     async def get_captcha_problem(self, client: ClientAdapter):
         """
         The get_captcha_problem function is a coroutine that accepts a TcaptchaSession object as an argument.
@@ -63,6 +60,15 @@ class SlideCaptchaSession(BaseTcaptchaSession):
 
         self.cdn_imgs = list(await asyncio.gather(*(r(i) for i in self.cdn_urls)))
 
+    def get_jigsaw_solver(self):
+        get_slice = lambda i: slice(
+            self.piece_sprite.sprite_pos[i],
+            self.piece_sprite.sprite_pos[i] + self.piece_sprite.size_2d[i],
+        )
+        piece_pos = get_slice(0), get_slice(1)
+
+        return Jigsaw(*self.cdn_imgs, piece_pos=piece_pos, top=self.piece_sprite.init_pos[1])
+
     async def solve_captcha(self):
         """
         The solve_captcha function solves the captcha problem. It assumes that :obj:`TcaptchaSession.cdn_imgs`
@@ -77,18 +83,12 @@ class SlideCaptchaSession(BaseTcaptchaSession):
         """
         assert self.cdn_imgs
 
-        get_slice = lambda i: slice(
-            self.piece_sprite.sprite_pos[i],
-            self.piece_sprite.sprite_pos[i] + self.piece_sprite.size_2d[i],
-        )
-        piece_pos = get_slice(0), get_slice(1)
-
-        jig = Jigsaw(*self.cdn_imgs, piece_pos=piece_pos, top=self.piece_sprite.init_pos[1])
+        jig = self.get_jigsaw_solver()
         # BUG: +1 to ensure left > init_pos[0], otherwise it's >=.
         # However if left == init_pos[0] + 1, it is certainly a wrong result.
         left = jig.solve(self.piece_sprite.init_pos[0] + 1)
 
         xs, ys = imitate_drag(self.piece_sprite.init_pos[0], left, jig.top)
-        self.set_drag_track(xs, ys)
+        self.mouse_track.set_result(list(zip(xs, ys)))
 
         return f"{left},{jig.top}"

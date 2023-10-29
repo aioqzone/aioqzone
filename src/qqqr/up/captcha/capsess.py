@@ -1,10 +1,10 @@
+import asyncio
 import typing as t
 from abc import ABC, abstractmethod
 from hashlib import md5
 from time import time
 
-from chaosvm import prepare
-from chaosvm.proxy.dom import TDC
+from tylisten import HookSpec
 from yarl import URL
 
 from qqqr.utils.net import ClientAdapter
@@ -14,7 +14,8 @@ from ._model import PrehandleResp
 
 class BaseTcaptchaSession(ABC):
     data_type: str = "DynAnswerType_UC"
-    mouse_track: t.Optional[t.List[t.Tuple[int, int]]] = None
+    mouse_track: "asyncio.Future[t.Optional[t.List[t.Tuple[int, int]]]]"
+    solve_captcha_hook: HookSpec
 
     def __init__(
         self,
@@ -23,6 +24,7 @@ class BaseTcaptchaSession(ABC):
         super().__init__()
         self.prehandle = prehandle
         self.parse_captcha_data()
+        self.mouse_track = asyncio.get_event_loop().create_future()
 
     def parse_captcha_data(self):
         self.conf = self.prehandle.captcha
@@ -67,13 +69,15 @@ class BaseTcaptchaSession(ABC):
         """
         .. note:: If :obj:`.mouse_track` should be set, set it before calling this method.
         """
+        from chaosvm import prepare
+
         async with client.get(self._tdx_js_url()) as r:
             r.raise_for_status()
             self.tdc = prepare(
-                await r.text(),
+                await r.text("utf8"),
                 ip=self.prehandle.uip,
                 ua=ua or client.headers["User-Agent"],
-                mouse_track=self.mouse_track,
+                mouse_track=await self.mouse_track,
             )
 
     @abstractmethod
