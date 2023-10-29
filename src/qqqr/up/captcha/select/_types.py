@@ -9,7 +9,6 @@ from qqqr.utils.net import ClientAdapter
 
 from .._model import ClickCfg, PrehandleResp, Sprite
 from ..capsess import BaseTcaptchaSession
-from ..img_utils import *
 
 log = logging.getLogger(__name__)
 _TyHook = type(select_captcha_input)
@@ -64,6 +63,8 @@ class SelectCaptchaSession(BaseTcaptchaSession):
             self.data_type = self.render.bg.click_cfg.data_type[0]
 
     async def get_captcha_problem(self, client: ClientAdapter):
+        from ..img_utils import frombytes, tobytes
+
         async with client.get(self._cdn_join(self.render.bg.img_url)) as r:
             img = frombytes(await r.content.read())
 

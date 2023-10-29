@@ -17,6 +17,7 @@ from qqqr.type import APPID, PT_QR_APP, Proxy
 from qqqr.utils.net import ClientAdapter
 
 from ._model import CheckResp, LoginResp, VerifyResp
+from .captcha import Captcha
 from .encrypt import PasswdEncoder, TeaEncoder
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
@@ -72,7 +73,7 @@ class UpWebSession(LoginSession):
             return self.verify_rst.ticket
         return self.check_rst.verifysession
 
-    async def pass_vc(self, solver) -> None:
+    async def pass_vc(self, solver: "Captcha") -> None:
         """
         The `pass_vc` function is used to pass the verification tcaptcha.
         It is called when :meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code.
@@ -330,7 +331,9 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         """
 
         try:
-            from .captcha import Captcha
+            import chaosvm
+            import numpy
+            import PIL
         except ImportError:
             log.warning("captcha extras not installed. Install `aioqzone[captcha]` and retry.")
             log.debug("ImportError as follows:", exc_info=True)

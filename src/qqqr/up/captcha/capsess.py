@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 from hashlib import md5
 from time import time
 
-from chaosvm import prepare
 from yarl import URL
 
 from qqqr.utils.net import ClientAdapter
@@ -68,6 +67,8 @@ class BaseTcaptchaSession(ABC):
         """
         .. note:: If :obj:`.mouse_track` should be set, set it before calling this method.
         """
+        from chaosvm import prepare
+
         async with client.get(self._tdx_js_url()) as r:
             r.raise_for_status()
             self.tdc = prepare(
