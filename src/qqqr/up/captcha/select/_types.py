@@ -55,6 +55,7 @@ class SelectCaptchaSession(BaseTcaptchaSession):
 
     def __init__(self, prehandle: PrehandleResp) -> None:
         super().__init__(prehandle)
+        self.mouse_track.set_result(None)
 
     def parse_captcha_data(self):
         super().parse_captcha_data()
@@ -66,10 +67,11 @@ class SelectCaptchaSession(BaseTcaptchaSession):
         async with client.get(self._cdn_join(self.render.bg.img_url)) as r:
             img = frombytes(await r.content.read())
 
-        self.cdn_imgs = [
-            tobytes(img[r.top : r.bottom, r.left : r.right])
+        imgs = {
+            r.id: tobytes(img[r.top : r.bottom, r.left : r.right])
             for r in self.render.json_payload.select_region_list
-        ]
+        }
+        self.cdn_imgs = [imgs[i] for i in self.render.json_payload.picture_ids]
 
     async def solve_captcha(self) -> str:
         if not self.select_captcha_input.has_impl:

@@ -1,3 +1,4 @@
+import asyncio
 import base64
 import json
 import logging
@@ -106,7 +107,7 @@ class Captcha:
         async def retry_closure():
             async with self.client.get(PREHANDLE_URL, params=data) as r:
                 r.raise_for_status()
-                m = re.search(CALLBACK + r"\((\{.*\})\)", await r.text())
+                m = re.search(CALLBACK + r"\((\{.*\})\)", await r.text("utf8"))
 
             assert m
             return PrehandleResp.model_validate_json(m.group(1))
@@ -116,11 +117,6 @@ class Captcha:
             sess.select_captcha_input = self.select_captcha_input
         return sess
 
-    async def iframe(self):
-        """call this right after calling :meth:`.prehandle`"""
-        async with self.client.get("https://t.captcha.qq.com/template/drag_ele.html") as r:
-            return r.text
-
     prehandle = new
     """alias of :meth:`.new`"""
 
@@ -129,38 +125,49 @@ class Captcha:
         retry=retry_if_result(lambda rst: not rst.ticket),
         after=after_log(log, logging.WARNING),
     )
-    async def verify(self):
+    async def verify(self, *, loop: t.Optional[asyncio.AbstractEventLoop] = None):
         """
         :raise NotImplementedError: cannot solve captcha
         """
         sess = await self.new()
+        loop = loop or asyncio.get_event_loop()
 
-        await sess.get_captcha_problem(self.client)
-        sess.solve_workload()
-        await sess.get_tdc(self.client)
+        async def get_solve_captcha(client: ClientAdapter) -> str:
+            await sess.get_captcha_problem(client)
+            return await sess.solve_captcha()
 
-        collect = str(sess.tdc.getData(None, True))  # BUG: maybe a String(), convert to str
+        async def get_tdc_collect(client: ClientAdapter) -> str:
+            await sess.get_tdc(client)
+            return str(sess.tdc.getData(None, True))
 
+        ans, collect, _ = await asyncio.gather(
+            get_solve_captcha(self.client),
+            get_tdc_collect(self.client),
+            loop.run_in_executor(None, sess.solve_workload),
+        )
+        if not ans:
+            raise NotImplementedError
         ans = dict(
             elem_id=1,
             type=sess.data_type,
-            data=await sess.solve_captcha(),
+            data=ans,
         )
-        if not ans["data"]:
-            raise NotImplementedError
+        info = sess.tdc.getInfo()["info"]
+        assert isinstance(info, str)
 
         data = {
             "collect": collect,
             "tlg": len(collect),
-            "eks": sess.tdc.getInfo()["info"],
+            "eks": info.strip("'"),
             "sess": sess.prehandle.sess,
-            "ans": json.dumps(ans),
+            "ans": json.dumps([ans]),
             "pow_answer": hex_add(sess.conf.common.pow_cfg.prefix, sess.pow_ans),
             "pow_calc_time": sess.duration,
         }
         log.debug(f"verify post data: {data}")
 
         async with self.client.post(VERIFY_URL, data=data) as r:
-            r = VerifyResp.model_validate_json(await r.text())
+            r = VerifyResp.model_validate_json(await r.text("utf8"))
 
+        log.debug(f"verify result: {r}")
         return r
