@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:46+0800\n"
+"POT-Creation-Date: 2023-10-30 19:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.13.1\n"
 
 #: ../../source/qqqr/up/captcha/captcha.rst:2
 msgid "Captcha and TcaptchaSession"
@@ -31,10 +31,6 @@ msgstr ""
 
 #: of qqqr.up.captcha.Captcha.base64_ua:3
 msgid "A string containing the base64 encoded user agent"
-msgstr ""
-
-#: of qqqr.up.captcha.Captcha.iframe:1
-msgid "call this right after calling :meth:`.prehandle`"
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.new:1

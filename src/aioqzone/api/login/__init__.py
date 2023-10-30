@@ -10,7 +10,7 @@ Users can inherit these managers and implement their own persistance logic.
 
 import asyncio
 import logging
-from typing import Dict
+from typing import Dict, Optional
 
 from aiohttp import ClientError
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt, wait_exponential
@@ -37,9 +37,9 @@ __all__ = [
 class ConstLoginMan(Loginable):
     """A basic login manager which uses external provided cookie."""
 
-    def __init__(self, uin: int, cookie: Dict[str, str]) -> None:
+    def __init__(self, uin: int, cookie: Optional[Dict[str, str]] = None) -> None:
         super().__init__(uin)
-        self.cookie = cookie
+        self.cookie = {} if cookie is None else cookie
 
     async def _new_cookie(self) -> Dict[str, str]:
         return self.cookie

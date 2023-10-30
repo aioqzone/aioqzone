@@ -1,10 +1,9 @@
 import logging
 import re
-from functools import wraps
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
 from lxml.html import fromstring
-from tenacity import before_log, retry, stop_after_attempt
+from tenacity import after_log, retry, stop_after_attempt
 
 from aioqzone.api.login import Loginable
 from aioqzone.exception import QzoneError
@@ -24,7 +23,9 @@ class QzoneH5RawAPI:
     host = "https://h5.qzone.qq.com"
     qzonetoken: str = ""
 
-    def __init__(self, client: ClientAdapter, loginman: Loginable) -> None:
+    def __init__(
+        self, client: ClientAdapter, loginman: Loginable, *, retry_if_login_expire: bool = True
+    ) -> None:
         """
         .. warning:: If `loginman` uses an `AsyncClient`, the `client` param MUST use this client as well.
         """
@@ -32,9 +33,9 @@ class QzoneH5RawAPI:
         self.client = client
         self.login = loginman
         self._relogin_retry = retry(
-            stop=stop_after_attempt(2),
+            stop=stop_after_attempt(2 if retry_if_login_expire else 1),
             retry=retry_if_status(302, 403) | retry_if_qzone_code(-3000, -10000),
-            after=before_log(log, logging.INFO),
+            after=after_log(log, logging.INFO),
             sleep=self._update_cookie_safe,
         )
         """A decorator which will relogin and retry given func if cookie expired.
@@ -62,8 +63,7 @@ class QzoneH5RawAPI:
         host: Optional[str] = None,
         **kw,
     ):
-        if params is None:
-            params = {}
+        params = {} if params is None else params.copy()
         if "p_skey" not in self.login.cookie:
             raise QzoneError(-3000, "未登录")
         if attach_token:
@@ -83,8 +83,7 @@ class QzoneH5RawAPI:
         host: Optional[str] = None,
         **kw,
     ):
-        if params is None:
-            params = {}
+        params = {} if params is None else params.copy()
         if "p_skey" not in self.login.cookie:
             raise QzoneError(-3000, "未登录")
         if attach_token:
