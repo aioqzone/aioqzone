@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:46+0800\n"
+"POT-Creation-Date: 2023-10-30 19:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.13.1\n"
 
 #: ../../source/qqqr/up/login.rst:2
 msgid "UpLogin and UpSession"
@@ -33,27 +33,27 @@ msgstr ""
 msgid "`TeaEncoder` is the only encoder. ``NodeEncoder`` is removed."
 msgstr ""
 
-#: of qqqr.up.web.UpWebLogin.captcha:1
+#: of qqqr.up.web.UpWebLogin.captcha_solver:1
 msgid ""
 "The `captcha` function is used to build a :class:`Captcha` instance. It takes in a string, which"
 " is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance."
 msgstr ""
 
-#: of qqqr.up.web.UpWebLogin.captcha qqqr.up.web.UpWebLogin.pass_vc
-#: qqqr.up.web.UpWebLogin.send_sms_code qqqr.up.web.UpWebLogin.try_login
+#: of qqqr.up.web.UpWebLogin.captcha_solver qqqr.up.web.UpWebLogin.send_sms_code
+#: qqqr.up.web.UpWebLogin.try_login
 msgid "参数"
 msgstr ""
 
-#: of qqqr.up.web.UpWebLogin.captcha:6
+#: of qqqr.up.web.UpWebLogin.captcha_solver:6
 msgid "Pass the session id to the captcha function"
 msgstr ""
 
-#: of qqqr.up.web.UpWebLogin.captcha qqqr.up.web.UpWebLogin.new qqqr.up.web.UpWebLogin.pass_vc
+#: of qqqr.up.web.UpWebLogin.captcha_solver qqqr.up.web.UpWebLogin.new
 #: qqqr.up.web.UpWebLogin.try_login
 msgid "返回"
 msgstr ""
 
-#: of qqqr.up.web.UpWebLogin.captcha:7
+#: of qqqr.up.web.UpWebLogin.captcha_solver:7
 msgid "An instance of the captcha class, or None if dependency not installed."
 msgstr ""
 
@@ -75,38 +75,12 @@ msgid ""
 "whether this login needs a captcha, sms verification, etc."
 msgstr ""
 
-#: of qqqr.up.web.UpWebLogin.new qqqr.up.web.UpWebLogin.pass_vc
+#: of qqqr.up.web.UpWebLogin.new
 msgid "抛出"
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.new:6
 msgid "a up login session"
-msgstr ""
-
-#: of qqqr.up.web.UpWebLogin.pass_vc:1
-msgid ""
-"The `pass_vc` function is used to pass the verification tcaptcha. It is called when "
-":meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code."
-msgstr ""
-
-#: of qqqr.up.web.UpWebLogin.pass_vc:5
-msgid "the session object"
-msgstr ""
-
-#: of qqqr.up.web.UpWebLogin.pass_vc:6
-msgid "if cannot solve this captcha"
-msgstr ""
-
-#: of qqqr.up.web.UpWebLogin.pass_vc
-msgid "返回类型"
-msgstr ""
-
-#: of qqqr.up.web.UpWebLogin.pass_vc:7
-msgid ":py:data:`~typing.Optional`\\[:py:class:`~qqqr.up.web.UpWebSession`]"
-msgstr ""
-
-#: of qqqr.up.web.UpWebLogin.pass_vc:8
-msgid "The session with :obj:`~UpWebSession.verify_rst` is set, or None if :exc:`ImportError`."
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.send_sms_code:1
@@ -236,4 +210,16 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "The session with :obj:`~UpWebSession.verify_rst` is set."
+#~ msgstr ""
+
+#~ msgid "if cannot solve this captcha"
+#~ msgstr ""
+
+#~ msgid "返回类型"
+#~ msgstr ""
+
+#~ msgid ":py:data:`~typing.Optional`\\[:py:class:`~qqqr.up.web.UpWebSession`]"
+#~ msgstr ""
+
+#~ msgid "The session with :obj:`~UpWebSession.verify_rst` is set, or None if :exc:`ImportError`."
 #~ msgstr ""
