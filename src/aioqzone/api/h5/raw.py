@@ -2,7 +2,7 @@ import logging
 import re
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
-from lxml.html import fromstring
+from lxml.html import HtmlElement, document_fromstring
 from tenacity import after_log, retry, stop_after_attempt
 
 from aioqzone.api.login import Loginable
@@ -158,11 +158,13 @@ class QzoneH5RawAPI:
                 r.raise_for_status()
 
                 html = await r.text()
-                scripts: List = fromstring(html).xpath(
+                scripts: List[HtmlElement] = document_fromstring(html).xpath(
                     'body/script[@type="application/javascript"]'
                 )
                 if not scripts:
                     log.debug("jump to %s", str(r.url))
+                    log.debug(f"request header cookies: {r.request_info.headers['Cookie']}")
+                    log.debug(f"loginman cookies: {self.login.cookie}")
                     raise QzoneError(-3000, "script tag not found")
 
                 texts: List[str] = [s.text for s in scripts]
