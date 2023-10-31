@@ -71,7 +71,7 @@ class QzoneH5RawAPI:
             params["g_tk"] = str(self.login.gtk)
             self.client.referer = "https://h5.qzone.qq.com/"
         host = host or self.host
-        return self.client.get(host + path, params=params, **kw)
+        return self.client.get(host + path, params=params, cookies=self.login.cookie, **kw)
 
     def host_post(
         self,
@@ -91,15 +91,12 @@ class QzoneH5RawAPI:
             params["g_tk"] = str(self.login.gtk)
         self.client.referer = "https://h5.qzone.qq.com/"
         host = host or self.host
-        return self.client.post(self.host + path, params=params, data=data, **kw)
+        return self.client.post(
+            self.host + path, params=params, data=data, cookies=self.login.cookie, **kw
+        )
 
     async def _update_cookie_safe(self, *_) -> None:
         await self.login.new_cookie()
-        # update cookies is optional.
-        try:
-            self.client.cookie_jar.update_cookies(self.login.cookie)
-        except:
-            log.warning("Error when updating client cookies", exc_info=True)
 
     def _rtext_handler(
         self,
