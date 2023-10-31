@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 from lxml.html import HtmlElement, document_fromstring
 from tenacity import after_log, retry, stop_after_attempt
@@ -168,21 +168,23 @@ class QzoneH5RawAPI:
                 script = firstn(texts, lambda s: "shine0callback" in s)
                 if not script:
                     raise QzoneError(-3000, "data script not found")
-                return script
 
-        script = await retry_closure()
-        m = re.search(r'window\.shine0callback.*return "([0-9a-f]+?)";', script)
-        if m is None:
-            raise RuntimeError("data script not found")
+                m = re.search(r'window\.shine0callback.*return "([0-9a-f]+?)";', script)
+                if m is None:
+                    raise RuntimeError("data script not found")
 
-        self.qzonetoken = m.group(1)
-        log.debug(f"got qzonetoken = {self.qzonetoken}")
+                self.qzonetoken = m.group(1)
+                log.debug(f"got qzonetoken = {self.qzonetoken}")
 
-        m = re.search(r"var FrontPage =.*?data\s*:\s*\{", script)
-        if m is None:
-            raise RuntimeError("page data not found")
-        data = script[m.end() - 1 : m.end() + entire_closing(script[m.end() - 1 :])]
-        return self._rtext_handler(data, cb=False, errno_key=("code", "ret"), data_key="data")
+                m = re.search(r"var FrontPage =.*?data\s*:\s*\{", script)
+                if m is None:
+                    raise RuntimeError("page data not found")
+                data = script[m.end() - 1 : m.end() + entire_closing(script[m.end() - 1 :])]
+                return self._rtext_handler(
+                    data, cb=False, errno_key=("code", "ret"), data_key="data"
+                )
+
+        return await retry_closure()
 
     async def get_active_feeds(self, attach_info: str) -> StrDict:
         """Get next page. If :obj:`.qzonetoken` is not parsed or :obj:`attach_info` is empty,
@@ -208,11 +210,11 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_post("/webapp/json/mqzone_feeds/getActiveFeeds", data=data) as r:
                 r.raise_for_status()
-                return await r.json()
+                return self._rtext_handler(
+                    await r.json(), cb=False, errno_key=("code", "ret"), data_key="data"
+                )
 
-        return self._rtext_handler(
-            await retry_closure(), cb=False, errno_key=("code", "ret"), data_key="data"
-        )
+        return await retry_closure()
 
     async def shuoshuo(self, fid: str, hostuin: int, appid=311, busi_param: str = ""):
         """This can be used to get the detailed summary of a feed.
@@ -238,9 +240,9 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_get("/webapp/json/mqzone_detail/shuoshuo", data) as r:
                 r.raise_for_status()
-                return await r.json()
+                return self._rtext_handler(await r.json(), cb=False, data_key="data")
 
-        return self._rtext_handler(await retry_closure(), cb=False, data_key="data")
+        return await retry_closure()
 
     async def mfeeds_get_count(self) -> StrDict:
         @self._relogin_retry
@@ -249,11 +251,15 @@ class QzoneH5RawAPI:
                 "/feeds/mfeeds_get_count", dict(format="json"), host="https://mobile.qzone.qq.com"
             ) as r:
                 r.raise_for_status()
-                return await r.json(content_type=None)
+                return self._rtext_handler(
+                    await r.json(content_type=None), cb=False, data_key="data"
+                )
 
-        return self._rtext_handler(await retry_closure(), cb=False, data_key="data")
+        return await retry_closure()
 
-    async def internal_dolike_app(self, appid: int, unikey: str, curkey: str, like=True):
+    async def internal_dolike_app(
+        self, appid: int, unikey: str, curkey: str, like=True
+    ) -> StrDict:
         data = dict(
             opuin=self.login.uin,
             unikey=unikey,
@@ -271,10 +277,9 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_get(path, data) as r:
                 r.raise_for_status()
-                return await r.json()
+                return self._rtext_handler(await r.json(), errno_key=("ret",), cb=False)
 
-        self._rtext_handler(await retry_closure(), errno_key=("ret",), cb=False)
-        return True
+        return await retry_closure()
 
     async def add_comment(self, ownuin: int, srcId: str, appid: int, content: str, private=False):
         assert content, "comment should not be empty"
@@ -296,8 +301,8 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_post("/webapp/json/qzoneOperation/addComment", data=data) as r:
                 r.raise_for_status()
-                return await r.json()
+                return self._rtext_handler(
+                    await r.json(), cb=False, errno_key=("ret",), data_key="data"
+                )
 
-        return self._rtext_handler(
-            await retry_closure(), cb=False, errno_key=("ret",), data_key="data"
-        )
+        return await retry_closure()
