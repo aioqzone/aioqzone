@@ -277,7 +277,9 @@ class QzoneH5RawAPI:
         async def retry_closure() -> StrDict:
             async with self.host_get(path, data) as r:
                 r.raise_for_status()
-                return self._rtext_handler(await r.json(), errno_key=("ret",), cb=False)
+                return self._rtext_handler(
+                    await r.json(content_type=None), errno_key=("ret",), cb=False
+                )
 
         return await retry_closure()
 
