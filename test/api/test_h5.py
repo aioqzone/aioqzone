@@ -10,45 +10,15 @@ from tenacity import RetryError
 
 from aioqzone.api import Loginable
 from aioqzone.api.h5 import QzoneH5API
-from aioqzone.api.h5.raw import QzoneH5RawAPI
 from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 
-@pytest_asyncio.fixture(scope="class")
-async def raw(client: ClientAdapter, man: Loginable):
-    yield QzoneH5RawAPI(client, man)
-
-
 @pytest.fixture(scope="class")
 def context():
     return {}
-
-
-class TestH5RawAPI:
-    async def test_index(self, raw: QzoneH5RawAPI, context: dict):
-        try:
-            d = await raw.index()
-        except RetryError:
-            pytest.skip("login failed")
-        if d["hasmore"]:
-            context["attach_info"] = d["attachinfo"]
-
-    async def test_more(self, raw: QzoneH5RawAPI, context: dict):
-        if "attach_info" not in context:
-            pytest.skip("have youe run `test_index` before this test?")
-        d = await raw.get_active_feeds(context["attach_info"])
-        if d["hasmore"]:
-            context["attach_info"] = d["attachinfo"]
-
-    async def test_heartbeat(self, raw: QzoneH5RawAPI):
-        try:
-            d = await raw.mfeeds_get_count()
-        except RetryError:
-            pytest.skip("login failed")
-        assert "active_cnt" in d
 
 
 @pytest_asyncio.fixture(scope="class")
