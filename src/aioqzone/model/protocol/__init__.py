@@ -49,9 +49,8 @@ class LikeData(BaseModel):
         return str(PersudoCurkey(uin, abstime))
 
     @staticmethod
-    def persudo_unikey(appid: int, uin: int, **kwds):
+    def persudo_unikey(appid: int, uin: int, fid: str):
         if appid == 311:
-            fid = kwds.get("fid", None) or kwds.get("key")
             return f"https://user.qzone.qq.com/{uin}/mood/{fid}"
 
         raise ValueError(appid)

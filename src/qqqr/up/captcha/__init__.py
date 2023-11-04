@@ -6,6 +6,7 @@ import re
 import typing as t
 from random import random
 from time import time
+from urllib.parse import unquote
 
 from pydantic import ValidationError
 from tenacity import after_log, retry, retry_if_exception_type, retry_if_result, stop_after_attempt
@@ -138,7 +139,7 @@ class Captcha:
 
         async def get_tdc_collect(client: ClientAdapter) -> str:
             await sess.get_tdc(client)
-            return str(sess.tdc.getData(None, True))
+            return unquote(str(sess.tdc.getData(None, True)))
 
         ans, collect, _ = await asyncio.gather(
             get_solve_captcha(self.client),

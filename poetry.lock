@@ -1123,13 +1123,13 @@ files = [
 
 [[package]]
 name = "pychaosvm"
-version = "0.2.7"
+version = "0.2.8"
 description = "A Python envirionment for Tencent ChaosVM."
 optional = true
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pychaosvm-0.2.7-py3-none-any.whl", hash = "sha256:986fce8b900bf383256276687f8107f37084351e02adcf0e61b78ca6be132933"},
-    {file = "pychaosvm-0.2.7.tar.gz", hash = "sha256:5a95b55b910f740ccf9ad1441b4e8bd552d4cb9a19c972a3b2de2c792b0f8c70"},
+    {file = "pychaosvm-0.2.8-py3-none-any.whl", hash = "sha256:5fb20c084b7403fcec6e939108013545dd1d209a9e0279b64f9411fde2487341"},
+    {file = "pychaosvm-0.2.8.tar.gz", hash = "sha256:dbd6c822ceb06f26ed6c0425f365029087797ef083c3f3c4d1af7b47f0550212"},
 ]
 
 [package.dependencies]
