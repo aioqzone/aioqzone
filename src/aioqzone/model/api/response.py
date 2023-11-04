@@ -1,9 +1,10 @@
 import re
-from typing import TYPE_CHECKING, ClassVar, Dict, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, ClassVar, Dict, List, Optional, Tuple
 
 from aiohttp import ClientResponse
 from lxml.html import HtmlElement, document_fromstring
 from pydantic import AliasChoices, BaseModel, Field, HttpUrl, model_validator
+from tenacity import TryAgain
 from typing_extensions import Self
 
 from aioqzone.exception import QzoneError
@@ -32,26 +33,20 @@ if TYPE_CHECKING:
     StrDict = Dict[str, JsonValue]
 
 
-class QzoneResponse(BaseModel):
-    class _parse_conf:
-        cb: ClassVar[bool] = False
-        errno_key: ClassVar[Tuple[str, ...]] = "code", "ret", "err"
-        msg_key: ClassVar[Tuple[str, ...]] = "message", "msg"
-        data_key: ClassVar[Optional[str]] = "data"
+class _ResponseParseConfig(BaseModel):
+    cb: bool = False
+    errno_key: Tuple[str, ...] = "code", "ret", "err"
+    msg_key: Tuple[str, ...] = "message", "msg"
+    data_key: Optional[str] = "data"
 
-    def __init_subclass__(
-        cls,
-        *,
-        cb: bool = False,
-        errno_key: Tuple[str, ...] = ("code", "err"),
-        msg_key: Tuple[str, ...] = ("message", "msg"),
-        data_key: Optional[str] = "data",
-        **kwargs,
-    ):
-        cls._parse_conf.cb = cb
-        cls._parse_conf.errno_key = errno_key
-        cls._parse_conf.msg_key = msg_key
-        cls._parse_conf.data_key = data_key
+
+class QzoneResponse(BaseModel):
+    _parse_conf: ClassVar[_ResponseParseConfig]
+
+    def __init_subclass__(cls, **kwargs):
+        cls._parse_conf = _ResponseParseConfig.model_validate(kwargs)
+        for k in cls._parse_conf.model_fields_set:
+            kwargs.pop(k)  # type: ignore
         return super().__init_subclass__(**kwargs)
 
     @classmethod
@@ -126,12 +121,12 @@ class IndexPageResp(FeedPageResp):
             'body/script[@type="application/javascript"]'
         )
         if not scripts:
-            raise QzoneError(-3000, "script tag not found")
+            raise TryAgain("script tag not found")
 
         texts: List[str] = [s.text for s in scripts]
         script = firstn(texts, lambda s: "shine0callback" in s)
         if not script:
-            raise QzoneError(-3000, "data script not found")
+            raise TryAgain("data script not found")
 
         m = re.search(r'window\.shine0callback.*return "([0-9a-f]+?)";', script)
         if m is None:
@@ -145,11 +140,14 @@ class IndexPageResp(FeedPageResp):
         data = json_loads(data)
         assert isinstance(data, dict)
 
-        data["qzonetoken"] = qzonetoken
+        if cls._parse_conf.data_key:
+            data[cls._parse_conf.data_key]["qzonetoken"] = qzonetoken  # type: ignore
+        else:
+            data["qzonetoken"] = qzonetoken
         return data
 
 
-class SingleReturnResp(QzoneResponse):
+class SingleReturnResp(QzoneResponse, data_key=None):  # type: ignore
     pass
 
 
@@ -158,7 +156,7 @@ class AddCommentResp(QzoneResponse):
     msg: str = ""
     verifyurl: str = ""
     commentid: int = 0
-    commentLikekey: Union[HttpUrl, str]
+    commentLikekey: HttpUrl
 
 
 class PublishMoodResp(QzoneResponse):

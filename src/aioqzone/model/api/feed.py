@@ -1,6 +1,6 @@
 import typing as t
 
-from pydantic import AliasPath, BaseModel, Field, HttpUrl, model_validator
+from pydantic import AliasChoices, AliasPath, BaseModel, Field, HttpUrl, model_validator
 
 __all__ = ["FeedData"]
 
@@ -28,8 +28,10 @@ class FeedCommon(BaseModel):
 
 
 class UserInfo(BaseModel):
-    nickname: str = Field(validation_alias=AliasPath("user", "nickname"))
-    uin: int = Field(validation_alias=AliasPath("user", "uin"))
+    uin: int = Field(validation_alias=AliasChoices("uin", AliasPath("user", "uin")))
+    nickname: str = Field(
+        default="", validation_alias=AliasChoices("nickname", AliasPath("user", "nickname"))
+    )
 
 
 class FeedSummary(BaseModel):
@@ -86,7 +88,7 @@ class PhotoUrls(BaseModel):
 
 class FeedVideo(BaseModel):
     videoid: str
-    videourl: HttpUrl
+    videourl: t.Union[HttpUrl, t.Literal[""], None]
     # videourls: dict
     coverurl: PhotoUrls
     videotime: int
@@ -98,7 +100,7 @@ class FeedVideo(BaseModel):
 
 class PicData(BaseModel):
     photourl: PhotoUrls
-    videodata: t.Optional[FeedVideo] = None
+    videodata: FeedVideo
     videoflag: int = 0
 
     albumid: str
@@ -130,6 +132,7 @@ class CommentItem(LikeInfo):
     date: int
     user: UserInfo
     isDeleted: bool = False
+    isPrivate: bool = False
 
     likeNum: int = Field(default_factory=int)
     replynum: int

@@ -6,11 +6,11 @@ from aioqzone.utils.time import time_ms
 
 
 class QzoneRequestParams(BaseModel):
-    uin_fields: t.ClassVar[t.Tuple[str]] = Field(default_factory=tuple, repr=False, exclude=True)
-    ts_fields: t.ClassVar[t.Tuple[str]] = Field(default_factory=tuple, repr=False, exclude=True)
+    uin_fields: t.ClassVar[t.Tuple[str, ...]] = ()
+    ts_fields: t.ClassVar[t.Tuple[str, ...]] = ()
 
     def build_params(self, uin: int, timestamp: t.Optional[float] = None):
-        d = self.model_dump(mode="json")
+        d = self.model_dump(mode="json", by_alias=True)
         d.update({i: uin for i in self.uin_fields})
         if self.ts_fields:
             timestamp = time_ms(timestamp)

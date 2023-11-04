@@ -44,21 +44,21 @@ class QzoneH5API:
         """
 
     async def call(self, api: QzoneApi[TyRequest, TyResponse]) -> TyResponse:
-        if api.attach_token:
-            params = dict(qzonetoken=self.qzonetoken, g_tk=str(self.login.gtk))
-        else:
-            params = dict()
-
-        data = api.params.build_params(self.login.uin)
+        params = api.params.build_params(self.login.uin)
         if api.http_method == "GET":
-            params.update(data)
             data = None
+        else:
+            data = params
+            params = {}
 
         self.client.referer = "https://h5.qzone.qq.com/"
         async for attempt in self._relogin_retry:
             with attempt:
-                if params.get("g_tk") == 0:
+                if (gtk := self.login.gtk) == 0:
                     raise TryAgain
+                if api.attach_token:
+                    params.update(qzonetoken=self.qzonetoken, g_tk=str(gtk))
+
                 async with self.client.request(
                     api.http_method, api.url, params=params, data=data, cookies=self.login.cookie
                 ) as r:
@@ -81,13 +81,12 @@ class QzoneH5API:
         :raise `RuntimeError`: if any failure occurs in data parsing.
         """
 
-        r = await self.call(FeedPageApi(response=IndexPageResp, attach_token=False))
-        assert isinstance(r, IndexPageResp)
+        r = await self.call(IndexPageApi(response=IndexPageResp, attach_token=False))
         self.qzonetoken = r.qzonetoken
         log.debug(f"got qzonetoken = {self.qzonetoken}")
         return r
 
-    async def get_active_feeds(self, attach_info: str) -> FeedPageResp:
+    async def get_active_feeds(self, attach_info: t.Optional[str] = None) -> FeedPageResp:
         """Get next page. If :obj:`.qzonetoken` is not parsed or :obj:`attach_info` is empty,
         it will call :meth:`.index` and return its response.
 
@@ -170,7 +169,7 @@ class QzoneH5API:
             )
         )
 
-    async def delete_ugc(self, fid: str, appid: int):
+    async def delete_ugc(self, fid: str, appid: int) -> DeleteUgcResp:
         return await self.call(
             AddOperationApi(
                 params=DeleteUgcParams(fid=fid, appid=appid),
