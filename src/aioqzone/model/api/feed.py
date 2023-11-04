@@ -14,8 +14,8 @@ class FeedCommon(BaseModel):
     time: int
     appid: int
     typeid: int = Field(alias="feedstype")
-    curkey: t.Union[HttpUrl, str] = Field(alias="curlikekey")
-    orgkey: t.Union[HttpUrl, str] = Field(alias="orglikekey")
+    curkey: t.Union[HttpUrl, str] = Field(alias="curlikekey", union_mode="left_to_right")
+    orgkey: t.Union[HttpUrl, str] = Field(alias="orglikekey", union_mode="left_to_right")
     ugckey: str
     """an underscore-joined string including `uin`, `appid`, `ugcrightkey`"""
     ugcrightkey: str
@@ -201,7 +201,7 @@ class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
     like: LikeInfo = Field(default_factory=LikeInfo)
 
     comment: FeedComment = Field(default_factory=FeedComment)
-    original: t.Union[FeedOriginal, Share, None] = None
+    original: t.Union[FeedOriginal, Share, None] = Field(default=None, union_mode="left_to_right")
     share_info: ShareInfo = Field(
         default_factory=ShareInfo, validation_alias=AliasPath("operation", "share_info")
     )
