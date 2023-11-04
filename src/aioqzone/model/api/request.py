@@ -2,13 +2,19 @@ import typing as t
 
 from pydantic import BaseModel, Field
 
+from aioqzone.utils.time import time_ms
+
 
 class QzoneRequestParams(BaseModel):
     uin_fields: t.ClassVar[t.Tuple[str]] = Field(default_factory=tuple, repr=False, exclude=True)
+    ts_fields: t.ClassVar[t.Tuple[str]] = Field(default_factory=tuple, repr=False, exclude=True)
 
-    def build_params(self, uin: int):
+    def build_params(self, uin: int, timestamp: t.Optional[float] = None):
         d = self.model_dump(mode="json")
         d.update({i: uin for i in self.uin_fields})
+        if self.ts_fields:
+            timestamp = time_ms(timestamp)
+            d.update({i: timestamp for i in self.ts_fields})
         return d
 
 
@@ -33,7 +39,7 @@ class GetCountParams(QzoneRequestParams):
 
 
 class DolikeParam(QzoneRequestParams):
-    _uin_fields = ("opuin",)
+    uin_fields = ("opuin",)
     unikey: str
     curkey: str
     appid: int
@@ -42,12 +48,35 @@ class DolikeParam(QzoneRequestParams):
 
 
 class AddCommentParams(QzoneRequestParams):
-    _uin_fields = ("uin",)
+    uin_fields = ("uin",)
     ownuin: int
-    srcId: str
-    isPrivateComment: int
+    fid: str = Field(serialization_alias="srcId")
+    private: int = Field(serialization_alias="isPrivateComment")
     content: str = Field(min_length=1, max_length=2000)
     appid: int = Field(default=311)
 
     bypass_param: dict = Field(default_factory=dict)
     busi_param: dict = Field(default_factory=dict)
+
+
+class PublishMoodParams(QzoneRequestParams):
+    uin_fields = ("res_uin",)
+    content: str = Field(min_length=1, max_length=2000)
+    richval: str = ""
+    issyncweibo: int = Field(default=False, validate_default=True)
+
+    opr_type: str = "publish_shuoshuo"
+    format: str = "json"
+    # lat: int
+    # lon: int
+    # lbsid: str = "poiinfo_district"
+
+
+class DeleteUgcParams(QzoneRequestParams):
+    uin_fields = ("res_uin",)
+    appid: int = Field(serialization_alias="res_type")
+    fid: str = Field(serialization_alias="res_id")
+
+    opr_type: str = "delugc"
+    real_del: int = 0
+    format: str = "json"

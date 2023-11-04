@@ -107,7 +107,7 @@ class QzoneH5API:
 
     async def shuoshuo(
         self, fid: str, hostuin: int, appid=311, busi_param: str = ""
-    ) -> GetMoreResp:
+    ) -> DetailResp:
         """This can be used to get the detailed summary of a feed.
 
         :param fid: aka. ``cellid``
@@ -120,11 +120,12 @@ class QzoneH5API:
                 params=ShuoshuoParams(
                     fid=fid, hostuin=hostuin, appid=appid, busi_param=busi_param
                 ),
-                response=GetMoreResp,
+                response=DetailResp,
             )
         )
 
     async def mfeeds_get_count(self) -> FeedCount:
+        """Get new feeds count. This is also the "keep-alive" signal of the cookie."""
         return await self.call(
             GetCountApi(params=GetCountParams(), response=FeedCount),
         )
@@ -132,30 +133,47 @@ class QzoneH5API:
     async def internal_dolike_app(
         self, appid: int, unikey: str, curkey: str, like=True
     ) -> SingleReturnResp:
+        """Like or unlike."""
         if like:
             path = "/proxy/domain/w.qzone.qq.com/cgi-bin/likes/internal_dolike_app"
         else:
             path = "/proxy/domain/w.qzone.qq.com/cgi-bin/likes/internal_unlike_app"
 
         return await self.call(
-            QzoneApi(
-                http_method="GET",
+            DoLikeApi(
                 path=path,
                 params=DolikeParam(appid=appid, unikey=unikey, curkey=curkey),
                 response=SingleReturnResp,
             )
         )
 
-    async def add_comment(self, ownuin: int, srcId: str, appid: int, content: str, private=False):
+    async def add_comment(self, owner_uin: int, fid: str, appid: int, content: str, private=False):
+        """Comment a feed."""
         return await self.call(
             AddCommentApi(
                 params=AddCommentParams(
-                    ownuin=ownuin,
-                    srcId=srcId,
-                    isPrivateComment=private,
+                    ownuin=owner_uin,
+                    fid=fid,
+                    private=private,
                     content=content,
                     appid=appid,
                 ),
-                response=SingleReturnResp,
+                response=AddCommentResp,
+            )
+        )
+
+    async def publish_mood(self, content: str, sync_weibo=False):
+        return await self.call(
+            PublishMoodApi(
+                params=PublishMoodParams(content=content, issyncweibo=sync_weibo),
+                response=PublishMoodResp,
+            )
+        )
+
+    async def delete_ugc(self, fid: str, appid: int):
+        return await self.call(
+            AddOperationApi(
+                params=DeleteUgcParams(fid=fid, appid=appid),
+                response=DeleteUgcResp,
             )
         )

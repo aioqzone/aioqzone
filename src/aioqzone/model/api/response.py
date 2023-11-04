@@ -1,9 +1,9 @@
 import re
-from typing import TYPE_CHECKING, ClassVar, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, ClassVar, Dict, List, Optional, Tuple, Union
 
 from aiohttp import ClientResponse
 from lxml.html import HtmlElement, document_fromstring
-from pydantic import AliasChoices, BaseModel, Field, model_validator
+from pydantic import AliasChoices, BaseModel, Field, HttpUrl, model_validator
 from typing_extensions import Self
 
 from aioqzone.exception import QzoneError
@@ -17,9 +17,12 @@ __all__ = [
     "QzoneResponse",
     "FeedPageResp",
     "IndexPageResp",
-    "GetMoreResp",
+    "DetailResp",
     "FeedCount",
     "SingleReturnResp",
+    "AddCommentResp",
+    "PublishMoodResp",
+    "DeleteUgcResp",
     "FeedData",
 ]
 
@@ -32,7 +35,7 @@ if TYPE_CHECKING:
 class QzoneResponse(BaseModel):
     class _parse_conf:
         cb: ClassVar[bool] = False
-        errno_key: ClassVar[Tuple[str, ...]] = "code", "err"
+        errno_key: ClassVar[Tuple[str, ...]] = "code", "ret", "err"
         msg_key: ClassVar[Tuple[str, ...]] = "message", "msg"
         data_key: ClassVar[Optional[str]] = "data"
 
@@ -90,7 +93,7 @@ class FeedCount(QzoneResponse):
     visitor_cnt: int = 0
 
 
-class GetMoreResp(FeedData, QzoneResponse):
+class DetailResp(FeedData, QzoneResponse):
     hasmore: bool = False
     attach_info: str = ""
 
@@ -99,7 +102,7 @@ class GetMoreResp(FeedData, QzoneResponse):
         return {k[5:] if str.startswith(k, "cell_") else k: i for k, i in v.items()}
 
 
-class FeedPageResp(QzoneResponse, errno_key=("code", "ret")):
+class FeedPageResp(QzoneResponse):
     """Represents RESPonse from get feed page operation.
     Used to validate response data in :meth:`aioqzone.api.h5.QzoneH5API.index`
     and :meth:`aioqzone.api.h5.QzoneH5API.getActivateFeeds`
@@ -146,5 +149,26 @@ class IndexPageResp(FeedPageResp):
         return data
 
 
-class SingleReturnResp(QzoneResponse, errno_key=("ret",)):
+class SingleReturnResp(QzoneResponse):
     pass
+
+
+class AddCommentResp(QzoneResponse):
+    ret: int = 0
+    msg: str = ""
+    verifyurl: str = ""
+    commentid: int = 0
+    commentLikekey: Union[HttpUrl, str]
+
+
+class PublishMoodResp(QzoneResponse):
+    ret: int = 0
+    msg: str = ""
+    fid: str = Field(validation_alias="tid")
+    undeal_info: FeedCount = Field(default_factory=FeedCount)
+
+
+class DeleteUgcResp(QzoneResponse):
+    ret: int = 0
+    msg: str = ""
+    undeal_info: FeedCount = Field(default_factory=FeedCount)
