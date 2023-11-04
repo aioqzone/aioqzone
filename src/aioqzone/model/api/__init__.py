@@ -1,6 +1,6 @@
 import typing as t
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, Field
 from yarl import URL
 
 from .request import *

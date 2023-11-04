@@ -1,0 +1,427 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2023, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-04 21:22+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.1\n"
+
+#: ../../source/aioqzone/model/api.rst:2
+msgid "H5 API definations"
+msgstr ""
+
+#: aioqzone.model.api.AddCommentApi aioqzone.model.api.AddOperationApi aioqzone.model.api.DoLikeApi
+#: aioqzone.model.api.FeedPageApi aioqzone.model.api.GetCountApi aioqzone.model.api.IndexPageApi
+#: aioqzone.model.api.ListFriendApi aioqzone.model.api.PublishMoodApi aioqzone.model.api.QzoneApi
+#: aioqzone.model.api.ShuoshuoApi aioqzone.model.api.request.ActiveFeedsParams
+#: aioqzone.model.api.request.AddCommentParams aioqzone.model.api.request.DeleteUgcParams
+#: aioqzone.model.api.request.DolikeParam aioqzone.model.api.request.GetCountParams
+#: aioqzone.model.api.request.PublishMoodParams aioqzone.model.api.request.ShuoshuoParams
+#: aioqzone.model.api.response.AddCommentResp aioqzone.model.api.response.DeleteUgcResp
+#: aioqzone.model.api.response.DetailResp aioqzone.model.api.response.FeedCount
+#: aioqzone.model.api.response.FeedPageResp aioqzone.model.api.response.IndexPageResp
+#: aioqzone.model.api.response.PublishMoodResp of
+msgid "Fields"
+msgstr ""
+
+#: aioqzone.model.api.QzoneApi:1 of
+msgid ":py:obj:`attach_token (bool) <aioqzone.model.api.QzoneApi.attach_token>`"
+msgstr ""
+
+#: aioqzone.model.api.QzoneApi:1 of
+msgid ":py:obj:`params (aioqzone.model.api.TyRequest) <aioqzone.model.api.QzoneApi.params>`"
+msgstr ""
+
+#: aioqzone.model.api.QzoneApi:1 of
+msgid ":py:obj:`path (str) <aioqzone.model.api.QzoneApi.path>`"
+msgstr ""
+
+#: aioqzone.model.api.QzoneApi:1 of
+msgid ":py:obj:`response (Type[aioqzone.model.api.TyResponse]) <aioqzone.model.api.QzoneApi.response>`"
+msgstr ""
+
+#: ../../source/aioqzone/model/api.rst:9
+msgid "Parameters"
+msgstr ""
+
+#: aioqzone.model.api.request.ActiveFeedsParams:1 of
+msgid ":py:obj:`attach_info (str) <aioqzone.model.api.request.ActiveFeedsParams.attach_info>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParams:1 of
+msgid ":py:obj:`appid (int) <aioqzone.model.api.request.AddCommentParams.appid>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParams:1 of
+msgid ":py:obj:`busi_param (dict) <aioqzone.model.api.request.AddCommentParams.busi_param>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParams:1 of
+msgid ":py:obj:`bypass_param (dict) <aioqzone.model.api.request.AddCommentParams.bypass_param>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParams:1 of
+msgid ":py:obj:`content (str) <aioqzone.model.api.request.AddCommentParams.content>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParams:1 of
+msgid ":py:obj:`fid (str) <aioqzone.model.api.request.AddCommentParams.fid>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParams:1 of
+msgid ":py:obj:`ownuin (int) <aioqzone.model.api.request.AddCommentParams.ownuin>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParams:1 of
+msgid ":py:obj:`private (int) <aioqzone.model.api.request.AddCommentParams.private>`"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.request.AddCommentParams.content
+#: aioqzone.model.api.request.PublishMoodParams.content
+#: aioqzone.model.api.request.ShuoshuoParams.busi_param
+#: aioqzone.model.api.response.AddCommentResp.commentLikekey of
+msgid "Constraints"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.request.AddCommentParams.content:1
+#: aioqzone.model.api.request.PublishMoodParams.content:1 of
+msgid "**min_length** = 1"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.request.AddCommentParams.content:1
+#: aioqzone.model.api.request.PublishMoodParams.content:1 of
+msgid "**max_length** = 2000"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteUgcParams:1 of
+msgid ":py:obj:`appid (int) <aioqzone.model.api.request.DeleteUgcParams.appid>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteUgcParams:1 of
+msgid ":py:obj:`fid (str) <aioqzone.model.api.request.DeleteUgcParams.fid>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteUgcParams:1 of
+msgid ":py:obj:`format (str) <aioqzone.model.api.request.DeleteUgcParams.format>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteUgcParams:1 of
+msgid ":py:obj:`opr_type (str) <aioqzone.model.api.request.DeleteUgcParams.opr_type>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteUgcParams:1 of
+msgid ":py:obj:`real_del (int) <aioqzone.model.api.request.DeleteUgcParams.real_del>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DolikeParam:1 of
+msgid ":py:obj:`appid (int) <aioqzone.model.api.request.DolikeParam.appid>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DolikeParam:1 of
+msgid ":py:obj:`curkey (str) <aioqzone.model.api.request.DolikeParam.curkey>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DolikeParam:1 of
+msgid ":py:obj:`format (str) <aioqzone.model.api.request.DolikeParam.format>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DolikeParam:1 of
+msgid ":py:obj:`opr_type (str) <aioqzone.model.api.request.DolikeParam.opr_type>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DolikeParam:1 of
+msgid ":py:obj:`unikey (str) <aioqzone.model.api.request.DolikeParam.unikey>`"
+msgstr ""
+
+#: aioqzone.model.api.request.GetCountParams:1 of
+msgid ":py:obj:`format (str) <aioqzone.model.api.request.GetCountParams.format>`"
+msgstr ""
+
+#: aioqzone.model.api.request.PublishMoodParams:1 of
+msgid ":py:obj:`content (str) <aioqzone.model.api.request.PublishMoodParams.content>`"
+msgstr ""
+
+#: aioqzone.model.api.request.PublishMoodParams:1 of
+msgid ":py:obj:`format (str) <aioqzone.model.api.request.PublishMoodParams.format>`"
+msgstr ""
+
+#: aioqzone.model.api.request.PublishMoodParams:1 of
+msgid ":py:obj:`issyncweibo (int) <aioqzone.model.api.request.PublishMoodParams.issyncweibo>`"
+msgstr ""
+
+#: aioqzone.model.api.request.PublishMoodParams:1 of
+msgid ":py:obj:`opr_type (str) <aioqzone.model.api.request.PublishMoodParams.opr_type>`"
+msgstr ""
+
+#: aioqzone.model.api.request.PublishMoodParams:1 of
+msgid ":py:obj:`richval (str) <aioqzone.model.api.request.PublishMoodParams.richval>`"
+msgstr ""
+
+#: aioqzone.model.api.request.ShuoshuoParams:1 of
+msgid ":py:obj:`appid (int) <aioqzone.model.api.request.ShuoshuoParams.appid>`"
+msgstr ""
+
+#: aioqzone.model.api.request.ShuoshuoParams:1 of
+msgid ":py:obj:`busi_param (str) <aioqzone.model.api.request.ShuoshuoParams.busi_param>`"
+msgstr ""
+
+#: aioqzone.model.api.request.ShuoshuoParams:1 of
+msgid ":py:obj:`count (int) <aioqzone.model.api.request.ShuoshuoParams.count>`"
+msgstr ""
+
+#: aioqzone.model.api.request.ShuoshuoParams:1 of
+msgid ":py:obj:`fid (str) <aioqzone.model.api.request.ShuoshuoParams.fid>`"
+msgstr ""
+
+#: aioqzone.model.api.request.ShuoshuoParams:1 of
+msgid ":py:obj:`format (str) <aioqzone.model.api.request.ShuoshuoParams.format>`"
+msgstr ""
+
+#: aioqzone.model.api.request.ShuoshuoParams:1 of
+msgid ":py:obj:`hostuin (int) <aioqzone.model.api.request.ShuoshuoParams.hostuin>`"
+msgstr ""
+
+#: aioqzone.model.api.request.ShuoshuoParams:1 of
+msgid ":py:obj:`refresh_type (int) <aioqzone.model.api.request.ShuoshuoParams.refresh_type>`"
+msgstr ""
+
+#: aioqzone.model.api.request.ShuoshuoParams:1 of
+msgid ":py:obj:`subid (str) <aioqzone.model.api.request.ShuoshuoParams.subid>`"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.request.ShuoshuoParams.busi_param:1 of
+msgid "**max_length** = 100"
+msgstr ""
+
+#: ../../source/aioqzone/model/api.rst:16
+msgid "Responses"
+msgstr ""
+
+#: aioqzone.model.api.response.AddCommentResp:1 of
+msgid ""
+":py:obj:`commentLikekey (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url]) "
+"<aioqzone.model.api.response.AddCommentResp.commentLikekey>`"
+msgstr ""
+
+#: aioqzone.model.api.response.AddCommentResp:1 of
+msgid ":py:obj:`commentid (int) <aioqzone.model.api.response.AddCommentResp.commentid>`"
+msgstr ""
+
+#: aioqzone.model.api.response.AddCommentResp:1 of
+msgid ":py:obj:`msg (str) <aioqzone.model.api.response.AddCommentResp.msg>`"
+msgstr ""
+
+#: aioqzone.model.api.response.AddCommentResp:1 of
+msgid ":py:obj:`ret (int) <aioqzone.model.api.response.AddCommentResp.ret>`"
+msgstr ""
+
+#: aioqzone.model.api.response.AddCommentResp:1 of
+msgid ":py:obj:`verifyurl (str) <aioqzone.model.api.response.AddCommentResp.verifyurl>`"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.response.AddCommentResp.commentLikekey:1 of
+msgid "**max_length** = 2083"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.response.AddCommentResp.commentLikekey:1 of
+msgid "**allowed_schemes** = ['http', 'https']"
+msgstr ""
+
+#: aioqzone.model.api.response.DeleteUgcResp:1 of
+msgid ":py:obj:`msg (str) <aioqzone.model.api.response.DeleteUgcResp.msg>`"
+msgstr ""
+
+#: aioqzone.model.api.response.DeleteUgcResp:1 of
+msgid ":py:obj:`ret (int) <aioqzone.model.api.response.DeleteUgcResp.ret>`"
+msgstr ""
+
+#: aioqzone.model.api.response.DeleteUgcResp:1 of
+msgid ""
+":py:obj:`undeal_info (aioqzone.model.api.response.FeedCount) "
+"<aioqzone.model.api.response.DeleteUgcResp.undeal_info>`"
+msgstr ""
+
+#: aioqzone.model.api.response.DetailResp:1 of
+msgid ":py:obj:`attach_info (str) <aioqzone.model.api.response.DetailResp.attach_info>`"
+msgstr ""
+
+#: aioqzone.model.api.response.DetailResp:1 of
+msgid ":py:obj:`hasmore (bool) <aioqzone.model.api.response.DetailResp.hasmore>`"
+msgstr ""
+
+#: aioqzone.model.api.response.DetailResp of
+msgid "Validators"
+msgstr ""
+
+#: aioqzone.model.api.response.DetailResp:1 of
+msgid ""
+":py:obj:`remove_prefix <aioqzone.model.api.response.DetailResp.remove_prefix>` » :py:obj:`all "
+"fields <aioqzone.model.api.response.DetailResp.all fields>`"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.response.DetailResp.attach_info
+#: aioqzone.model.api.response.DetailResp.hasmore of
+msgid "Validated by"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.response.DetailResp.attach_info:1
+#: aioqzone.model.api.response.DetailResp.hasmore:1 of
+msgid ":py:obj:`remove_prefix <aioqzone.model.api.response.DetailResp.remove_prefix>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedCount:1 of
+msgid ":py:obj:`active_cnt (int) <aioqzone.model.api.response.FeedCount.active_cnt>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedCount:1 of
+msgid ":py:obj:`gamebar_cnt (int) <aioqzone.model.api.response.FeedCount.gamebar_cnt>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedCount:1 of
+msgid ":py:obj:`gift_cnt (int) <aioqzone.model.api.response.FeedCount.gift_cnt>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedCount:1 of
+msgid ":py:obj:`passive_cnt (int) <aioqzone.model.api.response.FeedCount.passive_cnt>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedCount:1 of
+msgid ":py:obj:`visitor_cnt (int) <aioqzone.model.api.response.FeedCount.visitor_cnt>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedPageResp:1 of
+msgid ""
+"Represents RESPonse from get feed page operation. Used to validate response data in "
+":meth:`aioqzone.api.h5.QzoneH5API.index` and :meth:`aioqzone.api.h5.QzoneH5API.getActivateFeeds`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedPageResp:1 of
+msgid ":py:obj:`attachinfo (str) <aioqzone.model.api.response.FeedPageResp.attachinfo>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedPageResp:1 of
+msgid ":py:obj:`hasmore (bool) <aioqzone.model.api.response.FeedPageResp.hasmore>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedPageResp:1 of
+msgid ":py:obj:`newcnt (int) <aioqzone.model.api.response.FeedPageResp.newcnt>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedPageResp:1 of
+msgid ""
+":py:obj:`undeal_info (aioqzone.model.api.response.FeedCount) "
+"<aioqzone.model.api.response.FeedPageResp.undeal_info>`"
+msgstr ""
+
+#: aioqzone.model.api.response.FeedPageResp:1 of
+msgid ""
+":py:obj:`vFeeds (List[aioqzone.model.api.feed.FeedData]) "
+"<aioqzone.model.api.response.FeedPageResp.vFeeds>`"
+msgstr ""
+
+#: aioqzone.model.api.response.IndexPageResp:1 of
+msgid ":py:obj:`qzonetoken (str) <aioqzone.model.api.response.IndexPageResp.qzonetoken>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PublishMoodResp:1 of
+msgid ":py:obj:`fid (str) <aioqzone.model.api.response.PublishMoodResp.fid>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PublishMoodResp:1 of
+msgid ":py:obj:`msg (str) <aioqzone.model.api.response.PublishMoodResp.msg>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PublishMoodResp:1 of
+msgid ":py:obj:`ret (int) <aioqzone.model.api.response.PublishMoodResp.ret>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PublishMoodResp:1 of
+msgid ""
+":py:obj:`undeal_info (aioqzone.model.api.response.FeedCount) "
+"<aioqzone.model.api.response.PublishMoodResp.undeal_info>`"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object:1 of
+msgid "Parses the response text or object recieved from Qzone API."
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object of
+msgid "参数"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object:4 of
+msgid "the parsed response object. see `.response_to_object`"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object of
+msgid "抛出"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object:5 of
+msgid "if returned result code != 0"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object
+#: aioqzone.model.api.response.QzoneResponse.response_to_object of
+msgid "返回类型"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object:7 of
+msgid ":py:class:`~typing.Self`"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object of
+msgid "返回"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.from_response_object:8 of
+msgid "Self"
+msgstr ""
+
+#: aioqzone.model.api.response.QzoneResponse.response_to_object:2 of
+msgid ""
+":py:class:`~typing.Dict`\\[:py:class:`str`, :py:data:`~typing.Union`\\[:py:class:`bool`, "
+":py:class:`int`, :py:class:`str`, "
+":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, :py:class:`int`], "
+"JsonValue], :py:class:`~typing.List`\\[JsonValue]]]"
+msgstr ""
+
+#~ msgid "Response Models"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`comment (aioqzone.model.api.feed.FeedComment) "
+#~ "<aioqzone.model.api.feed.FeedData.comment>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`common (aioqzone.model.api.feed.FeedCommon) "
+#~ "<aioqzone.model.api.feed.FeedData.common>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`like (aioqzone.model.api.feed.LikeInfo) <aioqzone.model.api.feed.FeedData.like>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`original (aioqzone.model.api.feed.FeedOriginal | "
+#~ "aioqzone.model.api.feed.Share | None) "
+#~ "<aioqzone.model.api.feed.FeedData.original>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`share_info (aioqzone.model.api.feed.ShareInfo) "
+#~ "<aioqzone.model.api.feed.FeedData.share_info>`"
+#~ msgstr ""
