@@ -141,7 +141,11 @@ class IndexPageResp(FeedPageResp):
         assert isinstance(data, dict)
 
         if cls._parse_conf.data_key:
-            data[cls._parse_conf.data_key]["qzonetoken"] = qzonetoken  # type: ignore
+            if d := data[cls._parse_conf.data_key]:
+                assert isinstance(d, dict)
+                d["qzonetoken"] = qzonetoken
+            else:
+                data[cls._parse_conf.data_key] = dict(qzonetoken=qzonetoken)
         else:
             data["qzonetoken"] = qzonetoken
         return data

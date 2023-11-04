@@ -21,7 +21,7 @@ async def api(client: ClientAdapter, man: Loginable):
 
 
 async def qzone_workflow(api: QzoneH5API):
-    await api.index()
+    feed_flow = await api.index()
     assert api.qzonetoken
 
     feed = await api.publish_mood(MOOD_TEXT, sync_weibo=False)
