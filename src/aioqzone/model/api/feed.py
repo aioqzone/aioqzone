@@ -1,28 +1,21 @@
-from typing import List, Optional, Set, Union
+import typing as t
 
-from pydantic import BaseModel, Field, model_validator
-from pydantic.networks import HttpUrl
+from pydantic import AliasChoices, AliasPath, BaseModel, Field, HttpUrl, model_validator
 
-
-class FeedCount(BaseModel):
-    active_cnt: int = 0
-    passive_cnt: int = 0
-    gamebar_cnt: int = 0
-    gift_cnt: int = 0
-    visitor_cnt: int = 0
+__all__ = ["FeedData"]
 
 
 class RightInfo(BaseModel):
     ugc_right: int
-    allow_uins: List = Field(default_factory=list)
+    allow_uins: t.List = Field(default_factory=list)
 
 
 class FeedCommon(BaseModel):
     time: int
     appid: int
     typeid: int = Field(alias="feedstype")
-    curkey: Union[HttpUrl, str] = Field(alias="curlikekey")
-    orgkey: Union[HttpUrl, str] = Field(alias="orglikekey")
+    curkey: t.Union[HttpUrl, str] = Field(alias="curlikekey")
+    orgkey: t.Union[HttpUrl, str] = Field(alias="orglikekey")
     ugckey: str
     """an underscore-joined string including `uin`, `appid`, `ugcrightkey`"""
     ugcrightkey: str
@@ -35,36 +28,25 @@ class FeedCommon(BaseModel):
 
 
 class UserInfo(BaseModel):
-    nickname: str
-    uin: int
-
-    @model_validator(mode="before")
-    def unpack_user(cls, v: dict):
-        if "user" in v:
-            return v["user"]
-        return v
-
-
-class CellId(BaseModel):
-    cellid: str
+    uin: int = Field(validation_alias=AliasChoices("uin", AliasPath("user", "uin")))
+    nickname: str = Field(
+        default="", validation_alias=AliasChoices("nickname", AliasPath("user", "nickname"))
+    )
 
 
 class FeedSummary(BaseModel):
     summary: str = ""
     hasmore: bool = False
 
-    @model_validator(mode="before")
-    def add_hasmore(cls, v: dict):
-        if "hasmore" not in v:
-            if len(v.get("summary", "")) >= 499:
-                v["hasmore"] = True
-        return v
+    @property
+    def has_more(self):
+        return self.hasmore or len(self.summary) >= 499
 
 
 class LikeInfo(BaseModel):
     isliked: bool = False
-    likeNum: int = Field(alias="num", default_factory=int)
-    likemans: List[UserInfo] = Field(default_factory=list)
+    likeNum: int = Field(validation_alias="num", default_factory=int)
+    likemans: t.List[UserInfo] = Field(default_factory=list)
 
 
 class PhotoUrl(BaseModel):
@@ -89,7 +71,7 @@ class PhotoUrl(BaseModel):
 
 
 class PhotoUrls(BaseModel):
-    urls: Set[PhotoUrl]
+    urls: t.Set[PhotoUrl]
 
     @model_validator(mode="before")
     def unpack_urls(cls, v: dict):
@@ -106,7 +88,7 @@ class PhotoUrls(BaseModel):
 
 class FeedVideo(BaseModel):
     videoid: str
-    videourl: HttpUrl
+    videourl: t.Union[HttpUrl, t.Literal[""], None]
     # videourls: dict
     coverurl: PhotoUrls
     videotime: int
@@ -118,29 +100,29 @@ class FeedVideo(BaseModel):
 
 class PicData(BaseModel):
     photourl: PhotoUrls
-    videodata: Optional[FeedVideo] = None
+    videodata: FeedVideo
     videoflag: int = 0
 
     albumid: str
-    curkey: str = Field(alias="curlikekey")
+    curkey: str = Field(validation_alias="curlikekey")
 
     origin_size: int
     origin_height: int
     origin_width: int
     origin_phototype: int = 0
 
-    @model_validator(mode="before")
-    def remove_useless_data(cls, v: dict):
-        if "videodata" in v:
-            if not v["videodata"]["videourl"]:
-                del v["videodata"]
-        return v
+    # @model_validator(mode="before")
+    # def remove_useless_data(cls, v: dict):
+    #     if "videodata" in v:
+    #         if not v["videodata"]["videourl"]:
+    #             del v["videodata"]
+    #     return v
 
 
 class FeedPic(BaseModel):
     albumid: str
     uin: int
-    picdata: List[PicData]
+    picdata: t.List[PicData]
 
 
 class CommentItem(LikeInfo):
@@ -150,18 +132,19 @@ class CommentItem(LikeInfo):
     date: int
     user: UserInfo
     isDeleted: bool = False
+    isPrivate: bool = False
 
     likeNum: int = Field(default_factory=int)
     replynum: int
-    commentpic: List = Field(default_factory=list)
-    replys: List = Field(default_factory=list)
+    commentpic: t.List = Field(default_factory=list)
+    replys: t.List = Field(default_factory=list)
     # picdata: dict
 
 
 class FeedComment(BaseModel):
     num: int = 0
     unreadCnt: int = 0
-    comments: List[CommentItem] = Field(default_factory=list)
+    comments: t.List[CommentItem] = Field(default_factory=list)
 
 
 class HasCommon(BaseModel):
@@ -181,36 +164,32 @@ class HasSummary(BaseModel):
 
 
 class HasMedia(BaseModel):
-    pic: Optional[FeedPic] = None
-    video: Optional[FeedVideo] = None
+    pic: t.Optional[FeedPic] = None
+    video: t.Optional[FeedVideo] = None
 
 
 class HasFid(BaseModel):
-    id: CellId
-
-    @property
-    def fid(self):
-        return self.id.cellid
+    fid: str = Field(validation_alias=AliasPath("id", "cellid"))
 
 
 class ShareInfo(BaseModel):
     summary: str = ""
     title: str = ""
-    photourl: Optional[PhotoUrls] = None
+    photourl: t.Optional[PhotoUrls] = None
 
-    @model_validator(mode="before")
-    def remove_empty_photourl(cls, v: dict):
-        if not v.get("photourl"):
-            v["photourl"] = None
-        return v
+    # @model_validator(mode="before")
+    # def remove_empty_photourl(cls, v: dict):
+    #     if not v.get("photourl"):
+    #         v["photourl"] = None
+    #     return v
 
 
 class Share(HasCommon):
-    common: FeedCommon = Field(alias="cell_comm")
+    common: FeedCommon = Field(validation_alias="cell_comm")
 
 
 class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
-    common: FeedCommon = Field(alias="comm")
+    common: FeedCommon = Field(validation_alias="comm")
 
     @model_validator(mode="before")
     def remove_prefix(cls, v: dict):
@@ -218,38 +197,11 @@ class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
 
 
 class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
-    common: FeedCommon = Field(alias="comm")
+    common: FeedCommon = Field(validation_alias="comm")
     like: LikeInfo = Field(default_factory=LikeInfo)
 
     comment: FeedComment = Field(default_factory=FeedComment)
-    original: Union[FeedOriginal, Share, None] = None
-    share_info: ShareInfo = Field(default_factory=ShareInfo)
-
-    @model_validator(mode="before")
-    def unpack_share_info(cls, v: dict):
-        if "operation" in v:
-            v["share_info"] = v["operation"].get("share_info", {})
-        return v
-
-
-class GetMoreResp(FeedData):
-    hasmore: bool = False
-    attach_info: str = ""
-
-    @model_validator(mode="before")
-    def remove_prefix(cls, v: dict):
-        return {k[5:] if str.startswith(k, "cell_") else k: i for k, i in v.items()}
-
-
-class FeedPageResp(BaseModel):
-    """Represents RESPonse from get feed page operation.
-    Used to validate response data in :meth:`aioqzone.api.h5.QzoneH5API.index`
-    and :meth:`aioqzone.api.h5.QzoneH5API.getActivateFeeds`
-    """
-
-    hasmore: bool = False
-    attachinfo: str = ""
-    newcnt: int
-
-    undeal_info: FeedCount
-    vFeeds: List[FeedData]
+    original: t.Union[FeedOriginal, Share, None] = None
+    share_info: ShareInfo = Field(
+        default_factory=ShareInfo, validation_alias=AliasPath("operation", "share_info")
+    )

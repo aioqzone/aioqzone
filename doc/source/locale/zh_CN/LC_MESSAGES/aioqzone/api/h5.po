@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 12:46+0800\n"
+"POT-Creation-Date: 2023-11-04 21:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -17,11 +17,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.13.1\n"
 
 #: ../../source/aioqzone/api/h5.rst:2
 msgid "Qzone H5 API"
 msgstr "Qzone H5 接口"
+
+#: aioqzone.api.h5.model.QzoneH5API.add_comment:1 of
+msgid "Comment a feed."
+msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:1 of
 #, fuzzy
@@ -40,12 +44,13 @@ msgid "The ``attach_info`` field from last call. Pass an empty string equals to 
 msgstr "上一次调用返回值中的``attach_info``域。如果传入一个空串，将会调用:meth:`index`。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds aioqzone.api.h5.model.QzoneH5API.index
-#: aioqzone.api.h5.model.QzoneH5API.shuoshuo of
+#: aioqzone.api.h5.model.QzoneH5API.internal_dolike_app
+#: aioqzone.api.h5.model.QzoneH5API.mfeeds_get_count aioqzone.api.h5.model.QzoneH5API.shuoshuo of
 msgid "返回类型"
 msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:7 aioqzone.api.h5.model.QzoneH5API.index:6 of
-msgid ":py:class:`~aioqzone.model.response.h5.FeedPageResp`"
+#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:7 of
+msgid ":py:class:`~aioqzone.model.api.response.FeedPageResp`"
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds of
@@ -68,6 +73,26 @@ msgstr ""
 msgid "if any failure occurs in data parsing."
 msgstr "若数据解析中出现任何错误"
 
+#: aioqzone.api.h5.model.QzoneH5API.index:6 of
+msgid ":py:class:`~aioqzone.model.api.response.IndexPageResp`"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.internal_dolike_app:1 of
+msgid "Like or unlike."
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.internal_dolike_app:4 of
+msgid ":py:class:`~aioqzone.model.api.response.SingleReturnResp`"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.mfeeds_get_count:1 of
+msgid "Get new feeds count. This is also the \"keep-alive\" signal of the cookie."
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.mfeeds_get_count:4 of
+msgid ":py:class:`~aioqzone.model.api.response.FeedCount`"
+msgstr ""
+
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:1 of
 msgid "This can be used to get the detailed summary of a feed."
 msgstr "此接口可用于获取说说的详细信息。"
@@ -89,7 +114,7 @@ msgid "optional encoded params"
 msgstr "可选的编码后的参数"
 
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:12 of
-msgid ":py:class:`~aioqzone.model.response.h5.GetMoreResp`"
+msgid ":py:class:`~aioqzone.model.api.response.DetailResp`"
 msgstr ""
 
 #~ msgid "Get next page."
@@ -120,4 +145,10 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "The ``attach_info`` field from last call. Pass an empty string equals to call :meth:`.index`."
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.model.response.h5.FeedPageResp`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.model.response.h5.GetMoreResp`"
 #~ msgstr ""
