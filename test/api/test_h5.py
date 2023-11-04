@@ -69,4 +69,4 @@ async def test_workflow(api: QzoneH5API):
     except RetryError as e:
         assert e.last_attempt.failed
         e = e.last_attempt.exception()
-        pytest.skip("login failed", msg=str(e))
+        pytest.skip(f"login failed: {e}")
