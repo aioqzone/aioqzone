@@ -12,7 +12,6 @@ from .._model import ClickCfg, PrehandleResp, Sprite
 from ..capsess import BaseTcaptchaSession
 
 log = logging.getLogger(__name__)
-_TyHook = type(solve_select_captcha)
 
 
 class SelectBgElemCfg(Sprite):
@@ -51,7 +50,7 @@ class SelectCaptchaDisplay(BaseModel):
 
 
 class SelectCaptchaSession(BaseTcaptchaSession):
-    solve_captcha_hook: _TyHook
+    solve_captcha_hook: solve_select_captcha.TyInst
 
     def __init__(self, prehandle: PrehandleResp) -> None:
         super().__init__(prehandle)

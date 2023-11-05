@@ -23,8 +23,8 @@ class Loginable(ABC):
         self.lock = asyncio.Lock()
         self.ch_login_notify = ch_login_notify or FutureStore()
 
-        self.login_success = MT.login_success.new()
-        self.login_failed = MT.login_failed.new()
+        self.login_success = MT.login_success()
+        self.login_failed = MT.login_failed()
 
     @abstractmethod
     async def _new_cookie(self) -> Dict[str, str]:
