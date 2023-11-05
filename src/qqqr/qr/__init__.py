@@ -43,8 +43,8 @@ class QrSession(LoginSession):
 class _QrHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
-        self.qr_fetched = MT.qr_fetched.new()
-        self.qr_cancelled = MT.qr_cancelled.new()
+        self.qr_fetched = MT.qr_fetched()
+        self.qr_cancelled = MT.qr_cancelled()
         self.cancel = asyncio.Event()
         self.refresh = asyncio.Event()
 

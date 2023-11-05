@@ -1713,22 +1713,17 @@ files = [
 
 [[package]]
 name = "tylisten"
-version = "1.1.2"
-description = "A fully typed async hook library."
+version = "2.0.1"
+description = "A tiny hook specification library with typing support."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "tylisten-1.1.2-py3-none-any.whl", hash = "sha256:dc7db9b71cb4c1b7ce37f4b95a50adcf8e6a85f160302a4ca072f0cfb65105ea"},
-    {file = "tylisten-1.1.2.tar.gz", hash = "sha256:686af7652b112b308829a693087391bd3d4fd6179e80199934305784fbf6f656"},
+    {file = "tylisten-2.0.1-py3-none-any.whl", hash = "sha256:e6de8523f17ba0dd0c413d7ab10f23ba8bdb7daa15c432403ef3f6d973ea1ea8"},
+    {file = "tylisten-2.0.1.tar.gz", hash = "sha256:1cf40107ea25b130678ffe5b1acf32af7040b437fded69013abc82a76ace1f38"},
 ]
 
 [package.dependencies]
 typing_extensions = ">=4.6.0"
-
-[package.source]
-type = "legacy"
-url = "https://aioqzone.github.io/aioqzone-index/simple"
-reference = "aioqzone-index"
 
 [[package]]
 name = "typing-extensions"
@@ -1886,4 +1881,4 @@ captcha = ["numpy", "pillow", "pychaosvm"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "b45883248e3544847a2b000e4d5258204274254b559f2107f69bde2ae280f8e8"
+content-hash = "e01ebecad1e71ce1fc50e2154548d1a3c39d483ac8830107725d4883afacf821"

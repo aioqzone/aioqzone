@@ -100,8 +100,8 @@ class UpWebSession(LoginSession):
 class _UpHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
-        self.sms_code_input = MT.sms_code_input.new()
-        self.solve_select_captcha = MT.solve_select_captcha.new()
+        self.sms_code_input = MT.sms_code_input()
+        self.solve_select_captcha = MT.solve_select_captcha()
 
 
 class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
