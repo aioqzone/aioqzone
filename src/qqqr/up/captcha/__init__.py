@@ -11,11 +11,13 @@ from urllib.parse import unquote
 from pydantic import ValidationError
 from tenacity import after_log, retry, retry_if_exception_type, retry_if_result, stop_after_attempt
 
+from qqqr.message import solve_select_captcha
+
 from ...utils.net import ClientAdapter
 from .._model import VerifyResp
 from ._model import PrehandleResp
 from .capsess import BaseTcaptchaSession as TcaptchaSession
-from .select._types import SelectCaptchaSession, _TyHook
+from .select._types import SelectCaptchaSession
 
 PREHANDLE_URL = "https://t.captcha.qq.com/cap_union_prehandle"
 SHOW_NEW_URL = "https://t.captcha.qq.com/cap_union_new_show"
@@ -39,7 +41,7 @@ class Captcha:
     # (c_login_2.js)showNewVC-->prehandle
     # prehandle(recall)--call tcapcha-frame.*.js-->new_show
     # new_show(html)--js in html->loadImg(url)
-    solve_select_captcha: _TyHook
+    solve_select_captcha: solve_select_captcha.TyInst
 
     def __init__(self, client: ClientAdapter, appid: int, sid: str, xlogin_url: str):
         """
