@@ -67,9 +67,9 @@ class QzoneResponse(BaseModel):
         header = response_header.model_validate(obj)
         if header.status != 0:
             if header.message:
-                raise QzoneError(header.status, header.message, rdict=header)
+                raise QzoneError(header.status, header.message, robj=header)
             else:
-                raise QzoneError(header.status, rdict=header)
+                raise QzoneError(header.status, robj=header)
 
         if pc.data_key is None:
             return cls.model_validate(obj)
