@@ -3,15 +3,15 @@ class QzoneError(RuntimeError):
 
     msg = "unknown"
 
-    def __init__(self, code: int, *args, rdict=None):
+    def __init__(self, code: int, *args, robj: object = None):
         self.code = int(code)
-        self.rdict = rdict
+        self.robj = robj
         if len(args) > 0 and isinstance(args[0], str):
             self.msg = args[0]
         super().__init__(self, *args)
 
     def __str__(self) -> str:
-        return f"Code {self.code}: {self.msg}"
+        return f"QzoneCode {self.code}: {self.msg}"
 
 
 class UnexpectedLoginError(RuntimeError):
