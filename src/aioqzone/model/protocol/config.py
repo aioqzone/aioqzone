@@ -7,8 +7,6 @@ from pydantic_settings import BaseSettings
 class LoginConfig(BaseSettings):
     uin: int = 0
     """Login uin (qq)."""
-    min_login_interval: float = 1800
-    """Minimum login interval, in second."""
 
 
 class UpLoginConfig(LoginConfig):
