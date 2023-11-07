@@ -26,15 +26,14 @@ aioqzone封装了一些Qzone接口。
 - [ ] [通过网络环境检测][pychaosvm]
 - [x] 爬取HTML说说
 - [x] 爬取说说详细内容
-- [x] 爬取空间相册
 - [x] 点赞/取消赞
 - [x] 发布(仅文字)/修改/删除说说
-- [ ] 评论相关
+- [x] 发评论
 
 ### 为什么选择 aioqzone
 
 - [x] 完整的 IDE 类型支持 (typing)
-- [x] API 结果类型验证 (pydantic)
+- [x] API 类型验证 (pydantic)
 - [x] 异步设计
 - [x] 易于二次开发
 - [x] [文档支持](https://aioqzone.github.io/aioqzone)
@@ -47,8 +46,8 @@ __在做了:__
 
 |包名    |简述  |
 |-----------|-------------------|
-|aioqzone   |封装Qzone API  |
-|qqqr       |网页登录    |
+|aioqzone   |Qzone API          |
+|qqqr       |Qzone 登录         |
 
 ## 例子
 
