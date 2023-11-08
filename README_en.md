@@ -23,15 +23,14 @@ English | [简体中文](README.md)
 - [ ] [pass network environment verification][pychaosvm]
 - [x] get complete html feeds
 - [x] get feed details
-- [x] get Qzone album
 - [x] like/unlike app
 - [x] publish/update/delete text feeds
-- [ ] comment
+- [x] add comment
 
 ### Why using this package?
 
 - [x] full ide typing support (typing)
-- [x] api response validation (pydantic)
+- [x] api validation (pydantic)
 - [x] async design
 - [x] complete infrastructure to ease your own develop
 - [x] [doc support](https://aioqzone.github.io/aioqzone)
@@ -44,8 +43,8 @@ __Working On:__
 
 |package    |brief description  |
 |-----------|-------------------|
-|aioqzone   |qzone api wrapper  |
-|qqqr       |qzone web login    |
+|aioqzone   |qzone api          |
+|qqqr       |qzone login        |
 
 ## Examples
 

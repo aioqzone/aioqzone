@@ -23,7 +23,7 @@ def man(request, client: ClientAdapter, env: test_env):
     if request.param == "up":
         return UpLoginManager(
             client,
-            config=UpLoginConfig(uin=env.uin, pwd=env.password, min_login_interval=0),
+            config=UpLoginConfig(uin=env.uin, pwd=env.password),
         )
 
     if request.param == "qr":
