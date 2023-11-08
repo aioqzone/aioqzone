@@ -1,19 +1,15 @@
 """
 Collect some built-in login manager without persistant cookie.
 Users can inherit these managers and implement their own persistance logic.
-
-.. versionchanged:: 0.14.0
-
-    Removed ``UPLoginMan`` and ``QRLoginMan``. Renamed ``MixedLoginMan`` to :class:`UnifiedLoginManager`.
-    For the removed managers, use :class:`.UnifiedLoginManager` instead.
 """
 
 import asyncio
 import logging
-from typing import Dict, Optional
+import typing as t
 
 from aiohttp import ClientError
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from tylisten import FutureStore
 
 from aioqzone.exception import UnexpectedLoginError
 from aioqzone.model import QrLoginConfig, UpLoginConfig
@@ -37,17 +33,30 @@ __all__ = [
 class ConstLoginMan(Loginable):
     """A basic login manager which uses external provided cookie."""
 
-    def __init__(self, uin: int, cookie: Optional[Dict[str, str]] = None) -> None:
-        super().__init__(uin)
+    def __init__(
+        self,
+        uin: int,
+        cookie: t.Optional[t.Dict[str, str]] = None,
+        *,
+        ch_login_notify: t.Optional[FutureStore] = None,
+    ) -> None:
+        super().__init__(uin, ch_login_notify=ch_login_notify)
         self.cookie = {} if cookie is None else cookie
 
-    async def _new_cookie(self) -> Dict[str, str]:
+    async def _new_cookie(self) -> t.Dict[str, str]:
         return self.cookie
 
 
 class UpLoginManager(Loginable):
-    def __init__(self, client: ClientAdapter, config: UpLoginConfig, *, h5=True) -> None:
-        super().__init__(config.uin)
+    def __init__(
+        self,
+        client: ClientAdapter,
+        config: UpLoginConfig,
+        *,
+        h5=True,
+        ch_login_notify: t.Optional[FutureStore] = None,
+    ) -> None:
+        super().__init__(config.uin, ch_login_notify=ch_login_notify)
         self.client = client
         self.config = config
         self.h5(h5, clear_cookie=False)  # init uplogin
@@ -58,7 +67,7 @@ class UpLoginManager(Loginable):
         retry=retry_if_exception_type(TryAgain),
         reraise=True,
     )
-    async def _new_cookie(self) -> Dict[str, str]:
+    async def _new_cookie(self) -> t.Dict[str, str]:
         """
         :raise `TencentLoginError`: Qzone login error.
         :raise `TryAgain`: Network error, or qzone login expired.
@@ -81,7 +90,6 @@ class UpLoginManager(Loginable):
 
             raise TencentLoginError(StatusCode.NeedSmsVerify, "需要手机验证")
         except (GeneratorExit, ClientError) as e:
-            omit_exc_info = isinstance(e, (GeneratorExit, ClientError))
             log.warning(f"密码登录：{type(e).__name__}，重试", exc_info=True)
             log.debug(e.args, extra=e.__dict__)
             raise TryAgain from e
@@ -117,13 +125,20 @@ class UpLoginManager(Loginable):
 
 
 class QrLoginManager(Loginable):
-    def __init__(self, client: ClientAdapter, config: QrLoginConfig, *, h5=True) -> None:
-        super().__init__(config.uin)
+    def __init__(
+        self,
+        client: ClientAdapter,
+        config: QrLoginConfig,
+        *,
+        h5=True,
+        ch_login_notify: t.Optional[FutureStore] = None,
+    ) -> None:
+        super().__init__(config.uin, ch_login_notify=ch_login_notify)
         self.client = client
         self.config = config
         self.h5(h5, clear_cookie=False)  # init uplogin
 
-    async def _new_cookie(self) -> Dict[str, str]:
+    async def _new_cookie(self) -> t.Dict[str, str]:
         """
         :raise `UnexpectedInteraction`: All exceptions caused by user, such as cancelling the login, or not scanning the QRcode.
         :raise `TryAgain`: Network error, or qzone login expired.
