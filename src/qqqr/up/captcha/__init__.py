@@ -155,7 +155,7 @@ class Captcha:
             type=sess.data_type,
             data=ans,
         )
-        info = sess.tdc.getInfo()["info"]
+        info = sess.tdc.getInfo(None)["info"]
         assert isinstance(info, str)
 
         data = {
