@@ -1,8 +1,26 @@
+import sys
 import typing as t
 
-from pydantic import AliasChoices, AliasPath, BaseModel, Field, HttpUrl, model_validator
+from pydantic import (
+    AliasChoices,
+    AliasPath,
+    BaseModel,
+    Field,
+    HttpUrl,
+    field_validator,
+    model_validator,
+)
 
 __all__ = ["FeedData"]
+
+if sys.version_info >= (3, 9):
+    removeprefix = str.removeprefix
+else:
+
+    def removeprefix(self: str, prefix: str, /):
+        if self.startswith(prefix):
+            return self[len(prefix) :]
+        return self
 
 
 class RightInfo(BaseModel):
@@ -193,7 +211,13 @@ class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
 
     @model_validator(mode="before")
     def remove_prefix(cls, v: dict):
-        return {k[5:] if str.startswith(k, "cell_") else k: i for k, i in v.items()}
+        return {removeprefix(k, "cell_"): i for k, i in v.items()}
+
+    @field_validator("summary")
+    @classmethod
+    def remove_colon(cls, v: FeedSummary):
+        v.summary = removeprefix(v.summary, "：")
+        return v
 
 
 class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
