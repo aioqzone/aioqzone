@@ -6,7 +6,7 @@ from tenacity import RetryError
 
 from aioqzone.api import Loginable
 from aioqzone.api.h5 import QzoneH5API
-from aioqzone.model import LikeData
+from aioqzone.model import LikeData, UgcRight
 from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
@@ -24,7 +24,7 @@ async def qzone_workflow(api: QzoneH5API):
     feed_flow = await api.index()
     assert api.qzonetoken
 
-    feed = await api.publish_mood(MOOD_TEXT, sync_weibo=False)
+    feed = await api.publish_mood(MOOD_TEXT, sync_weibo=False, ugc_right=UgcRight.self)
     ownuin, appid = api.login.uin, 311
     unikey = LikeData.persudo_unikey(appid, ownuin, feed.fid)
 
@@ -36,6 +36,7 @@ async def qzone_workflow(api: QzoneH5API):
     assert feed.fid in feed_dict
 
     fetched_feed = feed_dict[feed.fid]
+    assert fetched_feed.common.right_info.ugc_right == UgcRight.self
     assert MOOD_TEXT in fetched_feed.summary.summary
     # BUG: dolike returns `succ` but has no effect. the fetched `isliked` is False.
     # So this assertion is disabled temperorily. FIXME!

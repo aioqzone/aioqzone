@@ -161,10 +161,16 @@ class QzoneH5API:
             )
         )
 
-    async def publish_mood(self, content: str, sync_weibo=False):
+    async def publish_mood(
+        self, content: str, sync_weibo=False, ugc_right: UgcRight = UgcRight.all
+    ):
         return await self.call(
             PublishMoodApi(
-                params=PublishMoodParams(content=content, issyncweibo=sync_weibo),
+                params=PublishMoodParams(
+                    content=content,
+                    issyncweibo=sync_weibo,
+                    ugc_right=ugc_right,
+                ),
                 response=PublishMoodResp,
             )
         )
