@@ -1,5 +1,6 @@
 import sys
 import typing as t
+from enum import IntEnum
 
 from pydantic import (
     AliasChoices,
@@ -21,6 +22,14 @@ else:
         if self.startswith(prefix):
             return self[len(prefix) :]
         return self
+
+
+class UgcRight(IntEnum):
+    all = 1
+    qq = 4
+    part = 16
+    self = 64
+    blacklist = 128
 
 
 class RightInfo(BaseModel):
