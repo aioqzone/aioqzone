@@ -4,6 +4,8 @@ from pydantic import BaseModel, Field
 
 from aioqzone.utils.time import time_ms
 
+from .feed import UgcRight
+
 __all__ = [
     "QzoneRequestParams",
     "ActiveFeedsParams",
@@ -13,6 +15,7 @@ __all__ = [
     "AddCommentParams",
     "PublishMoodParams",
     "DeleteUgcParams",
+    "UgcRight",
 ]
 
 
@@ -75,6 +78,7 @@ class PublishMoodParams(QzoneRequestParams):
     content: str = Field(min_length=1, max_length=2000)
     richval: str = ""
     issyncweibo: int = Field(default=False, validate_default=True)
+    ugc_right: UgcRight = UgcRight.all
 
     opr_type: str = "publish_shuoshuo"
     format: str = "json"
