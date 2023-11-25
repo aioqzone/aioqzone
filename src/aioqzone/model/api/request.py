@@ -1,11 +1,15 @@
 import typing as t
+from base64 import b64encode
+from math import floor
+from time import time
 
 from pydantic import BaseModel, Field, field_serializer
+from typing_extensions import Buffer
 
 from aioqzone.utils.time import time_ms
 
 from .feed import UgcRight
-from .response import PhotoData
+from .response import PicInfo, UploadPicResponse
 
 __all__ = [
     "QzoneRequestParams",
@@ -16,7 +20,10 @@ __all__ = [
     "AddCommentParams",
     "PublishMoodParams",
     "DeleteUgcParams",
+    "UploadPicParams",
+    "PhotosPreuploadParams",
     "UgcRight",
+    "PhotoData",
 ]
 
 
@@ -74,6 +81,36 @@ class AddCommentParams(QzoneRequestParams):
     busi_param: dict = Field(default_factory=dict)
 
 
+class PhotoData(BaseModel):
+    albumid: str
+    lloc: str
+    sloc: str
+    type: str = ""
+    height: int = 0
+    width: int = 0
+    origin_uuid: str = ""
+    origin_height: int = 0
+    origin_width: int = 0
+
+    def to_richval(self):
+        richval: t.List[str] = [
+            self.albumid,
+            self.lloc,
+            self.sloc,
+            self.type,
+            str(self.height),
+            str(self.width),
+            self.origin_uuid,
+            str(self.origin_height or ""),
+            str(self.origin_width or ""),
+        ]
+        return ",".join(richval)
+
+    @classmethod
+    def from_PicInfo(cls, o: PicInfo):
+        return cls.model_validate(o, from_attributes=True)
+
+
 class PublishMoodParams(QzoneRequestParams):
     uin_fields = ("res_uin",)
     content: str = Field(min_length=1, max_length=2000)
@@ -100,3 +137,66 @@ class DeleteUgcParams(QzoneRequestParams):
     opr_type: str = "delugc"
     real_del: int = 0
     format: str = "json"
+
+
+class UploadPicParams(QzoneRequestParams):
+    uin_fields = ("uin",)
+    picture: Buffer
+    hd_height: int
+    hd_width: int
+    hd_quality: int = 70
+
+    # defaults
+    base64: int = 1
+    output_type = "json"
+    preupload: int = 1
+    charset: str = "utf-8"
+    output_charset: str = "utf-8"
+    logintype: str = "sid"
+    Exif_CameraMaker: str = ""
+    Exif_CameraModel: str = ""
+    Exif_Time: str = ""
+
+    @field_serializer("picture")
+    def b64_serialize(self, picture: Buffer) -> str:
+        return b64encode(picture).decode()
+
+
+class PhotosPreuploadParams(QzoneRequestParams):
+    uin_fields = ("uin",)
+    upload_pics: t.List[UploadPicResponse] = Field(exclude=True)
+
+    currnum: int = 0
+    upload_hd: int = 0
+
+    # defaults
+    preupload: int = 2
+    output_type = "json"
+    uploadtype: int = 1
+    albumtype: int = 7
+    big_style: int = 1
+    op_src: int = 15003
+    charset = "utf-8"
+    output_charset = "utf-8"
+    refer = "shuoshuo"
+
+    @property
+    def uploadNum(self):
+        return len(self.upload_pics)
+
+    def build_params(self, uin: int, timestamp: t.Optional[float] = None):
+        assert self.upload_pics
+
+        params = super().build_params(uin=uin, timestamp=timestamp)
+        timestamp = timestamp or time()
+        batchid = time_ms(timestamp) * 1000
+        uploadtime = floor(timestamp)
+        params.update(batchid=batchid, uploadtime=uploadtime)
+
+        md5, size = [], []
+        for pic in self.upload_pics:
+            md5.append(pic.filemd5)
+            size.append(str(pic.filelen))
+
+        params.update(md5="|".join(md5), filelen="|".join(size))
+        return params

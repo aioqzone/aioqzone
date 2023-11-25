@@ -2,6 +2,7 @@ import logging
 
 from pydantic import ValidationError
 from tenacity import AsyncRetrying, TryAgain, after_log, stop_after_attempt
+from typing_extensions import Buffer
 
 from aioqzone.api.login import Loginable
 from aioqzone.model.api import *
@@ -162,16 +163,47 @@ class QzoneH5API:
         )
 
     async def publish_mood(
-        self, content: str, sync_weibo=False, ugc_right: UgcRight = UgcRight.all
+        self,
+        content: str,
+        photos: t.Optional[t.List[PhotoData]] = None,
+        sync_weibo=False,
+        ugc_right: UgcRight = UgcRight.all,
     ):
         return await self.call(
             PublishMoodApi(
                 params=PublishMoodParams(
                     content=content,
+                    photos=photos or [],
                     issyncweibo=sync_weibo,
                     ugc_right=ugc_right,
                 ),
                 response=PublishMoodResp,
+            )
+        )
+
+    async def upload_pic(self, picture: Buffer, width: int, height: int, quality: int):
+        return await self.call(
+            UploadPicApi(
+                params=UploadPicParams(
+                    picture=picture,
+                    hd_width=width,
+                    hd_height=height,
+                    hd_quality=quality,
+                ),
+                response=UploadPicResponse,
+            )
+        )
+
+    async def preupload_photos(self, photos: t.List[UploadPicResponse], cur_num=0, hd=False):
+        assert photos
+        return await self.call(
+            PhotosPreuploadApi(
+                params=PhotosPreuploadParams(
+                    upload_pics=photos,
+                    currnum=cur_num,
+                    upload_hd=int(hd),
+                ),
+                response=PhotosPreuploadResponse,
             )
         )
 

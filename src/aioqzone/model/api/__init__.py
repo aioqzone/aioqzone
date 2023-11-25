@@ -71,3 +71,15 @@ class AddOperationApi(QzoneApi):
     http_method: t.ClassVar[TyMethod] = "POST"
     host: t.ClassVar[str] = "https://mobile.qzone.qq.com"
     path: t.ClassVar[str] = "operation/operation_add"
+
+
+class UploadPicApi(QzoneApi[UploadPicParams, UploadPicResponse]):
+    http_method: t.ClassVar[TyMethod] = "POST"
+    host: t.ClassVar[str] = "https://mobile.qzone.qq.com"
+    path: t.ClassVar[str] = "/up/cgi-bin/upload/cgi_upload_pic_v2"
+
+
+class PhotosPreuploadApi(QzoneApi[PhotosPreuploadParams, PhotosPreuploadResponse]):
+    http_method: t.ClassVar[TyMethod] = "POST"
+    host: t.ClassVar[str] = "https://mobile.qzone.qq.com"
+    path: t.ClassVar[str] = "/up/cgi-bin/upload/cgi_upload_pic_v2"
