@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Tuple
 import pytest
 
 pytest.importorskip("numpy")
-pytest.importorskip("PIL")
 pytest.importorskip("chaosvm")
 
 import pytest_asyncio

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import io
-from contextlib import suppress
 from os import environ
 from typing import TYPE_CHECKING, Type, cast
 from unittest.mock import patch
@@ -12,6 +11,7 @@ import pytest_asyncio
 from aiohttp import ClientConnectionError as ConnectError
 from aiohttp import ClientResponseError
 from aiohttp import RequestInfo as Request
+from PIL import Image as image
 from tenacity import TryAgain
 
 from aioqzone.api import QrLoginConfig, QrLoginManager, UpLoginConfig, UpLoginManager
@@ -77,12 +77,8 @@ class TestUP:
 @pytest_asyncio.fixture
 async def qr(client: ClientAdapter, env: test_env):
     man = QrLoginManager(client, config=QrLoginConfig(uin=env.uin))
-    with suppress(ImportError):
-        from PIL import Image as image
 
-        man.qr_fetched.add_impl(
-            lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
-        )
+    man.qr_fetched.add_impl(lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show())
     yield man
 
 

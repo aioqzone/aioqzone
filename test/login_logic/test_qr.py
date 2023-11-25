@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import asyncio
 import io
-from contextlib import suppress
 from os import environ
 from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
+from PIL import Image as image
 
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak
@@ -25,13 +25,9 @@ if TYPE_CHECKING:
 @pytest_asyncio.fixture(scope="class")
 async def login(client: ClientAdapter, env: test_env):
     login = QrLogin(client, env.uin)
-
-    with suppress(ImportError):
-        from PIL import Image as image
-
-        login.qr_fetched.add_impl(
-            lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
-        )
+    login.qr_fetched.add_impl(
+        lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
+    )
 
     yield login
 

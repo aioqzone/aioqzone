@@ -324,7 +324,6 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
         try:
             import chaosvm
             import numpy
-            import PIL
         except ImportError:
             log.warning("captcha extras not installed. Install `aioqzone[captcha]` and retry.")
             log.debug("ImportError as follows:", exc_info=True)

@@ -65,7 +65,6 @@ class TestUpWeb:
                 pytest.skip(str(e))
             elif e.code == StatusCode.NeedCaptcha:
                 pytest.importorskip("numpy")
-                pytest.importorskip("PIL")
                 pytest.importorskip("chaosvm")
             elif e.code == StatusCode.NeedSmsVerify:
                 if not web.sms_code_input.has_impl:
@@ -91,7 +90,6 @@ async def test_h5_login(h5: UpH5Login):
             pytest.skip(str(e))
         elif e.code == StatusCode.NeedCaptcha:
             pytest.importorskip("numpy")
-            pytest.importorskip("PIL")
             pytest.importorskip("chaosvm")
         elif e.code == StatusCode.NeedSmsVerify:
             if not h5.sms_code_input.has_impl:
