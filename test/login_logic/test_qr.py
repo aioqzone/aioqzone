@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import asyncio
 import io
 from contextlib import suppress
 from os import environ
+from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
@@ -9,15 +12,19 @@ import pytest_asyncio
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak
 from qqqr.qr import QrLogin, QrSession
-from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
+if TYPE_CHECKING:
+    from test.conftest import test_env
+
+    from qqqr.utils.net import ClientAdapter
+
 
 @pytest_asyncio.fixture(scope="class")
-async def login(client: ClientAdapter):
-    login = QrLogin(client)
+async def login(client: ClientAdapter, env: test_env):
+    login = QrLogin(client, env.uin)
 
     with suppress(ImportError):
         from PIL import Image as image

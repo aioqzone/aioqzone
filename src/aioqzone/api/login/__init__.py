@@ -178,7 +178,7 @@ class QrLoginManager(Loginable):
             self.cookie.clear()
             self.client.cookie_jar.clear()
 
-        self.qrlogin = QrLogin(client=self.client, h5=enable)
+        self.qrlogin = QrLogin(client=self.client, uin=self.uin, h5=enable)
 
         self.qr_fetched = self.qrlogin.qr_fetched
         self.qr_cancelled = self.qrlogin.qr_cancelled

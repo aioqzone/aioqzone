@@ -10,7 +10,7 @@ from tenacity import RetryError
 from yarl import URL
 
 import qqqr.message as MT
-from qqqr.base import LoginBase, LoginSession
+from qqqr.base import XLOGIN_URL, LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.type import APPID, PT_QR_APP, Proxy
@@ -33,8 +33,7 @@ class UpWebSession(LoginSession):
         *,
         create_time: t.Optional[float] = None,
     ) -> None:
-        super().__init__(create_time=create_time)
-        self.login_sig = login_sig
+        super().__init__(login_sig=login_sig, create_time=create_time)
         self.login_referer = login_referer
         """url fetched in `new`."""
         self.verify_rst: t.Optional[VerifyResp] = None
@@ -104,7 +103,7 @@ class _UpHookMixin:
         self.solve_select_captcha = MT.solve_select_captcha()
 
 
-class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
+class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
     """
     .. versionchanged:: 0.12.4
 
@@ -127,8 +126,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         proxy: t.Optional[Proxy] = None,
         info: t.Optional[PT_QR_APP] = None,
     ):
-        super().__init__(client, h5=h5, app=app, proxy=proxy, info=info)
-        self.uin = uin
+        super().__init__(client, uin=uin, h5=h5, app=app, proxy=proxy, info=info)
         self.pwd = pwd
         self.pwder = TeaEncoder(pwd)
 
@@ -158,14 +156,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             if self.info.help:
                 params["pt_qr_help_link"] = self.info.help
 
-        return URL("https://xui.ptlogin2.qq.com/cgi-bin/xlogin").with_query(params)
-
-    async def deviceId(self) -> str:
-        """a js fingerprint.
-
-        .. seealso:: https://github.com/fingerprintjs/fingerprintjs
-        """
-        return ""  # TODO
+        return URL(XLOGIN_URL).with_query(params)
 
     async def new(self):
         """Create a :class:`UpWebSession`. This will call `check` api of Qzone, and receive result
