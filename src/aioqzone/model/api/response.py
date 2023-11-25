@@ -174,3 +174,29 @@ class DeleteUgcResp(QzoneResponse):
     ret: int = 0
     msg: str = ""
     undeal_info: FeedCount = Field(default_factory=FeedCount)
+
+
+class PhotoData(BaseModel):
+    albumid: str
+    lloc: str
+    sloc: str
+    type: str
+    height: int = 0
+    width: int = 0
+    origin_uuid: str = ""
+    origin_height: int = 0
+    origin_width: int = 0
+
+    def to_richval(self):
+        richval: List[str] = [
+            self.albumid,
+            self.lloc,
+            self.sloc,
+            self.type,
+            str(self.height),
+            str(self.width),
+            self.origin_uuid,
+            str(self.origin_height or ""),
+            str(self.origin_width or ""),
+        ]
+        return ",".join(richval)

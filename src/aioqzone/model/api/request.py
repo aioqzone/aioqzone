@@ -1,10 +1,11 @@
 import typing as t
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_serializer
 
 from aioqzone.utils.time import time_ms
 
 from .feed import UgcRight
+from .response import PhotoData
 
 __all__ = [
     "QzoneRequestParams",
@@ -76,7 +77,7 @@ class AddCommentParams(QzoneRequestParams):
 class PublishMoodParams(QzoneRequestParams):
     uin_fields = ("res_uin",)
     content: str = Field(min_length=1, max_length=2000)
-    richval: str = ""
+    photos: t.List[PhotoData] = Field(default_factory=list, serialization_alias="richval")
     issyncweibo: int = Field(default=False, validate_default=True)
     ugc_right: UgcRight = UgcRight.all
 
@@ -85,6 +86,10 @@ class PublishMoodParams(QzoneRequestParams):
     # lat: int
     # lon: int
     # lbsid: str = "poiinfo_district"
+
+    @field_serializer("photos")
+    def richval(self, photos: t.List[PhotoData]):
+        return " ".join(i.to_richval() for i in photos)
 
 
 class DeleteUgcParams(QzoneRequestParams):
