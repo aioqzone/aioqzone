@@ -21,7 +21,7 @@ pytestmark = pytest.mark.asyncio
 
 
 def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
-    if environ.get("CI") is None and (root := Path("data/debug")).exists():
+    if (root := Path("data/debug")).exists():
         for i, b in enumerate(imgs, start=1):
             with open(root / f"{i}.png", "wb") as f:
                 f.write(b)
@@ -32,7 +32,8 @@ def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
 @pytest_asyncio.fixture(scope="module")
 async def login(client: ClientAdapter, env: test_env):
     login = UpH5Login(client, env.uin, env.password.get_secret_value())
-    login.captcha.solve_select_captcha.add_impl(select_captcha_input)
+    if environ.get("CI") is None:
+        login.captcha.solve_select_captcha.add_impl(select_captcha_input)
     yield login
 
 
