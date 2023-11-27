@@ -5,8 +5,10 @@ import typing as t
 from dataclasses import dataclass
 from random import random
 
+from yarl import URL
+
 import qqqr.message as MT
-from qqqr.base import LoginBase, LoginSession
+from qqqr.base import XLOGIN_URL, LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak, UserTimeout
 from qqqr.qr.type import PollResp
@@ -21,16 +23,22 @@ LOGIN_URL = "https://ptlogin2.qzone.qq.com/check_sig"
 
 @dataclass(unsafe_hash=True)
 class QR:
-    png: bytes
+    png: t.Optional[bytes]
+    """If None, the QR is pushed to user's client."""
     sig: str
     expired: bool = False
 
 
 class QrSession(LoginSession):
     def __init__(
-        self, first_qr: QR, *, create_time: t.Optional[float] = None, refresh_times: int = 0
+        self,
+        first_qr: QR,
+        login_sig: str,
+        *,
+        create_time: t.Optional[float] = None,
+        refresh_times: int = 0,
     ) -> None:
-        super().__init__(create_time=create_time)
+        super().__init__(login_sig=login_sig, create_time=create_time)
         self.refreshed = refresh_times
         self.current_qr = first_qr
 
@@ -49,24 +57,34 @@ class _QrHookMixin:
         self.refresh = asyncio.Event()
 
 
-class QrLogin(_QrHookMixin, LoginBase[QrSession]):
-    async def new(self) -> QrSession:
-        return QrSession(await self.show())
+class QrLogin(LoginBase[QrSession], _QrHookMixin):
+    async def new(self, push_qr=False) -> QrSession:
+        cookie = self.client.cookie_jar.filter_cookies(URL(XLOGIN_URL)).get("pt_login_sig")
+        return QrSession(
+            await self.show(push_qr),
+            login_sig="" if cookie is None else cookie.value,
+        )
 
-    async def show(self) -> QR:
+    async def show(self, push_qr=False) -> QR:
         data = {
             "appid": self.app.appid,
-            "e": 2,
-            "l": "M",
-            "s": 3,
-            "d": 72,
-            "v": 4,
-            "t": random(),
             "daid": self.app.daid,
             "pt_3rd_aid": 0,
+            "t": random(),
+            "u1": self.proxy.s_url,
         }
+        if push_qr:
+            data.update(qr_push_uin=self.uin, type=1, qr_push=1, ptlang=2052)
+        else:
+            data.update(e=2, l="M", s=3, d=72, v=4)
         async with self.client.get(SHOW_QR, params=data) as r:
-            return QR(await r.content.read(), r.cookies["qrsig"].value)
+            if push_qr:
+                raise NotImplementedError
+
+            return QR(
+                png=await r.content.read(),
+                sig=r.cookies["qrsig"].value,
+            )
 
     async def poll(self, sess: QrSession) -> PollResp:
         """Poll QR status.
@@ -89,10 +107,10 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
         data = {
             "u1": self.proxy.s_url,
             "ptqrtoken": hash33(sess.current_qr.sig),
-            # 'js_ver': 21071516,
-            "login_sig": "",
+            "login_sig": sess.login_sig,
             "aid": self.app.appid,
             "daid": self.app.daid,
+            "o1vId": await self.deviceId(),
         }
 
         async with self.client.get(POLL_QR, params=data.update(const) or data) as r:
@@ -131,7 +149,10 @@ class QrLogin(_QrHookMixin, LoginBase[QrSession]):
 
         while cnt_expire < refresh_times:
             # BUG: should we wrap hook errors here?
-            await self.qr_fetched.emit(png=sess.current_qr.png, times=cnt_expire, qr_renew=renew)
+            if sess.current_qr.png:
+                await self.qr_fetched.emit(
+                    png=sess.current_qr.png, times=cnt_expire, qr_renew=renew
+                )
             renew = False
 
             while not self.refresh.is_set():

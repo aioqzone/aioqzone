@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import io
-from contextlib import suppress
 from os import environ
 from typing import TYPE_CHECKING
 
 import pytest
+from PIL import Image as image
 
 from aioqzone.api import UpLoginConfig, UpLoginManager
 from qqqr.utils.net import ClientAdapter
@@ -30,11 +30,8 @@ def man(request, client: ClientAdapter, env: test_env):
         from aioqzone.api import QrLoginConfig, QrLoginManager
 
         man = QrLoginManager(client, config=QrLoginConfig(uin=env.uin))
-        with suppress(ImportError):
-            from PIL import Image as image
-
-            man.qr_fetched.add_impl(
-                lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
-            )
+        man.qr_fetched.add_impl(
+            lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
+        )
 
         return man

@@ -10,6 +10,7 @@ from qqqr.utils.net import ClientAdapter
 
 from .._model import ClickCfg, PrehandleResp, Sprite
 from ..capsess import BaseTcaptchaSession
+from ..pil_utils import *
 
 log = logging.getLogger(__name__)
 
@@ -21,6 +22,7 @@ class SelectBgElemCfg(Sprite):
 
 class SelectRegion(BaseModel):
     id: int
+    box: t.Tuple[int, int, int, int] = Field(validation_alias="range")
     left: int = Field(validation_alias=AliasPath("range", 0))
     top: int = Field(validation_alias=AliasPath("range", 1))
     right: int = Field(validation_alias=AliasPath("range", 2))
@@ -52,8 +54,8 @@ class SelectCaptchaDisplay(BaseModel):
 class SelectCaptchaSession(BaseTcaptchaSession):
     solve_captcha_hook: solve_select_captcha.TyInst
 
-    def __init__(self, prehandle: PrehandleResp) -> None:
-        super().__init__(prehandle)
+    def __init__(self, session: str, prehandle: PrehandleResp) -> None:
+        super().__init__(session, prehandle)
         self.mouse_track.set_result(None)
 
     def parse_captcha_data(self):
@@ -63,14 +65,11 @@ class SelectCaptchaSession(BaseTcaptchaSession):
             self.data_type = self.render.bg.click_cfg.data_type[0]
 
     async def get_captcha_problem(self, client: ClientAdapter):
-        from ..img_utils import frombytes, tobytes
-
         async with client.get(self._cdn_join(self.render.bg.img_url)) as r:
             img = frombytes(await r.content.read())
 
         imgs = {
-            r.id: tobytes(img[r.top : r.bottom, r.left : r.right])
-            for r in self.render.json_payload.select_region_list
+            r.id: tobytes(img.crop(r.box)) for r in self.render.json_payload.select_region_list
         }
         self.cdn_imgs = [imgs[i] for i in self.render.json_payload.picture_ids]
 

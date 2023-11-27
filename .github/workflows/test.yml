@@ -32,7 +32,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: poetry
 
-      - name: Install and Test w/o Extras
+      - name: Install and Test
         env:
           TEST_UIN: ${{ secrets.TEST_UIN }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
@@ -43,21 +43,6 @@ jobs:
 
           echo "::group::pytest outputs"
           poetry run pytest test --log-cli-level=WARNING
-          echo "::endgroup::"
-
-      - name: Install and Test w/ Extras
-        env:
-          TEST_UIN: ${{ secrets.TEST_UIN }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-        run: |
-          echo "::group::Install All Dependencies"
-          poetry install --all-extras -n -vv
-          echo "::endgroup::"
-
-          echo "::group::pytest outputs"
-          poetry run pytest --log-cli-level=WARNING \
-            test/login_logic/test_captcha.py \
-            test/login_logic/test_jigsaw.py
           echo "::endgroup::"
 
       - name: Request Changes

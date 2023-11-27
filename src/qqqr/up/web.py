@@ -10,7 +10,7 @@ from tenacity import RetryError
 from yarl import URL
 
 import qqqr.message as MT
-from qqqr.base import LoginBase, LoginSession
+from qqqr.base import XLOGIN_URL, LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.type import APPID, PT_QR_APP, Proxy
@@ -33,8 +33,7 @@ class UpWebSession(LoginSession):
         *,
         create_time: t.Optional[float] = None,
     ) -> None:
-        super().__init__(create_time=create_time)
-        self.login_sig = login_sig
+        super().__init__(login_sig=login_sig, create_time=create_time)
         self.login_referer = login_referer
         """url fetched in `new`."""
         self.verify_rst: t.Optional[VerifyResp] = None
@@ -83,7 +82,7 @@ class UpWebSession(LoginSession):
         :raise TencentLoginError: if failed to pass captcha
         """
         try:
-            self.verify_rst = await solver.verify()
+            self.verify_rst = await solver.verify(self.sid)
         except RetryError as e:
             from qqqr.constant import captcha_status_description
 
@@ -101,10 +100,9 @@ class _UpHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
         self.sms_code_input = MT.sms_code_input()
-        self.solve_select_captcha = MT.solve_select_captcha()
 
 
-class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
+class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
     """
     .. versionchanged:: 0.12.4
 
@@ -127,10 +125,10 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         proxy: t.Optional[Proxy] = None,
         info: t.Optional[PT_QR_APP] = None,
     ):
-        super().__init__(client, h5=h5, app=app, proxy=proxy, info=info)
-        self.uin = uin
+        super().__init__(client, uin=uin, h5=h5, app=app, proxy=proxy, info=info)
         self.pwd = pwd
         self.pwder = TeaEncoder(pwd)
+        self.captcha = Captcha(self.client, self.app.appid, str(self.login_page_url))
 
     @property
     def login_page_url(self):
@@ -158,14 +156,7 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
             if self.info.help:
                 params["pt_qr_help_link"] = self.info.help
 
-        return URL("https://xui.ptlogin2.qq.com/cgi-bin/xlogin").with_query(params)
-
-    async def deviceId(self) -> str:
-        """a js fingerprint.
-
-        .. seealso:: https://github.com/fingerprintjs/fingerprintjs
-        """
-        return ""  # TODO
+        return URL(XLOGIN_URL).with_query(params)
 
     async def new(self):
         """Create a :class:`UpWebSession`. This will call `check` api of Qzone, and receive result
@@ -283,11 +274,8 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
         if sess.code == StatusCode.NeedCaptcha:
             log.warning("需通过防水墙")
 
-            if (solver := self.captcha_solver(sess.sid)) is None:
-                raise TencentLoginError(StatusCode.NeedCaptcha, "未安装依赖，无法识别验证码")
-
             try:
-                await sess.pass_vc(solver)
+                await sess.pass_vc(self.captcha)
             except NotImplementedError:
                 raise TencentLoginError(StatusCode.NeedCaptcha, "未能识别验证码")
             if sess.verify_rst is None or not sess.verify_rst.ticket:
@@ -319,29 +307,3 @@ class UpWebLogin(_UpHookMixin, LoginBase[UpWebSession]):
                     raise TencentLoginError(resp.code, "未获得动态(SMS)验证码")
             else:
                 raise TencentLoginError(resp.code, resp.msg)
-
-    def captcha_solver(self, sid: t.Union[str, UpWebSession]):
-        """
-        The `captcha` function is used to build a :class:`Captcha` instance.
-        It takes in a string, which is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance.
-
-
-        :param sid: Pass the session id to the captcha function
-        :return: An instance of the captcha class, or None if dependency not installed.
-        """
-
-        try:
-            import chaosvm
-            import numpy
-            import PIL
-        except ImportError:
-            log.warning("captcha extras not installed. Install `aioqzone[captcha]` and retry.")
-            log.debug("ImportError as follows:", exc_info=True)
-            return
-
-        if isinstance(sid, UpWebSession):
-            sid = sid.sid
-
-        solver = Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
-        solver.solve_select_captcha = self.solve_select_captcha
-        return solver

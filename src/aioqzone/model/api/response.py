@@ -1,5 +1,5 @@
 import re
-from typing import TYPE_CHECKING, ClassVar, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, ClassVar, Coroutine, Dict, List, Optional, Tuple
 
 from aiohttp import ClientResponse
 from lxml.html import HtmlElement, document_fromstring
@@ -8,7 +8,7 @@ from tenacity import TryAgain
 from typing_extensions import Self
 
 from aioqzone.exception import QzoneError
-from aioqzone.utils.regex import entire_closing
+from aioqzone.utils.regex import entire_closing, response_callback
 from qqqr.utils.iter import firstn
 from qqqr.utils.jsjson import json_loads
 
@@ -24,6 +24,8 @@ __all__ = [
     "AddCommentResp",
     "PublishMoodResp",
     "DeleteUgcResp",
+    "UploadPicResponse",
+    "PhotosPreuploadResponse",
     "FeedData",
 ]
 
@@ -34,7 +36,6 @@ if TYPE_CHECKING:
 
 
 class _ResponseParseConfig(BaseModel):
-    cb: bool = False
     errno_key: Tuple[str, ...] = "code", "ret", "err"
     msg_key: Tuple[str, ...] = "message", "msg"
     data_key: Optional[str] = "data"
@@ -60,16 +61,18 @@ class QzoneResponse(BaseModel):
         """
         pc = cls._parse_conf
 
-        class response_header(BaseModel):
-            status: int = Field(validation_alias=AliasChoices(*pc.errno_key))
-            message: str = Field(default="", validation_alias=AliasChoices(*pc.msg_key))
+        if pc.errno_key and pc.msg_key:
 
-        header = response_header.model_validate(obj)
-        if header.status != 0:
-            if header.message:
-                raise QzoneError(header.status, header.message, robj=header)
-            else:
-                raise QzoneError(header.status, robj=header)
+            class response_header(BaseModel):
+                status: int = Field(validation_alias=AliasChoices(*pc.errno_key))
+                message: str = Field(default="", validation_alias=AliasChoices(*pc.msg_key))
+
+            header = response_header.model_validate(obj)
+            if header.status != 0:
+                if header.message:
+                    raise QzoneError(header.status, header.message, robj=header)
+                else:
+                    raise QzoneError(header.status, robj=header)
 
         if pc.data_key is None:
             return cls.model_validate(obj)
@@ -174,3 +177,34 @@ class DeleteUgcResp(QzoneResponse):
     ret: int = 0
     msg: str = ""
     undeal_info: FeedCount = Field(default_factory=FeedCount)
+
+
+class UploadPicResponse(QzoneResponse, errno_key=()):  # type: ignore
+    filelen: int
+    filemd5: str
+
+    @classmethod
+    async def response_to_object(cls, response: ClientResponse):
+        m = response_callback.search(await response.text())
+        assert m
+        return json_loads(m.group(1))
+
+
+class PicInfo(BaseModel):
+    pre: HttpUrl
+    url: HttpUrl
+    sloc: str
+    lloc: str
+    width: int
+    height: int
+    albumid: str
+
+
+class PhotosPreuploadResponse(QzoneResponse, errno_key=()):  # type: ignore
+    photos: List[PicInfo] = Field(default_factory=list)
+
+    @classmethod
+    async def response_to_object(cls, response: ClientResponse):
+        m = response_callback.search(await response.text())
+        assert m
+        return dict(photos=json_loads(m.group(1)))
