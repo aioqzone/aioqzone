@@ -121,7 +121,8 @@ class UpLoginManager(Loginable):
             h5=enable,
         )
         self.sms_code_input = self.uplogin.sms_code_input
-        self.solve_select_captcha = self.uplogin.solve_select_captcha
+        self.solve_select_captcha = self.uplogin.captcha.solve_select_captcha
+        self.solve_slide_captcha = self.uplogin.captcha.solve_slide_captcha
 
 
 class QrLoginManager(Loginable):
@@ -178,7 +179,7 @@ class QrLoginManager(Loginable):
             self.cookie.clear()
             self.client.cookie_jar.clear()
 
-        self.qrlogin = QrLogin(client=self.client, h5=enable)
+        self.qrlogin = QrLogin(client=self.client, uin=self.uin, h5=enable)
 
         self.qr_fetched = self.qrlogin.qr_fetched
         self.qr_cancelled = self.qrlogin.qr_cancelled

@@ -31,6 +31,11 @@ class Sprite(BaseModel):
     def width(self):
         return self.size_2d[0]
 
+    @property
+    def box(self):
+        l, t = self.sprite_pos
+        return (l, t, l + self.width, l + self.height)
+
 
 class ClickCfg(BaseModel):
     mark_style: str

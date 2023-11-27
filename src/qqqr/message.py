@@ -44,3 +44,16 @@ def solve_select_captcha(prompt: str, imgs: t.Tuple[bytes, ...]) -> t.Sequence[i
     :return: the image indexes which satisfy the question. Empty list will be treated as no answer.
     """
     return ()
+
+
+@hookdef
+def solve_slide_captcha(background: bytes, piece: bytes, init_pos: t.Tuple[int, int]) -> int:
+    """This hook asks answers for a slide captcha.
+
+    :param background: the slide captcha background (with a dimmed target area)
+    :param piece: the slide piece (corresponding to the target area)
+    :param init_pos: the (x, y) position of the initial piece.
+
+    :return: the left position of the target area.
+    """
+    return 0

@@ -1,14 +1,57 @@
 import asyncio
+import logging
 import typing as t
+from random import choices, randint
 
 from pydantic import BaseModel, Field
 
-from qqqr.utils.iter import first
+from qqqr.message import solve_slide_captcha
+from qqqr.utils.iter import first, firstn
 from qqqr.utils.net import ClientAdapter
 
 from .._model import FgBindingCfg, FgElemCfg, Sprite
 from ..capsess import BaseTcaptchaSession
-from .jigsaw import Jigsaw, imitate_drag
+from ..pil_utils import *
+
+log = logging.getLogger(__name__)
+
+
+def imitate_drag(x1: int, x2: int, y: int) -> t.Tuple[t.List[int], t.List[int]]:
+    """
+    The imitate_drag function simulates a drag event.
+
+    The function takes one argument, x, which is the number of pixels that the user drags.
+    The function returns a tuple of lists containing three integers: [x_coordinate, y_coordinate].
+    Each coordinate and time value is randomly generated according to corresponding rules.
+
+    :param x1: Specify the position that the drag starts.
+    :param x2: Specify the position that the drag ends.
+    :param y: Specify the y-coordinate.
+    :return: Two lists consist of the x coordinate and y coordinate
+    """
+    assert 0 < x1 < x2, (x1, x2)
+    assert 0 < y, y
+
+    n = randint(50, 64)
+    noise_y = choices([y - 1, y + 1, y], [0.1, 0.1, 0.8], k=n)
+
+    if n >= 51:
+        noise_x = [0]
+        noise_x += choices(list(range(-3, 4)), k=max(n - 51, 0))
+    else:
+        noise_x = []
+
+    noise_x += choices(list(range(-2, 3)), k=30)
+    noise_x += choices(list(range(-1, 2)), k=19)
+    noise_x.append(0)
+
+    d, lsv = (x1 - x2) / (n - 1), x1
+    for i in range(n):
+        noise_x[i] += round(lsv)
+        lsv += d
+    noise_x.sort()
+
+    return noise_x, noise_y
 
 
 class SlideBgElemCfg(Sprite):
@@ -29,6 +72,8 @@ class SlideCaptchaDisplay(BaseModel):
 
 
 class SlideCaptchaSession(BaseTcaptchaSession):
+    solve_captcha_hook: solve_slide_captcha.TyInst
+
     def parse_captcha_data(self):
         super().parse_captcha_data()
         self.render = SlideCaptchaDisplay.model_validate(self.conf.render)
@@ -60,15 +105,6 @@ class SlideCaptchaSession(BaseTcaptchaSession):
 
         self.cdn_imgs = list(await asyncio.gather(*(r(i) for i in self.cdn_urls)))
 
-    def get_jigsaw_solver(self):
-        get_slice = lambda i: slice(
-            self.piece_sprite.sprite_pos[i],
-            self.piece_sprite.sprite_pos[i] + self.piece_sprite.size_2d[i],
-        )
-        piece_pos = get_slice(0), get_slice(1)
-
-        return Jigsaw(*self.cdn_imgs, piece_pos=piece_pos, top=self.piece_sprite.init_pos[1])
-
     async def solve_captcha(self):
         """
         The solve_captcha function solves the captcha problem. It assumes that :obj:`TcaptchaSession.cdn_imgs`
@@ -83,12 +119,23 @@ class SlideCaptchaSession(BaseTcaptchaSession):
         """
         assert self.cdn_imgs
 
-        jig = self.get_jigsaw_solver()
+        if not self.solve_captcha_hook.has_impl:
+            log.warning("solve_captcha_hook has no impls.")
+            return ""
+
+        background, piece = self.cdn_imgs
+        piece_img = frombytes(piece).crop(self.piece_sprite.box)
+        piece = tobytes(piece_img)
+
+        left, top = self.piece_sprite.init_pos
+        hook_results = await self.solve_captcha_hook.results(background, piece, (left, top))
         # BUG: +1 to ensure left > init_pos[0], otherwise it's >=.
         # However if left == init_pos[0] + 1, it is certainly a wrong result.
-        left = jig.solve(self.piece_sprite.init_pos[0] + 1)
+        ans = firstn(hook_results, lambda i: i > left)
+        if ans is None:
+            return ""
 
-        xs, ys = imitate_drag(self.piece_sprite.init_pos[0], left, jig.top)
+        xs, ys = imitate_drag(left, ans, top)
         self.mouse_track.set_result(list(zip(xs, ys)))
 
-        return f"{left},{jig.top}"
+        return f"{ans},{top}"

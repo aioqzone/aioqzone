@@ -1,14 +1,10 @@
 from __future__ import annotations
 
+from os import environ
 from pathlib import Path
 from typing import TYPE_CHECKING, Tuple
 
 import pytest
-
-pytest.importorskip("numpy")
-pytest.importorskip("PIL")
-pytest.importorskip("chaosvm")
-
 import pytest_asyncio
 
 from qqqr.constant import captcha_status_description
@@ -18,6 +14,7 @@ from qqqr.up.captcha import Captcha, SelectCaptchaSession, TcaptchaSession
 if TYPE_CHECKING:
     from test.conftest import test_env
 
+    from qqqr.up.web import UpWebSession
     from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
@@ -35,23 +32,26 @@ def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
 @pytest_asyncio.fixture(scope="module")
 async def login(client: ClientAdapter, env: test_env):
     login = UpH5Login(client, env.uin, env.password.get_secret_value())
-    login.solve_select_captcha.add_impl(select_captcha_input)
+    if environ.get("CI") is None:
+        login.captcha.solve_select_captcha.add_impl(select_captcha_input)
     yield login
 
 
 @pytest_asyncio.fixture(scope="class")
-async def captcha(login: UpH5Login):
+async def upsess(login: UpH5Login):
     upsess = await login.new()
     await login.check(upsess)
-    captcha = login.captcha_solver(upsess.check_rst.session)
-    if captcha is None:
-        pytest.skip("deps not installed")
-    yield captcha
+    yield upsess
 
 
 @pytest_asyncio.fixture(scope="class")
-async def sess(captcha: Captcha):
-    return await captcha.new()
+async def captcha(login: UpH5Login):
+    yield login.captcha
+
+
+@pytest_asyncio.fixture(scope="class")
+async def sess(captcha: Captcha, upsess: UpWebSession):
+    return await captcha.new(upsess.sid)
 
 
 class TestCaptcha:
@@ -91,11 +91,14 @@ class TestCaptcha:
         assert callable(sess.tdc.getData)
         assert callable(sess.tdc.getInfo)
 
-    async def test_verify(self, captcha: Captcha):
+    async def test_verify(self, captcha: Captcha, upsess: UpWebSession):
         try:
-            r = await captcha.verify()
+            r = await captcha.verify(upsess.sid)
         except NotImplementedError:
-            pytest.xfail("cannot solve captcha")
+            if captcha.solve_select_captcha.has_impl:
+                pytest.fail("cannot solve captcha")
+            pytest.skip("cannot solve captcha")
+
         if r.code == 0:
             assert r.verifycode
             assert r.ticket
