@@ -89,7 +89,7 @@ async def test_h5_login(h5: UpH5Login):
             if not h5.sms_code_input.has_impl:
                 pytest.skip(str(e))
         elif e.code == StatusCode.NeedCaptcha:
-            if not web.captcha.solve_select_captcha.has_impl:
+            if not h5.captcha.solve_select_captcha.has_impl:
                 pytest.skip("cannot solve captcha")
 
         raise
