@@ -19,9 +19,14 @@ class BaseTcaptchaSession(ABC):
 
     def __init__(
         self,
+        session: str,
         prehandle: PrehandleResp,
     ) -> None:
+        """
+        :param session: login session id, got from :meth:`UpWebLogin.new`
+        """
         super().__init__()
+        self.session = session
         self.prehandle = prehandle
         self.parse_captcha_data()
         self.mouse_track = asyncio.get_event_loop().create_future()
@@ -86,14 +91,15 @@ class BaseTcaptchaSession(ABC):
 
     @abstractmethod
     async def solve_captcha(self) -> str:
+        """If failed to solve captcha, return an empty string."""
         return ""
 
     @classmethod
-    def factory(cls, prehandle: PrehandleResp):
+    def factory(cls, session: str, prehandle: PrehandleResp):
         render = prehandle.captcha.render
         if "json_payload" in render:
             from .select._types import SelectCaptchaSession as cls
         else:
             from .slide._types import SlideCaptchaSession as cls
 
-        return cls(prehandle)
+        return cls(session=session, prehandle=prehandle)

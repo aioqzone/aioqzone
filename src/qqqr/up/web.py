@@ -82,7 +82,7 @@ class UpWebSession(LoginSession):
         :raise TencentLoginError: if failed to pass captcha
         """
         try:
-            self.verify_rst = await solver.verify()
+            self.verify_rst = await solver.verify(self.sid)
         except RetryError as e:
             from qqqr.constant import captcha_status_description
 
@@ -100,7 +100,6 @@ class _UpHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
         self.sms_code_input = MT.sms_code_input()
-        self.solve_select_captcha = MT.solve_select_captcha()
 
 
 class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
@@ -129,6 +128,7 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
         super().__init__(client, uin=uin, h5=h5, app=app, proxy=proxy, info=info)
         self.pwd = pwd
         self.pwder = TeaEncoder(pwd)
+        self.captcha = Captcha(self.client, self.app.appid, str(self.login_page_url))
 
     @property
     def login_page_url(self):
@@ -274,11 +274,8 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
         if sess.code == StatusCode.NeedCaptcha:
             log.warning("需通过防水墙")
 
-            if (solver := self.captcha_solver(sess.sid)) is None:
-                raise TencentLoginError(StatusCode.NeedCaptcha, "未安装依赖，无法识别验证码")
-
             try:
-                await sess.pass_vc(solver)
+                await sess.pass_vc(self.captcha)
             except NotImplementedError:
                 raise TencentLoginError(StatusCode.NeedCaptcha, "未能识别验证码")
             if sess.verify_rst is None or not sess.verify_rst.ticket:
@@ -310,28 +307,3 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
                     raise TencentLoginError(resp.code, "未获得动态(SMS)验证码")
             else:
                 raise TencentLoginError(resp.code, resp.msg)
-
-    def captcha_solver(self, sid: t.Union[str, UpWebSession]):
-        """
-        The `captcha` function is used to build a :class:`Captcha` instance.
-        It takes in a string, which is the session id got from :meth:`.new`, and returns the :class:`Captcha` instance.
-
-
-        :param sid: Pass the session id to the captcha function
-        :return: An instance of the captcha class, or None if dependency not installed.
-        """
-
-        try:
-            import chaosvm
-            import numpy
-        except ImportError:
-            log.warning("captcha extras not installed. Install `aioqzone[captcha]` and retry.")
-            log.debug("ImportError as follows:", exc_info=True)
-            return
-
-        if isinstance(sid, UpWebSession):
-            sid = sid.sid
-
-        solver = Captcha(self.client, self.app.appid, sid, str(self.login_page_url))
-        solver.solve_select_captcha = self.solve_select_captcha
-        return solver

@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 import pytest
 import pytest_asyncio
 
-import qqqr.message as MT
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.up import UpH5Login, UpWebLogin
@@ -42,11 +41,8 @@ class TestUpWeb:
         sess = await web.new()
         await web.check(sess)
         if sess.code == StatusCode.NeedCaptcha:
-            solver = web.captcha_solver(sess)
-            if solver is None:
-                pytest.skip("captcha extras is not installed, skipped.")
             try:
-                await sess.pass_vc(solver)
+                await sess.pass_vc(web.captcha)
             except NotImplementedError:
                 pytest.xfail("cannot solve captcha")
         if sess.code != 1:
@@ -63,9 +59,6 @@ class TestUpWeb:
         except TencentLoginError as e:
             if e.code in [StatusCode.RiskyNetwork, StatusCode.ForceQR]:
                 pytest.skip(str(e))
-            elif e.code == StatusCode.NeedCaptcha:
-                pytest.importorskip("numpy")
-                pytest.importorskip("chaosvm")
             elif e.code == StatusCode.NeedSmsVerify:
                 if not web.sms_code_input.has_impl:
                     pytest.skip(str(e))
@@ -88,9 +81,6 @@ async def test_h5_login(h5: UpH5Login):
     except TencentLoginError as e:
         if e.code in [StatusCode.RiskyNetwork, StatusCode.ForceQR]:
             pytest.skip(str(e))
-        elif e.code == StatusCode.NeedCaptcha:
-            pytest.importorskip("numpy")
-            pytest.importorskip("chaosvm")
         elif e.code == StatusCode.NeedSmsVerify:
             if not h5.sms_code_input.has_impl:
                 pytest.skip(str(e))

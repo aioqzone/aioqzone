@@ -11,7 +11,8 @@ from urllib.parse import unquote
 from pydantic import ValidationError
 from tenacity import after_log, retry, retry_if_exception_type, retry_if_result, stop_after_attempt
 
-from qqqr.message import solve_select_captcha
+import qqqr.message as MT
+from qqqr.message import solve_select_captcha, solve_slide_captcha
 
 from ...utils.net import ClientAdapter
 from .._model import VerifyResp
@@ -37,26 +38,32 @@ def hex_add(h: str, o: int):
     return hex(int(h, 16) + o)[2:]
 
 
-class Captcha:
+class _CaptchaHookMixin:
+    def __init__(self, *args, **kwds) -> None:
+        super().__init__(*args, **kwds)
+        self.solve_select_captcha = MT.solve_select_captcha()
+        self.solve_slide_captcha = MT.solve_slide_captcha()
+
+
+class Captcha(_CaptchaHookMixin):
     # (c_login_2.js)showNewVC-->prehandle
     # prehandle(recall)--call tcapcha-frame.*.js-->new_show
     # new_show(html)--js in html->loadImg(url)
     solve_select_captcha: solve_select_captcha.TyInst
+    solve_slide_captcha: solve_slide_captcha.TyInst
 
-    def __init__(self, client: ClientAdapter, appid: int, sid: str, xlogin_url: str):
+    def __init__(self, client: ClientAdapter, appid: int, xlogin_url: str):
         """
         :param client: network client
         :param appid: Specify the appid of the application
-        :param sid: Session id got from :meth:`UpWebLogin.new`
         :param xlogin_url: :obj:`LoginBase.xlogin_url`
         """
 
         super().__init__()
         self.client = client
         self.appid = appid
-        self.sid = sid
         self.xlogin_url = xlogin_url
-        self.client.referer = "https://xui.ptlogin2.qq.com/"
+        self.client.headers["Referer"] = "https://xui.ptlogin2.qq.com/"
 
     @property
     def base64_ua(self):
@@ -68,10 +75,10 @@ class Captcha:
 
         return base64.b64encode(self.client.headers["User-Agent"].encode()).decode()
 
-    async def new(self) -> TcaptchaSession:
+    async def new(self, sid: str) -> TcaptchaSession:
         """``prehandle``. Call this method to generate a new verify session.
 
-        :raises NotImplementedError: if not a slide captcha.
+        :param sid: login session id, got from :meth:`UpWebLogin.new`
         :return: a tcaptcha session
         """
         CALLBACK = "_aq_596882"
@@ -98,7 +105,7 @@ class Captcha:
             "aid": self.appid,
             "accver": 1,
             "ua": self.base64_ua,
-            "sid": self.sid,
+            "sid": sid,
             "entry_url": self.xlogin_url,
             # 'js': '/tcaptcha-frame.a75be429.js'
             "subsid": 1,
@@ -115,9 +122,11 @@ class Captcha:
             assert m
             return PrehandleResp.model_validate_json(m.group(1))
 
-        sess = TcaptchaSession.factory(await retry_closure())
+        sess = TcaptchaSession.factory(sid, await retry_closure())
         if isinstance(sess, SelectCaptchaSession):
             sess.solve_captcha_hook = self.solve_select_captcha
+        else:
+            sess.solve_captcha_hook = self.solve_slide_captcha
         return sess
 
     prehandle = new
@@ -128,11 +137,11 @@ class Captcha:
         retry=retry_if_result(lambda rst: not rst.ticket),
         after=after_log(log, logging.WARNING),
     )
-    async def verify(self, *, loop: t.Optional[asyncio.AbstractEventLoop] = None):
+    async def verify(self, sid: str, *, loop: t.Optional[asyncio.AbstractEventLoop] = None):
         """
         :raise NotImplementedError: cannot solve captcha
         """
-        sess = await self.new()
+        sess = await self.new(sid)
         loop = loop or asyncio.get_event_loop()
 
         async def get_solve_captcha(client: ClientAdapter) -> str:
@@ -149,7 +158,7 @@ class Captcha:
             loop.run_in_executor(None, sess.solve_workload),
         )
         if not ans:
-            raise NotImplementedError
+            raise NotImplementedError("Failed to solve captcha")
         ans = dict(
             elem_id=1,
             type=sess.data_type,

@@ -3,8 +3,8 @@ from base64 import b64encode
 from math import floor
 from time import time
 
-from pydantic import BaseModel, Field, field_serializer
-from typing_extensions import Buffer
+from pydantic import Base64Encoder, BaseModel, EncodedBytes, Field, field_serializer
+from typing_extensions import Annotated
 
 from aioqzone.utils.time import time_ms
 
@@ -141,14 +141,14 @@ class DeleteUgcParams(QzoneRequestParams):
 
 class UploadPicParams(QzoneRequestParams):
     uin_fields = ("uin",)
-    picture: Buffer
+    picture: Annotated[bytes, EncodedBytes(Base64Encoder)]
     hd_height: int
     hd_width: int
     hd_quality: int = 70
 
     # defaults
     base64: int = 1
-    output_type = "json"
+    output_type: str = "json"
     preupload: int = 1
     charset: str = "utf-8"
     output_charset: str = "utf-8"
@@ -156,10 +156,6 @@ class UploadPicParams(QzoneRequestParams):
     Exif_CameraMaker: str = ""
     Exif_CameraModel: str = ""
     Exif_Time: str = ""
-
-    @field_serializer("picture")
-    def b64_serialize(self, picture: Buffer) -> str:
-        return b64encode(picture).decode()
 
 
 class PhotosPreuploadParams(QzoneRequestParams):
@@ -171,14 +167,14 @@ class PhotosPreuploadParams(QzoneRequestParams):
 
     # defaults
     preupload: int = 2
-    output_type = "json"
+    output_type: str = "json"
     uploadtype: int = 1
     albumtype: int = 7
     big_style: int = 1
     op_src: int = 15003
-    charset = "utf-8"
-    output_charset = "utf-8"
-    refer = "shuoshuo"
+    charset: str = "utf-8"
+    output_charset: str = "utf-8"
+    refer: str = "shuoshuo"
 
     @property
     def uploadNum(self):
