@@ -93,7 +93,10 @@ class TestCaptcha:
         try:
             r = await captcha.verify(upsess.sid)
         except NotImplementedError:
-            pytest.xfail("cannot solve captcha")
+            if captcha.solve_select_captcha.has_impl:
+                pytest.fail("cannot solve captcha")
+            pytest.skip("cannot solve captcha")
+
         if r.code == 0:
             assert r.verifycode
             assert r.ticket

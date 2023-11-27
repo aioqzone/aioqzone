@@ -121,7 +121,8 @@ class UpLoginManager(Loginable):
             h5=enable,
         )
         self.sms_code_input = self.uplogin.sms_code_input
-        self.solve_select_captcha = self.uplogin.solve_select_captcha
+        self.solve_select_captcha = self.uplogin.captcha.solve_select_captcha
+        self.solve_slide_captcha = self.uplogin.captcha.solve_slide_captcha
 
 
 class QrLoginManager(Loginable):

@@ -44,6 +44,8 @@ class TestUpWeb:
             try:
                 await sess.pass_vc(web.captcha)
             except NotImplementedError:
+                if web.captcha.solve_select_captcha.has_impl:
+                    pytest.fail("cannot solve captcha")
                 pytest.xfail("cannot solve captcha")
         if sess.code != 1:
             assert sess.verifycode
