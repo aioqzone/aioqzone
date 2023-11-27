@@ -15,43 +15,46 @@ from ..pil_utils import *
 
 log = logging.getLogger(__name__)
 
+try:
+    from slide_tc import imitate_drag  # prefer to numpy version
+except ImportError:
 
-def imitate_drag(x1: int, x2: int, y: int) -> t.Tuple[t.List[int], t.List[int]]:
-    """
-    The imitate_drag function simulates a drag event.
+    def imitate_drag(x1: int, x2: int, y: int) -> t.Tuple[t.List[int], t.List[int]]:
+        """
+        The imitate_drag function simulates a drag event.
 
-    The function takes one argument, x, which is the number of pixels that the user drags.
-    The function returns a tuple of lists containing three integers: [x_coordinate, y_coordinate].
-    Each coordinate and time value is randomly generated according to corresponding rules.
+        The function takes one argument, x, which is the number of pixels that the user drags.
+        The function returns a tuple of lists containing three integers: [x_coordinate, y_coordinate].
+        Each coordinate and time value is randomly generated according to corresponding rules.
 
-    :param x1: Specify the position that the drag starts.
-    :param x2: Specify the position that the drag ends.
-    :param y: Specify the y-coordinate.
-    :return: Two lists consist of the x coordinate and y coordinate
-    """
-    assert 0 < x1 < x2, (x1, x2)
-    assert 0 < y, y
+        :param x1: Specify the position that the drag starts.
+        :param x2: Specify the position that the drag ends.
+        :param y: Specify the y-coordinate.
+        :return: Two lists consist of the x coordinate and y coordinate
+        """
+        assert 0 < x1 < x2, (x1, x2)
+        assert 0 < y, y
 
-    n = randint(50, 64)
-    noise_y = choices([y - 1, y + 1, y], [0.1, 0.1, 0.8], k=n)
+        n = randint(50, 64)
+        noise_y = choices([y - 1, y + 1, y], [0.1, 0.1, 0.8], k=n)
 
-    if n >= 51:
-        noise_x = [0]
-        noise_x += choices(list(range(-3, 4)), k=max(n - 51, 0))
-    else:
-        noise_x = []
+        if n >= 51:
+            noise_x = [0]
+            noise_x += choices(list(range(-3, 4)), k=max(n - 51, 0))
+        else:
+            noise_x = []
 
-    noise_x += choices(list(range(-2, 3)), k=30)
-    noise_x += choices(list(range(-1, 2)), k=19)
-    noise_x.append(0)
+        noise_x += choices(list(range(-2, 3)), k=30)
+        noise_x += choices(list(range(-1, 2)), k=19)
+        noise_x.append(0)
 
-    d, lsv = (x1 - x2) / (n - 1), x1
-    for i in range(n):
-        noise_x[i] += round(lsv)
-        lsv += d
-    noise_x.sort()
+        d, lsv = (x1 - x2) / (n - 1), x1
+        for i in range(n):
+            noise_x[i] += round(lsv)
+            lsv += d
+        noise_x.sort()
 
-    return noise_x, noise_y
+        return noise_x, noise_y
 
 
 class SlideBgElemCfg(Sprite):
