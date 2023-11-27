@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import typing as t
 from random import choices, randint
 
@@ -11,6 +12,8 @@ from qqqr.utils.net import ClientAdapter
 from .._model import FgBindingCfg, FgElemCfg, Sprite
 from ..capsess import BaseTcaptchaSession
 from ..pil_utils import *
+
+log = logging.getLogger(__name__)
 
 
 def imitate_drag(x1: int, x2: int, y: int) -> t.Tuple[t.List[int], t.List[int]]:
@@ -115,6 +118,11 @@ class SlideCaptchaSession(BaseTcaptchaSession):
         :return: None
         """
         assert self.cdn_imgs
+
+        if not self.solve_captcha_hook.has_impl:
+            log.warning("solve_captcha_hook has no impls.")
+            return ""
+
         background, piece = self.cdn_imgs
         piece_img = frombytes(piece).crop(self.piece_sprite.box)
         piece = tobytes(piece_img)

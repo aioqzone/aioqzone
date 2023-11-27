@@ -64,7 +64,9 @@ class TestUpWeb:
             elif e.code == StatusCode.NeedSmsVerify:
                 if not web.sms_code_input.has_impl:
                     pytest.skip(str(e))
-
+            elif e.code == StatusCode.NeedCaptcha:
+                if not web.captcha.solve_select_captcha.has_impl:
+                    pytest.skip("cannot solve captcha")
             raise
 
 

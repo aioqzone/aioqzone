@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from os import environ
 from pathlib import Path
 from typing import TYPE_CHECKING, Tuple
 
@@ -20,7 +21,7 @@ pytestmark = pytest.mark.asyncio
 
 
 def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
-    if (root := Path("data/debug")).exists():
+    if environ.get("CI") is None and (root := Path("data/debug")).exists():
         for i, b in enumerate(imgs, start=1):
             with open(root / f"{i}.png", "wb") as f:
                 f.write(b)
