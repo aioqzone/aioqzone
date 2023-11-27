@@ -1474,13 +1474,13 @@ testing-integration = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "jar
 
 [[package]]
 name = "slide-tc"
-version = "0.1.0"
+version = "0.1.1"
 description = "solve slide Tcaptcha"
 optional = true
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "slide_tc-0.1.0-py3-none-any.whl", hash = "sha256:d7c2b4b337e71fcfbb49bb0e2b5e08e9d4b31aa0406e6f50862c3c180e7c4634"},
-    {file = "slide_tc-0.1.0.tar.gz", hash = "sha256:b42ef11f1757edd643af80df7d149369cc1740c60d1e1a9454cb0e10187ef663"},
+    {file = "slide_tc-0.1.1-py3-none-any.whl", hash = "sha256:18d3ac4e37dfa4303fa6a29a9ce3abd271861ff7a84872130322fe41dd4d11f7"},
+    {file = "slide_tc-0.1.1.tar.gz", hash = "sha256:ae39b3aa9d06293e675329290c05c183bf6a5f364556a6c2def9a3b8b8dc5756"},
 ]
 
 [package.dependencies]
@@ -1904,4 +1904,4 @@ captcha = ["slide-tc"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "9d79781301b39f5e57c9d4450285816c944f40c63cbb4b21e444f0ae5913c97e"
+content-hash = "bcb1f3c909472cc8169fb568d2b6e0d468350383d32d9dca99e996060880e766"
