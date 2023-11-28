@@ -6,9 +6,9 @@ __all__ = ["qr_cancelled", "qr_fetched", "qr_refresh", "sms_code_input"]
 
 
 @hookdef
-def qr_fetched(png: bytes, times: int, qr_renew=False):
+def qr_fetched(png: t.Optional[bytes], times: int, qr_renew=False):
     """
-    :param png: QR bytes (png format)
+    :param png: Optional QR bytes (png format). If None, the QR is pushed to user's mobile and there is no need to scan.
     :param times: QR **expire** times in this session
     :param qr_renew: this refresh is requested by user
     """
