@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import io
 from os import environ
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import pytest
 import pytest_asyncio
@@ -21,12 +21,14 @@ if TYPE_CHECKING:
 
     from qqqr.utils.net import ClientAdapter
 
+NoneType = type(None)
+
 
 @pytest_asyncio.fixture(scope="class")
 async def login(client: ClientAdapter, env: test_env):
     login = QrLogin(client, env.uin)
     login.qr_fetched.add_impl(
-        lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show()
+        lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show() if png else None
     )
 
     yield login
@@ -50,14 +52,15 @@ class TestSession:
 class TestLoop:
     @skip_ci
     async def test_loop(self, login: QrLogin):
-        cookie = await login.login()
-        assert cookie["p_skey"]
+        for i in range(2):
+            cookie = await login.login()
+            assert cookie["p_skey"]
 
     async def test_resend_cancel(self, login: QrLogin):
         hist = []
         login.qr_cancelled.add_impl(lambda: hist.append("cancel"))
 
-        async def __qr_fetched(png: bytes, times: int, qr_renew=False):
+        async def __qr_fetched(png: Optional[bytes], times: int, qr_renew=False):
             hist.append(png)
             if len(hist) == 1:
                 assert times == 0
@@ -75,6 +78,7 @@ class TestLoop:
 
         assert len(hist) == 3
         assert hist[-1] == "cancel"
-        assert isinstance(hist[0], bytes)
-        assert isinstance(hist[1], bytes)
+        assert isinstance(hist[0], (bytes, NoneType))
+        assert isinstance(hist[1], (bytes, NoneType))
+        assert type(hist[0]) == type(hist[1])
         assert hist[0] != hist[1]
