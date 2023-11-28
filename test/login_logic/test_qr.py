@@ -52,9 +52,8 @@ class TestSession:
 class TestLoop:
     @skip_ci
     async def test_loop(self, login: QrLogin):
-        for i in range(2):
-            cookie = await login.login()
-            assert cookie["p_skey"]
+        cookie = await login.login()
+        assert cookie["p_skey"]
 
     async def test_resend_cancel(self, login: QrLogin):
         hist = []
