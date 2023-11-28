@@ -13,12 +13,14 @@ from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak, UserTimeout
 from qqqr.qr.type import PollResp
 from qqqr.utils.encrypt import hash33
+from qqqr.utils.jsjson import json_loads
 
 log = logging.getLogger(__name__)
 
 SHOW_QR = "https://ssl.ptlogin2.qq.com/ptqrshow"
 POLL_QR = "https://ssl.ptlogin2.qq.com/ptqrlogin"
 LOGIN_URL = "https://ptlogin2.qzone.qq.com/check_sig"
+RECENT_UIN_URL = "https://ssl.ptlogin2.qq.com/pt_fetch_dev_uin"
 
 
 @dataclass(unsafe_hash=True)
@@ -27,6 +29,10 @@ class QR:
     """If None, the QR is pushed to user's client."""
     sig: str
     expired: bool = False
+
+    @property
+    def pushed(self):
+        return self.png is None
 
 
 class QrSession(LoginSession):
@@ -58,7 +64,16 @@ class _QrHookMixin:
 
 
 class QrLogin(LoginBase[QrSession], _QrHookMixin):
-    async def new(self, push_qr=False) -> QrSession:
+    async def new(self) -> QrSession:
+        cookie = self.client.cookie_jar.filter_cookies(URL("ptlogin2.qq.com")).get("pt_guid_sig")
+        if cookie is None:
+            push_qr = False
+        else:
+            params = dict(r=random(), pt_guid_token=hash33(cookie.value))
+            async with self.client.get(RECENT_UIN_URL, params=params) as response:
+                r: dict = eval(await response.text(), dict(ptui_fetch_dev_uin_CB=json_loads))
+            push_qr = r.get("errcode") == 22028
+
         cookie = self.client.cookie_jar.filter_cookies(URL(XLOGIN_URL)).get("pt_login_sig")
         return QrSession(
             await self.show(push_qr),
@@ -149,10 +164,7 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
 
         while cnt_expire < refresh_times:
             # BUG: should we wrap hook errors here?
-            if sess.current_qr.png:
-                await self.qr_fetched.emit(
-                    png=sess.current_qr.png, times=cnt_expire, qr_renew=renew
-                )
+            await self.qr_fetched.emit(png=sess.current_qr.png, times=cnt_expire, qr_renew=renew)
             renew = False
 
             while not self.refresh.is_set():

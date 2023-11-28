@@ -78,7 +78,9 @@ class TestUP:
 async def qr(client: ClientAdapter, env: test_env):
     man = QrLoginManager(client, config=QrLoginConfig(uin=env.uin))
 
-    man.qr_fetched.add_impl(lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show())
+    man.qr_fetched.add_impl(
+        lambda png, times, qr_renew=False: image.open(io.BytesIO(png)).show() if png else None
+    )
     yield man
 
 
