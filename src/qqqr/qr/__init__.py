@@ -74,7 +74,10 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
         else:
             params = dict(r=random(), pt_guid_token=hash33(cookie.value))
             async with self.client.get(RECENT_UIN_URL, params=params) as response:
-                r: dict = eval(await response.text(), dict(ptui_fetch_dev_uin_CB=json_loads))
+                m = re.search(r"ptui_fetch_dev_uin_CB\((.*)\)", await response.text())
+                assert m
+                r = json_loads(m.group(1))
+            assert isinstance(r, dict)
             push_qr = r.get("errcode") == 22028
 
         return QrSession(await self.show(push_qr), login_sig=login_sig)
