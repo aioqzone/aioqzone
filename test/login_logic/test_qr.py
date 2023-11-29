@@ -54,6 +54,7 @@ class TestLoop:
     async def test_loop(self, login: QrLogin):
         cookie = await login.login()
         assert cookie["p_skey"]
+        assert cookie["pt_guid_sig"]
 
     async def test_resend_cancel(self, login: QrLogin):
         hist = []

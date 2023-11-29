@@ -1,8 +1,10 @@
 """Response validation in `qqqr.up.captcha`"""
 
-from typing import Union
+import typing as t
 
 from pydantic import BaseModel, Field, HttpUrl
+
+from qqqr.type import RedirectCookies
 
 
 class CheckResp(BaseModel):
@@ -25,9 +27,11 @@ class CheckResp(BaseModel):
 
 class LoginResp(BaseModel):
     code: int
-    url: Union[HttpUrl, str]
+    url: t.Union[HttpUrl, str]
     msg: str
     nickname: str
+    pt_ev_token: str = ""
+    cookies: t.Optional[RedirectCookies] = None
 
 
 class VerifyResp(BaseModel):

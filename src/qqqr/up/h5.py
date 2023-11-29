@@ -1,5 +1,6 @@
 import logging
 import re
+from random import random
 
 from yarl import URL
 
@@ -29,13 +30,14 @@ class UpH5Login(UpWebLogin):
     async def check(self, sess: UpWebSession):
         data = dict(
             pt_tea=2,
-            uin=***REMOVED***,
-            appid=549000929,
+            uin=self.uin,
+            appid=self.app.appid,
+            daid=self.app.daid,
             ptlang=2052,
             regmaster="",
             pt_uistyle=9,
             o1vId=await self.deviceId(),
-            r=0.5004446805302833,
+            r=random(),
         )
         async with self.client.get(CHECK_URL, params=data) as r:
             r.raise_for_status()
@@ -75,6 +77,7 @@ class UpH5Login(UpWebLogin):
             "daid": self.app.daid,
             "ptdrvs": sess.check_rst.ptdrvs,
             "sid": sess.check_rst.session,
+            # "pt_ev_token": sess.pt_ev_token,
             "o1vId": await self.deviceId(),
         }
         data.update(const)
