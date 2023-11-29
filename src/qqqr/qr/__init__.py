@@ -11,9 +11,10 @@ import qqqr.message as MT
 from qqqr.base import XLOGIN_URL, LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak, UserTimeout
-from qqqr.qr.type import PollResp
+from qqqr.qr.type import PollCookie, PollResp
 from qqqr.utils.encrypt import hash33
 from qqqr.utils.jsjson import json_loads
+from qqqr.utils.net import get_all_cookie
 
 log = logging.getLogger(__name__)
 
@@ -65,6 +66,8 @@ class _QrHookMixin:
 
 class QrLogin(LoginBase[QrSession], _QrHookMixin):
     async def new(self) -> QrSession:
+        login_sig = await self._pt_login_sig()
+
         cookie = self.client.cookie_jar.filter_cookies(URL("ptlogin2.qq.com")).get("pt_guid_sig")
         if cookie is None:
             push_qr = False
@@ -74,11 +77,7 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
                 r: dict = eval(await response.text(), dict(ptui_fetch_dev_uin_CB=json_loads))
             push_qr = r.get("errcode") == 22028
 
-        cookie = self.client.cookie_jar.filter_cookies(URL(XLOGIN_URL)).get("pt_login_sig")
-        return QrSession(
-            await self.show(push_qr),
-            login_sig="" if cookie is None else cookie.value,
-        )
+        return QrSession(await self.show(push_qr), login_sig=login_sig)
 
     async def show(self, push_qr=False) -> QR:
         data = {
@@ -132,8 +131,12 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
             r.raise_for_status()
             rl = re.findall(r"'(.*?)'[,\)]", await r.text())
 
-        resp = PollResp.model_validate(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
-        log.debug(resp)
+            resp = PollResp.model_validate(
+                dict(zip(["code", "", "url", "", "msg", "nickname"], rl))
+            )
+            log.debug(resp)
+            if resp.code == StatusCode.Authenticated:
+                resp.cookies = PollCookie.model_validate(get_all_cookie(r))
         return resp
 
     async def login(
@@ -179,7 +182,10 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
                     break
                 elif stat.code == StatusCode.Authenticated:
                     sess.login_url = str(stat.url)
-                    return await self._get_login_url(sess)
+                    return await self._get_login_url(
+                        sess,
+                        cur_cookies=stat.cookies and stat.cookies.model_dump(),
+                    )
             else:
                 self.refresh.clear()
                 renew = True

@@ -7,10 +7,9 @@ from random import choice, random
 from time import time_ns
 
 from tenacity import RetryError
-from yarl import URL
 
 import qqqr.message as MT
-from qqqr.base import XLOGIN_URL, LoginBase, LoginSession
+from qqqr.base import LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.type import APPID, PT_QR_APP, Proxy
@@ -29,13 +28,10 @@ class UpWebSession(LoginSession):
     def __init__(
         self,
         login_sig: str,
-        login_referer: str,
         *,
         create_time: t.Optional[float] = None,
     ) -> None:
         super().__init__(login_sig=login_sig, create_time=create_time)
-        self.login_referer = login_referer
-        """url fetched in `new`."""
         self.verify_rst: t.Optional[VerifyResp] = None
         self.sms_ticket = ""
         self.sms_code: t.Optional[str] = None
@@ -130,34 +126,6 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
         self.pwder = TeaEncoder(pwd)
         self.captcha = Captcha(self.client, self.app.appid, str(self.login_page_url))
 
-    @property
-    def login_page_url(self):
-        params = {
-            "hide_title_bar": 1,
-            "style": 22,
-            "daid": self.app.daid,
-            "low_login": 0,
-            "qlogin_auto_login": 1,
-            "no_verifyimg": 1,
-            "link_target": "blank",
-            "appid": self.app.appid,
-            "target": "self",
-            "s_url": self.proxy.s_url,
-            "proxy_url": self.proxy.proxy_url,
-            "pt_no_auth": 1,
-        }
-        if self.info:
-            if self.info.app:
-                params["pt_qr_app"] = self.info.app
-            if self.info.link:
-                params["pt_qr_link"] = self.info.link
-            if self.info.register:
-                params["self_regurl"] = self.info.register
-            if self.info.help:
-                params["pt_qr_help_link"] = self.info.help
-
-        return URL(XLOGIN_URL).with_query(params)
-
     async def new(self):
         """Create a :class:`UpWebSession`. This will call `check` api of Qzone, and receive result
         about whether this login needs a captcha, sms verification, etc.
@@ -166,9 +134,7 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
 
         :return: a up login session
         """
-        async with self.client.get(self.login_page_url) as r:
-            r.raise_for_status()
-            return UpWebSession(r.cookies["pt_login_sig"].value, str(r.url))
+        return UpWebSession(await self._pt_login_sig())
 
     async def check(self, sess: UpWebSession):
         data = {
