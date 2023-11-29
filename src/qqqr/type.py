@@ -1,6 +1,8 @@
 import sys
 from dataclasses import dataclass
 
+from pydantic import BaseModel
+
 if sys.version_info >= (3, 9):
     frozen_args = dict(frozen=True, slots=True)
 else:
@@ -25,3 +27,11 @@ class Proxy:
 class APPID:
     appid: int
     daid: int
+
+
+class RedirectCookies(BaseModel):
+    supertoken: str
+    superkey: str
+    pt_guid_sig: str
+    pt_recent_uins: str = ""
+    ptcz: str
