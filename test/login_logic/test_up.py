@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from os import environ
 from typing import TYPE_CHECKING
 
 import pytest
@@ -15,6 +16,7 @@ if TYPE_CHECKING:
     from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio
+skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 
 @pytest_asyncio.fixture(scope="module")
@@ -27,7 +29,7 @@ async def web(client: ClientAdapter, env: test_env):
 
 
 class TestUpWeb:
-    @pytest.mark.skip("this test should be called manually")
+    @skip_ci
     async def testRegisterSmsCodeGetter(self, web: UpWebLogin):
         async def GetSmsCode(uin: int, phone: str, nickname: str):
             assert phone
@@ -57,7 +59,7 @@ class TestUpWeb:
 
     async def test_login(self, web: UpWebLogin):
         try:
-            assert await web.login()
+            cookies = await web.login()
         except TencentLoginError as e:
             if e.code in [StatusCode.RiskyNetwork, StatusCode.ForceQR]:
                 pytest.skip(str(e))
@@ -68,6 +70,9 @@ class TestUpWeb:
                 if not web.captcha.solve_select_captcha.has_impl:
                     pytest.skip("cannot solve captcha")
             raise
+
+        assert cookies["p_skey"]
+        assert cookies["pt_guid_sig"]
 
 
 @pytest.fixture
@@ -81,7 +86,7 @@ def h5(client: ClientAdapter, env: test_env):
 
 async def test_h5_login(h5: UpH5Login):
     try:
-        assert await h5.login()
+        cookies = await h5.login()
     except TencentLoginError as e:
         if e.code in [StatusCode.RiskyNetwork, StatusCode.ForceQR]:
             pytest.skip(str(e))
@@ -93,3 +98,6 @@ async def test_h5_login(h5: UpH5Login):
                 pytest.skip("cannot solve captcha")
 
         raise
+
+    assert cookies["p_skey"]
+    # assert cookies["pt_guid_sig"]

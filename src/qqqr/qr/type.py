@@ -3,13 +3,7 @@ import typing as t
 from pydantic import BaseModel
 from pydantic.networks import HttpUrl
 
-
-class PollCookie(BaseModel):
-    supertoken: str
-    superkey: str
-    pt_guid_sig: str
-    pt_recent_uins: str
-    ptcz: str
+from qqqr.type import RedirectCookies
 
 
 class PollResp(BaseModel):
@@ -17,4 +11,4 @@ class PollResp(BaseModel):
     url: t.Union[HttpUrl, str]
     msg: str
     nickname: str
-    cookies: t.Optional[PollCookie] = None
+    cookies: t.Optional[RedirectCookies] = None

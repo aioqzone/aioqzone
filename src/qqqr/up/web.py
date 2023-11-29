@@ -13,9 +13,10 @@ from qqqr.base import LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.type import APPID, PT_QR_APP, Proxy
-from qqqr.utils.net import ClientAdapter
+from qqqr.utils.iter import firstn
+from qqqr.utils.net import ClientAdapter, get_all_cookie
 
-from ._model import CheckResp, LoginResp, VerifyResp
+from ._model import CheckResp, LoginResp, RedirectCookies, VerifyResp
 from .captcha import Captcha
 from .encrypt import PasswdEncoder, TeaEncoder
 
@@ -25,6 +26,8 @@ log = logging.getLogger(__name__)
 
 
 class UpWebSession(LoginSession):
+    pt_ev_token = ""
+
     def __init__(
         self,
         login_sig: str,
@@ -224,13 +227,22 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
         ) as response:
             response.raise_for_status()
             rl = re.findall(r"'(.*?)'[,\)]", await response.text())
+            resp = LoginResp.model_validate(
+                dict(zip(["code", "", "url", "", "msg", "nickname", "pt_ev_token"], rl))
+            )
+            log.debug(resp)
 
-        resp = LoginResp.model_validate(dict(zip(["code", "", "url", "", "msg", "nickname"], rl)))
-        if resp.code == StatusCode.NeedSmsVerify:
-            sess.sms_ticket = ""
-            if m := response.cookies.get("pt_sms_ticket"):
-                sess.sms_ticket = m.value
-        log.debug(resp)
+            if resp.code == StatusCode.NeedSmsVerify:
+                sess.sms_ticket = ""
+                if m := response.cookies.get("pt_sms_ticket"):
+                    sess.sms_ticket = m.value
+            elif resp.code == StatusCode.Authenticated:
+                cookies = get_all_cookie(response)
+                if "pt_guid_sig" not in cookies:
+                    # TODO: patch for h5 up login
+                    cookies["pt_guid_sig"] = ""
+                resp.cookies = RedirectCookies.model_validate(cookies)
+
         return resp
 
     async def login(self):
@@ -253,7 +265,10 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
             sess.login_history.append(resp)
             if resp.code == StatusCode.Authenticated:
                 sess.login_url = str(resp.url)
-                return await self._get_login_url(sess)
+                return await self._get_login_url(
+                    sess,
+                    cur_cookies=resp.cookies and resp.cookies.model_dump(),
+                )
             elif resp.code == StatusCode.NeedSmsVerify:
                 log.warning("需用户短信验证")
                 if pastcode == StatusCode.NeedSmsVerify:
@@ -263,12 +278,13 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
                     raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 await self.send_sms_code(sess)
                 with suppress(BaseException):
-                    sms_code = await asyncio.wait_for(
-                        self.sms_code_input(uin=self.uin, phone=resp.msg, nickname=resp.nickname),
+                    hook_results = await asyncio.wait_for(
+                        self.sms_code_input.results(
+                            uin=self.uin, phone=resp.msg, nickname=resp.nickname
+                        ),
                         timeout=60,
                     )
-                    if sms_code and len(sms_code := sms_code.strip()) >= 4:
-                        sess.sms_code = sms_code
+                    sess.sms_code = firstn(hook_results, lambda c: c and len(c.strip()) >= 4)
                 if sess.sms_code is None:
                     raise TencentLoginError(resp.code, "未获得动态(SMS)验证码")
             else:

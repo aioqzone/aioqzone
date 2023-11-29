@@ -11,7 +11,7 @@ import qqqr.message as MT
 from qqqr.base import XLOGIN_URL, LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak, UserTimeout
-from qqqr.qr.type import PollCookie, PollResp
+from qqqr.qr.type import PollResp, RedirectCookies
 from qqqr.utils.encrypt import hash33
 from qqqr.utils.jsjson import json_loads
 from qqqr.utils.net import get_all_cookie
@@ -136,7 +136,7 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
             )
             log.debug(resp)
             if resp.code == StatusCode.Authenticated:
-                resp.cookies = PollCookie.model_validate(get_all_cookie(r))
+                resp.cookies = RedirectCookies.model_validate(get_all_cookie(r))
         return resp
 
     async def login(
