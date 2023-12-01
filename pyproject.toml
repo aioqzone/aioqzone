@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aioqzone"
-version = "1.7.2.dev4"
+version = "1.7.2.dev6"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = ["aioqzone <zzzzss990315@gmail.com>"]
 license = "AGPL-3.0"
@@ -38,7 +38,7 @@ tenacity = "^8.2.3"
 exceptiongroup = "^1.1.1"
 tylisten = "^2.0.1"
 pillow = "^10.0.1"
-pychaosvm = { version = "~0.3.0", source = "aioqzone-index" }
+pychaosvm = { version = "~0.3.1", source = "aioqzone-index" }
 slide-tc = {version = "~0.1.1", optional = true, source = "aioqzone-index" }
 
 [tool.poetry.extras]

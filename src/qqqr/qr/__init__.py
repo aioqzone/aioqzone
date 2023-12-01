@@ -8,7 +8,7 @@ from random import random
 from yarl import URL
 
 import qqqr.message as MT
-from qqqr.base import XLOGIN_URL, LoginBase, LoginSession
+from qqqr.base import LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak, UserTimeout
 from qqqr.qr.type import PollResp, RedirectCookies
@@ -69,16 +69,19 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
         login_sig = await self._pt_login_sig()
 
         cookie = self.client.cookie_jar.filter_cookies(URL("ptlogin2.qq.com")).get("pt_guid_sig")
-        if cookie is None:
-            push_qr = False
+        push_qr = False
+        if cookie is None or not cookie.value:
+            log.debug("pt_guid_sig not found, skip pt_fetch_dev_uin")
         else:
             params = dict(r=random(), pt_guid_token=hash33(cookie.value))
             async with self.client.get(RECENT_UIN_URL, params=params) as response:
-                m = re.search(r"ptui_fetch_dev_uin_CB\((.*)\)", await response.text())
-                assert m
+                m = re.search(r"ptui_fetch_dev_uin_CB\((.*)\)", r := await response.text())
+            log.debug("pt_fetch_dev_uin response:", r)
+
+            if m:
                 r = json_loads(m.group(1))
-            assert isinstance(r, dict)
-            push_qr = r.get("errcode") == 22028
+                assert isinstance(r, dict)
+                push_qr = r.get("errcode") == 22028
 
         return QrSession(await self.show(push_qr), login_sig=login_sig)
 
@@ -95,13 +98,27 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
         else:
             data.update(e=2, l="M", s=3, d=72, v=4)
         async with self.client.get(SHOW_QR, params=data) as r:
-            if push_qr:
-                raise NotImplementedError
+            qrsig = r.cookies["qrsig"].value
+            if not push_qr:
+                return QR(
+                    png=await r.content.read(),
+                    sig=qrsig,
+                )
+            m = re.search(r"ptui_qrcode_CB\((.*)\)", r := await r.text())
 
-            return QR(
-                png=await r.content.read(),
-                sig=r.cookies["qrsig"].value,
-            )
+        log.debug("ptqrshow(qr_push) response:", r)
+        assert m
+        resp = json_loads(m.group(1))
+        assert isinstance(resp, dict)
+        if resp["ec"] == 0:
+            log.info("二维码已推送至用户手机端")
+            return QR(None, qrsig)
+
+        log.warning(resp["em"])
+        cookie = self.client.cookie_jar.filter_cookies(URL("ptlogin2.qq.com")).get("pt_guid_sig")
+        if cookie:
+            cookie.set(cookie.key, "", "")
+        return await self.show(push_qr=False)
 
     async def poll(self, sess: QrSession) -> PollResp:
         """Poll QR status.
