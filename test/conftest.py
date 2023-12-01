@@ -1,4 +1,5 @@
 import asyncio
+from os import environ
 
 import pytest
 import pytest_asyncio
@@ -17,6 +18,11 @@ class test_env(BaseSettings):
 @pytest.fixture(scope="session")
 def env():
     return test_env()
+
+
+@pytest.fixture(scope="session")
+def CI():
+    return environ.get("CI") is not None
 
 
 @pytest.fixture(scope="module")
