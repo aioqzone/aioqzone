@@ -14,9 +14,13 @@ TyMethod = t.Union[t.Literal["GET"], t.Literal["POST"]]
 class QzoneApi(BaseModel, t.Generic[TyRequest, TyResponse]):
     host: t.ClassVar[str] = "https://h5.qzone.qq.com"
     http_method: t.ClassVar[TyMethod]
-    attach_token: bool = True
     path: str
 
+    keep_alive: bool = True
+    accept: t.Optional[str] = None
+    referer: str = "https://h5.qzone.qq.com/"
+
+    attach_token: bool = True
     params: TyRequest = Field(default_factory=QzoneRequestParams)
     response: t.Type[TyResponse]
 
@@ -28,6 +32,7 @@ class QzoneApi(BaseModel, t.Generic[TyRequest, TyResponse]):
 class IndexPageApi(QzoneApi[QzoneRequestParams, IndexPageResp]):
     http_method: t.ClassVar[TyMethod] = "GET"
     path: t.ClassVar[str] = "/mqzone/index"
+    keep_alive: bool = False
 
 
 class FeedPageApi(QzoneApi[ActiveFeedsParams, FeedPageResp]):
@@ -44,6 +49,7 @@ class GetCountApi(QzoneApi[GetCountParams, FeedCount]):
     http_method: t.ClassVar[TyMethod] = "GET"
     host: t.ClassVar[str] = "https://mobile.qzone.qq.com"
     path: t.ClassVar[str] = "/feeds/mfeeds_get_count"
+    accept: str = "application/json"
 
 
 class DoLikeApi(QzoneApi[DolikeParam, SingleReturnResp]):
