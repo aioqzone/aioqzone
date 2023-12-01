@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from os import environ
 from pathlib import Path
 from typing import TYPE_CHECKING, Tuple
 
@@ -30,9 +29,9 @@ def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
 
 
 @pytest_asyncio.fixture(scope="module")
-async def login(client: ClientAdapter, env: test_env):
+async def login(client: ClientAdapter, env: test_env, CI: bool):
     login = UpH5Login(client, env.uin, env.password.get_secret_value())
-    if environ.get("CI") is None:
+    if not CI:
         login.captcha.solve_select_captcha.add_impl(select_captcha_input)
     yield login
 

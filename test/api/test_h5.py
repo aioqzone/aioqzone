@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from pathlib import Path
+from typing import Tuple
+
 import pytest
 import pytest_asyncio
 from tenacity import RetryError
 
-from aioqzone.api import Loginable
+from aioqzone.api import Loginable, UpLoginManager
 from aioqzone.api.h5 import QzoneH5API
 from aioqzone.model import LikeData, UgcRight
 from qqqr.utils.net import ClientAdapter
@@ -15,8 +18,19 @@ MOOD_TEXT = "This is a curious test :D"
 COMMENT_TEXT = "Here is a kind comment :)"
 
 
+def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
+    if (root := Path("data/debug")).exists():
+        for i, b in enumerate(imgs, start=1):
+            with open(root / f"{i}.png", "wb") as f:
+                f.write(b)
+    r = []
+    return r
+
+
 @pytest_asyncio.fixture(scope="class")
-async def api(client: ClientAdapter, man: Loginable):
+async def api(client: ClientAdapter, man: Loginable, CI: bool):
+    if not CI and isinstance(man, UpLoginManager):
+        man.solve_select_captcha.add_impl(select_captcha_input)
     yield QzoneH5API(client, man)
 
 

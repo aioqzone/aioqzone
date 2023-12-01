@@ -65,14 +65,14 @@ class Loginable(ABC):
 
     @property
     def gtk(self) -> int:
-        """Calculate ``gtk`` using ``pskey`` field in the cookie.
+        """Calculate g_token(gtk) using ``p_skey`` or ``skey`` field in the cookie.
 
-        :return: gtk
+        :return: g_token
 
         .. note:: ``0`` denotes no existing login.
         .. seealso:: :meth:`qqqr.utils.encrypt.gtk`
         """
-        pskey = self.cookie.get("p_skey")
-        if pskey is None:
+        skey = self.cookie.get("p_skey") or self.cookie.get("skey")
+        if skey is None:
             return 0
-        return gtk(pskey)
+        return gtk(skey)

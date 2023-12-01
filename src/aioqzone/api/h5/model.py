@@ -2,7 +2,6 @@ import logging
 
 from pydantic import ValidationError
 from tenacity import AsyncRetrying, TryAgain, after_log, stop_after_attempt
-from typing_extensions import Buffer
 
 from aioqzone.api.login import Loginable
 from aioqzone.model.api import *
@@ -52,7 +51,12 @@ class QzoneH5API:
             data = params
             params = {}
 
-        self.client.referer = "https://h5.qzone.qq.com/"
+        headers = dict(Referer=api.referer)
+        if api.keep_alive:
+            headers["Connection"] = "keep-alive"
+        if api.accept:
+            headers["Accept"] = api.accept
+
         async for attempt in self._relogin_retry:
             with attempt:
                 if (gtk := self.login.gtk) == 0:
@@ -61,7 +65,12 @@ class QzoneH5API:
                     params.update(qzonetoken=self.qzonetoken, g_tk=str(gtk))
 
                 async with self.client.request(
-                    api.http_method, api.url, params=params, data=data, cookies=self.login.cookie
+                    api.http_method,
+                    api.url,
+                    params=params,
+                    data=data,
+                    headers=headers,
+                    cookies=self.login.cookie,
                 ) as r:
                     r.raise_for_status()
                     obj = await api.response.response_to_object(r)
@@ -181,7 +190,7 @@ class QzoneH5API:
             )
         )
 
-    async def upload_pic(self, picture: Buffer, width: int, height: int, quality: int):
+    async def upload_pic(self, picture: bytes, width: int, height: int, quality: int):
         return await self.call(
             UploadPicApi(
                 params=UploadPicParams(
