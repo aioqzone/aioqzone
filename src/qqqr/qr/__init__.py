@@ -11,7 +11,7 @@ import qqqr.message as MT
 from qqqr.base import LoginBase, LoginSession
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak, UserTimeout
-from qqqr.qr.type import PollResp, RedirectCookies
+from qqqr.qr.type import FetchDevUinResp, PollResp, PushQrResp, RedirectCookies
 from qqqr.utils.encrypt import hash33
 from qqqr.utils.jsjson import json_loads
 from qqqr.utils.net import get_all_cookie
@@ -22,6 +22,8 @@ SHOW_QR = "https://ssl.ptlogin2.qq.com/ptqrshow"
 POLL_QR = "https://ssl.ptlogin2.qq.com/ptqrlogin"
 LOGIN_URL = "https://ptlogin2.qzone.qq.com/check_sig"
 RECENT_UIN_URL = "https://ssl.ptlogin2.qq.com/pt_fetch_dev_uin"
+
+PTLOGIN2 = URL("https://ptlogin2.qq.com")
 
 
 @dataclass(unsafe_hash=True)
@@ -68,20 +70,20 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
     async def new(self) -> QrSession:
         login_sig = await self._pt_login_sig()
 
-        cookie = self.client.cookie_jar.filter_cookies(URL("ptlogin2.qq.com")).get("pt_guid_sig")
+        cookie = self.client.cookie_jar.filter_cookies(PTLOGIN2).get("pt_guid_sig")
         push_qr = False
         if cookie is None or not cookie.value:
             log.debug("pt_guid_sig not found, skip pt_fetch_dev_uin")
         else:
             params = dict(r=random(), pt_guid_token=hash33(cookie.value))
             async with self.client.get(RECENT_UIN_URL, params=params) as response:
+                dev_mid_sig = response.cookies.get("dev_mid_sig")
                 m = re.search(r"ptui_fetch_dev_uin_CB\((.*)\)", r := await response.text())
             log.debug("pt_fetch_dev_uin response:", r)
 
             if m:
-                r = json_loads(m.group(1))
-                assert isinstance(r, dict)
-                push_qr = r.get("errcode") == 22028
+                r = FetchDevUinResp.model_validate_json(m.group(1))
+                push_qr = r.code == 22028 and dev_mid_sig is not None and self.uin in r.uin_list
 
         return QrSession(await self.show(push_qr), login_sig=login_sig)
 
@@ -98,24 +100,24 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
         else:
             data.update(e=2, l="M", s=3, d=72, v=4)
         async with self.client.get(SHOW_QR, params=data) as r:
-            qrsig = r.cookies["qrsig"].value
+            qrsig = r.cookies.get("qrsig")
             if not push_qr:
+                assert qrsig
                 return QR(
                     png=await r.content.read(),
-                    sig=qrsig,
+                    sig=qrsig.value,
                 )
             m = re.search(r"ptui_qrcode_CB\((.*)\)", r := await r.text())
 
         log.debug("ptqrshow(qr_push) response:", r)
         assert m
-        resp = json_loads(m.group(1))
-        assert isinstance(resp, dict)
-        if resp["ec"] == 0:
+        resp = PushQrResp.model_validate_json(m.group(1))
+        if qrsig and resp.code == 0:
             log.info("二维码已推送至用户手机端")
-            return QR(None, qrsig)
+            return QR(None, qrsig.value)
 
-        log.warning(resp["em"])
-        cookie = self.client.cookie_jar.filter_cookies(URL("ptlogin2.qq.com")).get("pt_guid_sig")
+        log.warning(resp.message)
+        cookie = self.client.cookie_jar.filter_cookies(PTLOGIN2).get("pt_guid_sig")
         if cookie:
             cookie.set(cookie.key, "", "")
         return await self.show(push_qr=False)
