@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-04 21:22+0800\n"
+"POT-Creation-Date: 2023-12-04 16:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -37,8 +37,24 @@ msgstr ""
 msgid "Fields"
 msgstr ""
 
+#: aioqzone.model.api.GetCountApi:1 of
+msgid ":py:obj:`accept (str) <aioqzone.model.api.GetCountApi.accept>`"
+msgstr ""
+
+#: aioqzone.model.api.IndexPageApi:1 of
+msgid ":py:obj:`keep_alive (bool) <aioqzone.model.api.IndexPageApi.keep_alive>`"
+msgstr ""
+
+#: aioqzone.model.api.QzoneApi:1 of
+msgid ":py:obj:`accept (str | None) <aioqzone.model.api.QzoneApi.accept>`"
+msgstr ""
+
 #: aioqzone.model.api.QzoneApi:1 of
 msgid ":py:obj:`attach_token (bool) <aioqzone.model.api.QzoneApi.attach_token>`"
+msgstr ""
+
+#: aioqzone.model.api.QzoneApi:1 of
+msgid ":py:obj:`keep_alive (bool) <aioqzone.model.api.QzoneApi.keep_alive>`"
 msgstr ""
 
 #: aioqzone.model.api.QzoneApi:1 of
@@ -47,6 +63,10 @@ msgstr ""
 
 #: aioqzone.model.api.QzoneApi:1 of
 msgid ":py:obj:`path (str) <aioqzone.model.api.QzoneApi.path>`"
+msgstr ""
+
+#: aioqzone.model.api.QzoneApi:1 of
+msgid ":py:obj:`referer (str) <aioqzone.model.api.QzoneApi.referer>`"
 msgstr ""
 
 #: aioqzone.model.api.QzoneApi:1 of
@@ -167,7 +187,15 @@ msgid ":py:obj:`opr_type (str) <aioqzone.model.api.request.PublishMoodParams.opr
 msgstr ""
 
 #: aioqzone.model.api.request.PublishMoodParams:1 of
-msgid ":py:obj:`richval (str) <aioqzone.model.api.request.PublishMoodParams.richval>`"
+msgid ""
+":py:obj:`photos (List[aioqzone.model.api.request.PhotoData]) "
+"<aioqzone.model.api.request.PublishMoodParams.photos>`"
+msgstr ""
+
+#: aioqzone.model.api.request.PublishMoodParams:1 of
+msgid ""
+":py:obj:`ugc_right (aioqzone.model.api.feed.UgcRight) "
+"<aioqzone.model.api.request.PublishMoodParams.ugc_right>`"
 msgstr ""
 
 #: aioqzone.model.api.request.ShuoshuoParams:1 of
@@ -380,7 +408,7 @@ msgid "返回类型"
 msgstr ""
 
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:7 of
-msgid ":py:class:`~typing.Self`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Self\\``"
 msgstr ""
 
 #: aioqzone.model.api.response.QzoneResponse.from_response_object of
@@ -393,10 +421,12 @@ msgstr ""
 
 #: aioqzone.model.api.response.QzoneResponse.response_to_object:2 of
 msgid ""
-":py:class:`~typing.Dict`\\[:py:class:`str`, :py:data:`~typing.Union`\\[:py:class:`bool`, "
-":py:class:`int`, :py:class:`str`, "
-":py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, :py:class:`int`], "
-"JsonValue], :py:class:`~typing.List`\\[JsonValue]]]"
+":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Dict\\`\\\\ "
+"\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:data\\:\\`\\~typing.Union\\`\\\\ "
+"\\\\\\[\\:py\\:class\\:\\`bool\\`\\, \\:py\\:class\\:\\`int\\`\\, \\:py\\:class\\:\\`str\\`\\, "
+"\\:py\\:class\\:\\`\\~typing.Dict\\`\\\\ \\\\\\[\\:py\\:data\\:\\`\\~typing.Union\\`\\\\ "
+"\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:class\\:\\`int\\`\\]\\, JsonValue\\]\\, "
+"\\:py\\:class\\:\\`\\~typing.List\\`\\\\ \\\\\\[JsonValue\\]\\]\\]`"
 msgstr ""
 
 #~ msgid "Response Models"
@@ -424,4 +454,17 @@ msgstr ""
 #~ msgid ""
 #~ ":py:obj:`share_info (aioqzone.model.api.feed.ShareInfo) "
 #~ "<aioqzone.model.api.feed.FeedData.share_info>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`richval (str) <aioqzone.model.api.request.PublishMoodParams.richval>`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.Self`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:class:`~typing.Dict`\\[:py:class:`str`, "
+#~ ":py:data:`~typing.Union`\\[:py:class:`bool`, :py:class:`int`, :py:class:`str`,"
+#~ " :py:class:`~typing.Dict`\\[:py:data:`~typing.Union`\\[:py:class:`str`, "
+#~ ":py:class:`int`], JsonValue], :py:class:`~typing.List`\\[JsonValue]]]"
 #~ msgstr ""

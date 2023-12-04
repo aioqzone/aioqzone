@@ -12,13 +12,9 @@ from typing import Union
 from rsa import PublicKey
 from rsa import encrypt as rsa_encrypt
 
-LOGIN_JS = "https://qq-web.cdn-go.cn/any.ptlogin2.qq.com/v1.3.0/ptlogin/js/c_login_2.js"
 PUBKEY = PublicKey(
-    int(
-        "e9a815ab9d6e86abbf33a4ac64e9196d5be44a09bd0ed6ae052914e1a865ac8331fed863de8ea697e9a7f63329e5e23cda09c72570f46775b7e39ea9670086f847d3c9c51963b131409b1e04265d9747419c635404ca651bbcbc87f99b8008f7f5824653e3658be4ba73e4480156b390bb73bc1f8b33578e7a4e12440e9396f2552c1aff1c92e797ebacdc37c109ab7bce2367a19c56a033ee04534723cc2558cb27368f5b9d32c04d12dbd86bbd68b1d99b7c349a8453ea75d1b2e94491ab30acf6c46a36a75b721b312bedf4e7aad21e54e9bcbcf8144c79b6e3c05eb4a1547750d224c0085d80e6da3907c3d945051c13c7c1dcefd6520ee8379c4f5231ed",
-        16,
-    ),
-    int("10001", 16),
+    29496410687140474961119245498915887699746044446431573370755803330798106970246404153324791276945613538908384803873682125117660027361723341249004819631069444529772469791984089750098105980017598210197651262912913003686191561807018747713133181122140185218267859189424249203315474970083525464658420601178962825467757646812713543951322998963854566864529737741968186080598661524321050149157809052160123823325600419947995213991733248714968482744503612161143440082407680406893798778565223892792085769105886059245894371386120558683710768503711260651478376959795916731934526910610532162307615665046831918144682579200585877303789,
+    65537,
 )
 
 
@@ -39,15 +35,19 @@ class TeaEncoder(PasswdEncoder):
 
         Original code is from `@hoxide <https://github.com/LeoHuang2015/qqloginjs/blob/7d82f2f7d7363547763c40ce5d258d18989b9732/tea.py>`_,
         seems it has MIT license. Our code is under AGPL-3.0.
+
+    .. hint::
+
+        For javascript cases, we provide a `TypeScript version <_static/teaencoder.ts>` (testing).
     """
 
     delta = 0x9E3779B9
 
     @classmethod
     def _xor(cls, a: bytes, b: bytes):
-        a1, a2 = struct.unpack(">LL", a[0:8])
-        b1, b2 = struct.unpack(">LL", b[0:8])
-        r = struct.pack(">LL", (a1 ^ b1) & 0xFFFFFFFF, (a2 ^ b2) & 0xFFFFFFFF)
+        (a1,) = struct.unpack(">Q", a[:8])
+        (b1,) = struct.unpack(">Q", b[:8])
+        r = struct.pack(">Q", a1 ^ b1)
         return r
 
     @classmethod
@@ -113,11 +113,11 @@ class TeaEncoder(PasswdEncoder):
         >>> _hex2bytes("g1")
         0   # ignores all and gives default value
 
-        This equals to the following code in javascript:
+        This behaviour keeps in line with the following code in javascript:
 
         .. code-block:: javascript
 
-            String.fromCharCode(parseInt(double_unsigned))
+            String.fromCharCode(parseInt(double_unsigned, 16))
         """
         e = []
         for i in range(0, len(s), 2):
