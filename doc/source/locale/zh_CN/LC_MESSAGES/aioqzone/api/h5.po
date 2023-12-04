@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-04 21:13+0800\n"
+"POT-Creation-Date: 2023-12-04 16:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -50,7 +50,7 @@ msgid "返回类型"
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:7 of
-msgid ":py:class:`~aioqzone.model.api.response.FeedPageResp`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.FeedPageResp\\``"
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds of
@@ -74,7 +74,7 @@ msgid "if any failure occurs in data parsing."
 msgstr "若数据解析中出现任何错误"
 
 #: aioqzone.api.h5.model.QzoneH5API.index:6 of
-msgid ":py:class:`~aioqzone.model.api.response.IndexPageResp`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.IndexPageResp\\``"
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.internal_dolike_app:1 of
@@ -82,7 +82,7 @@ msgid "Like or unlike."
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.internal_dolike_app:4 of
-msgid ":py:class:`~aioqzone.model.api.response.SingleReturnResp`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.SingleReturnResp\\``"
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.mfeeds_get_count:1 of
@@ -90,7 +90,7 @@ msgid "Get new feeds count. This is also the \"keep-alive\" signal of the cookie
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.mfeeds_get_count:4 of
-msgid ":py:class:`~aioqzone.model.api.response.FeedCount`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.FeedCount\\``"
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:1 of
@@ -114,7 +114,7 @@ msgid "optional encoded params"
 msgstr "可选的编码后的参数"
 
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:12 of
-msgid ":py:class:`~aioqzone.model.api.response.DetailResp`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.DetailResp\\``"
 msgstr ""
 
 #~ msgid "Get next page."
@@ -151,4 +151,19 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ":py:class:`~aioqzone.model.response.h5.GetMoreResp`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.model.api.response.FeedPageResp`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.model.api.response.IndexPageResp`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.model.api.response.SingleReturnResp`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.model.api.response.FeedCount`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~aioqzone.model.api.response.DetailResp`"
 #~ msgstr ""

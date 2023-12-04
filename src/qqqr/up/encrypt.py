@@ -35,6 +35,10 @@ class TeaEncoder(PasswdEncoder):
 
         Original code is from `@hoxide <https://github.com/LeoHuang2015/qqloginjs/blob/7d82f2f7d7363547763c40ce5d258d18989b9732/tea.py>`_,
         seems it has MIT license. Our code is under AGPL-3.0.
+
+    .. hint::
+
+        For javascript cases, we provide a `TypeScript version <_static/teaencoder.ts>` (testing).
     """
 
     delta = 0x9E3779B9

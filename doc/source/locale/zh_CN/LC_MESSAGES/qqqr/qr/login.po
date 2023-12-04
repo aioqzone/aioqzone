@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-25 12:57+0800\n"
+"POT-Creation-Date: 2023-12-04 16:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.13.1\n"
 
 #: ../../source/qqqr/qr/login.rst:2
 msgid "QrLogin and QrSession"
@@ -63,7 +63,7 @@ msgid "返回类型"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.new:4
-msgid ":py:class:`~qqqr.qr.QrSession`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~qqqr.qr.QrSession\\``"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.poll:1
@@ -75,7 +75,7 @@ msgid "if response status code != 200"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.poll:5
-msgid ":py:class:`~qqqr.qr.type.PollResp`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~qqqr.qr.type.PollResp\\``"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.poll
@@ -84,6 +84,10 @@ msgstr ""
 
 #: of qqqr.qr.QrLogin.poll:6
 msgid "a poll response object"
+msgstr ""
+
+#: ../../../docstring of qqqr.qr.QR.png:1
+msgid "If None, the QR is pushed to user's client."
 msgstr ""
 
 #~ msgid "Return type"
@@ -99,4 +103,10 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ":meth:`._loop`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~qqqr.qr.QrSession`"
+#~ msgstr ""
+
+#~ msgid ":py:class:`~qqqr.qr.type.PollResp`"
 #~ msgstr ""

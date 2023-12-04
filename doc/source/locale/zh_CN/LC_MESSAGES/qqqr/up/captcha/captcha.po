@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-30 19:21+0800\n"
+"POT-Creation-Date: 2023-12-04 16:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,28 +37,32 @@ msgstr ""
 msgid "``prehandle``. Call this method to generate a new verify session."
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.new qqqr.up.captcha.Captcha.verify
-msgid "抛出"
+#: of qqqr.up.captcha.Captcha.new
+msgid "参数"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.new:3
-msgid "if not a slide captcha."
+#: of qqqr.up.captcha.Captcha.new:4
+msgid "login session id, got from :meth:`UpWebLogin.new`"
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.new
 msgid "返回类型"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.new:4
-msgid ":py:class:`~qqqr.up.captcha.capsess.BaseTcaptchaSession`"
+#: of qqqr.up.captcha.Captcha.new:4 qqqr.up.captcha.Captcha.new:5
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~qqqr.up.captcha.capsess.BaseTcaptchaSession\\``"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.new:5
+#: of qqqr.up.captcha.Captcha.new:6
 msgid "a tcaptcha session"
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.new:1
 msgid "alias of :meth:`.new`"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.verify
+msgid "抛出"
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.verify:1
@@ -153,4 +157,10 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Calculating timeout, default as 30 seconds."
+#~ msgstr ""
+
+#~ msgid "if not a slide captcha."
+#~ msgstr ""
+
+#~ msgid ":py:class:`~qqqr.up.captcha.capsess.BaseTcaptchaSession`"
 #~ msgstr ""

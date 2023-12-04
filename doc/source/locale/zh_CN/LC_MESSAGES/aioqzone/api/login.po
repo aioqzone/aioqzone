@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-07 14:38+0800\n"
+"POT-Creation-Date: 2023-12-04 16:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -42,7 +42,9 @@ msgid "返回类型"
 msgstr ""
 
 #: aioqzone.api.login.ConstLoginMan._new_cookie:4 aioqzone.api.login._base.Loginable._new_cookie:4 of
-msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
+msgid ""
+":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Dict\\`\\\\ "
+"\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:class\\:\\`str\\`\\]`"
 msgstr ""
 
 #: aioqzone.api.login.ConstLoginMan._new_cookie aioqzone.api.login._base.Loginable._new_cookie
@@ -62,11 +64,11 @@ msgstr "缓存的 cookie"
 
 #: aioqzone.api.login._base.Loginable.gtk:1 of
 #, fuzzy
-msgid "Calculate ``gtk`` using ``pskey`` field in the cookie."
+msgid "Calculate g_token(gtk) using ``p_skey`` or ``skey`` field in the cookie."
 msgstr "使用 cookie 中的 ``pskey`` 字段计算 gtk。"
 
 #: aioqzone.api.login._base.Loginable.gtk:3 of
-msgid "gtk"
+msgid "g_token"
 msgstr ""
 
 #: aioqzone.api.login._base.Loginable.gtk:5 of
@@ -95,7 +97,7 @@ msgid ""
 msgstr "此方法使用 :class:`asyncio.Lock` 确保只有一个请求会真正地出发登录，期间的其余请求会被阻塞，在登录结束后复用其返回值。"
 
 #: aioqzone.api.login._base.Loginable.new_cookie:8 of
-msgid ":py:class:`bool`"
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`bool\\``"
 msgstr ""
 
 #: aioqzone.api.login._base.Loginable.new_cookie:9 of
@@ -220,4 +222,13 @@ msgstr "将 :obj:`.qrlogin` 和 :obj:`.uplogin` 切换到H5登录。"
 #~ msgstr "返回 :obj:`LoginMethod` 的顺序。也可以赋值一个 :obj:`LoginMethod` 的 :obj:`Sequence` 来改变此顺序。"
 
 #~ msgid "Get the end of suppress duration."
+#~ msgstr ""
+
+#~ msgid ":py:class:`~typing.Dict`\\[:py:class:`str`, :py:class:`str`]"
+#~ msgstr ""
+
+#~ msgid "gtk"
+#~ msgstr ""
+
+#~ msgid ":py:class:`bool`"
 #~ msgstr ""

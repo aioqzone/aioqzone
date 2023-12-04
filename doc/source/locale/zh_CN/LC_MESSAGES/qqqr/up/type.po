@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:46+0800\n"
+"POT-Creation-Date: 2023-12-04 16:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.13.1\n"
 
 #: ../../source/qqqr/up/type.rst:2
 msgid "UpLogin Types"
@@ -66,11 +66,19 @@ msgid ":py:obj:`code (int) <qqqr.up._model.LoginResp.code>`"
 msgstr ""
 
 #: of qqqr.up._model.LoginResp:1
+msgid ":py:obj:`cookies (qqqr.type.RedirectCookies | None) <qqqr.up._model.LoginResp.cookies>`"
+msgstr ""
+
+#: of qqqr.up._model.LoginResp:1
 msgid ":py:obj:`msg (str) <qqqr.up._model.LoginResp.msg>`"
 msgstr ""
 
 #: of qqqr.up._model.LoginResp:1
 msgid ":py:obj:`nickname (str) <qqqr.up._model.LoginResp.nickname>`"
+msgstr ""
+
+#: of qqqr.up._model.LoginResp:1
+msgid ":py:obj:`pt_ev_token (str) <qqqr.up._model.LoginResp.pt_ev_token>`"
 msgstr ""
 
 #: of qqqr.up._model.LoginResp:1

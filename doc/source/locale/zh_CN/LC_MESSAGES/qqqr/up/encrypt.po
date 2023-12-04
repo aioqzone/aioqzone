@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2023, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-04 16:42+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.1\n"
+
+#: ../../source/qqqr/up/encrypt.rst:2
+msgid "Password Encoder"
+msgstr ""
+
+#: of qqqr.up.encrypt:1
+msgid "This module implements (or calls) qzone password encrypt algorithm."
+msgstr ""
+
+#: of qqqr.up.encrypt.TeaEncoder:1
+msgid "Pure python password encoder implementation using tea and rsa."
+msgstr ""
+
+#: of qqqr.up.encrypt.TeaEncoder:5
+msgid ""
+"Original code is from `@hoxide "
+"<https://github.com/LeoHuang2015/qqloginjs/blob/7d82f2f7d7363547763c40ce5d258d18989b9732/tea.py>`_,"
+" seems it has MIT license. Our code is under AGPL-3.0."
+msgstr ""
+
+#: of qqqr.up.encrypt.TeaEncoder:10
+msgid "For javascript cases, we provide a `TypeScript version <_static/teaencoder.ts>` (testing)."
+msgstr ""
+
+#~ msgid "For javascript cases, we have a TypeScript version at `_static/teaencoder.ts`_ ."
+#~ msgstr ""
+
+#~ msgid "For javascript cases, we have a `TypeScript version <_static/teaencoder.ts>`"
+#~ msgstr ""
