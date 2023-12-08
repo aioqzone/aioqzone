@@ -68,13 +68,15 @@ def approx_ts(timedesc: str) -> int:
     return int(time.mktime(dt))
 
 
-def sementic_time(timestamp: Union[float, int]) -> str:
+def sementic_time(timestamp: float, cur_ts: Optional[float] = None) -> str:
     """reverse of :meth:`.approx_ts`
 
     :param timestamp: timestamp in second
-    :return: a sementic time description in Chinese
+    :param cur_timestamp: current timestamp
+    :return: a relative sementic time description in Chinese
     """
-    today = datetime.now(TIME_ZONE).replace(hour=0, second=0, microsecond=0)
+    now = datetime.fromtimestamp(cur_ts, TIME_ZONE) if cur_ts else datetime.now(TIME_ZONE)
+    today = now.replace(hour=0, minute=0, second=0, microsecond=0)
     ytday = today - timedelta(days=1)
     byday = ytday - timedelta(days=1)
 
@@ -82,9 +84,9 @@ def sementic_time(timestamp: Union[float, int]) -> str:
     s = ""
     if today <= feedtime:
         pass
-    elif ytday <= feedtime < today:
+    elif ytday <= feedtime:
         s += "昨天"
-    elif byday <= feedtime < ytday:
+    elif byday <= feedtime:
         s += "前天"
     else:
         s += feedtime.strftime("%m月%d日 ")
