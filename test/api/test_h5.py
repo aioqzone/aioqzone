@@ -5,6 +5,7 @@ from typing import Tuple
 
 import pytest
 import pytest_asyncio
+from aiohttp import ClientResponseError
 from tenacity import RetryError
 
 from aioqzone.api import Loginable, UpLoginManager
@@ -85,3 +86,7 @@ async def test_workflow(api: QzoneH5API):
         assert e.last_attempt.failed
         e = e.last_attempt.exception()
         pytest.skip(f"login failed: {e}")
+    except ClientResponseError as e:
+        if e.code == 500:
+            pytest.skip("qzone api buzy")
+        raise
