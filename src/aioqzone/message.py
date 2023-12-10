@@ -16,7 +16,7 @@ __all__ = [
 
 
 @hookdef
-def login_success(uin: int):
+def login_success(uin: int) -> t.Any:
     """Login success.
 
     :param uin: login uin
@@ -25,7 +25,7 @@ def login_success(uin: int):
 
 
 @hookdef
-def login_failed(uin: int, exc: t.Union[BaseException, str]):
+def login_failed(uin: int, exc: t.Union[BaseException, str]) -> t.Any:
     """Login failed.
 
     :param uin: login uin

@@ -12,7 +12,7 @@ __all__ = [
 
 
 @hookdef
-def qr_fetched(png: t.Optional[bytes], times: int, qr_renew=False):
+def qr_fetched(png: t.Optional[bytes], times: int, qr_renew=False) -> t.Any:
     """
     :param png: Optional QR bytes (png format). If None, the QR is pushed to user's mobile and there is no need to scan.
     :param times: QR **expire** times in this session
@@ -21,7 +21,7 @@ def qr_fetched(png: t.Optional[bytes], times: int, qr_renew=False):
 
 
 @hookdef
-def qr_cancelled():
+def qr_cancelled() -> t.Any:
     """qr cancelled"""
 
 
