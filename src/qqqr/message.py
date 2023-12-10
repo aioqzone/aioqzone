@@ -2,7 +2,13 @@ import typing as t
 
 from tylisten import hookdef
 
-__all__ = ["qr_cancelled", "qr_fetched", "sms_code_input"]
+__all__ = [
+    "qr_cancelled",
+    "qr_fetched",
+    "sms_code_input",
+    "solve_select_captcha",
+    "solve_slide_captcha",
+]
 
 
 @hookdef
