@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-01 15:48+0800\n"
+"POT-Creation-Date: 2023-12-10 10:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -17,11 +17,120 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.13.1\n"
 
 #: ../../source/aioqzone/messages.rst:2
 msgid "Messages"
 msgstr "消息"
+
+#: ../../source/aioqzone/messages.rst:7
+#, fuzzy
+msgid "QR Login Messages"
+msgstr "消息"
+
+#: aioqzone.message.login_failed aioqzone.message.login_success of qqqr.message.qr_fetched
+#: qqqr.message.sms_code_input qqqr.message.solve_select_captcha qqqr.message.solve_slide_captcha
+msgid "参数"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.qr_fetched:1
+msgid ""
+"Optional QR bytes (png format). If None, the QR is pushed to user's mobile and there is no need "
+"to scan."
+msgstr ""
+
+#: ../../../docstring of qqqr.message.qr_fetched:2
+msgid "QR **expire** times in this session"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.qr_fetched:3
+msgid "this refresh is requested by user"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.qr_cancelled:1
+msgid "qr cancelled"
+msgstr ""
+
+#: ../../source/aioqzone/messages.rst:14
+#, fuzzy
+msgid "UP Login Messages"
+msgstr "消息"
+
+#: ../../../docstring of qqqr.message.sms_code_input:1
+msgid "uin"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.sms_code_input:2
+msgid "User's binded phone number."
+msgstr ""
+
+#: ../../../docstring of qqqr.message.sms_code_input:3
+msgid "Nickname of current login user."
+msgstr ""
+
+#: of qqqr.message.sms_code_input qqqr.message.solve_select_captcha qqqr.message.solve_slide_captcha
+msgid "返回"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.sms_code_input:4
+msgid "User received SMS verify code."
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_select_captcha:1
+msgid "This hook asks answers for a select captcha."
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_select_captcha:3
+msgid "the question of the select captcha"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_select_captcha:4
+msgid "the choice images of the select captcha"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_select_captcha:6
+msgid "the image indexes which satisfy the question. Empty list will be treated as no answer."
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_slide_captcha:1
+msgid "This hook asks answers for a slide captcha."
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_slide_captcha:3
+msgid "the slide captcha background (with a dimmed target area)"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_slide_captcha:4
+msgid "the slide piece (corresponding to the target area)"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_slide_captcha:5
+msgid "the (x, y) position of the initial piece."
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_slide_captcha:7
+msgid "the left position of the target area."
+msgstr ""
+
+#: ../../source/aioqzone/messages.rst:23
+msgid "Unified Login Messages"
+msgstr ""
+
+#: ../../../docstring aioqzone.message.login_success:1 of
+msgid "Login success."
+msgstr ""
+
+#: ../../../docstring aioqzone.message.login_failed:3 aioqzone.message.login_success:3 of
+msgid "login uin"
+msgstr ""
+
+#: ../../../docstring aioqzone.message.login_failed:1 of
+msgid "Login failed."
+msgstr ""
+
+#: ../../../docstring aioqzone.message.login_failed:4 of
+msgid "exception or error message"
+msgstr ""
 
 #~ msgid "Fields"
 #~ msgstr ""
@@ -78,4 +187,13 @@ msgstr "消息"
 #~ msgstr ""
 
 #~ msgid "User's binded phone number."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Optional QR bytes (png format). If None, the "
+#~ "QR is pushed to user's mobile and there is"
+#~ " no need to scan."
+#~ msgstr ""
+
+#~ msgid "this refresh is requested by user"
 #~ msgstr ""

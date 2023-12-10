@@ -2,7 +2,13 @@ import typing as t
 
 from tylisten import hookdef
 
-__all__ = ["qr_cancelled", "qr_fetched", "qr_refresh", "sms_code_input"]
+__all__ = [
+    "qr_cancelled",
+    "qr_fetched",
+    "sms_code_input",
+    "solve_select_captcha",
+    "solve_slide_captcha",
+]
 
 
 @hookdef
@@ -17,11 +23,6 @@ def qr_fetched(png: t.Optional[bytes], times: int, qr_renew=False):
 @hookdef
 def qr_cancelled():
     """qr cancelled"""
-
-
-@hookdef
-def qr_refresh():
-    """qr refreshed"""
 
 
 @hookdef

@@ -60,7 +60,7 @@ class QrSession(LoginSession):
 class _QrHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
-        self.qr_fetched = MT.qr_fetched()
+        self.qr_fetched = MT.qr_fetched.with_timeout(60)
         self.qr_cancelled = MT.qr_cancelled()
         self.cancel = asyncio.Event()
         self.refresh = asyncio.Event()
@@ -189,7 +189,9 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
 
         while cnt_expire < refresh_times:
             # BUG: should we wrap hook errors here?
-            await self.qr_fetched.emit(png=sess.current_qr.png, times=cnt_expire, qr_renew=renew)
+            await self.qr_fetched.emit_suppress_timeout(
+                png=sess.current_qr.png, times=cnt_expire, qr_renew=renew
+            )
             renew = False
 
             while not self.refresh.is_set():

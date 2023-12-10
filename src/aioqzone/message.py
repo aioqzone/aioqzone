@@ -7,8 +7,9 @@ from qqqr.message import *
 __all__ = [
     "qr_cancelled",
     "qr_fetched",
-    "qr_refresh",
     "sms_code_input",
+    "solve_select_captcha",
+    "solve_slide_captcha",
     "login_success",
     "login_failed",
 ]
@@ -16,9 +17,18 @@ __all__ = [
 
 @hookdef
 def login_success(uin: int):
+    """Login success.
+
+    :param uin: login uin
+    """
     ...
 
 
 @hookdef
 def login_failed(uin: int, exc: t.Union[BaseException, str]):
+    """Login failed.
+
+    :param uin: login uin
+    :param exc: exception or error message
+    """
     ...

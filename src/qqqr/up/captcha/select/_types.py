@@ -1,5 +1,7 @@
+import asyncio
 import logging
 import typing as t
+from contextlib import suppress
 
 from pydantic import AliasPath, BaseModel, Field, model_validator
 
@@ -78,8 +80,10 @@ class SelectCaptchaSession(BaseTcaptchaSession):
             log.warning("solve_captcha_hook has no impls.")
             return ""
 
-        hook_results = await self.solve_captcha_hook.results(
-            self.render.instruction, tuple(self.cdn_imgs)
-        )
-        ans = first(hook_results, lambda i: bool(i), default=())
+        ans = ()
+        with suppress(asyncio.TimeoutError):
+            hook_results = await self.solve_captcha_hook.results(
+                self.render.instruction, tuple(self.cdn_imgs)
+            )
+            ans = first(hook_results, lambda i: bool(i), default=())
         return ",".join(str(self.render.json_payload.picture_ids[i - 1]) for i in ans)

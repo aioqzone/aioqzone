@@ -68,6 +68,7 @@ html_static_path = ["_static"]
 # autodoc_pydantic settings
 autodoc_pydantic_model_show_json = False
 autodoc_pydantic_model_undoc_members = False
+autodoc_member_order = "bysource"
 
 # external inventory
 intersphinx_mapping = {

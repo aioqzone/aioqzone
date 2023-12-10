@@ -41,8 +41,8 @@ def hex_add(h: str, o: int):
 class _CaptchaHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
-        self.solve_select_captcha = MT.solve_select_captcha()
-        self.solve_slide_captcha = MT.solve_slide_captcha()
+        self.solve_select_captcha = MT.solve_select_captcha.with_timeout(60)
+        self.solve_slide_captcha = MT.solve_slide_captcha.with_timeout(60)
 
 
 class Captcha(_CaptchaHookMixin):

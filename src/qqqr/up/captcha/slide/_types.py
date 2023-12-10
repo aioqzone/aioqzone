@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import typing as t
+from contextlib import suppress
 from random import choices, randint
 
 from pydantic import BaseModel, Field
@@ -131,10 +132,14 @@ class SlideCaptchaSession(BaseTcaptchaSession):
         piece = tobytes(piece_img)
 
         left, top = self.piece_sprite.init_pos
-        hook_results = await self.solve_captcha_hook.results(background, piece, (left, top))
-        # BUG: +1 to ensure left > init_pos[0], otherwise it's >=.
-        # However if left == init_pos[0] + 1, it is certainly a wrong result.
-        ans = firstn(hook_results, lambda i: i > left)
+
+        ans = None
+        with suppress(asyncio.TimeoutError):
+            hook_results = await self.solve_captcha_hook.results(background, piece, (left, top))
+            # BUG: +1 to ensure left > init_pos[0], otherwise it's >=.
+            # However if left == init_pos[0] + 1, it is certainly a wrong result.
+            ans = firstn(hook_results, lambda i: i > left)
+
         if ans is None:
             return ""
 
