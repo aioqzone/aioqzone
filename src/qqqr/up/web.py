@@ -98,7 +98,7 @@ class UpWebSession(LoginSession):
 class _UpHookMixin:
     def __init__(self, *args, **kwds) -> None:
         super().__init__(*args, **kwds)
-        self.sms_code_input = MT.sms_code_input()
+        self.sms_code_input = MT.sms_code_input.with_timeout(60)
 
 
 class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
@@ -278,11 +278,8 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
                     raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 await self.send_sms_code(sess)
                 with suppress(BaseException):
-                    hook_results = await asyncio.wait_for(
-                        self.sms_code_input.results(
-                            uin=self.uin, phone=resp.msg, nickname=resp.nickname
-                        ),
-                        timeout=60,
+                    hook_results = await self.sms_code_input.results(
+                        uin=self.uin, phone=resp.msg, nickname=resp.nickname
                     )
                     sess.sms_code = firstn(hook_results, lambda c: c and len(c.strip()) >= 4)
                 if sess.sms_code is None:

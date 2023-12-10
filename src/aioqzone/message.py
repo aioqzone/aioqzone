@@ -7,7 +7,6 @@ from qqqr.message import *
 __all__ = [
     "qr_cancelled",
     "qr_fetched",
-    "qr_refresh",
     "sms_code_input",
     "login_success",
     "login_failed",
