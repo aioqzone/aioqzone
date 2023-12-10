@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-10 10:08+0800\n"
+"POT-Creation-Date: 2023-12-10 10:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Messages"
 msgstr "消息"
 
-#: ../../source/aioqzone/messages.rst:7
+#: ../../source/aioqzone/messages.rst:5
 #, fuzzy
 msgid "QR Login Messages"
 msgstr "消息"
@@ -47,6 +47,17 @@ msgstr ""
 msgid "this refresh is requested by user"
 msgstr ""
 
+#: aioqzone.message.login_failed aioqzone.message.login_success of qqqr.message.qr_cancelled
+#: qqqr.message.qr_fetched qqqr.message.sms_code_input qqqr.message.solve_select_captcha
+#: qqqr.message.solve_slide_captcha
+msgid "返回类型"
+msgstr ""
+
+#: ../../../docstring aioqzone.message.login_failed:6 aioqzone.message.login_success:5 of
+#: qqqr.message.qr_cancelled:4 qqqr.message.qr_fetched:5
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:data\\:\\`\\~typing.Any\\``"
+msgstr ""
+
 #: ../../../docstring of qqqr.message.qr_cancelled:1
 msgid "qr cancelled"
 msgstr ""
@@ -68,11 +79,17 @@ msgstr ""
 msgid "Nickname of current login user."
 msgstr ""
 
+#: ../../../docstring of qqqr.message.sms_code_input:4
+msgid ""
+":sphinx_autodoc_typehints_type:`\\:py\\:data\\:\\`\\~typing.Optional\\`\\\\ "
+"\\\\\\[\\:py\\:class\\:\\`str\\`\\]`"
+msgstr ""
+
 #: of qqqr.message.sms_code_input qqqr.message.solve_select_captcha qqqr.message.solve_slide_captcha
 msgid "返回"
 msgstr ""
 
-#: ../../../docstring of qqqr.message.sms_code_input:4
+#: ../../../docstring of qqqr.message.sms_code_input:5
 msgid "User received SMS verify code."
 msgstr ""
 
@@ -89,6 +106,12 @@ msgid "the choice images of the select captcha"
 msgstr ""
 
 #: ../../../docstring of qqqr.message.solve_select_captcha:6
+msgid ""
+":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Sequence\\`\\\\ "
+"\\\\\\[\\:py\\:class\\:\\`int\\`\\]`"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_select_captcha:7
 msgid "the image indexes which satisfy the question. Empty list will be treated as no answer."
 msgstr ""
 
@@ -109,10 +132,14 @@ msgid "the (x, y) position of the initial piece."
 msgstr ""
 
 #: ../../../docstring of qqqr.message.solve_slide_captcha:7
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`int\\``"
+msgstr ""
+
+#: ../../../docstring of qqqr.message.solve_slide_captcha:8
 msgid "the left position of the target area."
 msgstr ""
 
-#: ../../source/aioqzone/messages.rst:23
+#: ../../source/aioqzone/messages.rst:25
 msgid "Unified Login Messages"
 msgstr ""
 
