@@ -1,9 +1,9 @@
 import re
-from typing import TYPE_CHECKING, ClassVar, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, ClassVar, Dict, List, Union
 
 from aiohttp import ClientResponse
 from lxml.html import HtmlElement, document_fromstring
-from pydantic import AliasChoices, BaseModel, Field, HttpUrl, model_validator
+from pydantic import AliasChoices, AliasPath, BaseModel, Field, HttpUrl, model_validator
 from tenacity import TryAgain
 from typing_extensions import Self
 
@@ -18,6 +18,7 @@ __all__ = [
     "QzoneResponse",
     "FeedPageResp",
     "IndexPageResp",
+    "ProfilePagePesp",
     "DetailResp",
     "FeedCount",
     "SingleReturnResp",
@@ -35,20 +36,12 @@ if TYPE_CHECKING:
     StrDict = Dict[str, JsonValue]
 
 
-class _ResponseParseConfig(BaseModel):
-    errno_key: Tuple[str, ...] = "code", "ret", "err"
-    msg_key: Tuple[str, ...] = "message", "msg"
-    data_key: Optional[str] = "data"
-
-
 class QzoneResponse(BaseModel):
-    _parse_conf: ClassVar[_ResponseParseConfig]
-
-    def __init_subclass__(cls, **kwargs):
-        cls._parse_conf = _ResponseParseConfig.model_validate(kwargs)
-        for k in cls._parse_conf.model_fields_set:
-            kwargs.pop(k)  # type: ignore
-        return super().__init_subclass__(**kwargs)
+    _errno_key: ClassVar[Union[str, AliasPath, AliasChoices, None]] = AliasChoices(
+        "code", "ret", "err"
+    )
+    _msg_key: ClassVar[Union[str, AliasPath, AliasChoices, None]] = AliasChoices("message", "msg")
+    _data_key: ClassVar[Union[str, AliasPath, AliasChoices, None]] = AliasPath("data")
 
     @classmethod
     def from_response_object(cls, obj: "StrDict") -> Self:
@@ -59,13 +52,11 @@ class QzoneResponse(BaseModel):
 
         :return: Self
         """
-        pc = cls._parse_conf
-
-        if pc.errno_key and pc.msg_key:
+        if cls._errno_key and cls._msg_key:
 
             class response_header(BaseModel):
-                status: int = Field(validation_alias=AliasChoices(*pc.errno_key))
-                message: str = Field(default="", validation_alias=AliasChoices(*pc.msg_key))
+                status: int = Field(validation_alias=cls._errno_key)
+                message: str = Field(default="", validation_alias=cls._msg_key)
 
             header = response_header.model_validate(obj)
             if header.status != 0:
@@ -74,9 +65,13 @@ class QzoneResponse(BaseModel):
                 else:
                     raise QzoneError(header.status, robj=header)
 
-        if pc.data_key is None:
+        if cls._data_key is None:
             return cls.model_validate(obj)
-        return cls.model_validate(obj[pc.data_key])
+
+        class data_wrapper(BaseModel):
+            data: cls = Field(validation_alias=cls._data_key)
+
+        return data_wrapper.model_validate(obj).data
 
     @classmethod
     async def response_to_object(cls, response: ClientResponse) -> "StrDict":
@@ -141,20 +136,76 @@ class IndexPageResp(FeedPageResp):
             raise RuntimeError("page data not found")
         data = script[m.end() - 1 : m.end() + entire_closing(script[m.end() - 1 :])]
         data = json_loads(data)
-        assert isinstance(data, dict)
+        data["data"]["qzonetoken"] = qzonetoken  # type: ignore
 
-        if cls._parse_conf.data_key:
-            if d := data[cls._parse_conf.data_key]:
-                assert isinstance(d, dict)
-                d["qzonetoken"] = qzonetoken
-            else:
-                data[cls._parse_conf.data_key] = dict(qzonetoken=qzonetoken)
-        else:
-            data["qzonetoken"] = qzonetoken
         return data
 
 
-class SingleReturnResp(QzoneResponse, data_key=None):  # type: ignore
+class QzoneStatistic(BaseModel):
+    blog: int = 0
+    message: int = 0
+    pic: int = 0
+    shuoshuo: int = 0
+
+
+class QzoneProfile(BaseModel):
+    nickname: str
+    age: int
+    gender: int
+    face: HttpUrl
+
+    city: str = ""
+    country: str = ""
+    province: str = ""
+
+    isFamousQzone: bool = False
+    is_concerned: bool = False
+    is_special: int
+
+
+class QzoneInfo(QzoneResponse):
+    count: QzoneStatistic
+    cover: HttpUrl = Field(validation_alias=AliasPath("coverinfo", 0, "cover"))
+    is_friend: bool
+    is_hide: int
+    limit: int
+    profile: QzoneProfile
+
+
+class ProfilePagePesp(QzoneResponse):
+    info: QzoneInfo
+    feedpage: FeedPageResp
+
+    @classmethod
+    async def response_to_object(cls, response: ClientResponse):
+        html = await response.text()
+        scripts: List[HtmlElement] = document_fromstring(html).xpath(
+            'body/script[@type="application/javascript"]'
+        )
+        if not scripts:
+            raise TryAgain("script tag not found")
+
+        texts: List[str] = [s.text for s in scripts]
+        script = firstn(texts, lambda s: "shine0callback" in s)
+        if not script:
+            raise TryAgain("data script not found")
+
+        m = re.search(r"var FrontPage =.*?data\s*:\s*\[", script)
+        if m is None:
+            raise RuntimeError("page data not found")
+        data = script[m.end() - 1 : m.end() + entire_closing(script[m.end() - 1 :], "[")]
+        data = re.sub(r",,\]$", "]", data)
+        data = json_loads(data)
+        assert isinstance(data, list)
+
+        return cls(
+            info=QzoneInfo.from_response_object(data[0]),
+            feedpage=FeedPageResp.from_response_object(data[1]),
+        )
+
+
+class SingleReturnResp(QzoneResponse):
+    _data_key = None
     pass
 
 
@@ -179,7 +230,8 @@ class DeleteUgcResp(QzoneResponse):
     undeal_info: FeedCount = Field(default_factory=FeedCount)
 
 
-class UploadPicResponse(QzoneResponse, errno_key=()):  # type: ignore
+class UploadPicResponse(QzoneResponse):
+    _errno_key = None
     filelen: int
     filemd5: str
 
@@ -200,7 +252,8 @@ class PicInfo(BaseModel):
     albumid: str
 
 
-class PhotosPreuploadResponse(QzoneResponse, errno_key=()):  # type: ignore
+class PhotosPreuploadResponse(QzoneResponse):
+    _errno_key = None
     photos: List[PicInfo] = Field(default_factory=list)
 
     @classmethod

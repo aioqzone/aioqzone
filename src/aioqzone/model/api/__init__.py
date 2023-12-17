@@ -36,7 +36,7 @@ class IndexPageApi(QzoneApi[QzoneRequestParams, IndexPageResp]):
     attach_token: bool = False
 
 
-class UserProfileApi(QzoneApi[ProfileParams, IndexPageResp]):
+class UserProfileApi(QzoneApi[ProfileParams, ProfilePagePesp]):
     http_method: t.ClassVar[TyHttpMethod] = "GET"
     path: t.ClassVar[str] = "/mqzone/profile"
     keep_alive: bool = False

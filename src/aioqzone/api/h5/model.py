@@ -96,7 +96,7 @@ class QzoneH5API:
         log.debug(f"got qzonetoken = {self.qzonetoken}")
         return r
 
-    async def profile(self, hostuin: int, start_time: float = 0) -> FeedPageResp:
+    async def profile(self, hostuin: int, start_time: float = 0) -> ProfilePagePesp:
         """Get profile page of a user.
 
         :param hostuin: uin of the user
@@ -105,7 +105,7 @@ class QzoneH5API:
         return await self.call(
             UserProfileApi(
                 params=ProfileParams(hostuin=hostuin, starttime=int(1e3 * start_time)),
-                response=IndexPageResp,
+                response=ProfilePagePesp,
             )
         )
 
