@@ -1,5 +1,5 @@
 import re
-from typing import TYPE_CHECKING, Any, ClassVar, Coroutine, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, ClassVar, Dict, List, Optional, Tuple
 
 from aiohttp import ClientResponse
 from lxml.html import HtmlElement, document_fromstring

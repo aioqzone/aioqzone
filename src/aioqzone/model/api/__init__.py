@@ -33,6 +33,14 @@ class IndexPageApi(QzoneApi[QzoneRequestParams, IndexPageResp]):
     http_method: t.ClassVar[TyHttpMethod] = "GET"
     path: t.ClassVar[str] = "/mqzone/index"
     keep_alive: bool = False
+    attach_token: bool = False
+
+
+class UserProfileApi(QzoneApi[ProfileParams, IndexPageResp]):
+    http_method: t.ClassVar[TyHttpMethod] = "GET"
+    path: t.ClassVar[str] = "/mqzone/profile"
+    keep_alive: bool = False
+    attach_token: bool = False
 
 
 class FeedPageApi(QzoneApi[ActiveFeedsParams, FeedPageResp]):
