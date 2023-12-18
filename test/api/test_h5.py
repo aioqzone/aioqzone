@@ -38,6 +38,7 @@ async def api(client: ClientAdapter, man: Loginable, CI: bool):
 async def qzone_workflow(api: QzoneH5API):
     feed_flow = await api.index()
     assert api.qzonetoken
+    profile_flow = await api.profile(feed_flow.vFeeds[0].userinfo.uin)
 
     feed = await api.publish_mood(MOOD_TEXT, sync_weibo=False, ugc_right=UgcRight.self)
     ownuin, appid = api.login.uin, 311
@@ -87,6 +88,6 @@ async def test_workflow(api: QzoneH5API):
         e = e.last_attempt.exception()
         pytest.skip(f"login failed: {e}")
     except ClientResponseError as e:
-        if e.code == 500:
+        if e.status == 500:
             pytest.skip("qzone api buzy")
         raise

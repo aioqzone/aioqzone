@@ -14,6 +14,7 @@ from .response import PicInfo, UploadPicResponse
 __all__ = [
     "QzoneRequestParams",
     "ActiveFeedsParams",
+    "ProfileParams",
     "ShuoshuoParams",
     "GetCountParams",
     "DolikeParam",
@@ -42,6 +43,12 @@ class QzoneRequestParams(BaseModel):
 
 class ActiveFeedsParams(QzoneRequestParams):
     attach_info: str
+
+
+class ProfileParams(QzoneRequestParams):
+    hostuin: int
+    starttime: int = 0
+    ts_fields = ("starttime",)
 
 
 class ShuoshuoParams(QzoneRequestParams):

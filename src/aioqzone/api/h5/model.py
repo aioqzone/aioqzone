@@ -96,6 +96,19 @@ class QzoneH5API:
         log.debug(f"got qzonetoken = {self.qzonetoken}")
         return r
 
+    async def profile(self, hostuin: int, start_time: float = 0) -> ProfilePagePesp:
+        """Get profile page of a user.
+
+        :param hostuin: uin of the user
+        :param start_time: timestamp in seconds, default as current time.
+        """
+        return await self.call(
+            UserProfileApi(
+                params=ProfileParams(hostuin=hostuin, starttime=int(1e3 * start_time)),
+                response=ProfilePagePesp,
+            )
+        )
+
     async def get_active_feeds(self, attach_info: t.Optional[str] = None) -> FeedPageResp:
         """Get next page. If :obj:`.qzonetoken` is not parsed or :obj:`attach_info` is empty,
         it will call :meth:`.index` and return its response.
@@ -156,7 +169,9 @@ class QzoneH5API:
             )
         )
 
-    async def add_comment(self, owner_uin: int, fid: str, appid: int, content: str, private=False):
+    async def add_comment(
+        self, owner_uin: int, fid: str, appid: int, content: str, private=False
+    ) -> AddCommentResp:
         """Comment a feed."""
         return await self.call(
             AddCommentApi(
@@ -177,7 +192,7 @@ class QzoneH5API:
         photos: t.Optional[t.List[PhotoData]] = None,
         sync_weibo=False,
         ugc_right: UgcRight = UgcRight.all,
-    ):
+    ) -> PublishMoodResp:
         return await self.call(
             PublishMoodApi(
                 params=PublishMoodParams(
@@ -190,7 +205,9 @@ class QzoneH5API:
             )
         )
 
-    async def upload_pic(self, picture: bytes, width: int, height: int, quality: int):
+    async def upload_pic(
+        self, picture: bytes, width: int, height: int, quality: int
+    ) -> UploadPicResponse:
         return await self.call(
             UploadPicApi(
                 params=UploadPicParams(
@@ -203,7 +220,9 @@ class QzoneH5API:
             )
         )
 
-    async def preupload_photos(self, photos: t.List[UploadPicResponse], cur_num=0, hd=False):
+    async def preupload_photos(
+        self, photos: t.List[UploadPicResponse], cur_num=0, hd=False
+    ) -> PhotosPreuploadResponse:
         assert photos
         return await self.call(
             PhotosPreuploadApi(
