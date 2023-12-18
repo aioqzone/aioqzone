@@ -1,5 +1,6 @@
 import re
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, List, Union
+import typing as t
+from contextlib import suppress
 
 from aiohttp import ClientResponse
 from lxml.html import HtmlElement, document_fromstring
@@ -13,6 +14,7 @@ from qqqr.utils.iter import firstn
 from qqqr.utils.jsjson import json_loads
 
 from .feed import FeedData
+from .profile import ProfileFeedData
 
 __all__ = [
     "QzoneResponse",
@@ -30,18 +32,20 @@ __all__ = [
     "FeedData",
 ]
 
-if TYPE_CHECKING:
+if t.TYPE_CHECKING:
     from qqqr.utils.jsjson import JsonValue
 
-    StrDict = Dict[str, JsonValue]
+    StrDict = t.Dict[str, JsonValue]
 
 
 class QzoneResponse(BaseModel):
-    _errno_key: ClassVar[Union[str, AliasPath, AliasChoices, None]] = AliasChoices(
+    _errno_key: t.ClassVar[t.Union[str, AliasPath, AliasChoices, None]] = AliasChoices(
         "code", "ret", "err"
     )
-    _msg_key: ClassVar[Union[str, AliasPath, AliasChoices, None]] = AliasChoices("message", "msg")
-    _data_key: ClassVar[Union[str, AliasPath, AliasChoices, None]] = AliasPath("data")
+    _msg_key: t.ClassVar[t.Union[str, AliasPath, AliasChoices, None]] = AliasChoices(
+        "message", "msg"
+    )
+    _data_key: t.ClassVar[t.Union[str, AliasPath, AliasChoices, None]] = AliasPath("data")
 
     @classmethod
     def from_response_object(cls, obj: "StrDict") -> Self:
@@ -106,7 +110,11 @@ class FeedPageResp(QzoneResponse):
     newcnt: int
 
     undeal_info: FeedCount
-    vFeeds: List[FeedData]
+    vFeeds: t.List[FeedData]
+
+
+class ProfileResp(FeedPageResp):
+    vFeeds: t.List[ProfileFeedData]
 
 
 class IndexPageResp(FeedPageResp):
@@ -115,28 +123,29 @@ class IndexPageResp(FeedPageResp):
     @classmethod
     async def response_to_object(cls, response: ClientResponse):
         html = await response.text()
-        scripts: List[HtmlElement] = document_fromstring(html).xpath(
+        scripts: t.List[HtmlElement] = document_fromstring(html).xpath(
             'body/script[@type="application/javascript"]'
         )
         if not scripts:
             raise TryAgain("script tag not found")
 
-        texts: List[str] = [s.text for s in scripts]
+        texts: t.List[str] = [s.text for s in scripts]
         script = firstn(texts, lambda s: "shine0callback" in s)
         if not script:
             raise TryAgain("data script not found")
 
         m = re.search(r'window\.shine0callback.*return "([0-9a-f]+?)";', script)
         if m is None:
-            raise RuntimeError("data script not found")
+            raise TryAgain("data script not found")
         qzonetoken = m.group(1)
 
         m = re.search(r"var FrontPage =.*?data\s*:\s*\{", script)
         if m is None:
-            raise RuntimeError("page data not found")
+            raise TryAgain("page data not found")
         data = script[m.end() - 1 : m.end() + entire_closing(script[m.end() - 1 :])]
         data = json_loads(data)
-        data["data"]["qzonetoken"] = qzonetoken  # type: ignore
+        with suppress(TypeError):
+            data["data"]["qzonetoken"] = qzonetoken  # type: ignore
 
         return data
 
@@ -179,28 +188,34 @@ class ProfilePagePesp(QzoneResponse):
     @classmethod
     async def response_to_object(cls, response: ClientResponse):
         html = await response.text()
-        scripts: List[HtmlElement] = document_fromstring(html).xpath(
+        scripts: t.List[HtmlElement] = document_fromstring(html).xpath(
             'body/script[@type="application/javascript"]'
         )
         if not scripts:
             raise TryAgain("script tag not found")
 
-        texts: List[str] = [s.text for s in scripts]
+        texts: t.List[str] = [s.text for s in scripts]
         script = firstn(texts, lambda s: "shine0callback" in s)
         if not script:
             raise TryAgain("data script not found")
 
         m = re.search(r"var FrontPage =.*?data\s*:\s*\[", script)
         if m is None:
-            raise RuntimeError("page data not found")
+            raise TryAgain("page data not found")
         data = script[m.end() - 1 : m.end() + entire_closing(script[m.end() - 1 :], "[")]
         data = re.sub(r",,\]$", "]", data)
         data = json_loads(data)
         assert isinstance(data, list)
+        if len(data) < 2:
+            raise TryAgain("profile not returned")
 
+        return dict(zip(["info", "feedpage"], data))
+
+    @classmethod
+    def from_response_object(cls, obj: "StrDict") -> Self:
         return cls(
-            info=QzoneInfo.from_response_object(data[0]),
-            feedpage=FeedPageResp.from_response_object(data[1]),
+            info=QzoneInfo.from_response_object(obj["info"]),  # type: ignore
+            feedpage=ProfileResp.from_response_object(obj["feedpage"]),  # type: ignore
         )
 
 
@@ -254,7 +269,7 @@ class PicInfo(BaseModel):
 
 class PhotosPreuploadResponse(QzoneResponse):
     _errno_key = None
-    photos: List[PicInfo] = Field(default_factory=list)
+    photos: t.List[PicInfo] = Field(default_factory=list)
 
     @classmethod
     async def response_to_object(cls, response: ClientResponse):

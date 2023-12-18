@@ -25,6 +25,7 @@ else:
 
 
 class UgcRight(IntEnum):
+    unknown = 0
     all = 1
     qq = 4
     part = 16
@@ -33,7 +34,7 @@ class UgcRight(IntEnum):
 
 
 class RightInfo(BaseModel):
-    ugc_right: int
+    ugc_right: int = UgcRight.unknown
     allow_uins: t.List = Field(default_factory=list)
 
 
@@ -175,7 +176,7 @@ class FeedComment(BaseModel):
 
 
 class HasCommon(BaseModel):
-    common: FeedCommon
+    common: FeedCommon = Field(validation_alias="comm")
 
     @property
     def abstime(self):
@@ -216,8 +217,6 @@ class Share(HasCommon):
 
 
 class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
-    common: FeedCommon = Field(validation_alias="comm")
-
     @model_validator(mode="before")
     def remove_prefix(cls, v: dict):
         return {removeprefix(k, "cell_"): i for k, i in v.items()}
@@ -230,7 +229,6 @@ class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
 
 
 class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
-    common: FeedCommon = Field(validation_alias="comm")
     like: LikeInfo = Field(default_factory=LikeInfo)
 
     comment: FeedComment = Field(default_factory=FeedComment)

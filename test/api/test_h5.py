@@ -88,6 +88,6 @@ async def test_workflow(api: QzoneH5API):
         e = e.last_attempt.exception()
         pytest.skip(f"login failed: {e}")
     except ClientResponseError as e:
-        if e.code == 500:
+        if e.status == 500:
             pytest.skip("qzone api buzy")
         raise
