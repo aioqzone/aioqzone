@@ -33,6 +33,10 @@ class ProfileFeedCommon(FeedCommon):
 class HasCommon(BaseModel):
     common: ProfileFeedCommon = Field(validation_alias="comm")
 
+    @property
+    def abstime(self):
+        return self.common.time
+
 
 class ProfilePicData(BaseModel):
     photourl: PhotoUrls
