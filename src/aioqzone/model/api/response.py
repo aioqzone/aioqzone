@@ -184,7 +184,7 @@ class QzoneInfo(QzoneResponse):
 
 class ProfilePagePesp(QzoneResponse):
     info: QzoneInfo
-    feedpage: FeedPageResp
+    feedpage: ProfileResp
 
     @classmethod
     async def response_to_object(cls, response: ClientResponse):
