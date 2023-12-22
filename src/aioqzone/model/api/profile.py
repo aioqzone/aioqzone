@@ -19,6 +19,7 @@ from .feed import (
     RightInfo,
     Share,
     ShareInfo,
+    UserInfo,
     removeprefix,
 )
 
@@ -53,6 +54,10 @@ class HasMedia(BaseModel):
     pic: t.Optional[ProfileFeedPic] = None
 
 
+class ProfileLikeInfo(LikeInfo):
+    likemans: t.Optional[t.List[UserInfo]] = None
+
+
 class ProfileCommentItem(CommentItem):
     commentLikekey: t.Optional[str] = None
     commentpic: t.Optional[t.List] = Field(
@@ -78,7 +83,7 @@ class ProfileFeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
 
 
 class ProfileFeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
-    like: LikeInfo = Field(default_factory=LikeInfo)
+    like: ProfileLikeInfo = Field(default_factory=ProfileLikeInfo)
 
     comment: ProfileComment = Field(default_factory=ProfileComment)
     original: t.Union[ProfileFeedOriginal, Share, None] = Field(

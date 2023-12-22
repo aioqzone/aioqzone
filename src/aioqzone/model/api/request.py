@@ -14,6 +14,7 @@ from .response import PicInfo, UploadPicResponse
 __all__ = [
     "QzoneRequestParams",
     "ActiveFeedsParams",
+    "GetFeedsParams",
     "ProfileParams",
     "ShuoshuoParams",
     "GetCountParams",
@@ -43,6 +44,15 @@ class QzoneRequestParams(BaseModel):
 
 class ActiveFeedsParams(QzoneRequestParams):
     attach_info: str
+
+
+class GetFeedsParams(QzoneRequestParams):
+    hostuin: int
+    res_attach: str = ""
+
+    res_type: int = 2
+    refresh_type: int = 2
+    format: str = "json"
 
 
 class ProfileParams(QzoneRequestParams):
