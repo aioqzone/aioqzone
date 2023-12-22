@@ -30,6 +30,7 @@ __all__ = [
     "UploadPicResponse",
     "PhotosPreuploadResponse",
     "FeedData",
+    "ProfileFeedData",
 ]
 
 if t.TYPE_CHECKING:
