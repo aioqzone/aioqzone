@@ -14,7 +14,7 @@ from qqqr.utils.iter import firstn
 from qqqr.utils.jsjson import json_loads
 
 from .feed import FeedData
-from .profile import ProfileFeedData
+from .profile import ProfileFeedData, QzoneProfile
 
 __all__ = [
     "QzoneResponse",
@@ -157,21 +157,6 @@ class QzoneStatistic(BaseModel):
     message: int = 0
     pic: int = 0
     shuoshuo: int = 0
-
-
-class QzoneProfile(BaseModel):
-    nickname: str
-    age: int
-    gender: int
-    face: HttpUrl
-
-    city: str = ""
-    country: str = ""
-    province: str = ""
-
-    isFamousQzone: bool = False
-    is_concerned: bool = False
-    is_special: int
 
 
 class QzoneInfo(QzoneResponse):
