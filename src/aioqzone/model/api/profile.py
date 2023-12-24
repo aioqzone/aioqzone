@@ -3,7 +3,7 @@ Qzone uses different feed schemes for ``/mqzone/profile``. This module patches :
 """
 import typing as t
 
-from pydantic import AliasPath, BaseModel, Field, field_validator, model_validator
+from pydantic import AliasPath, BaseModel, Field, HttpUrl, field_validator, model_validator
 
 from .feed import (
     CommentItem,
@@ -22,6 +22,22 @@ from .feed import (
     UserInfo,
     removeprefix,
 )
+
+
+class QzoneProfile(BaseModel):
+    nickname: str
+    face: HttpUrl
+
+    age: int = 0
+    gender: t.Optional[int] = None
+
+    city: str = ""
+    country: str = ""
+    province: str = ""
+
+    isFamousQzone: bool = False
+    is_concerned: bool = False
+    is_special: int
 
 
 class ProfileFeedCommon(FeedCommon):
