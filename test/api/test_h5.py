@@ -35,10 +35,16 @@ async def api(client: ClientAdapter, man: Loginable, CI: bool):
     yield QzoneH5API(client, man)
 
 
-async def qzone_workflow(api: QzoneH5API):
+async def flow_wo_check(api: QzoneH5API):
     feed_flow = await api.index()
     assert api.qzonetoken
     profile_flow = await api.profile(feed_flow.vFeeds[0].userinfo.uin)
+    flow2 = await api.get_feeds(feed_flow.vFeeds[0].userinfo.uin, profile_flow.feedpage.attachinfo)
+    pass
+
+
+async def qzone_workflow(api: QzoneH5API):
+    await flow_wo_check(api)
 
     feed = await api.publish_mood(MOOD_TEXT, sync_weibo=False, ugc_right=UgcRight.self)
     ownuin, appid = api.login.uin, 311

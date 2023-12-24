@@ -53,6 +53,12 @@ class ShuoshuoApi(QzoneApi[ShuoshuoParams, DetailResp]):
     path: t.ClassVar[str] = "/webapp/json/mqzone_detail/shuoshuo"
 
 
+class GetFeedsApi(QzoneApi[GetFeedsParams, ProfileResp]):
+    http_method: t.ClassVar[TyHttpMethod] = "GET"
+    host: t.ClassVar[str] = "https://mobile.qzone.qq.com"
+    path: t.ClassVar[str] = "/get_feeds"
+
+
 class GetCountApi(QzoneApi[GetCountParams, FeedCount]):
     http_method: t.ClassVar[TyHttpMethod] = "GET"
     host: t.ClassVar[str] = "https://mobile.qzone.qq.com"

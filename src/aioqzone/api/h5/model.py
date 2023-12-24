@@ -127,6 +127,17 @@ class QzoneH5API:
             )
         )
 
+    async def get_feeds(self, uin: int, attach_info: t.Optional[str] = None) -> ProfileResp:
+        return await self.call(
+            GetFeedsApi(
+                params=GetFeedsParams(
+                    hostuin=uin,
+                    res_attach=attach_info or "",
+                ),
+                response=ProfileResp,
+            )
+        )
+
     async def shuoshuo(
         self, fid: str, hostuin: int, appid=311, busi_param: str = ""
     ) -> DetailResp:

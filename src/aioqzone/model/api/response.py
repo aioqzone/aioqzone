@@ -19,6 +19,7 @@ from .profile import ProfileFeedData
 __all__ = [
     "QzoneResponse",
     "FeedPageResp",
+    "ProfileResp",
     "IndexPageResp",
     "ProfilePagePesp",
     "DetailResp",

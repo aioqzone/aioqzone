@@ -41,6 +41,7 @@ class StatusCode(IntEnum):
     InvalidArguments = 7
     ForceQR = 10005
     NeedSmsVerify = 10009  # Means, notify the owner
+    NoMobile = 10015
     RiskyNetwork = 23003
     RateLimit = 23011
 
