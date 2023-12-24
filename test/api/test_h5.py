@@ -40,6 +40,7 @@ async def flow_wo_check(api: QzoneH5API):
     assert api.qzonetoken
     profile_flow = await api.profile(feed_flow.vFeeds[0].userinfo.uin)
     flow2 = await api.get_feeds(feed_flow.vFeeds[0].userinfo.uin, profile_flow.feedpage.attachinfo)
+    pass
 
 
 async def qzone_workflow(api: QzoneH5API):
