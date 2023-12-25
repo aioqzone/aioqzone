@@ -37,10 +37,12 @@ async def api(client: ClientAdapter, man: Loginable, CI: bool):
 
 async def flow_wo_check(api: QzoneH5API):
     feed_flow = await api.index()
-    assert api.qzonetoken
-    profile_flow = await api.profile(feed_flow.vFeeds[0].userinfo.uin)
-    flow2 = await api.get_feeds(feed_flow.vFeeds[0].userinfo.uin, profile_flow.feedpage.attachinfo)
-    pass
+    assert api.qzone_tokens[api.login.uin]
+
+    hostuin = feed_flow.vFeeds[0].userinfo.uin
+    profile_flow = await api.profile(hostuin)
+    flow2 = await api.get_feeds(hostuin, profile_flow.feedpage.attachinfo)
+    assert api.qzone_tokens[hostuin]
 
 
 async def qzone_workflow(api: QzoneH5API):

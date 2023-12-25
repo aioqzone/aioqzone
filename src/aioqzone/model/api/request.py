@@ -63,7 +63,7 @@ class ProfileParams(QzoneRequestParams):
 
 class ShuoshuoParams(QzoneRequestParams):
     fid: str = Field(serialization_alias="cellid")
-    hostuin: int = Field(serialization_alias="uin")
+    uin: int = Field(alias="uin")
     appid: int = Field(default=311)
     busi_param: str = Field(default="", max_length=100)
 
