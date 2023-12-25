@@ -171,6 +171,7 @@ class QzoneInfo(QzoneResponse):
 class ProfilePagePesp(QzoneResponse):
     info: QzoneInfo
     feedpage: ProfileResp
+    qzonetoken: str
 
     @classmethod
     async def response_to_object(cls, response: ClientResponse):
@@ -186,6 +187,11 @@ class ProfilePagePesp(QzoneResponse):
         if not script:
             raise TryAgain("data script not found")
 
+        m = re.search(r'window\.shine0callback.*return "([0-9a-f]+?)";', script)
+        if m is None:
+            raise TryAgain("data script not found")
+        qzonetoken = m.group(1)
+
         m = re.search(r"var FrontPage =.*?data\s*:\s*\[", script)
         if m is None:
             raise TryAgain("page data not found")
@@ -196,13 +202,16 @@ class ProfilePagePesp(QzoneResponse):
         if len(data) < 2:
             raise TryAgain("profile not returned")
 
-        return dict(zip(["info", "feedpage"], data))
+        data = dict(zip(["info", "feedpage"], data))
+        data["qzonetoken"] = qzonetoken
+        return data
 
     @classmethod
     def from_response_object(cls, obj: "StrDict") -> Self:
         return cls(
             info=QzoneInfo.from_response_object(obj["info"]),  # type: ignore
             feedpage=ProfileResp.from_response_object(obj["feedpage"]),  # type: ignore
+            qzonetoken=obj["qzonetoken"],
         )
 
 

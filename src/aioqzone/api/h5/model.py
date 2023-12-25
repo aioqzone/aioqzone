@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 
 class QzoneH5API:
-    qzonetoken: str = ""
+    qzone_tokens: t.Dict[int, str]
 
     def __init__(
         self, client: ClientAdapter, loginman: Loginable, *, retry_if_login_expire: bool = True
@@ -42,9 +42,10 @@ class QzoneH5API:
                 You *SHOULD* **NOT** wrap a function with mutable input. If you change the mutable
                 var in the first attempt, in the second attempt the var saves the changed value.
         """
+        self.qzone_tokens = {}
 
     async def call(self, api: QzoneApi[TyRequest, TyResponse]) -> TyResponse:
-        params = api.params.build_params(self.login.uin)
+        params: t.Dict[str, t.Any] = api.params.build_params(self.login.uin)
         if api.http_method == "GET":
             data = None
         else:
@@ -62,7 +63,10 @@ class QzoneH5API:
                 if (gtk := self.login.gtk) == 0:
                     raise TryAgain
                 if api.attach_token:
-                    params.update(qzonetoken=self.qzonetoken, g_tk=str(gtk))
+                    params["g_tk"] = gtk
+                    hostuin: int = getattr(api.params, "hostuin", self.login.uin)
+                    if qzonetoken := self.qzone_tokens.get(hostuin):
+                        params["qzonetoken"] = qzonetoken
 
                 async with self.client.request(
                     api.http_method,
@@ -92,32 +96,35 @@ class QzoneH5API:
         """
 
         r = await self.call(IndexPageApi(response=IndexPageResp, attach_token=False))
-        self.qzonetoken = r.qzonetoken
-        log.debug(f"got qzonetoken = {self.qzonetoken}")
+        self.qzone_tokens[self.login.uin] = r.qzonetoken
+        log.debug(f"qzonetoken[{self.login.uin}] = {r.qzonetoken}")
         return r
 
     async def profile(self, hostuin: int, start_time: float = 0) -> ProfilePagePesp:
-        """Get profile page of a user.
+        """Get the profile page of a user.
 
         :param hostuin: uin of the user
         :param start_time: timestamp in seconds, default as current time.
         """
-        return await self.call(
+        r = await self.call(
             UserProfileApi(
                 params=ProfileParams(hostuin=hostuin, starttime=int(1e3 * start_time)),
                 response=ProfilePagePesp,
             )
         )
+        self.qzone_tokens[hostuin] = r.qzonetoken
+        log.debug(f"qzonetoken[{hostuin}] = {r.qzonetoken}")
+        return r
 
     async def get_active_feeds(self, attach_info: t.Optional[str] = None) -> FeedPageResp:
-        """Get next page. If :obj:`.qzonetoken` is not parsed or :obj:`attach_info` is empty,
-        it will call :meth:`.index` and return its response.
+        """Get next page. If :obj:`.qzone_tokens` has not cached a qzonetoken of the login uin
+        or :obj:`attach_info` is empty, this method will call :meth:`.index` and return its response.
 
         :param attach_info: The ``attach_info`` field from last call.
             Pass an empty string equals to call :meth:`.index`.
         :return: If success, the ``data`` field of the response.
         """
-        if not self.qzonetoken or not attach_info:
+        if not self.qzone_tokens.get(self.login.uin) or not attach_info:
             return await self.index()
 
         return await self.call(
@@ -128,19 +135,29 @@ class QzoneH5API:
         )
 
     async def get_feeds(self, uin: int, attach_info: t.Optional[str] = None) -> ProfileResp:
+        """Get next page of the given :obj:`uin`.
+        If :obj:`.qzone_tokens` has not cached qzonetoken of given :obj:`uin` or :obj:`attach_info` is empty,
+        it will call :meth:`.profile` and return its :obj:`~ProfileResp.feedpage` field.
+
+        :param uin: uin of the user
+        :param attach_info: The ``attach_info`` field from last call.
+            Pass an empty string equals to call :meth:`.index`.
+        :return: If success, the ``data`` field of the response.
+        """
+        if not self.qzone_tokens.get(uin) or not attach_info:
+            return (await self.profile(uin)).feedpage
+
         return await self.call(
             GetFeedsApi(
                 params=GetFeedsParams(
                     hostuin=uin,
-                    res_attach=attach_info or "",
+                    res_attach=attach_info,
                 ),
                 response=ProfileResp,
             )
         )
 
-    async def shuoshuo(
-        self, fid: str, hostuin: int, appid=311, busi_param: str = ""
-    ) -> DetailResp:
+    async def shuoshuo(self, fid: str, uin: int, appid=311, busi_param: str = "") -> DetailResp:
         """This can be used to get the detailed summary of a feed.
 
         :param fid: aka. ``cellid``
@@ -150,9 +167,7 @@ class QzoneH5API:
         """
         return await self.call(
             ShuoshuoApi(
-                params=ShuoshuoParams(
-                    fid=fid, hostuin=hostuin, appid=appid, busi_param=busi_param
-                ),
+                params=ShuoshuoParams(fid=fid, uin=uin, appid=appid, busi_param=busi_param),
                 response=DetailResp,
             )
         )
