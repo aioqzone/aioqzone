@@ -9,6 +9,12 @@ Here we will explain some common used abbreviation and alias in aioqzone.
 
 .. glossary::
 
+    abstime
+        A timestamp represents when the feed is created.
+        All feeds have this field. If not, generate a persudo one is easy.
+
+        In Qzone interface, this is called ``created_time`` sometimes.
+
     appid
         Specifies where the feed is created. For example, the app id of "emotion" is 311,
         202 means shares from Wechat or other apps.
@@ -19,8 +25,5 @@ Here we will explain some common used abbreviation and alias in aioqzone.
 
         In Qzone interface, `fid` is also named as ``tid``, ``feedkey``, etc.
 
-    abstime
-        A timestamp represents when the feed is created.
-        All feeds have this field. If not, generate a persudo one is easy.
-
-        In Qzone interface, this is called ``created_time`` sometimes.
+    uin
+        Known as ``QQ``, which identifies an account.

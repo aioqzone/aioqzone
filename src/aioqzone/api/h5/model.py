@@ -95,7 +95,7 @@ class QzoneH5API:
         :raise `RuntimeError`: if any failure occurs in data parsing.
         """
 
-        r = await self.call(IndexPageApi(response=IndexPageResp, attach_token=False))
+        r = await self.call(IndexPageApi())
         self.qzone_tokens[self.login.uin] = r.qzonetoken
         log.debug(f"qzonetoken[{self.login.uin}] = {r.qzonetoken}")
         return r
@@ -106,12 +106,7 @@ class QzoneH5API:
         :param hostuin: uin of the user
         :param start_time: timestamp in seconds, default as current time.
         """
-        r = await self.call(
-            UserProfileApi(
-                params=ProfileParams(hostuin=hostuin, starttime=int(1e3 * start_time)),
-                response=ProfilePagePesp,
-            )
-        )
+        r = await self.call(UserProfileApi(params=ProfileParams.model_validate(locals())))
         self.qzone_tokens[hostuin] = r.qzonetoken
         log.debug(f"qzonetoken[{hostuin}] = {r.qzonetoken}")
         return r
@@ -127,90 +122,57 @@ class QzoneH5API:
         if not self.qzone_tokens.get(self.login.uin) or not attach_info:
             return await self.index()
 
-        return await self.call(
-            FeedPageApi(
-                params=ActiveFeedsParams(attach_info=attach_info),
-                response=FeedPageResp,
-            )
-        )
+        return await self.call(FeedPageApi(params=ActiveFeedsParams.model_validate(locals())))
 
-    async def get_feeds(self, uin: int, attach_info: t.Optional[str] = None) -> ProfileResp:
+    async def get_feeds(self, hostuin: int, attach_info: t.Optional[str] = None) -> ProfileResp:
         """Get next page of the given :obj:`uin`.
         If :obj:`.qzone_tokens` has not cached qzonetoken of given :obj:`uin` or :obj:`attach_info` is empty,
         it will call :meth:`.profile` and return its :obj:`~ProfileResp.feedpage` field.
 
-        :param uin: uin of the user
+        :param hostuin: uin of the user
         :param attach_info: The ``attach_info`` field from last call.
             Pass an empty string equals to call :meth:`.index`.
         :return: If success, the ``data`` field of the response.
         """
-        if not self.qzone_tokens.get(uin) or not attach_info:
-            return (await self.profile(uin)).feedpage
+        if not self.qzone_tokens.get(hostuin) or not attach_info:
+            return (await self.profile(hostuin)).feedpage
 
-        return await self.call(
-            GetFeedsApi(
-                params=GetFeedsParams(
-                    hostuin=uin,
-                    res_attach=attach_info,
-                ),
-                response=ProfileResp,
-            )
-        )
+        return await self.call(GetFeedsApi(params=GetFeedsParams.model_validate(locals())))
 
     async def shuoshuo(self, fid: str, uin: int, appid=311, busi_param: str = "") -> DetailResp:
         """This can be used to get the detailed summary of a feed.
 
-        :param fid: aka. ``cellid``
-        :param hostuin: uin of the owner of the given feed
-        :param appid: appid of the given feed, default as 311
+        :param fid: :term:`fid`
+        :param uin: uin of the owner of the given feed
+        :param appid: :term:`appid`
         :param busi_param: optional encoded params
         """
-        return await self.call(
-            ShuoshuoApi(
-                params=ShuoshuoParams(fid=fid, uin=uin, appid=appid, busi_param=busi_param),
-                response=DetailResp,
-            )
-        )
+        return await self.call(ShuoshuoApi(params=ShuoshuoParams.model_validate(locals())))
 
     async def mfeeds_get_count(self) -> FeedCount:
         """Get new feeds count. This is also the "keep-alive" signal of the cookie."""
-        return await self.call(
-            GetCountApi(params=GetCountParams(), response=FeedCount),
-        )
+        return await self.call(GetCountApi())
 
     async def internal_dolike_app(
         self, appid: int, unikey: str, curkey: str, like=True
     ) -> SingleReturnResp:
         """Like or unlike."""
-        if like:
-            path = "/proxy/domain/w.qzone.qq.com/cgi-bin/likes/internal_dolike_app"
-        else:
-            path = "/proxy/domain/w.qzone.qq.com/cgi-bin/likes/internal_unlike_app"
+        cls = LikeApi if like else UnlikeApi
 
-        return await self.call(
-            DoLikeApi(
-                path=path,
-                params=DolikeParam(appid=appid, unikey=unikey, curkey=curkey),
-                response=SingleReturnResp,
-            )
-        )
+        return await self.call(cls(params=DolikeParam.model_validate(locals())))
 
     async def add_comment(
-        self, owner_uin: int, fid: str, appid: int, content: str, private=False
+        self, ownuin: int, fid: str, appid: int, content: str, private=False
     ) -> AddCommentResp:
-        """Comment a feed."""
-        return await self.call(
-            AddCommentApi(
-                params=AddCommentParams(
-                    ownuin=owner_uin,
-                    fid=fid,
-                    private=private,
-                    content=content,
-                    appid=appid,
-                ),
-                response=AddCommentResp,
-            )
-        )
+        """Comment a feed.
+
+        :param ownuin: Feed owner uin
+        :param fid: :term:`fid`
+        :param appid: :term:`appid`
+        :param content: comment content
+        :param private: is private comment
+        """
+        return await self.call(AddCommentApi(params=AddCommentParams.model_validate(locals())))
 
     async def publish_mood(
         self,
@@ -219,17 +181,15 @@ class QzoneH5API:
         sync_weibo=False,
         ugc_right: UgcRight = UgcRight.all,
     ) -> PublishMoodResp:
-        return await self.call(
-            PublishMoodApi(
-                params=PublishMoodParams(
-                    content=content,
-                    photos=photos or [],
-                    issyncweibo=sync_weibo,
-                    ugc_right=ugc_right,
-                ),
-                response=PublishMoodResp,
-            )
-        )
+        """Publish a feed.
+
+        :param content: feed content
+        :param photos:
+        :param sync_weibo: sync to weibo, default to false
+        :param ugc_right: access right, default to "Available to Everyone".
+        """
+        photos = photos or []
+        return await self.call(PublishMoodApi(params=PublishMoodParams.model_validate(locals())))
 
     async def upload_pic(
         self, picture: bytes, width: int, height: int, quality: int
@@ -242,29 +202,26 @@ class QzoneH5API:
                     hd_height=height,
                     hd_quality=quality,
                 ),
-                response=UploadPicResponse,
             )
         )
 
     async def preupload_photos(
-        self, photos: t.List[UploadPicResponse], cur_num=0, hd=False
+        self, upload_pics: t.List[UploadPicResponse], cur_num=0, upload_hd=False
     ) -> PhotosPreuploadResponse:
-        assert photos
+        assert upload_pics
         return await self.call(
-            PhotosPreuploadApi(
-                params=PhotosPreuploadParams(
-                    upload_pics=photos,
-                    currnum=cur_num,
-                    upload_hd=int(hd),
-                ),
-                response=PhotosPreuploadResponse,
-            )
+            PhotosPreuploadApi(params=PhotosPreuploadParams.model_validate(locals()))
         )
 
     async def delete_ugc(self, fid: str, appid: int) -> DeleteUgcResp:
+        """Delete a feed.
+
+        :param fid: :term:`fid`
+        :param appid: :term:`appid`
+        """
         return await self.call(
             AddOperationApi(
-                params=DeleteUgcParams(fid=fid, appid=appid),
+                params=DeleteUgcParams.model_validate(locals()),
                 response=DeleteUgcResp,
             )
         )

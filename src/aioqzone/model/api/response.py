@@ -11,10 +11,12 @@ from typing_extensions import Self
 from aioqzone.exception import QzoneError
 from aioqzone.utils.regex import entire_closing, response_callback
 from qqqr.utils.iter import firstn
-from qqqr.utils.jsjson import json_loads
+from qqqr.utils.jsjson import JsonValue, json_loads
 
 from .feed import FeedData
 from .profile import ProfileFeedData, QzoneProfile
+
+StrDict = t.Dict[str, JsonValue]
 
 __all__ = [
     "QzoneResponse",
@@ -33,11 +35,6 @@ __all__ = [
     "FeedData",
     "ProfileFeedData",
 ]
-
-if t.TYPE_CHECKING:
-    from qqqr.utils.jsjson import JsonValue
-
-    StrDict = t.Dict[str, JsonValue]
 
 
 class QzoneResponse(BaseModel):
