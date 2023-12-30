@@ -25,7 +25,7 @@ msgstr "Qzone H5 接口"
 
 #: aioqzone.api.h5.model.QzoneH5API.index:1 of
 msgid "This api is the redirect page after h5 login, which is also the landing (main) page of h5 qzone."
-msgstr "此接口为H5登陆后的重定向页面，也是H5空间的主页。"
+msgstr "此接口为H5登录后的重定向页面，也是H5空间的主页。"
 
 #: aioqzone.api.h5.model.QzoneH5API.index of
 msgid "抛出"

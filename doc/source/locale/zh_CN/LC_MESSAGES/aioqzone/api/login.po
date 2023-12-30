@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../../source/aioqzone/api/login.rst:2
 msgid "Login Managers"
-msgstr "登陆管理器"
+msgstr "登录管理器"
 
 #: ../../source/aioqzone/api/login.rst:7
 #, fuzzy
