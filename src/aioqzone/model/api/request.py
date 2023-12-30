@@ -48,7 +48,7 @@ class ActiveFeedsParams(QzoneRequestParams):
 
 class GetFeedsParams(QzoneRequestParams):
     hostuin: int
-    res_attach: str = ""
+    attach_info: str = Field(default="", serialization_alias="res_attach")
 
     res_type: int = 2
     refresh_type: int = 2
@@ -57,8 +57,12 @@ class GetFeedsParams(QzoneRequestParams):
 
 class ProfileParams(QzoneRequestParams):
     hostuin: int
-    starttime: int = 0
+    start_time: float = Field(default=0, serialization_alias="starttime")
     ts_fields = ("starttime",)
+
+    @field_serializer("start_time")
+    def ms(self, start_time: float):
+        return int(1e3 * start_time)
 
 
 class ShuoshuoParams(QzoneRequestParams):
@@ -132,7 +136,9 @@ class PublishMoodParams(QzoneRequestParams):
     uin_fields = ("res_uin",)
     content: str = Field(min_length=1, max_length=2000)
     photos: t.List[PhotoData] = Field(default_factory=list, serialization_alias="richval")
-    issyncweibo: int = Field(default=False, validate_default=True)
+    sync_weibo: int = Field(
+        default=False, validate_default=True, serialization_alias="issyncweibo"
+    )
     ugc_right: UgcRight = UgcRight.all
 
     opr_type: str = "publish_shuoshuo"
@@ -179,7 +185,7 @@ class PhotosPreuploadParams(QzoneRequestParams):
     uin_fields = ("uin",)
     upload_pics: t.List[UploadPicResponse] = Field(exclude=True)
 
-    currnum: int = 0
+    cur_num: int = Field(default=0, serialization_alias="currnum")
     upload_hd: int = 0
 
     # defaults

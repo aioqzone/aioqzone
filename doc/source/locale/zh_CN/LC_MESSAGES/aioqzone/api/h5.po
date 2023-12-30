@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-30 10:15+0800\n"
+"POT-Creation-Date: 2023-12-30 20:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -35,11 +35,11 @@ msgstr ""
 msgid "if any failure occurs in data parsing."
 msgstr "若数据解析中出现任何错误"
 
-#: aioqzone.api.h5.model.QzoneH5API.add_comment aioqzone.api.h5.model.QzoneH5API.get_active_feeds
-#: aioqzone.api.h5.model.QzoneH5API.get_feeds aioqzone.api.h5.model.QzoneH5API.index
-#: aioqzone.api.h5.model.QzoneH5API.internal_dolike_app
+#: aioqzone.api.h5.model.QzoneH5API.add_comment aioqzone.api.h5.model.QzoneH5API.delete_ugc
+#: aioqzone.api.h5.model.QzoneH5API.get_active_feeds aioqzone.api.h5.model.QzoneH5API.get_feeds
+#: aioqzone.api.h5.model.QzoneH5API.index aioqzone.api.h5.model.QzoneH5API.internal_dolike_app
 #: aioqzone.api.h5.model.QzoneH5API.mfeeds_get_count aioqzone.api.h5.model.QzoneH5API.profile
-#: aioqzone.api.h5.model.QzoneH5API.shuoshuo of
+#: aioqzone.api.h5.model.QzoneH5API.publish_mood aioqzone.api.h5.model.QzoneH5API.shuoshuo of
 msgid "返回类型"
 msgstr ""
 
@@ -51,8 +51,10 @@ msgstr ""
 msgid "Get the profile page of a user."
 msgstr ""
 
+#: aioqzone.api.h5.model.QzoneH5API.add_comment aioqzone.api.h5.model.QzoneH5API.delete_ugc
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds aioqzone.api.h5.model.QzoneH5API.get_feeds
-#: aioqzone.api.h5.model.QzoneH5API.profile aioqzone.api.h5.model.QzoneH5API.shuoshuo of
+#: aioqzone.api.h5.model.QzoneH5API.profile aioqzone.api.h5.model.QzoneH5API.publish_mood
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo of
 msgid "参数"
 msgstr ""
 
@@ -109,23 +111,25 @@ msgstr ""
 msgid "This can be used to get the detailed summary of a feed."
 msgstr "此接口可用于获取说说的详细信息。"
 
+#: aioqzone.api.h5.model.QzoneH5API.add_comment:6 aioqzone.api.h5.model.QzoneH5API.delete_ugc:4
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:4 of
-msgid "aka. ``cellid``"
-msgstr "即 ``cellid``"
+msgid ":term:`fid`"
+msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:5 of
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:6 of
 msgid "uin of the owner of the given feed"
 msgstr "给定说说的发布人的uin"
 
-#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:7 of
-msgid "appid of the given feed, default as 311"
-msgstr "给定说说的 ``appid``，默认为 ``311``"
+#: aioqzone.api.h5.model.QzoneH5API.add_comment:8 aioqzone.api.h5.model.QzoneH5API.delete_ugc:6
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:8 of
+msgid ":term:`appid`"
+msgstr ""
 
-#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:9 of
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:10 of
 msgid "optional encoded params"
 msgstr "可选的编码后的参数"
 
-#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:11 of
+#: aioqzone.api.h5.model.QzoneH5API.shuoshuo:12 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.DetailResp\\``"
 msgstr ""
 
@@ -150,7 +154,47 @@ msgid "Comment a feed."
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:4 of
+msgid "Feed owner uin"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.add_comment:10 of
+msgid "comment content"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.add_comment:12 of
+msgid "is private comment"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.add_comment:14 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.AddCommentResp\\``"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.publish_mood:1 of
+msgid "Publish a feed."
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.publish_mood:4 of
+msgid "feed content"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.publish_mood:8 of
+msgid "sync to weibo, default to false"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.publish_mood:10 of
+msgid "access right, default to \"Available to Everyone\"."
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.publish_mood:12 of
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.PublishMoodResp\\``"
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.delete_ugc:1 of
+msgid "Delete a feed."
+msgstr ""
+
+#: aioqzone.api.h5.model.QzoneH5API.delete_ugc:8 of
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.DeleteUgcResp\\``"
 msgstr ""
 
 #~ msgid "Get next page."
@@ -203,3 +247,9 @@ msgstr ""
 
 #~ msgid ":py:class:`~aioqzone.model.api.response.DetailResp`"
 #~ msgstr ""
+
+#~ msgid "aka. ``cellid``"
+#~ msgstr "即 ``cellid``"
+
+#~ msgid "appid of the given feed, default as 311"
+#~ msgstr "给定说说的 ``appid``，默认为 ``311``"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-30 15:15+0800\n"
+"POT-Creation-Date: 2023-12-30 20:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -23,11 +23,11 @@ msgstr ""
 msgid "H5 API definations"
 msgstr ""
 
-#: aioqzone.model.api.AddCommentApi aioqzone.model.api.AddOperationApi aioqzone.model.api.DoLikeApi
-#: aioqzone.model.api.FeedPageApi aioqzone.model.api.GetCountApi aioqzone.model.api.GetFeedsApi
-#: aioqzone.model.api.IndexPageApi aioqzone.model.api.ListFriendApi
-#: aioqzone.model.api.PhotosPreuploadApi aioqzone.model.api.PublishMoodApi aioqzone.model.api.QzoneApi
-#: aioqzone.model.api.ShuoshuoApi aioqzone.model.api.UploadPicApi aioqzone.model.api.UserProfileApi
+#: aioqzone.model.api.AddCommentApi aioqzone.model.api.AddOperationApi aioqzone.model.api.FeedPageApi
+#: aioqzone.model.api.GetCountApi aioqzone.model.api.GetFeedsApi aioqzone.model.api.IndexPageApi
+#: aioqzone.model.api.LikeApi aioqzone.model.api.ListFriendApi aioqzone.model.api.PhotosPreuploadApi
+#: aioqzone.model.api.PublishMoodApi aioqzone.model.api.QzoneApi aioqzone.model.api.ShuoshuoApi
+#: aioqzone.model.api.UnlikeApi aioqzone.model.api.UploadPicApi aioqzone.model.api.UserProfileApi
 #: aioqzone.model.api.feed.FeedData aioqzone.model.api.profile.ProfileFeedData
 #: aioqzone.model.api.request.ActiveFeedsParams aioqzone.model.api.request.AddCommentParams
 #: aioqzone.model.api.request.DeleteUgcParams aioqzone.model.api.request.DolikeParam
@@ -45,51 +45,23 @@ msgid "Fields"
 msgstr ""
 
 #: aioqzone.model.api.QzoneApi:1 of
-msgid ":py:obj:`accept (str | None) <aioqzone.model.api.QzoneApi.accept>`"
-msgstr ""
-
-#: aioqzone.model.api.QzoneApi:1 of
-msgid ":py:obj:`attach_token (bool) <aioqzone.model.api.QzoneApi.attach_token>`"
-msgstr ""
-
-#: aioqzone.model.api.QzoneApi:1 of
-msgid ":py:obj:`keep_alive (bool) <aioqzone.model.api.QzoneApi.keep_alive>`"
-msgstr ""
-
-#: aioqzone.model.api.QzoneApi:1 of
 msgid ":py:obj:`params (aioqzone.model.api.TyRequest) <aioqzone.model.api.QzoneApi.params>`"
-msgstr ""
-
-#: aioqzone.model.api.QzoneApi:1 of
-msgid ":py:obj:`path (str) <aioqzone.model.api.QzoneApi.path>`"
 msgstr ""
 
 #: aioqzone.model.api.QzoneApi:1 of
 msgid ":py:obj:`referer (str) <aioqzone.model.api.QzoneApi.referer>`"
 msgstr ""
 
-#: aioqzone.model.api.QzoneApi:1 of
-msgid ":py:obj:`response (Type[aioqzone.model.api.TyResponse]) <aioqzone.model.api.QzoneApi.response>`"
-msgstr ""
-
-#: aioqzone.model.api.IndexPageApi:1 of
-msgid ":py:obj:`attach_token (bool) <aioqzone.model.api.IndexPageApi.attach_token>`"
-msgstr ""
-
-#: aioqzone.model.api.IndexPageApi:1 of
-msgid ":py:obj:`keep_alive (bool) <aioqzone.model.api.IndexPageApi.keep_alive>`"
-msgstr ""
-
-#: aioqzone.model.api.UserProfileApi:1 of
-msgid ":py:obj:`attach_token (bool) <aioqzone.model.api.UserProfileApi.attach_token>`"
-msgstr ""
-
-#: aioqzone.model.api.UserProfileApi:1 of
-msgid ":py:obj:`keep_alive (bool) <aioqzone.model.api.UserProfileApi.keep_alive>`"
-msgstr ""
-
 #: aioqzone.model.api.GetCountApi:1 of
-msgid ":py:obj:`accept (str) <aioqzone.model.api.GetCountApi.accept>`"
+msgid ""
+":py:obj:`params (aioqzone.model.api.request.GetCountParams) "
+"<aioqzone.model.api.GetCountApi.params>`"
+msgstr ""
+
+#: aioqzone.model.api.AddOperationApi:1 of
+msgid ""
+":py:obj:`response (Type[aioqzone.model.api.response.QzoneResponse]) "
+"<aioqzone.model.api.AddOperationApi.response>`"
 msgstr ""
 
 #: ../../source/aioqzone/model/api.rst:9
@@ -98,6 +70,10 @@ msgstr ""
 
 #: aioqzone.model.api.request.ActiveFeedsParams:1 of
 msgid ":py:obj:`attach_info (str) <aioqzone.model.api.request.ActiveFeedsParams.attach_info>`"
+msgstr ""
+
+#: aioqzone.model.api.request.GetFeedsParams:1 of
+msgid ":py:obj:`attach_info (str) <aioqzone.model.api.request.GetFeedsParams.attach_info>`"
 msgstr ""
 
 #: aioqzone.model.api.request.GetFeedsParams:1 of
@@ -113,10 +89,6 @@ msgid ":py:obj:`refresh_type (int) <aioqzone.model.api.request.GetFeedsParams.re
 msgstr ""
 
 #: aioqzone.model.api.request.GetFeedsParams:1 of
-msgid ":py:obj:`res_attach (str) <aioqzone.model.api.request.GetFeedsParams.res_attach>`"
-msgstr ""
-
-#: aioqzone.model.api.request.GetFeedsParams:1 of
 msgid ":py:obj:`res_type (int) <aioqzone.model.api.request.GetFeedsParams.res_type>`"
 msgstr ""
 
@@ -125,7 +97,7 @@ msgid ":py:obj:`hostuin (int) <aioqzone.model.api.request.ProfileParams.hostuin>
 msgstr ""
 
 #: aioqzone.model.api.request.ProfileParams:1 of
-msgid ":py:obj:`starttime (int) <aioqzone.model.api.request.ProfileParams.starttime>`"
+msgid ":py:obj:`start_time (float) <aioqzone.model.api.request.ProfileParams.start_time>`"
 msgstr ""
 
 #: aioqzone.model.api.request.ShuoshuoParams:1 of
@@ -245,10 +217,6 @@ msgid ":py:obj:`format (str) <aioqzone.model.api.request.PublishMoodParams.forma
 msgstr ""
 
 #: aioqzone.model.api.request.PublishMoodParams:1 of
-msgid ":py:obj:`issyncweibo (int) <aioqzone.model.api.request.PublishMoodParams.issyncweibo>`"
-msgstr ""
-
-#: aioqzone.model.api.request.PublishMoodParams:1 of
 msgid ":py:obj:`opr_type (str) <aioqzone.model.api.request.PublishMoodParams.opr_type>`"
 msgstr ""
 
@@ -256,6 +224,10 @@ msgstr ""
 msgid ""
 ":py:obj:`photos (List[aioqzone.model.api.request.PhotoData]) "
 "<aioqzone.model.api.request.PublishMoodParams.photos>`"
+msgstr ""
+
+#: aioqzone.model.api.request.PublishMoodParams:1 of
+msgid ":py:obj:`sync_weibo (int) <aioqzone.model.api.request.PublishMoodParams.sync_weibo>`"
 msgstr ""
 
 #: aioqzone.model.api.request.PublishMoodParams:1 of
@@ -353,7 +325,7 @@ msgid ":py:obj:`charset (str) <aioqzone.model.api.request.PhotosPreuploadParams.
 msgstr ""
 
 #: aioqzone.model.api.request.PhotosPreuploadParams:1 of
-msgid ":py:obj:`currnum (int) <aioqzone.model.api.request.PhotosPreuploadParams.currnum>`"
+msgid ":py:obj:`cur_num (int) <aioqzone.model.api.request.PhotosPreuploadParams.cur_num>`"
 msgstr ""
 
 #: aioqzone.model.api.request.PhotosPreuploadParams:1 of
@@ -812,4 +784,48 @@ msgstr ""
 #~ msgid ""
 #~ "QzoneResponse, FeedPageResp, IndexPageResp, DetailResp, FeedCount,"
 #~ " SingleReturnResp, AddCommentResp, PublishMoodResp, DeleteUgcResp"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`accept (str | None) <aioqzone.model.api.QzoneApi.accept>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`attach_token (bool) <aioqzone.model.api.QzoneApi.attach_token>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`keep_alive (bool) <aioqzone.model.api.QzoneApi.keep_alive>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`path (str) <aioqzone.model.api.QzoneApi.path>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`response (Type[aioqzone.model.api.TyResponse]) "
+#~ "<aioqzone.model.api.QzoneApi.response>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`attach_token (bool) <aioqzone.model.api.IndexPageApi.attach_token>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`keep_alive (bool) <aioqzone.model.api.IndexPageApi.keep_alive>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`attach_token (bool) <aioqzone.model.api.UserProfileApi.attach_token>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`keep_alive (bool) <aioqzone.model.api.UserProfileApi.keep_alive>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`accept (str) <aioqzone.model.api.GetCountApi.accept>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`res_attach (str) <aioqzone.model.api.request.GetFeedsParams.res_attach>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`starttime (int) <aioqzone.model.api.request.ProfileParams.starttime>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`issyncweibo (int) <aioqzone.model.api.request.PublishMoodParams.issyncweibo>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`currnum (int) <aioqzone.model.api.request.PhotosPreuploadParams.currnum>`"
 #~ msgstr ""
