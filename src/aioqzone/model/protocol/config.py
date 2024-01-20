@@ -1,6 +1,7 @@
-from typing import Literal, Union
+import typing as t
+from ipaddress import IPv4Address
 
-from pydantic import Field, SecretStr
+from pydantic import AnyUrl, Field, SecretStr
 from pydantic_settings import BaseSettings
 
 
@@ -12,6 +13,12 @@ class LoginConfig(BaseSettings):
 class UpLoginConfig(LoginConfig):
     pwd: SecretStr = Field(default="")
     """User password."""
+
+    fake_ip: t.Optional[IPv4Address] = None
+    """Fake IP used when collecting network environment.
+
+    .. versionadded:: 1.8.2
+    """
 
 
 class QrLoginConfig(LoginConfig):
