@@ -61,7 +61,7 @@ class QzoneH5API:
         async for attempt in self._relogin_retry:
             with attempt:
                 if (gtk := self.login.gtk) == 0:
-                    raise TryAgain
+                    raise TryAgain("no login state")
                 if api.attach_token:
                     params["g_tk"] = gtk
                     hostuin: int = getattr(api.params, "hostuin", self.login.uin)
