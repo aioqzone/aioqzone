@@ -52,7 +52,13 @@ class Captcha(_CaptchaHookMixin):
     solve_select_captcha: solve_select_captcha.TyInst
     solve_slide_captcha: solve_slide_captcha.TyInst
 
-    def __init__(self, client: ClientAdapter, appid: int, xlogin_url: str):
+    def __init__(
+        self,
+        client: ClientAdapter,
+        appid: int,
+        xlogin_url: str,
+        fake_ip: t.Optional[str] = None,
+    ):
         """
         :param client: network client
         :param appid: Specify the appid of the application
@@ -64,6 +70,7 @@ class Captcha(_CaptchaHookMixin):
         self.appid = appid
         self.xlogin_url = xlogin_url
         self.client.headers["Referer"] = "https://xui.ptlogin2.qq.com/"
+        self.fake_ip = fake_ip
 
     @property
     def base64_ua(self):
@@ -149,7 +156,7 @@ class Captcha(_CaptchaHookMixin):
             return await sess.solve_captcha()
 
         async def get_tdc_collect(client: ClientAdapter) -> str:
-            await sess.get_tdc(client)
+            await sess.get_tdc(client, ip=self.fake_ip)
             return unquote(str(sess.tdc.getData(None, True)))
 
         ans, collect, _ = await asyncio.gather(

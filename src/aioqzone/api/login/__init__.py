@@ -118,6 +118,7 @@ class UpLoginManager(Loginable):
             client=self.client,
             uin=self.config.uin,
             pwd=self.config.pwd.get_secret_value(),
+            fake_ip=self.config.fake_ip and str(self.config.fake_ip),
             h5=enable,
         )
         self.sms_code_input = self.uplogin.sms_code_input

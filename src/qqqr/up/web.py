@@ -123,11 +123,14 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
         app: t.Optional[APPID] = None,
         proxy: t.Optional[Proxy] = None,
         info: t.Optional[PT_QR_APP] = None,
+        fake_ip: t.Optional[str] = None,
     ):
         super().__init__(client, uin=uin, h5=h5, app=app, proxy=proxy, info=info)
         self.pwd = pwd
         self.pwder = TeaEncoder(pwd)
-        self.captcha = Captcha(self.client, self.app.appid, str(self.login_page_url))
+        self.captcha = Captcha(
+            self.client, self.app.appid, str(self.login_page_url), fake_ip=fake_ip
+        )
 
     async def new(self):
         """Create a :class:`UpWebSession`. This will call `check` api of Qzone, and receive result

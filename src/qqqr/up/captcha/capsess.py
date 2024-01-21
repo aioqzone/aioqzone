@@ -70,7 +70,9 @@ class BaseTcaptchaSession(ABC):
     def _vmslide_js_url(self):
         raise NotImplementedError
 
-    async def get_tdc(self, client: ClientAdapter, ua: t.Optional[str] = None):
+    async def get_tdc(
+        self, client: ClientAdapter, ua: t.Optional[str] = None, ip: t.Optional[str] = None
+    ):
         """
         .. note:: If :obj:`.mouse_track` should be set, set it before calling this method.
         """
@@ -80,7 +82,7 @@ class BaseTcaptchaSession(ABC):
             r.raise_for_status()
             self.tdc = prepare(
                 await r.text("utf8"),
-                ip=self.prehandle.uip,
+                ip=ip or self.prehandle.uip,
                 ua=ua or client.headers["User-Agent"],
                 mouse_track=await self.mouse_track,
             )
