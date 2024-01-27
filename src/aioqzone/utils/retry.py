@@ -14,8 +14,7 @@ class RetryIfCode(retry_if_exception, Generic[_E]):
 
     @classmethod
     @abstractmethod
-    def get_code(cls, exc: _E) -> int:
-        ...
+    def get_code(cls, exc: _E) -> int: ...
 
     def __init__(self, *code: int) -> None:
         super().__init__(lambda exc: isinstance(exc, self._exc_cls) and self.get_code(exc) in code)

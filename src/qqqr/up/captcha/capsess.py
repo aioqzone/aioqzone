@@ -88,8 +88,7 @@ class BaseTcaptchaSession(ABC):
             )
 
     @abstractmethod
-    async def get_captcha_problem(self, client: ClientAdapter):
-        ...
+    async def get_captcha_problem(self, client: ClientAdapter): ...
 
     @abstractmethod
     async def solve_captcha(self) -> str:

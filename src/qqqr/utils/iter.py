@@ -5,8 +5,9 @@ D = t.TypeVar("D")
 
 
 @t.overload
-def first(it: t.Iterable[T], pred: t.Optional[t.Callable[[T], t.Optional[object]]] = None) -> T:
-    ...
+def first(
+    it: t.Iterable[T], pred: t.Optional[t.Callable[[T], t.Optional[object]]] = None
+) -> T: ...
 
 
 @t.overload
@@ -15,8 +16,7 @@ def first(
     pred: t.Optional[t.Callable[[T], t.Optional[object]]] = None,
     *,
     default: D,
-) -> t.Union[T, D]:
-    ...
+) -> t.Union[T, D]: ...
 
 
 def first(
