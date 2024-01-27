@@ -1,6 +1,7 @@
 """This module defines types that are used internally by aioqzone and its plugins.
 These types are not designed to represent responses from Qzone.
 """
+
 from pydantic import BaseModel
 
 from .config import *

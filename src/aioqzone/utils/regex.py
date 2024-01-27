@@ -1,6 +1,7 @@
 """
 some patterns for matching html and so on.
 """
+
 import re
 
 # use this to match qzone api response

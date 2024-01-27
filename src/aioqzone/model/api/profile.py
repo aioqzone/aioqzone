@@ -1,6 +1,7 @@
 """
 Qzone uses different feed schemes for ``/mqzone/profile``. This module patches :mod:`.feed`.
 """
+
 import typing as t
 
 from pydantic import AliasPath, BaseModel, Field, HttpUrl, field_validator, model_validator
