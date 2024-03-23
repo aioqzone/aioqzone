@@ -167,13 +167,13 @@ tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "p
 
 [[package]]
 name = "autodoc-pydantic"
-version = "2.0.1"
+version = "2.1.0"
 description = "Seamlessly integrate pydantic models in your Sphinx documentation."
 optional = false
-python-versions = ">=3.7.1,<4.0.0"
+python-versions = ">=3.8,<4.0.0"
 files = [
-    {file = "autodoc_pydantic-2.0.1-py3-none-any.whl", hash = "sha256:d3c302fdb6d37edb5b721f0f540252fa79cea7018bc1a9a85bf70f33a68b0ce4"},
-    {file = "autodoc_pydantic-2.0.1.tar.gz", hash = "sha256:7a125a4ff18e4903e27be71e4ddb3269380860eacab4a584d6cc2e212fa96991"},
+    {file = "autodoc_pydantic-2.1.0-py3-none-any.whl", hash = "sha256:9f1f82ee3667589dfa08b21697be8bbd80b15110e838cd765bb1bf3ce1b0ea8f"},
+    {file = "autodoc_pydantic-2.1.0.tar.gz", hash = "sha256:3cf1b973e2f5ff0fbbe9b951c11827b5e32d3409e238f7f5782359426ab8d360"},
 ]
 
 [package.dependencies]
