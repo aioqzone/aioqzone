@@ -13,7 +13,7 @@ from aioqzone.api.h5 import QzoneH5API
 from aioqzone.model import LikeData, UgcRight
 from qqqr.utils.net import ClientAdapter
 
-pytestmark = pytest.mark.asyncio(scope="module")
+pytestmark = pytest.mark.asyncio(loop_scope="module")
 
 MOOD_TEXT = "This is a curious test :D"
 COMMENT_TEXT = "Here is a kind comment :)"
@@ -28,7 +28,7 @@ def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
     return r
 
 
-@pytest_asyncio.fixture(scope="class")
+@pytest_asyncio.fixture(loop_scope="module")
 async def api(client: ClientAdapter, man: Loginable, CI: bool):
     if not CI and isinstance(man, UpLoginManager):
         man.solve_select_captcha.add_impl(select_captcha_input)

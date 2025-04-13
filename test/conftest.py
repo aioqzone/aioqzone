@@ -24,7 +24,7 @@ def CI():
     return environ.get("CI") is not None
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(loop_scope="module")
 async def client():
     async with ClientAdapter() as client:
         yield client
