@@ -23,12 +23,13 @@ class QzoneApi(BaseModel, t.Generic[TyRequest, TyResponse]):
     referer: str = "https://h5.qzone.qq.com/"
 
     attach_token: t.ClassVar[bool] = True
+    login_required: t.ClassVar[bool] = True
     params: TyRequest = Field(default_factory=QzoneRequestParams)
     response: t.ClassVar[t.Type[TyResponse]]  # type: ignore
 
     @property
     def url(self) -> URL:
-        return URL(str(self.host)).with_path(self.path)
+        return URL(str(self.host)).with_path(self.path.format(**self.params.model_dump()))
 
 
 class IndexPageApi(QzoneApi[QzoneRequestParams, IndexPageResp]):
@@ -124,3 +125,11 @@ class PhotosPreuploadApi(QzoneApi[PhotosPreuploadParams, PhotosPreuploadResponse
     http_method: t.ClassVar[TyHttpMethod] = "POST"
     host: t.ClassVar[str] = "https://mobile.qzone.qq.com"
     path: t.ClassVar[str] = "/up/cgi-bin/upload/cgi_upload_pic_v2"
+
+
+class AvatarApi(QzoneApi[AvatarParams, AvatarResponse]):
+    response: t.ClassVar = AvatarResponse
+    login_required: t.ClassVar[bool] = False
+    http_method: t.ClassVar[TyHttpMethod] = "GET"
+    host: t.ClassVar[str] = "https://qlogo2.store.qq.com"
+    path: t.ClassVar[str] = "/qzone/{hostuin}/{hostuin}/{size}"

@@ -44,6 +44,7 @@ __all__ = [
     "FeedData",
     "PicInfo",
     "ProfileFeedData",
+    "AvatarResponse",
 ]
 
 validate_strdict = TypeAdapter(StrDict).validate_python
@@ -288,3 +289,15 @@ class PhotosPreuploadResponse(QzoneResponse):
         picinfos = json_loads(m.group(1))
         assert isinstance(picinfos, list)
         return dict(photos=[PicInfo.from_response_object(info["picinfo"]) for info in picinfos])  # type: ignore
+
+
+class AvatarResponse(QzoneResponse):
+    _errno_key = None
+    _msg_key = None
+    _data_key = None
+
+    avatar: bytes
+
+    @classmethod
+    async def response_to_object(cls, response: ClientResponse) -> "StrDict":
+        return {"avatar": await response.content.read()}
