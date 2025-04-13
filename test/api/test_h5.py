@@ -28,7 +28,7 @@ def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
     return r
 
 
-@pytest_asyncio.fixture(scope="class")
+@pytest_asyncio.fixture(loop_scope="class")
 async def api(client: ClientAdapter, man: Loginable, CI: bool):
     if not CI and isinstance(man, UpLoginManager):
         man.solve_select_captcha.add_impl(select_captcha_input)

@@ -18,7 +18,7 @@ if environ.get("CI") is None:
     loginman_list.append("qr")
 
 
-@pytest_asyncio.fixture(scope="module", params=loginman_list)
+@pytest_asyncio.fixture(loop_scope="module", params=loginman_list)
 async def man(request, client: ClientAdapter, env: test_env):
     if request.param == "up":
         return UpLoginManager(

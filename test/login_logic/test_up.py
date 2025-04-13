@@ -19,7 +19,7 @@ pytestmark = pytest.mark.asyncio(scope="module")
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(loop_scope="module")
 async def web(client: ClientAdapter, env: test_env):
     yield UpWebLogin(
         client,

@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 NoneType = type(None)
 
 
-@pytest_asyncio.fixture(scope="class")
+@pytest_asyncio.fixture(loop_scope="class")
 async def login(client: ClientAdapter, env: test_env):
     login = QrLogin(client, env.uin)
     login.qr_fetched.add_impl(
@@ -34,7 +34,7 @@ async def login(client: ClientAdapter, env: test_env):
     yield login
 
 
-@pytest_asyncio.fixture(scope="class")
+@pytest_asyncio.fixture(loop_scope="class")
 async def qrsess(login: QrLogin):
     yield await login.new()
 
