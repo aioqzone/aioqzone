@@ -13,7 +13,7 @@ from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak
 from qqqr.qr import QrLogin, QrSession
 
-pytestmark = pytest.mark.asyncio(scope="module")
+pytestmark = pytest.mark.asyncio(loop_scope="module")
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 if TYPE_CHECKING:
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 NoneType = type(None)
 
 
-@pytest_asyncio.fixture(loop_scope="class")
+@pytest_asyncio.fixture(loop_scope="module")
 async def login(client: ClientAdapter, env: test_env):
     login = QrLogin(client, env.uin)
     login.qr_fetched.add_impl(
@@ -34,7 +34,7 @@ async def login(client: ClientAdapter, env: test_env):
     yield login
 
 
-@pytest_asyncio.fixture(loop_scope="class")
+@pytest_asyncio.fixture(loop_scope="module")
 async def qrsess(login: QrLogin):
     yield await login.new()
 

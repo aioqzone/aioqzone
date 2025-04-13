@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from qqqr.up.web import UpWebSession
     from qqqr.utils.net import ClientAdapter
 
-pytestmark = pytest.mark.asyncio(scope="module")
+pytestmark = pytest.mark.asyncio(loop_scope="module")
 
 
 def select_captcha_input(prompt: str, imgs: Tuple[bytes, ...]):
@@ -36,19 +36,19 @@ async def login(client: ClientAdapter, env: test_env, CI: bool):
     yield login
 
 
-@pytest_asyncio.fixture(loop_scope="class")
+@pytest_asyncio.fixture(loop_scope="module")
 async def upsess(login: UpH5Login):
     upsess = await login.new()
     await login.check(upsess)
     yield upsess
 
 
-@pytest_asyncio.fixture(loop_scope="class")
+@pytest_asyncio.fixture(loop_scope="module")
 async def captcha(login: UpH5Login):
     yield login.captcha
 
 
-@pytest_asyncio.fixture(loop_scope="class")
+@pytest_asyncio.fixture(loop_scope="module")
 async def sess(captcha: Captcha, upsess: UpWebSession):
     try:
         return await captcha.new(upsess.sid)
