@@ -2342,4 +2342,4 @@ slide-captcha = ["slide-tc"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "06792ae49dbda326a5d73e24cc2a6f3b6bfe011b5bac21d60e1d08814caafdf9"
+content-hash = "2257f3b748eb0af1c6adbd1428564a3cad2c5fb36b0335ffe2ff99bfbca200d2"
