@@ -91,6 +91,11 @@ class UpWebSession(LoginSession):
                 captcha_status_description.get(r.code, r.errMessage),
                 subcode=r.code,
             ) from e.last_attempt.exception()
+        except BaseException as e:
+            raise TencentLoginError(
+                StatusCode.NeedCaptcha,
+                str(e),
+            ) from e
 
         log.info("成功通过验证码")
 
