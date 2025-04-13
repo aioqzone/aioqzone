@@ -61,13 +61,15 @@ class QzoneH5API:
 
         async for attempt in self._relogin_retry:
             with attempt:
-                if (gtk := self.login.gtk) == 0:
-                    raise TryAgain("no login state")
-                if api.attach_token:
-                    params["g_tk"] = gtk
-                    hostuin: int = getattr(api.params, "hostuin", self.login.uin)
-                    if qzonetoken := self.qzone_tokens.get(hostuin):
-                        params["qzonetoken"] = qzonetoken
+                if api.login_required:
+                    if (gtk := self.login.gtk) == 0:
+                        raise TryAgain("no login state")
+
+                    if api.attach_token:
+                        params["g_tk"] = gtk
+                        hostuin: int = getattr(api.params, "hostuin", self.login.uin)
+                        if qzonetoken := self.qzone_tokens.get(hostuin):
+                            params["qzonetoken"] = qzonetoken
 
                 async with self.client.request(
                     api.http_method,
@@ -251,4 +253,16 @@ class QzoneH5API:
                 params=DeleteUgcParams.model_validate(locals()),
                 response=DeleteUgcResp,
             )
+        )
+
+    async def avatar(self, hostuin: int, size: t.Literal[100, 640]) -> AvatarResponse:
+        """Get avatar from uin. Do not require login.
+
+        :param hostuin: the uin whose avatar to be get
+        :param size: availible sizes: `100`|`640`
+        """
+        return await self.call(
+            AvatarApi(
+                params=AvatarParams.model_validate(locals()),
+            ),
         )

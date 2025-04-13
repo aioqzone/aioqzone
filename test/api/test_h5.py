@@ -116,3 +116,9 @@ async def test_workflow(api: QzoneH5API):
         if e.status == 500:
             pytest.skip("qzone api buzy")
         raise
+
+
+@pytest.mark.parametrize("size", [100, 640])
+async def test_avatar(api: QzoneH5API, size):
+    resp = await api.avatar(949589999, size)
+    assert resp.avatar

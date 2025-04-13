@@ -16,6 +16,7 @@ from .response import PicInfo, UploadPicResponse
 __all__ = [
     "QzoneRequestParams",
     "ActiveFeedsParams",
+    "AvatarParams",
     "GetFeedsParams",
     "ProfileParams",
     "ShuoshuoParams",
@@ -241,3 +242,8 @@ class PhotosPreuploadParams(QzoneRequestParams):
 
         params.update(md5="|".join(md5), filelen="|".join(size))
         return params
+
+
+class AvatarParams(QzoneRequestParams):
+    hostuin: int
+    size: t.Literal[100, 640] = 100
