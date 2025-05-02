@@ -24,16 +24,13 @@ jobs:
       #       check-out repo and set-up python
       #----------------------------------------------
       - uses: actions/checkout@v4
-      - name: Install poetry
-        run: pipx install poetry
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          # cache: poetry
+      - uses: astral-sh/setup-uv@v6
       #----------------------------------------------
       #  --------    Build and release   ---------
       #----------------------------------------------
       - name: Build dist and Publish to PyPI
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
-        run: poetry publish --build
+          UV_PUBLISH_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          uv build
+          uv publish --username __token__

@@ -9,29 +9,27 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.7.2
+    hooks:
+      - id: uv-lock
   - repo: local
     hooks:
-      - id: poetry
-        name: poetry check
-        entry: poetry check
-        pass_filenames: false
-        language: system
-        files: pyproject.toml
       - id: isort
-        name: isort (python)
-        entry: poetry run isort .
+        name: sort imports
+        entry: uv run ruff check --select I --fix
         pass_filenames: false
         language: system
         types: [python]
       - id: black
-        name: Black
-        entry: poetry run black .
+        name: format
+        entry: uv run ruff format
         pass_filenames: false
         language: system
         types: [python]
       - id: pytest
         name: pytest-check
-        entry: poetry run pytest test
+        entry: uv run pytest test
         language: system
         pass_filenames: false
         types: [python, toml]
