@@ -1,6 +1,6 @@
 [project]
 name = "aioqzone"
-version = "1.9.4.dev1"
+version = "1.9.4.dev2"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = [{ name = "aioqzone" }]
 maintainers = [
@@ -55,7 +55,6 @@ slide-captcha = ["slide-tc~=0.1.1"]
 prerelease = "if-necessary-or-explicit"
 
 [tool.uv.sources]
-tylisten = { index = "PyPI" }
 pychaosvm = { index = "aioqzone-index" }
 slide-tc = { index = "aioqzone-index" }
 
@@ -63,13 +62,13 @@ slide-tc = { index = "aioqzone-index" }
 name = "aioqzone-index"
 url = "https://aioqzone.github.io/aioqzone-index/simple/"
 
-[[tool.uv.index]]
-name = "PyPI"
-url = "https://pypi.org/simple"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+only-packages = true
+packages = ["src/aioqzone", "src/qqqr"]
 
 [tool.pytest.ini_options]
 pythonpath = "src"
