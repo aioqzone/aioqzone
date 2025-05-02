@@ -116,7 +116,7 @@ wheels = [
 
 [[package]]
 name = "aioqzone"
-version = "1.9.4.dev1"
+version = "1.9.4.dev2"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
@@ -165,7 +165,7 @@ requires-dist = [
     { name = "rsa", specifier = ">=4.9.1" },
     { name = "slide-tc", marker = "extra == 'slide-captcha'", specifier = "~=0.1.1", index = "https://aioqzone.github.io/aioqzone-index/simple/" },
     { name = "tenacity", specifier = ">=8.2.3,<10.0.0" },
-    { name = "tylisten", specifier = ">=2.2.1", index = "https://pypi.org/simple" },
+    { name = "tylisten", specifier = ">=2.2.1" },
 ]
 provides-extras = ["slide-captcha"]
 
