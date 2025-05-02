@@ -24,13 +24,10 @@ jobs:
       #       check-out repo and set-up python
       #----------------------------------------------
       - uses: actions/checkout@v4
-      - name: Install poetry
-        run: pipx install poetry
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
-          cache: poetry
+          enable-cache: true
 
       - name: Install and Test
         env:
@@ -38,11 +35,11 @@ jobs:
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
           echo "::group::Install Basic Dependencies"
-          poetry install -n -vv
+          uv sync --group test
           echo "::endgroup::"
 
           echo "::group::pytest outputs"
-          poetry run pytest test --log-cli-level=WARNING
+          uv run pytest test --log-cli-level=WARNING
           echo "::endgroup::"
 
       - name: Request Changes

@@ -25,21 +25,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      - run: pipx install poetry
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: poetry
+      - uses: astral-sh/setup-uv@v6
 
       - name: Install Library and Build HTML
         run: |
           echo "::group::Install Library"
-          poetry install --with=docs --without=test
+          uv sync --group doc
           echo "::endgroup::"
 
           echo "::group::Build HTML"
-          poetry run sphinx-build doc/source doc/build/html -D release=$(poetry version -s)
+          uv run sphinx-build doc/source doc/build/html -D release=$(uv version --short)
           echo "::endgroup::"
 
       - name: Fix permissions
