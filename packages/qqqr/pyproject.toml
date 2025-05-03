@@ -1,0 +1,36 @@
+[project]
+name = "qqqr"
+version = "1.9.5.dev1"
+description = "An API-level simulation of Qzone web login process."
+authors = [{ name = "aioqzone" }]
+license = "AGPL-3.0"
+requires-python = ">=3.9"
+
+dependencies = [
+    "aiohttp>=3.9.0",
+    "pydantic>=2.11.4",
+    "rsa>=4.9.1",
+    "tenacity>=8.2.3,<10.0.0",
+    # "exceptiongroup>=1.1.1",
+    "tylisten>=2.2.1",
+    "pillow>=10.1.0",
+    "pychaosvm~=0.4.3",
+]
+
+[project.optional-dependencies]
+slide-captcha = ["slide-tc~=0.1.1"]
+
+[tool.uv]
+prerelease = "if-necessary-or-explicit"
+
+[tool.uv.sources]
+pychaosvm = { index = "aioqzone-index" }
+slide-tc = { index = "aioqzone-index" }
+
+[[tool.uv.index]]
+name = "aioqzone-index"
+url = "https://aioqzone.github.io/aioqzone-index/simple/"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

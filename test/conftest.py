@@ -4,7 +4,6 @@ import pytest
 import pytest_asyncio
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 from qqqr.utils.net import ClientAdapter
 
 

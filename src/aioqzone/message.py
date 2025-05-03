@@ -1,8 +1,7 @@
 import typing as t
 
-from tylisten import hookdef
-
 from qqqr.message import *
+from tylisten import hookdef
 
 __all__ = [
     "qr_cancelled",

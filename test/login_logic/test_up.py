@@ -5,15 +5,14 @@ from typing import TYPE_CHECKING
 
 import pytest
 import pytest_asyncio
-
 from qqqr.constant import StatusCode
 from qqqr.exception import TencentLoginError
 from qqqr.up import UpH5Login, UpWebLogin
 
 if TYPE_CHECKING:
-    from test.conftest import test_env
-
     from qqqr.utils.net import ClientAdapter
+
+    from test.conftest import test_env
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")

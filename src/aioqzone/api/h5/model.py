@@ -2,12 +2,12 @@ import logging
 from os import PathLike
 
 from pydantic import ValidationError
+from qqqr.utils.net import ClientAdapter
 from tenacity import AsyncRetrying, TryAgain, after_log, stop_after_attempt
 
 from aioqzone.api.login import Loginable
 from aioqzone.model.api import *
 from aioqzone.utils.retry import retry_if_qzone_code, retry_if_status
-from qqqr.utils.net import ClientAdapter
 
 log = logging.getLogger(__name__)
 

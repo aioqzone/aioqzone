@@ -6,12 +6,12 @@ from typing import Tuple
 import pytest
 import pytest_asyncio
 from aiohttp import ClientResponseError
+from qqqr.utils.net import ClientAdapter
 from tenacity import RetryError
 
 from aioqzone.api import Loginable, UpLoginManager
 from aioqzone.api.h5 import QzoneH5API
 from aioqzone.model import LikeData, UgcRight
-from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 

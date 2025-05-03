@@ -7,6 +7,12 @@ resolution-markers = [
     "python_full_version < '3.10'",
 ]
 
+[manifest]
+members = [
+    "aioqzone",
+    "qqqr",
+]
+
 [[package]]
 name = "aiohappyeyeballs"
 version = "2.6.1"
@@ -116,22 +122,11 @@ wheels = [
 
 [[package]]
 name = "aioqzone"
-version = "1.9.4.dev2"
+version = "1.9.5"
 source = { editable = "." }
 dependencies = [
-    { name = "aiohttp" },
-    { name = "pillow" },
-    { name = "pychaosvm" },
-    { name = "pydantic" },
     { name = "pydantic-settings" },
-    { name = "rsa" },
-    { name = "tenacity" },
-    { name = "tylisten" },
-]
-
-[package.optional-dependencies]
-slide-captcha = [
-    { name = "slide-tc" },
+    { name = "qqqr" },
 ]
 
 [package.dev-dependencies]
@@ -157,17 +152,9 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiohttp", specifier = ">=3.9.0" },
-    { name = "pillow", specifier = ">=10.1.0" },
-    { name = "pychaosvm", specifier = "~=0.4.3", index = "https://aioqzone.github.io/aioqzone-index/simple/" },
-    { name = "pydantic", specifier = ">=2.11.4" },
     { name = "pydantic-settings", specifier = ">=2.9.0" },
-    { name = "rsa", specifier = ">=4.9.1" },
-    { name = "slide-tc", marker = "extra == 'slide-captcha'", specifier = "~=0.1.1", index = "https://aioqzone.github.io/aioqzone-index/simple/" },
-    { name = "tenacity", specifier = ">=8.2.3,<10.0.0" },
-    { name = "tylisten", specifier = ">=2.2.1" },
+    { name = "qqqr", editable = "packages/qqqr" },
 ]
-provides-extras = ["slide-captcha"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -184,7 +171,7 @@ doc = [
 ]
 test = [
     { name = "pytest", specifier = ">=8.2.0" },
-    { name = "pytest-asyncio", specifier = "~=0.25.2" },
+    { name = "pytest-asyncio", specifier = "~=0.26.0" },
 ]
 
 [[package]]
@@ -1378,14 +1365,15 @@ wheels = [
 
 [[package]]
 name = "pytest-asyncio"
-version = "0.25.3"
+version = "0.26.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytest" },
+    { name = "typing-extensions", marker = "python_full_version < '3.10'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f2/a8/ecbc8ede70921dd2f544ab1cadd3ff3bf842af27f87bbdea774c7baa1d38/pytest_asyncio-0.25.3.tar.gz", hash = "sha256:fc1da2cf9f125ada7e710b4ddad05518d4cee187ae9412e9ac9271003497f07a", size = 54239, upload-time = "2025-01-28T18:37:58.729Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/c4/453c52c659521066969523e87d85d54139bbd17b78f09532fb8eb8cdb58e/pytest_asyncio-0.26.0.tar.gz", hash = "sha256:c4df2a697648241ff39e7f0e4a73050b03f123f760673956cf0d72a4990e312f", size = 54156, upload-time = "2025-03-25T06:22:28.883Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/67/17/3493c5624e48fd97156ebaec380dcaafee9506d7e2c46218ceebbb57d7de/pytest_asyncio-0.25.3-py3-none-any.whl", hash = "sha256:9e89518e0f9bd08928f97a3482fdc4e244df17529460bc038291ccaf8f85c7c3", size = 19467, upload-time = "2025-01-28T18:37:56.798Z" },
+    { url = "https://files.pythonhosted.org/packages/20/7f/338843f449ace853647ace35870874f69a764d251872ed1b4de9f234822c/pytest_asyncio-0.26.0-py3-none-any.whl", hash = "sha256:7b51ed894f4fbea1340262bdae5135797ebbe21d8638978e35d31c6d19f72fb0", size = 19694, upload-time = "2025-03-25T06:22:27.807Z" },
 ]
 
 [[package]]
@@ -1449,6 +1437,38 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/ed/5e/46168b1f2757f1fcd442bc3029cd8767d88a98c9c05770d8b420948743bb/PyYAML-6.0.2-cp39-cp39-win32.whl", hash = "sha256:6395c297d42274772abc367baaa79683958044e5d3835486c16da75d2a694631", size = 144593, upload-time = "2024-08-06T20:33:46.63Z" },
     { url = "https://files.pythonhosted.org/packages/19/87/5124b1c1f2412bb95c59ec481eaf936cd32f0fe2a7b16b97b81c4c017a6a/PyYAML-6.0.2-cp39-cp39-win_amd64.whl", hash = "sha256:39693e1f8320ae4f43943590b49779ffb98acb81f788220ea932a6b6c51004d8", size = 162312, upload-time = "2024-08-06T20:33:49.073Z" },
 ]
+
+[[package]]
+name = "qqqr"
+version = "1.9.5.dev1"
+source = { editable = "packages/qqqr" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "pillow" },
+    { name = "pychaosvm" },
+    { name = "pydantic" },
+    { name = "rsa" },
+    { name = "tenacity" },
+    { name = "tylisten" },
+]
+
+[package.optional-dependencies]
+slide-captcha = [
+    { name = "slide-tc" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "aiohttp", specifier = ">=3.9.0" },
+    { name = "pillow", specifier = ">=10.1.0" },
+    { name = "pychaosvm", specifier = "~=0.4.3", index = "https://aioqzone.github.io/aioqzone-index/simple/" },
+    { name = "pydantic", specifier = ">=2.11.4" },
+    { name = "rsa", specifier = ">=4.9.1" },
+    { name = "slide-tc", marker = "extra == 'slide-captcha'", specifier = "~=0.1.1", index = "https://aioqzone.github.io/aioqzone-index/simple/" },
+    { name = "tenacity", specifier = ">=8.2.3,<10.0.0" },
+    { name = "tylisten", specifier = ">=2.2.1" },
+]
+provides-extras = ["slide-captcha"]
 
 [[package]]
 name = "requests"

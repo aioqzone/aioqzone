@@ -5,16 +5,15 @@ from typing import TYPE_CHECKING, Tuple
 
 import pytest
 import pytest_asyncio
-
 from qqqr.constant import captcha_status_description
 from qqqr.up import UpH5Login
 from qqqr.up.captcha import Captcha, SelectCaptchaSession, TcaptchaSession
 
 if TYPE_CHECKING:
-    from test.conftest import test_env
-
     from qqqr.up.web import UpWebSession
     from qqqr.utils.net import ClientAdapter
+
+    from test.conftest import test_env
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 

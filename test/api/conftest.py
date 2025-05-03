@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING
 
 import pytest_asyncio
 from PIL import Image as image
+from qqqr.utils.net import ClientAdapter
 
 from aioqzone.api import UpLoginConfig, UpLoginManager
-from qqqr.utils.net import ClientAdapter
 
 if TYPE_CHECKING:
     from test.conftest import test_env

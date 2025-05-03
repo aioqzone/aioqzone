@@ -12,17 +12,17 @@ from aiohttp import ClientConnectionError as ConnectError
 from aiohttp import ClientResponseError
 from aiohttp import RequestInfo as Request
 from PIL import Image as image
+from qqqr.exception import TencentLoginError, UserBreak
+from qqqr.utils.net import ClientAdapter
 from tenacity import TryAgain
 
 from aioqzone.api import QrLoginConfig, QrLoginManager, UpLoginConfig, UpLoginManager
 from aioqzone.exception import UnexpectedLoginError
-from qqqr.exception import TencentLoginError, UserBreak
-from qqqr.utils.net import ClientAdapter
 
 if TYPE_CHECKING:
-    from test.conftest import test_env
-
     from qqqr.utils.net import ClientAdapter
+
+    from test.conftest import test_env
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")

@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Optional
 import pytest
 import pytest_asyncio
 from PIL import Image as image
-
 from qqqr.constant import StatusCode
 from qqqr.exception import UserBreak
 from qqqr.qr import QrLogin, QrSession
@@ -17,9 +16,9 @@ pytestmark = pytest.mark.asyncio(loop_scope="module")
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 if TYPE_CHECKING:
-    from test.conftest import test_env
-
     from qqqr.utils.net import ClientAdapter
+
+    from test.conftest import test_env
 
 NoneType = type(None)
 

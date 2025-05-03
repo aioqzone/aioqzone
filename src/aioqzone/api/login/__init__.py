@@ -8,14 +8,14 @@ import logging
 import typing as t
 
 from aiohttp import ClientError
+from qqqr.exception import TencentLoginError, UnexpectedInteraction, UserBreak
+from qqqr.qr import QrLogin
+from qqqr.utils.net import ClientAdapter
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 from tylisten import FutureStore
 
 from aioqzone.exception import UnexpectedLoginError
 from aioqzone.model import QrLoginConfig, UpLoginConfig
-from qqqr.exception import TencentLoginError, UnexpectedInteraction, UserBreak
-from qqqr.qr import QrLogin
-from qqqr.utils.net import ClientAdapter
 
 from ._base import Loginable
 

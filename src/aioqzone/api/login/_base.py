@@ -3,10 +3,10 @@ from abc import ABC, abstractmethod
 from time import time
 from typing import Dict, Optional
 
+from qqqr.utils.encrypt import gtk
 from tylisten import FutureStore
 
 import aioqzone.message as MT
-from qqqr.utils.encrypt import gtk
 
 
 class Loginable(ABC):
