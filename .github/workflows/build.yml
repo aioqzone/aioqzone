@@ -32,5 +32,5 @@ jobs:
         env:
           UV_PUBLISH_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: |
-          uv build
+          uv build --no-sources --all-packages
           uv publish --username __token__
