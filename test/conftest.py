@@ -1,3 +1,4 @@
+import sys
 from os import environ
 
 import pytest
@@ -21,6 +22,11 @@ def env():
 @pytest.fixture(scope="session")
 def CI():
     return environ.get("CI") is not None
+
+
+@pytest.fixture(scope="session")
+def is_debug():
+    return bool(sys.gettrace())
 
 
 @pytest_asyncio.fixture(loop_scope="module")
