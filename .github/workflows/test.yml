@@ -27,6 +27,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
+          activate-environment: true
           enable-cache: true
 
       - name: Install and Test
@@ -35,7 +36,7 @@ jobs:
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: |
           echo "::group::Install Basic Dependencies"
-          uv sync --group test
+          uv sync --no-default-groups --group test
           echo "::endgroup::"
 
           echo "::group::pytest outputs"
