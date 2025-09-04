@@ -96,7 +96,12 @@ class PhotoUrl(BaseModel):
 class PhotoUrls(RootModel[t.Set[PhotoUrl]]):
     @model_validator(mode="before")
     def unpack_urls(cls, v: dict):
-        return list(v.values())
+        return list(
+            filter(
+                lambda d: isinstance(d, dict) and d.get("url"),
+                v.values(),
+            )
+        )
 
     @property
     def largest(self) -> PhotoUrl:
