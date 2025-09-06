@@ -152,8 +152,8 @@ class FeedPic(BaseModel):
 
 
 class Visitor(BaseModel):
-    view_count: int
-    visitor_count: int
+    view_count: int = 0
+    visitor_count: int = 0
     # visitors: t.List[UserInfo]
     # mod: int
     # view_count_byfriends: int
