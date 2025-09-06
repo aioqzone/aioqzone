@@ -17,9 +17,8 @@ pytestmark = pytest.mark.asyncio(loop_scope="module")
 skip_ci = pytest.mark.skipif(bool(environ.get("CI")), reason="Skip QR loop in CI")
 
 if TYPE_CHECKING:
-    from test.conftest import test_env
-
     from qqqr.utils.net import ClientAdapter
+    from test.conftest import test_env
 
 NoneType = type(None)
 
