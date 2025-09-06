@@ -153,6 +153,16 @@ class FeedPic(BaseModel):
     albumid: str
     uin: int
     picdata: t.List[PicData]
+    uploadnum: int
+
+
+class Visitor(BaseModel):
+    view_count: int = 0
+    visitor_count: int = 0
+    # visitors: t.List[UserInfo]
+    # mod: int
+    # view_count_byfriends: int
+    # myfriend_info: str
 
 
 class CommentItem(LikeInfo):
@@ -238,3 +248,6 @@ class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
     share_info: ShareInfo = Field(
         default_factory=ShareInfo, validation_alias=AliasPath("operation", "share_info")
     )
+
+    # forward_list
+    visitor: Visitor = Field(default_factory=Visitor)
