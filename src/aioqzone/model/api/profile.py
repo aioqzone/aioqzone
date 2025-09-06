@@ -21,6 +21,7 @@ from .feed import (
     Share,
     ShareInfo,
     UserInfo,
+    Visitor,
 )
 
 
@@ -108,3 +109,5 @@ class ProfileFeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
     share_info: ShareInfo = Field(
         default_factory=ShareInfo, validation_alias=AliasPath("operation", "share_info")
     )
+
+    visitor: Visitor = Field(default_factory=Visitor)
