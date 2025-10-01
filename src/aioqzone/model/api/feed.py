@@ -29,21 +29,24 @@ class RightInfo(BaseModel):
     allow_uins: t.List = Field(default_factory=list)
 
 
-class FeedCommon(BaseModel):
+class ContentCommon(BaseModel):
     time: int
     appid: int
     typeid: int = Field(alias="feedstype")
     curkey: t.Union[HttpUrl, str] = Field(alias="curlikekey", union_mode="left_to_right")
     orgkey: t.Union[HttpUrl, str] = Field(alias="orglikekey", union_mode="left_to_right")
+
+    subid: int = 0
+    originaltype: int = 0
+
+
+class FeedCommon(ContentCommon):
     ugckey: str
     """an underscore-joined string including `uin`, `appid`, `ugcrightkey`"""
     ugcrightkey: str
     """an identifier, for most 311 feeds, it equals to cellid (fid)."""
-    right_info: RightInfo
-    wup_feeds_type: int
-
-    subid: int = 0
-    originaltype: int = 0
+    right_info: RightInfo = Field(default_factory=RightInfo)
+    wup_feeds_type: int = 0
 
 
 class UserInfo(BaseModel):
@@ -224,8 +227,10 @@ class ShareInfo(BaseModel):
     #     return v
 
 
-class Share(HasCommon):
-    common: FeedCommon = Field(validation_alias="cell_comm")
+class Share(BaseModel):
+    common: t.Union[FeedCommon, ContentCommon] = Field(
+        validation_alias="cell_comm", union_mode="left_to_right"
+    )
 
 
 class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
