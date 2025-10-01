@@ -116,7 +116,7 @@ wheels = [
 
 [[package]]
 name = "aioqzone"
-version = "1.9.4.dev6"
+version = "1.9.4.dev8"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
@@ -184,7 +184,7 @@ doc = [
 ]
 test = [
     { name = "pytest", specifier = ">=8.2.0" },
-    { name = "pytest-asyncio", specifier = "~=1.1.0" },
+    { name = "pytest-asyncio", specifier = ">=1.1,<1.3" },
 ]
 
 [[package]]

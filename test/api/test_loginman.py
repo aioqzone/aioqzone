@@ -20,7 +20,6 @@ from qqqr.exception import TencentLoginError, UserBreak
 from qqqr.utils.net import ClientAdapter
 
 if TYPE_CHECKING:
-    from qqqr.utils.net import ClientAdapter
     from test.conftest import test_env
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
@@ -119,3 +118,19 @@ class TestQR:
         assert qr.uin == pool[0]
         assert qr.cookie
         assert qr.gtk > 0
+
+
+@skip_ci
+async def test_const(client: ClientAdapter, qr: QrLoginManager):
+    from aioqzone.api.h5 import QzoneH5API
+    from aioqzone.api.login import ConstLoginMan
+
+    api = QzoneH5API(client, qr)
+    resp1 = await api.index()
+    assert resp1.qzonetoken
+    assert qr.cookie
+    api = QzoneH5API(client, ConstLoginMan.from_loginable(qr), retry_if_login_expire=False)
+    assert isinstance(api.login, ConstLoginMan)
+    assert api.login.cookie
+    resp2 = await api.index()
+    assert resp2.vFeeds

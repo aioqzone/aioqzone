@@ -10,6 +10,7 @@ import typing as t
 from aiohttp import ClientError
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 from tylisten import FutureStore
+from typing_extensions import Self
 
 from aioqzone.exception import UnexpectedLoginError
 from aioqzone.model import QrLoginConfig, UpLoginConfig
@@ -30,6 +31,7 @@ __all__ = [
 ]
 
 
+@t.final
 class ConstLoginMan(Loginable):
     """A basic login manager which uses external provided cookie."""
 
@@ -45,6 +47,19 @@ class ConstLoginMan(Loginable):
 
     async def _new_cookie(self) -> t.Dict[str, str]:
         return self.cookie
+
+    @classmethod
+    def from_loginable(cls, loginable: Loginable) -> Self:
+        """Create a :class:`.ConstLoginMan` from another :class:`.Loginable` instance.
+
+        :param loginable: any :class:`.Loginable` instance
+        :return: a :class:`.ConstLoginMan` instance
+
+        .. versionadded:: 1.9.4.dev8
+        """
+        return cls(
+            loginable.uin, cookie=loginable.cookie, ch_login_notify=loginable.ch_login_notify
+        )
 
 
 class UpLoginManager(Loginable):

@@ -1,4 +1,6 @@
 from http.cookies import SimpleCookie
+from random import random
+from secrets import token_hex
 from typing import Dict
 
 from aiohttp import ClientResponse as Response
@@ -33,7 +35,7 @@ def get_all_cookie(response: Response) -> Dict[str, str]:
     """An adapter to get all response cookies from a response object."""
     cookies = SimpleCookie()
     for i in response.headers.getall("Set-Cookie"):
-        if not "=;" in i:
+        if "=;" not in i:
             cookies.load(i)
     return {k: v.value for k, v in cookies.items() if v.value}
 
@@ -42,3 +44,10 @@ def use_mobile_ua(client: ClientAdapter):
     from ..constant import AndroidUA
 
     client.headers["User-Agent"] = AndroidUA
+    client.cookie_jar.update_cookies(
+        {
+            "_qimei_fingerprint": token_hex(32),
+            "_qimei_uuid42": token_hex(42),
+            "_qpsvr_localtk": f"{random():.16f}",
+        }
+    )

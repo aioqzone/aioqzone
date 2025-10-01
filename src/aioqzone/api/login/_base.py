@@ -14,12 +14,15 @@ class Loginable(ABC):
 
     last_login: float = 0
     """Last login time stamp. 0 represents no login since created."""
+    cookie: Dict[str, str]
+    """Cached cookie."""
+    ch_login_notify: FutureStore
+    """Future Store for emit login events."""
 
     def __init__(self, uin: int, ch_login_notify: Optional[FutureStore] = None) -> None:
         super().__init__()
         self.uin = uin
         self.cookie: Dict[str, str] = {}
-        """Cached cookie."""
         self.lock = asyncio.Lock()
         self.ch_login_notify = ch_login_notify or FutureStore()
 
@@ -33,7 +36,7 @@ class Loginable(ABC):
         :meta public:
         :return: cookie dict
         """
-        return
+        return {}
 
     async def new_cookie(self) -> bool:
         """Get a new cookie dict, which means cached cookie is not allowed.
