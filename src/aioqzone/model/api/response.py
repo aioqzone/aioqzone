@@ -38,6 +38,7 @@ __all__ = [
     "FeedCount",
     "SingleReturnResp",
     "AddCommentResp",
+    "AddCommentLegacyResp",
     "DeleteCommentResp",
     "PublishMoodResp",
     "DeleteUgcResp",
@@ -239,6 +240,25 @@ class AddCommentResp(QzoneResponse):
     verifyurl: str = ""
     commentid: int = 0
     commentLikekey: HttpUrl
+
+
+class AddCommentLegacyResp(QzoneResponse):
+    feeds: str
+
+    @classmethod
+    async def response_to_object(cls, response: ClientResponse):
+        html = await response.text()
+        scripts: t.List[HtmlElement] = document_fromstring(html).xpath(
+            'body/script[@type="text/javascript"]'
+        )
+        texts: t.List[str] = [s.text for s in scripts]
+        script = firstn(texts, lambda s: "frameElement.callback" in s)
+        if not script:
+            raise TryAgain("AddCommentLegacyResponse: script tag not found")
+
+        m = response_callback.search(script)
+        assert m
+        return validate_strdict(json_loads(m.group(1)))
 
 
 class DeleteCommentResp(AddCommentResp):

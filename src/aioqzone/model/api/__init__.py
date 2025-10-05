@@ -93,6 +93,12 @@ class AddCommentApi(QzoneApi[AddCommentParams, AddCommentResp]):
     path: t.ClassVar[str] = "/webapp/json/qzoneOperation/addComment"
 
 
+class AddCommentApiLegacy(QzoneApi[AddCommentParamsLegacy, AddCommentLegacyResp]):
+    response: t.ClassVar = AddCommentLegacyResp
+    http_method: t.ClassVar[TyHttpMethod] = "POST"
+    path: t.ClassVar[str] = "/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_re_feeds"
+
+
 class DeleteCommentApi(QzoneApi[DeleteCommentParams, DeleteCommentResp]):
     response: t.ClassVar = DeleteCommentResp
     http_method: t.ClassVar[TyHttpMethod] = "POST"

@@ -166,24 +166,67 @@ class QzoneH5API:
         return await self.call(cls(params=DolikeParam.model_validate(locals())))
 
     async def add_comment(
-        self, ownuin: int, fid: str, appid: int, content: str, private=False
-    ) -> AddCommentResp:
+        self,
+        hostuin: int,
+        fid: str,
+        appid: int,
+        content: str,
+        photos: t.Optional[t.Sequence[t.Union[PhotoData, PicInfo]]] = None,
+        feedsType: int = 100,
+        private=False,
+        abstime: t.Optional[int] = None,
+    ) -> t.Union[AddCommentResp, AddCommentLegacyResp]:
         """Comment a feed.
 
-        :param ownuin: Feed owner uin
+        :param hostuin: Feed owner uin
         :param fid: :term:`fid`
         :param appid: :term:`appid`
         :param content: comment content
+        :param photos:
+        :param abstime: required if `appid != 311`
         :param private: is private comment
         """
+        if photos:
+            if appid == 311:
+                topicId = f"{hostuin}_{fid}__1"
+            else:
+                assert abstime, "abstime is required if appid != 311"
+                topicId = f"{hostuin}_{abstime}"
+            return await self.call(
+                AddCommentApiLegacy(params=AddCommentParamsLegacy.model_validate(locals()))
+            )
+
         return await self.call(AddCommentApi(params=AddCommentParams.model_validate(locals())))
+
+    @t.overload
+    async def add_comment(
+        self,
+        hostuin: int,
+        fid: str,
+        appid: int,
+        content: str,
+        private=False,
+    ) -> AddCommentResp: ...
+
+    @t.overload
+    async def add_comment(
+        self,
+        hostuin: int,
+        fid: str,
+        appid: int,
+        content: str,
+        photos: t.Sequence[t.Union[PhotoData, PicInfo]],
+        feedsType: int = 100,
+        private=False,
+        abstime: t.Optional[int] = None,
+    ) -> AddCommentLegacyResp: ...
 
     async def delete_comment(
         self,
         hostUin: int,
         topicId: str,
-        feedsType: int,
         commentId: int,
+        feedsType: int = 100,
         commentUin: t.Optional[int] = None,
     ) -> DeleteCommentResp:
         """Delete a comment.

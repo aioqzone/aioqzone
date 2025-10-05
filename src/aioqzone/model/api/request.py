@@ -23,6 +23,7 @@ __all__ = [
     "GetCountParams",
     "DolikeParam",
     "AddCommentParams",
+    "AddCommentParamsLegacy",
     "DeleteCommentParams",
     "PublishMoodParams",
     "DeleteUgcParams",
@@ -94,35 +95,6 @@ class DolikeParam(QzoneRequestParams):
     format: str = "purejson"
 
 
-class AddCommentParams(QzoneRequestParams):
-    uin_fields = ("uin",)
-    ownuin: int
-    fid: str = Field(serialization_alias="srcId")
-    private: int = Field(serialization_alias="isPrivateComment")
-    content: str = Field(min_length=1, max_length=2000)
-    appid: int = Field(default=311)
-
-    bypass_param: dict = Field(default_factory=dict)
-    busi_param: dict = Field(default_factory=dict)
-
-
-class DeleteCommentParams(QzoneRequestParams):
-    uin_fields = ("uin",)
-    hostUin: int
-    topicId: str
-    feedsType: int
-    commentId: int
-    commentUin: int
-
-    inCharset: str = "utf-8"
-    outCharset: str = "utf-8"
-    plat: str = "qzone"
-    source: str = "ic"
-    format: str = "fs"
-    ref: str = "feeds"
-    paramstr: str = "2"
-
-
 class PhotoData(BaseModel):
     albumid: str
     lloc: str
@@ -151,6 +123,59 @@ class PhotoData(BaseModel):
     @classmethod
     def from_PicInfo(cls, o: PicInfo):
         return cls.model_validate(o, from_attributes=True)
+
+
+class AddCommentParams(QzoneRequestParams):
+    uin_fields = ("uin",)
+    hostuin: int
+    fid: str = Field(serialization_alias="srcId")
+    private: int = Field(serialization_alias="isPrivateComment")
+    content: str = Field(min_length=1, max_length=2000)
+    appid: int = Field(default=311)
+
+    bypass_param: dict = Field(default_factory=dict)
+    busi_param: dict = Field(default_factory=dict)
+
+
+class AddCommentParamsLegacy(QzoneRequestParams):
+    uin_fields = ("uin",)
+    hostuin: int
+    topicId: str
+    feedsType: int = 100
+    content: str = Field(min_length=1, max_length=2000)
+    photos: t.List[PhotoData] = Field(default_factory=list, serialization_alias="richval")
+    private: int
+
+    inCharset: str = "utf-8"
+    outCharset: str = "utf-8"
+    plat: str = "qzone"
+    source: str = "ic"
+    isSignIn: str = ""
+    format: str = "fs"
+    ref: str = "feeds"
+    richtype: int = 1
+    paramstr: str = "2"
+
+    @field_serializer("photos")
+    def richval(self, photos: t.List[PhotoData]):
+        return " ".join(i.to_richval() for i in photos)
+
+
+class DeleteCommentParams(QzoneRequestParams):
+    uin_fields = ("uin",)
+    hostUin: int
+    topicId: str
+    feedsType: int = 100
+    commentId: int
+    commentUin: int
+
+    inCharset: str = "utf-8"
+    outCharset: str = "utf-8"
+    plat: str = "qzone"
+    source: str = "ic"
+    format: str = "fs"
+    ref: str = "feeds"
+    paramstr: str = "2"
 
 
 class PublishMoodParams(QzoneRequestParams):

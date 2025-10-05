@@ -14,7 +14,6 @@ from .feed import (
     FeedSummary,
     HasFid,
     HasSummary,
-    HasUserInfo,
     LikeInfo,
     PhotoUrls,
     RightInfo,
@@ -87,7 +86,7 @@ class ProfileComment(FeedComment):
     comments: t.List[ProfileCommentItem] = Field(default_factory=list)
 
 
-class ProfileFeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
+class ProfileFeedOriginal(HasFid, HasCommon, HasSummary, HasMedia):
     @model_validator(mode="before")
     def remove_prefix(cls, v: dict[str, t.Any]):
         return {k.removeprefix("cell_"): i for k, i in v.items()}
@@ -99,7 +98,7 @@ class ProfileFeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
         return v
 
 
-class ProfileFeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
+class ProfileFeedData(HasFid, HasCommon, HasSummary, HasMedia):
     like: ProfileLikeInfo = Field(default_factory=ProfileLikeInfo)
 
     comment: ProfileComment = Field(default_factory=ProfileComment)
