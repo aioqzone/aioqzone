@@ -24,7 +24,7 @@ class QzoneApi(BaseModel, t.Generic[TyRequest, TyResponse]):
 
     attach_token: t.ClassVar[bool] = True
     login_required: t.ClassVar[bool] = True
-    params: TyRequest = Field(default_factory=QzoneRequestParams)
+    params: TyRequest = Field(default_factory=QzoneRequestParams)  # type: ignore
     response: t.ClassVar[t.Type[TyResponse]]  # type: ignore
 
     @property
@@ -91,6 +91,12 @@ class AddCommentApi(QzoneApi[AddCommentParams, AddCommentResp]):
     response: t.ClassVar = AddCommentResp
     http_method: t.ClassVar[TyHttpMethod] = "POST"
     path: t.ClassVar[str] = "/webapp/json/qzoneOperation/addComment"
+
+
+class DeleteCommentApi(QzoneApi[DeleteCommentParams, DeleteCommentResp]):
+    response: t.ClassVar = DeleteCommentResp
+    http_method: t.ClassVar[TyHttpMethod] = "POST"
+    path: t.ClassVar[str] = "/proxy/domain/taotao.qzone.qq.com/cgi-bin/emotion_cgi_delcomment_ugc"
 
 
 class ListFriendApi(QzoneApi):

@@ -1,4 +1,5 @@
 import logging
+import typing as t
 from os import PathLike
 
 from pydantic import ValidationError
@@ -176,6 +177,26 @@ class QzoneH5API:
         :param private: is private comment
         """
         return await self.call(AddCommentApi(params=AddCommentParams.model_validate(locals())))
+
+    async def delete_comment(
+        self,
+        hostUin: int,
+        topicId: str,
+        feedsType: int,
+        commentId: int,
+        commentUin: t.Optional[int] = None,
+    ) -> DeleteCommentResp:
+        """Delete a comment.
+
+        :param hostUin: Feed owner uin
+        :param topicId:
+        :param feedsType:
+        :param commentId: id of the comment to be deleted
+        :param commentUin: uin of the comment owner
+        """
+        return await self.call(
+            DeleteCommentApi(params=DeleteCommentParams.model_validate(locals()))
+        )
 
     async def publish_mood(
         self,

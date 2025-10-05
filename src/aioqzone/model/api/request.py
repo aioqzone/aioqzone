@@ -23,6 +23,7 @@ __all__ = [
     "GetCountParams",
     "DolikeParam",
     "AddCommentParams",
+    "DeleteCommentParams",
     "PublishMoodParams",
     "DeleteUgcParams",
     "UploadPicParams",
@@ -103,6 +104,23 @@ class AddCommentParams(QzoneRequestParams):
 
     bypass_param: dict = Field(default_factory=dict)
     busi_param: dict = Field(default_factory=dict)
+
+
+class DeleteCommentParams(QzoneRequestParams):
+    uin_fields = ("uin",)
+    hostUin: int
+    topicId: str
+    feedsType: int
+    commentId: int
+    commentUin: int
+
+    inCharset: str = "utf-8"
+    outCharset: str = "utf-8"
+    plat: str = "qzone"
+    source: str = "ic"
+    format: str = "fs"
+    ref: str = "feeds"
+    paramstr: str = "2"
 
 
 class PhotoData(BaseModel):

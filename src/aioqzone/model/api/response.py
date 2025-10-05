@@ -11,6 +11,7 @@ from pydantic import (
     Field,
     HttpUrl,
     TypeAdapter,
+    create_model,
     model_validator,
 )
 from tenacity import TryAgain
@@ -37,6 +38,7 @@ __all__ = [
     "FeedCount",
     "SingleReturnResp",
     "AddCommentResp",
+    "DeleteCommentResp",
     "PublishMoodResp",
     "DeleteUgcResp",
     "UploadPicResponse",
@@ -84,10 +86,10 @@ class QzoneResponse(BaseModel):
         if cls._data_key is None:
             return cls.model_validate(obj)
 
-        class data_wrapper(BaseModel):
-            data: cls = Field(validation_alias=cls._data_key)
-
-        return data_wrapper.model_validate(obj).data
+        data_wrapper = create_model(
+            "data_wrapper", data=(cls, Field(validation_alias=cls._data_key))
+        )
+        return getattr(data_wrapper.model_validate(obj), "data")
 
     @classmethod
     async def response_to_object(cls, response: ClientResponse) -> "StrDict":
@@ -191,16 +193,16 @@ class ProfilePagePesp(QzoneResponse):
             'body/script[@type="application/javascript"]'
         )
         if not scripts:
-            raise TryAgain("script tag not found")
+            raise TryAgain("ProfilePageResponse: script tag not found")
 
         texts: t.List[str] = [s.text for s in scripts]
         script = firstn(texts, lambda s: "shine0callback" in s)
         if not script:
-            raise TryAgain("data script not found")
+            raise TryAgain("ProfilePageResponse: script tag not found")
 
         m = re.search(r'window\.shine0callback.*return "([0-9a-f]+?)";', script)
         if m is None:
-            raise TryAgain("data script not found")
+            raise TryAgain("ProfilePageResponse: qzonetoken not found")
         qzonetoken = m.group(1)
 
         m = re.search(r"var FrontPage =.*?data\s*:\s*\[", script)
@@ -211,7 +213,7 @@ class ProfilePagePesp(QzoneResponse):
         data = json_loads(data)
         assert isinstance(data, list)
         if len(data) < 2:
-            raise TryAgain("profile not returned")
+            raise TryAgain("ProfilePageResponse: profile not returned")
 
         data = dict(zip(["info", "feedpage"], data))
         data["qzonetoken"] = qzonetoken
@@ -237,6 +239,25 @@ class AddCommentResp(QzoneResponse):
     verifyurl: str = ""
     commentid: int = 0
     commentLikekey: HttpUrl
+
+
+class DeleteCommentResp(AddCommentResp):
+    feeds: str = ""
+
+    @classmethod
+    async def response_to_object(cls, response: ClientResponse):
+        html = await response.text()
+        scripts: t.List[HtmlElement] = document_fromstring(html).xpath(
+            'body/script[@type="text/javascript"]'
+        )
+        texts: t.List[str] = [s.text for s in scripts]
+        script = firstn(texts, lambda s: "frameElement.callback" in s)
+        if not script:
+            raise TryAgain("DeleteCommentResponse: script tag not found")
+
+        m = response_callback.search(script)
+        assert m
+        return validate_strdict(json_loads(m.group(1)))
 
 
 class PublishMoodResp(QzoneResponse):
