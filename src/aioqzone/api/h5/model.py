@@ -291,7 +291,7 @@ class QzoneH5API:
         .. versionchanged:: 1.8.5
 
             In version <= 1.8.4, user is responsible for compressing a image and this api
-            encode the :obj:`picture` with Base64 and send it to Qzone _ASIS_.
+            encode the :obj:`picture` with Base64 and send it to Qzone *ASIS* .
 
             Since version 1.8.5, we recognize a compressed image by :obj:`width` and :obj:`height`
             parameters. If :obj:`width` and :obj:`height` is provided, this API will keep the former

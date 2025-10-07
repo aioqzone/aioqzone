@@ -17,19 +17,19 @@ repos:
     hooks:
       - id: isort
         name: sort imports
-        entry: uv run ruff check --select I --fix
+        entry: uv run --active ruff check --select I --fix
         pass_filenames: false
         language: system
         types: [python]
       - id: black
         name: format
-        entry: uv run ruff format
+        entry: uv run --active ruff format
         pass_filenames: false
         language: system
         types: [python]
       - id: pytest
         name: pytest-check
-        entry: uv run pytest test
+        entry: uv run --active pytest test
         language: system
         pass_filenames: false
         types: [python, toml]

@@ -18,6 +18,7 @@ aioqzone provides python interface to
 
    aioqzone/index
    qqqr/index
+   examples
 
 .. toctree::
    :caption: Links

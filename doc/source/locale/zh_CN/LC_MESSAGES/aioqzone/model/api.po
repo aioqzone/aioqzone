@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 10:48+0800\n"
+"POT-Creation-Date: 2025-10-07 23:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../../source/aioqzone/model/api.rst:2
 msgid "H5 API definations"
@@ -34,17 +34,20 @@ msgstr ""
 #: aioqzone.model.api.UnlikeApi aioqzone.model.api.UploadPicApi aioqzone.model.api.UserProfileApi
 #: aioqzone.model.api.feed.FeedData aioqzone.model.api.profile.ProfileFeedData
 #: aioqzone.model.api.request.ActiveFeedsParams aioqzone.model.api.request.AddCommentParams
-#: aioqzone.model.api.request.DeleteUgcParams aioqzone.model.api.request.DolikeParam
-#: aioqzone.model.api.request.GetCountParams aioqzone.model.api.request.GetFeedsParams
-#: aioqzone.model.api.request.PhotoData aioqzone.model.api.request.PhotosPreuploadParams
-#: aioqzone.model.api.request.ProfileParams aioqzone.model.api.request.PublishMoodParams
-#: aioqzone.model.api.request.ShuoshuoParams aioqzone.model.api.request.UploadPicParams
-#: aioqzone.model.api.response.AddCommentResp aioqzone.model.api.response.DeleteUgcResp
+#: aioqzone.model.api.request.AddCommentParamsLegacy aioqzone.model.api.request.AvatarParams
+#: aioqzone.model.api.request.DeleteCommentParams aioqzone.model.api.request.DeleteUgcParams
+#: aioqzone.model.api.request.DolikeParam aioqzone.model.api.request.GetCountParams
+#: aioqzone.model.api.request.GetFeedsParams aioqzone.model.api.request.PhotoData
+#: aioqzone.model.api.request.PhotosPreuploadParams aioqzone.model.api.request.ProfileParams
+#: aioqzone.model.api.request.PublishMoodParams aioqzone.model.api.request.ShuoshuoParams
+#: aioqzone.model.api.request.UploadPicParams aioqzone.model.api.response.AddCommentLegacyResp
+#: aioqzone.model.api.response.AddCommentResp aioqzone.model.api.response.AvatarResponse
+#: aioqzone.model.api.response.DeleteCommentResp aioqzone.model.api.response.DeleteUgcResp
 #: aioqzone.model.api.response.DetailResp aioqzone.model.api.response.FeedCount
 #: aioqzone.model.api.response.FeedPageResp aioqzone.model.api.response.IndexPageResp
-#: aioqzone.model.api.response.PhotosPreuploadResponse aioqzone.model.api.response.ProfilePagePesp
-#: aioqzone.model.api.response.ProfileResp aioqzone.model.api.response.PublishMoodResp
-#: aioqzone.model.api.response.UploadPicResponse of
+#: aioqzone.model.api.response.PhotosPreuploadResponse aioqzone.model.api.response.PicInfo
+#: aioqzone.model.api.response.ProfilePagePesp aioqzone.model.api.response.ProfileResp
+#: aioqzone.model.api.response.PublishMoodResp aioqzone.model.api.response.UploadPicResponse of
 msgid "Fields"
 msgstr ""
 
@@ -74,6 +77,14 @@ msgstr ""
 
 #: aioqzone.model.api.request.ActiveFeedsParams:1 of
 msgid ":py:obj:`attach_info (str) <aioqzone.model.api.request.ActiveFeedsParams.attach_info>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AvatarParams:1 of
+msgid ":py:obj:`hostuin (int) <aioqzone.model.api.request.AvatarParams.hostuin>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AvatarParams:1 of
+msgid ":py:obj:`size (Literal[100, 640]) <aioqzone.model.api.request.AvatarParams.size>`"
 msgstr ""
 
 #: aioqzone.model.api.request.GetFeedsParams:1 of
@@ -137,12 +148,10 @@ msgid ":py:obj:`uin (int) <aioqzone.model.api.request.ShuoshuoParams.uin>`"
 msgstr ""
 
 #: ../../../docstring aioqzone.model.api.request.AddCommentParams.content
+#: aioqzone.model.api.request.AddCommentParamsLegacy.content
 #: aioqzone.model.api.request.PublishMoodParams.content
-#: aioqzone.model.api.request.ShuoshuoParams.busi_param
-#: aioqzone.model.api.request.UploadPicParams.picture
-#: aioqzone.model.api.response.AddCommentResp.commentLikekey
-#: aioqzone.model.api.response.FeedData.original aioqzone.model.api.response.ProfileFeedData.original
-#: of
+#: aioqzone.model.api.request.ShuoshuoParams.busi_param aioqzone.model.api.response.FeedData.original
+#: aioqzone.model.api.response.ProfileFeedData.original of
 msgid "Constraints"
 msgstr ""
 
@@ -195,7 +204,7 @@ msgid ":py:obj:`fid (str) <aioqzone.model.api.request.AddCommentParams.fid>`"
 msgstr ""
 
 #: aioqzone.model.api.request.AddCommentParams:1 of
-msgid ":py:obj:`ownuin (int) <aioqzone.model.api.request.AddCommentParams.ownuin>`"
+msgid ":py:obj:`hostuin (int) <aioqzone.model.api.request.AddCommentParams.hostuin>`"
 msgstr ""
 
 #: aioqzone.model.api.request.AddCommentParams:1 of
@@ -203,13 +212,125 @@ msgid ":py:obj:`private (int) <aioqzone.model.api.request.AddCommentParams.priva
 msgstr ""
 
 #: ../../../docstring aioqzone.model.api.request.AddCommentParams.content:1
+#: aioqzone.model.api.request.AddCommentParamsLegacy.content:1
 #: aioqzone.model.api.request.PublishMoodParams.content:1 of
 msgid "**min_length** = 1"
 msgstr ""
 
 #: ../../../docstring aioqzone.model.api.request.AddCommentParams.content:1
+#: aioqzone.model.api.request.AddCommentParamsLegacy.content:1
 #: aioqzone.model.api.request.PublishMoodParams.content:1 of
 msgid "**max_length** = 2000"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`content (str) <aioqzone.model.api.request.AddCommentParamsLegacy.content>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`feedsType (int) <aioqzone.model.api.request.AddCommentParamsLegacy.feedsType>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`format (str) <aioqzone.model.api.request.AddCommentParamsLegacy.format>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`hostuin (int) <aioqzone.model.api.request.AddCommentParamsLegacy.hostuin>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`inCharset (str) <aioqzone.model.api.request.AddCommentParamsLegacy.inCharset>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`isSignIn (str) <aioqzone.model.api.request.AddCommentParamsLegacy.isSignIn>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`outCharset (str) <aioqzone.model.api.request.AddCommentParamsLegacy.outCharset>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`paramstr (str) <aioqzone.model.api.request.AddCommentParamsLegacy.paramstr>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ""
+":py:obj:`photos (List[pydantic.networks.HttpUrl]) "
+"<aioqzone.model.api.request.AddCommentParamsLegacy.photos>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`plat (str) <aioqzone.model.api.request.AddCommentParamsLegacy.plat>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`private (int) <aioqzone.model.api.request.AddCommentParamsLegacy.private>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`ref (str) <aioqzone.model.api.request.AddCommentParamsLegacy.ref>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`richtype (str) <aioqzone.model.api.request.AddCommentParamsLegacy.richtype>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`source (str) <aioqzone.model.api.request.AddCommentParamsLegacy.source>`"
+msgstr ""
+
+#: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
+msgid ":py:obj:`topicId (str) <aioqzone.model.api.request.AddCommentParamsLegacy.topicId>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`commentId (int) <aioqzone.model.api.request.DeleteCommentParams.commentId>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`commentUin (int) <aioqzone.model.api.request.DeleteCommentParams.commentUin>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`feedsType (int) <aioqzone.model.api.request.DeleteCommentParams.feedsType>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`format (str) <aioqzone.model.api.request.DeleteCommentParams.format>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`hostUin (int) <aioqzone.model.api.request.DeleteCommentParams.hostUin>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`inCharset (str) <aioqzone.model.api.request.DeleteCommentParams.inCharset>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`outCharset (str) <aioqzone.model.api.request.DeleteCommentParams.outCharset>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`paramstr (str) <aioqzone.model.api.request.DeleteCommentParams.paramstr>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`plat (str) <aioqzone.model.api.request.DeleteCommentParams.plat>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`ref (str) <aioqzone.model.api.request.DeleteCommentParams.ref>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`source (str) <aioqzone.model.api.request.DeleteCommentParams.source>`"
+msgstr ""
+
+#: aioqzone.model.api.request.DeleteCommentParams:1 of
+msgid ":py:obj:`topicId (str) <aioqzone.model.api.request.DeleteCommentParams.topicId>`"
 msgstr ""
 
 #: aioqzone.model.api.request.PublishMoodParams:1 of
@@ -305,15 +426,19 @@ msgid ":py:obj:`output_type (str) <aioqzone.model.api.request.UploadPicParams.ou
 msgstr ""
 
 #: aioqzone.model.api.request.UploadPicParams:1 of
-msgid ":py:obj:`picture (bytes[bytes]) <aioqzone.model.api.request.UploadPicParams.picture>`"
+msgid ":py:obj:`picture (bytes) <aioqzone.model.api.request.UploadPicParams.picture>`"
 msgstr ""
 
 #: aioqzone.model.api.request.UploadPicParams:1 of
 msgid ":py:obj:`preupload (int) <aioqzone.model.api.request.UploadPicParams.preupload>`"
 msgstr ""
 
-#: ../../../docstring aioqzone.model.api.request.UploadPicParams.picture:1 of
-msgid "**encoder** = <class 'pydantic.types.Base64Encoder'>"
+#: ../../source/aioqzone/model/api.rst
+msgid "返回类型"
+msgstr ""
+
+#: aioqzone.model.api.request.UploadPicParams.b64_picture:2 of
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`str\\``"
 msgstr ""
 
 #: aioqzone.model.api.request.PhotosPreuploadParams:1 of
@@ -415,8 +540,7 @@ msgstr ""
 msgid "Parses the response text or object recieved from Qzone API."
 msgstr ""
 
-#: aioqzone.model.api.response.ProfilePagePesp.from_response_object
-#: aioqzone.model.api.response.QzoneResponse.from_response_object of
+#: ../../source/aioqzone/model/api.rst
 msgid "参数"
 msgstr ""
 
@@ -425,8 +549,7 @@ msgstr ""
 msgid "the parsed response object. see `.response_to_object`"
 msgstr ""
 
-#: aioqzone.model.api.response.ProfilePagePesp.from_response_object
-#: aioqzone.model.api.response.QzoneResponse.from_response_object of
+#: ../../source/aioqzone/model/api.rst
 msgid "抛出"
 msgstr ""
 
@@ -435,20 +558,12 @@ msgstr ""
 msgid "if returned result code != 0"
 msgstr ""
 
-#: aioqzone.model.api.response.ProfilePagePesp.from_response_object
-#: aioqzone.model.api.response.QzoneResponse.from_response_object
-#: aioqzone.model.api.response.QzoneResponse.response_to_object of
-#: pydantic._internal._model_construction.init_private_attributes
-msgid "返回类型"
-msgstr ""
-
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:7
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:7 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Self\\``"
 msgstr ""
 
-#: aioqzone.model.api.response.ProfilePagePesp.from_response_object
-#: aioqzone.model.api.response.QzoneResponse.from_response_object of
+#: ../../source/aioqzone/model/api.rst
 msgid "返回"
 msgstr ""
 
@@ -457,14 +572,14 @@ msgstr ""
 msgid "Self"
 msgstr ""
 
-#: aioqzone.model.api.response.QzoneResponse.response_to_object:2 of
+#: aioqzone.model.api.response.AvatarResponse.response_to_object:2
+#: aioqzone.model.api.response.IndexPageResp.response_to_object:2
+#: aioqzone.model.api.response.PhotosPreuploadResponse.response_to_object:2
+#: aioqzone.model.api.response.QzoneResponse.response_to_object:2
+#: aioqzone.model.api.response.UploadPicResponse.response_to_object:2 of
 msgid ""
 ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Dict\\`\\\\ "
-"\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:data\\:\\`\\~typing.Union\\`\\\\ "
-"\\\\\\[\\:py\\:class\\:\\`bool\\`\\, \\:py\\:class\\:\\`int\\`\\, \\:py\\:class\\:\\`str\\`\\, "
-"\\:py\\:class\\:\\`\\~typing.Dict\\`\\\\ \\\\\\[\\:py\\:data\\:\\`\\~typing.Union\\`\\\\ "
-"\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:class\\:\\`int\\`\\]\\, JsonValue\\]\\, "
-"\\:py\\:class\\:\\`\\~typing.List\\`\\\\ \\\\\\[JsonValue\\]\\]\\]`"
+"\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:data\\:\\`\\~typing.Any\\`\\]`"
 msgstr ""
 
 #: aioqzone.model.api.response.FeedPageResp:1 of
@@ -583,17 +698,17 @@ msgstr ""
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:obj\\:\\`None\\``"
 msgstr ""
 
-#: of pydantic._internal._model_construction.init_private_attributes:8
+#: of pydantic._internal._model_construction.init_private_attributes:7
 msgid "Args:"
 msgstr ""
 
 #: of pydantic._internal._model_construction.init_private_attributes:8
-msgid "self: The BaseModel instance. __context: The context."
+msgid "self: The BaseModel instance. context: The context."
 msgstr ""
 
 #: aioqzone.model.api.response.AddCommentResp:1 of
 msgid ""
-":py:obj:`commentLikekey (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url]) "
+":py:obj:`commentLikekey (pydantic.networks.HttpUrl) "
 "<aioqzone.model.api.response.AddCommentResp.commentLikekey>`"
 msgstr ""
 
@@ -613,12 +728,16 @@ msgstr ""
 msgid ":py:obj:`verifyurl (str) <aioqzone.model.api.response.AddCommentResp.verifyurl>`"
 msgstr ""
 
-#: ../../../docstring aioqzone.model.api.response.AddCommentResp.commentLikekey:1 of
-msgid "**max_length** = 2083"
+#: aioqzone.model.api.response.AddCommentLegacyResp:1 of
+msgid ":py:obj:`feeds (str) <aioqzone.model.api.response.AddCommentLegacyResp.feeds>`"
 msgstr ""
 
-#: ../../../docstring aioqzone.model.api.response.AddCommentResp.commentLikekey:1 of
-msgid "**allowed_schemes** = ['http', 'https']"
+#: aioqzone.model.api.response.AddCommentLegacyResp:1 of
+msgid ":py:obj:`smooth_policy (dict) <aioqzone.model.api.response.AddCommentLegacyResp.smooth_policy>`"
+msgstr ""
+
+#: aioqzone.model.api.response.DeleteCommentResp:1 of
+msgid ":py:obj:`feeds (str) <aioqzone.model.api.response.DeleteCommentResp.feeds>`"
 msgstr ""
 
 #: aioqzone.model.api.response.PublishMoodResp:1 of
@@ -679,19 +798,59 @@ msgstr ""
 
 #: aioqzone.model.api.feed.FeedData:1 of
 msgid ""
+":py:obj:`operation (aioqzone.model.api.feed.FeedOperation) "
+"<aioqzone.model.api.feed.FeedData.operation>`"
+msgstr ""
+
+#: aioqzone.model.api.feed.FeedData:1 of
+msgid ""
 ":py:obj:`original (aioqzone.model.api.feed.FeedOriginal | aioqzone.model.api.feed.Share | None) "
 "<aioqzone.model.api.feed.FeedData.original>`"
 msgstr ""
 
 #: aioqzone.model.api.feed.FeedData:1 of
-msgid ""
-":py:obj:`share_info (aioqzone.model.api.feed.ShareInfo) "
-"<aioqzone.model.api.feed.FeedData.share_info>`"
+msgid ":py:obj:`visitor (aioqzone.model.api.feed.Visitor) <aioqzone.model.api.feed.FeedData.visitor>`"
 msgstr ""
 
 #: ../../../docstring aioqzone.model.api.response.FeedData.original:1
 #: aioqzone.model.api.response.ProfileFeedData.original:1 of
 msgid "**union_mode** = left_to_right"
+msgstr ""
+
+#: aioqzone.model.api.response.PicInfo:1 of
+msgid ":py:obj:`albumid (str) <aioqzone.model.api.response.PicInfo.albumid>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PicInfo:1 of
+msgid ":py:obj:`height (int) <aioqzone.model.api.response.PicInfo.height>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PicInfo:1 of
+msgid ":py:obj:`lloc (str) <aioqzone.model.api.response.PicInfo.lloc>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PicInfo:1 of
+msgid ":py:obj:`pre (pydantic.networks.HttpUrl) <aioqzone.model.api.response.PicInfo.pre>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PicInfo:1 of
+msgid ":py:obj:`sloc (str) <aioqzone.model.api.response.PicInfo.sloc>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PicInfo:1 of
+msgid ":py:obj:`url (pydantic.networks.HttpUrl) <aioqzone.model.api.response.PicInfo.url>`"
+msgstr ""
+
+#: aioqzone.model.api.response.PicInfo:1 of
+msgid ":py:obj:`width (int) <aioqzone.model.api.response.PicInfo.width>`"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.response.PicInfo.lloc:1 of
+msgid "id of large picture"
+msgstr ""
+
+#: ../../../docstring aioqzone.model.api.response.PicInfo.sloc:1 of
+msgid "id of small picture"
 msgstr ""
 
 #: aioqzone.model.api.profile.ProfileFeedData:1 of
@@ -708,14 +867,24 @@ msgstr ""
 
 #: aioqzone.model.api.profile.ProfileFeedData:1 of
 msgid ""
+":py:obj:`operation (aioqzone.model.api.feed.FeedOperation) "
+"<aioqzone.model.api.profile.ProfileFeedData.operation>`"
+msgstr ""
+
+#: aioqzone.model.api.profile.ProfileFeedData:1 of
+msgid ""
 ":py:obj:`original (aioqzone.model.api.profile.ProfileFeedOriginal | "
 "aioqzone.model.api.feed.Share | None) <aioqzone.model.api.profile.ProfileFeedData.original>`"
 msgstr ""
 
 #: aioqzone.model.api.profile.ProfileFeedData:1 of
 msgid ""
-":py:obj:`share_info (aioqzone.model.api.feed.ShareInfo) "
-"<aioqzone.model.api.profile.ProfileFeedData.share_info>`"
+":py:obj:`visitor (aioqzone.model.api.feed.Visitor) "
+"<aioqzone.model.api.profile.ProfileFeedData.visitor>`"
+msgstr ""
+
+#: aioqzone.model.api.response.AvatarResponse:1 of
+msgid ":py:obj:`avatar (bytes) <aioqzone.model.api.response.AvatarResponse.avatar>`"
 msgstr ""
 
 #~ msgid "Response Models"
@@ -832,4 +1001,33 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ":py:obj:`currnum (int) <aioqzone.model.api.request.PhotosPreuploadParams.currnum>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`ownuin (int) <aioqzone.model.api.request.AddCommentParams.ownuin>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`picture (bytes[bytes]) <aioqzone.model.api.request.UploadPicParams.picture>`"
+#~ msgstr ""
+
+#~ msgid "**encoder** = <class 'pydantic.types.Base64Encoder'>"
+#~ msgstr ""
+
+#~ msgid "self: The BaseModel instance. __context: The context."
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`commentLikekey "
+#~ "(pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url]) "
+#~ "<aioqzone.model.api.response.AddCommentResp.commentLikekey>`"
+#~ msgstr ""
+
+#~ msgid "**max_length** = 2083"
+#~ msgstr ""
+
+#~ msgid "**allowed_schemes** = ['http', 'https']"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`share_info (aioqzone.model.api.feed.ShareInfo) "
+#~ "<aioqzone.model.api.profile.ProfileFeedData.share_info>`"
 #~ msgstr ""

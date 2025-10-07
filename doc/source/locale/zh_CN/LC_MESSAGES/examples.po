@@ -1,0 +1,232 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2025, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-07 23:51+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../source/examples.rst:3
+msgid "Examples"
+msgstr ""
+
+#: ../../source/examples.rst:5
+msgid "This page provides a collection of examples of aioqzone usage."
+msgstr ""
+
+#: ../../source/examples.rst:8
+msgid "Login"
+msgstr ""
+
+#: ../../source/examples.rst:20 ../../source/examples.rst:37
+msgid "User-Agent is automatically set when login."
+msgstr ""
+
+#: ../../source/examples.rst:41
+msgid "You can surely disable auto login and use external cookie:"
+msgstr ""
+
+#: ../../source/examples.rst:56
+msgid "User-Agent is **NOT** automatically set, remember to change it:"
+msgstr ""
+
+#: ../../source/examples.rst:68
+msgid "If you'd like to use external cookie with auto login, just assign cookie dict to login manager:"
+msgstr ""
+
+#: ../../source/examples.rst:85
+msgid "Receiving Messages from Login Manager"
+msgstr ""
+
+#: ../../source/examples.rst:87
+msgid ":doc:`/aioqzone/messages`"
+msgstr ""
+
+#: ../../source/examples.rst:89
+msgid "You can receive QR code image from QR code login manager:"
+msgstr ""
+
+#: ../../source/examples.rst:102
+msgid "待处理"
+msgstr ""
+
+#: ../../source/examples.rst:102
+msgid "other messages"
+msgstr ""
+
+#: ../../source/examples.rst:105
+msgid "Create Qzone H5 API"
+msgstr ""
+
+#: ../../source/examples.rst:136
+msgid "fetch feed flow"
+msgstr ""
+
+#: ../../source/examples.rst:150
+msgid ""
+"Fetching (self) feed flow is a preliminary step for most operations, as it gets ``qzonetoken`` "
+"from Qzone server, which is used in most operations."
+msgstr ""
+
+#: ../../source/examples.rst:154
+msgid "fetch next page of feed flow"
+msgstr ""
+
+#: ../../source/examples.rst:156
+msgid "As feed flow is paginated, you can fetch next page of feed flow:"
+msgstr ""
+
+#: ../../source/examples.rst:182
+msgid ""
+"`aioqzone-feed <https://github.com/aioqzone/aioqzone-feed>`_ provides a high-level interface for"
+" fetching feed flow."
+msgstr ""
+
+#: ../../source/examples.rst:186
+msgid "fetch avatar from uin"
+msgstr ""
+
+#: ../../source/examples.rst:188
+msgid "This is a no-login API, you can fetch avatar without login state."
+msgstr ""
+
+#: ../../source/examples.rst:198
+msgid "upload photo"
+msgstr ""
+
+#: ../../source/examples.rst:200
+msgid ""
+"Uploading photo is a two-step process. The first is :meth:`QzoneH5API.upload_pic`, which should "
+"be called per-image. The response is file length and md5. The second is "
+"`:meth:`QzoneH5API.preupload_photos` , which is called once for multiple images, and the "
+"response is a list of :class:`PicInfo`, including image url, image id, etc."
+msgstr ""
+
+#: ../../source/examples.rst:217
+msgid ""
+"You can specify quality of uploaded image by setting ``quality`` parameter of "
+":meth:`QzoneH5API.upload_pic`."
+msgstr ""
+
+#: ../../source/examples.rst:220
+msgid "Mood operation"
+msgstr ""
+
+#: ../../source/examples.rst:223
+msgid "upload mood"
+msgstr ""
+
+#: ../../source/examples.rst:237
+msgid ""
+"You can specify mood visibility by setting ``ugc_right`` parameter of "
+":meth:`QzoneH5API.publish_mood` ."
+msgstr ""
+
+#: ../../source/examples.rst:240
+msgid "delete mood"
+msgstr ""
+
+#: ../../source/examples.rst:248
+msgid "get mood detail"
+msgstr ""
+
+#: ../../source/examples.rst:262
+msgid "like/unlike mood"
+msgstr ""
+
+#: ../../source/examples.rst:279
+msgid "mood comment"
+msgstr ""
+
+#: ../../source/examples.rst:282
+msgid "add comment"
+msgstr ""
+
+#: ../../source/examples.rst:293
+msgid "``busi_param`` is optional, but recommended."
+msgstr ""
+
+#: ../../source/examples.rst:307
+msgid ""
+"Picture comment uses legacy html Qzone API, which has a html response. Currently ``commentId`` "
+"cannot be parsed from the response."
+msgstr ""
+
+#: ../../source/examples.rst:311
+msgid "delete comment"
+msgstr ""
+
+#: ../../source/examples.rst:318
+msgid "check feed update"
+msgstr ""
+
+#: ../../source/examples.rst:320
+msgid "Speculation"
+msgstr ""
+
+#: ../../source/examples.rst:322
+msgid ""
+"Call this api every 5 minutes might keep your login cookie alive within one day (or several "
+"days). Otherwise the login state will expire in several hours."
+msgstr ""
+
+#~ msgid ""
+#~ "Fetching feed (self) flow is a preliminary step "
+#~ "for most operations, as it gets ``qzonetoken`` from"
+#~ " Qzone server, which is used in most operations."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Uploading photo is a two-step process. The "
+#~ "first is :meth:`QzoneH5API.upload_pic`, which should be "
+#~ "called per-image. The response is file length "
+#~ "and md5. The second is `:meth:`QzoneH5API.preupload_photos`,"
+#~ " which is called once for multiple images, and"
+#~ " the response is a list of :class:`PicInfo`, "
+#~ "including image url, image id, etc."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "You can specify quality of uploaded image by "
+#~ "setting ``quality`` parameter of :meth:`QzoneH5API.upload_pic`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "You can specify mood visibility by setting "
+#~ "``ugc_right`` parameter of :meth:`QzoneH5API.publish_mood`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Uploading photo is a two-step process. The "
+#~ "first is :meth:`~aioqzone.api.QzoneH5API.upload_pic`, which should"
+#~ " be called per-image. The response is file "
+#~ "length and md5. The second is "
+#~ "`:meth:`~aioqzone.api.QzoneH5API.preupload_photos` , which is called"
+#~ " once for multiple images, and the response is"
+#~ " a list of :class:`PicInfo`, including image url, "
+#~ "image id, etc."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "You can specify quality of uploaded image by "
+#~ "setting ``quality`` parameter of "
+#~ ":meth:`~aioqzone.api.QzoneH5API.upload_pic`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "You can specify mood visibility by setting "
+#~ "``ugc_right`` parameter of :meth:`~aioqzone.api.QzoneH5API.publish_mood`."
+#~ msgstr ""

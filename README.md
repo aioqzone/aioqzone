@@ -41,6 +41,7 @@ aioqzone封装了一些Qzone接口。
 __在做了:__
 
 - [ ] 完善的测试覆盖
+- [x] [示例代码](https://aioqzone.github.io/aioqzone/examples.html)
 
 ## 包描述
 
