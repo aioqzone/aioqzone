@@ -19,7 +19,7 @@ class QzoneApi(BaseModel, t.Generic[TyRequest, TyResponse]):
     path: t.ClassVar[str]
 
     keep_alive: t.ClassVar[bool] = True
-    accept: t.ClassVar[t.Optional[str]] = None
+    is_json: t.ClassVar[bool] = False
     referer: str = "https://h5.qzone.qq.com/"
 
     attach_token: t.ClassVar[bool] = True
@@ -74,7 +74,7 @@ class GetCountApi(QzoneApi[GetCountParams, FeedCount]):
     http_method: t.ClassVar[TyHttpMethod] = "GET"
     host: t.ClassVar[str] = "https://mobile.qzone.qq.com"
     path: t.ClassVar[str] = "/feeds/mfeeds_get_count"
-    accept: t.ClassVar[str] = "application/json"
+    is_json: t.ClassVar[bool] = True
 
 
 class LikeApi(QzoneApi[DolikeParam, SingleReturnResp]):
@@ -91,6 +91,7 @@ class AddCommentApi(QzoneApi[AddCommentParams, AddCommentResp]):
     response: t.ClassVar = AddCommentResp
     http_method: t.ClassVar[TyHttpMethod] = "POST"
     path: t.ClassVar[str] = "/webapp/json/qzoneOperation/addComment"
+    is_json: t.ClassVar[bool] = True
 
 
 class AddCommentApiLegacy(QzoneApi[AddCommentParamsLegacy, AddCommentLegacyResp]):
