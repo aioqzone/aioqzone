@@ -192,14 +192,22 @@ class FeedComment(BaseModel):
 
 class HasCommon(BaseModel):
     common: FeedCommon = Field(validation_alias="comm")
+    userinfo: UserInfo
 
     @property
     def abstime(self):
         return self.common.time
 
+    @property
+    def topicId(self):
+        """make topicId. for 311 feeds, it's made of uin and fid; for others, uin and time.
 
-class HasUserInfo(BaseModel):
-    userinfo: UserInfo
+        .. versionadded:: 1.9.5.dev1
+        """
+        if self.common.appid == 311:
+            fid: str = getattr(self, "fid", self.common.ugcrightkey)
+            return f"{self.userinfo.uin}_{fid}__1"
+        return f"{self.userinfo.uin}_{self.common.time}"
 
 
 class HasSummary(BaseModel):
@@ -227,13 +235,20 @@ class ShareInfo(BaseModel):
     #     return v
 
 
+class FeedOperation(BaseModel):
+    busi_param: dict = Field(default_factory=dict)
+    weixin_url: t.Union[HttpUrl, str] = Field(default="", union_mode="left_to_right")
+    qq_url: t.Union[HttpUrl, str] = Field(default="", union_mode="left_to_right")
+    share_info: ShareInfo = Field(default_factory=ShareInfo)
+
+
 class Share(BaseModel):
     common: t.Union[FeedCommon, ContentCommon] = Field(
         validation_alias="cell_comm", union_mode="left_to_right"
     )
 
 
-class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
+class FeedOriginal(HasFid, HasCommon, HasSummary, HasMedia):
     @model_validator(mode="before")
     def remove_prefix(cls, v: dict[str, t.Any]):
         return {k.removeprefix("cell_"): i for k, i in v.items()}
@@ -245,14 +260,12 @@ class FeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
         return v
 
 
-class FeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
+class FeedData(HasFid, HasCommon, HasSummary, HasMedia):
     like: LikeInfo = Field(default_factory=LikeInfo)
 
     comment: FeedComment = Field(default_factory=FeedComment)
     original: t.Union[FeedOriginal, Share, None] = Field(default=None, union_mode="left_to_right")
-    share_info: ShareInfo = Field(
-        default_factory=ShareInfo, validation_alias=AliasPath("operation", "share_info")
-    )
+    operation: FeedOperation = Field(default_factory=FeedOperation)
 
     # forward_list
     visitor: Visitor = Field(default_factory=Visitor)

@@ -1,7 +1,8 @@
 import logging
+import typing as t
 from os import PathLike
 
-from pydantic import ValidationError
+from pydantic import HttpUrl, ValidationError
 from tenacity import AsyncRetrying, TryAgain, after_log, stop_after_attempt
 
 from aioqzone.api.login import Loginable
@@ -48,16 +49,17 @@ class QzoneH5API:
     async def call(self, api: QzoneApi[TyRequest, TyResponse]) -> TyResponse:
         params: t.Dict[str, t.Any] = api.params.build_params(self.login.uin)
         if api.http_method == "GET":
-            data = None
+            data = {}
         else:
-            data = params
+            data = dict(json=params) if api.is_json else dict(data=params)
             params = {}
 
         headers = dict(Referer=api.referer)
         if api.keep_alive:
             headers["Connection"] = "keep-alive"
-        if api.accept:
-            headers["Accept"] = api.accept
+        # if api.is_json:
+        #     headers["Content-Type"] = "application/json"
+        #     headers["Accept"] = "application/json"
 
         async for attempt in self._relogin_retry:
             with attempt:
@@ -75,9 +77,9 @@ class QzoneH5API:
                     api.http_method,
                     api.url,
                     params=params,
-                    data=data,
                     headers=headers,
                     cookies=self.login.cookie,
+                    **data,
                 ) as r:
                     r.raise_for_status()
                     obj = await api.response.response_to_object(r)
@@ -164,18 +166,98 @@ class QzoneH5API:
 
         return await self.call(cls(params=DolikeParam.model_validate(locals())))
 
+    @t.overload
     async def add_comment(
-        self, ownuin: int, fid: str, appid: int, content: str, private=False
-    ) -> AddCommentResp:
-        """Comment a feed.
+        self,
+        hostuin: int,
+        fid: str,
+        appid: int,
+        content: str,
+        *,
+        busi_param: t.Optional[dict] = None,
+        private: bool = False,
+    ) -> AddCommentResp: ...
 
-        :param ownuin: Feed owner uin
+    @t.overload
+    async def add_comment(
+        self,
+        hostuin: int,
+        fid: str,
+        appid: int,
+        content: str,
+        photos: t.Sequence[HttpUrl],
+        *,
+        feedsType: int = 100,
+        private: bool = False,
+        abstime: t.Optional[int] = None,
+    ) -> AddCommentLegacyResp: ...
+
+    async def add_comment(
+        self,
+        hostuin: int,
+        fid: str,
+        appid: int,
+        content: str,
+        photos: t.Optional[t.Sequence[HttpUrl]] = None,
+        busi_param: t.Optional[dict] = None,
+        *,
+        feedsType: int = 100,
+        private=False,
+        abstime: t.Optional[int] = None,
+    ) -> t.Union[AddCommentResp, AddCommentLegacyResp]:
+        """Comment a feed. If :obj:`photos` is given, the legacy comment api will be used.
+
+        :param hostuin: Feed owner uin
         :param fid: :term:`fid`
         :param appid: :term:`appid`
         :param content: comment content
+        :param photos: photos to be attached, usually returned by :meth:`.preupload_photos`
+        :param busi_param: optional encoded params from :obj:`FeedOperation.operation.busi_param`
+        :param abstime: required if `appid != 311`
         :param private: is private comment
+
+        .. seealso:: :meth:`.preupload_photos`, :meth:`.upload_pic`
+
+        .. versionchanged:: 1.9.5.dev1
+
+            added support for legacy comment api (with photos).
         """
+        if photos:
+            if appid == 311:
+                topicId = f"{hostuin}_{fid}__1"
+            else:
+                assert abstime, "abstime is required if appid != 311"
+                topicId = f"{hostuin}_{abstime}"
+            return await self.call(
+                AddCommentApiLegacy(
+                    params=AddCommentParamsLegacy.model_validate(locals(), from_attributes=True)
+                )
+            )
+
+        busi_param = busi_param or {}
         return await self.call(AddCommentApi(params=AddCommentParams.model_validate(locals())))
+
+    async def delete_comment(
+        self,
+        hostUin: int,
+        topicId: str,
+        commentId: int,
+        feedsType: int = 100,
+        commentUin: t.Optional[int] = None,
+    ) -> DeleteCommentResp:
+        """Delete a comment.
+
+        :param hostUin: Feed owner uin
+        :param topicId:
+        :param feedsType:
+        :param commentId: id of the comment to be deleted
+        :param commentUin: uin of the comment owner, default as None, means the login uin
+        """
+        if commentUin is None:
+            commentUin = self.login.uin
+        return await self.call(
+            DeleteCommentApi(params=DeleteCommentParams.model_validate(locals()))
+        )
 
     async def publish_mood(
         self,
@@ -187,9 +269,11 @@ class QzoneH5API:
         """Publish a feed.
 
         :param content: feed content
-        :param photos:
+        :param photos: photos to be attached, usually returned by :meth:`.preupload_photos`
         :param sync_weibo: sync to weibo, default to false
         :param ugc_right: access right, default to "Available to Everyone".
+
+        .. seealso:: :meth:`.preupload_photos`, :meth:`.upload_pic`
         """
         photos = photos or []
         return await self.call(
@@ -237,6 +321,12 @@ class QzoneH5API:
     async def preupload_photos(
         self, upload_pics: t.List[UploadPicResponse], cur_num=0, upload_hd=False
     ) -> PhotosPreuploadResponse:
+        """Preupload photos before publishing a feed.
+
+        :param upload_pics: List of :obj:`.UploadPicResponse`, usually returned by :meth:`.upload_pic`
+
+        .. seealso:: :meth:`.upload_pic`
+        """
         assert upload_pics
         return await self.call(
             PhotosPreuploadApi(params=PhotosPreuploadParams.model_validate(locals()))

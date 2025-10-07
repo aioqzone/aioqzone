@@ -1,6 +1,6 @@
 [project]
 name = "aioqzone"
-version = "1.9.4.dev9"
+version = "1.9.5.dev4"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = [{ name = "aioqzone" }]
 maintainers = [
@@ -78,6 +78,12 @@ asyncio_default_fixture_loop_scope = "module"
 
 [tool.ruff]
 line-length = 99
+
+[tool.ruff.lint]
+ignore = [
+    "F403",  # 'from module import *' used; unable to detect undefined names
+    "F405",  # name may be undefined, or defined from star imports
+]
 
 [tool.pyright]
 pythonVersion = "3.9"

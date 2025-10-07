@@ -10,16 +10,15 @@ from .feed import (
     CommentItem,
     FeedComment,
     FeedCommon,
+    FeedOperation,
     FeedPic,
     FeedSummary,
     HasFid,
     HasSummary,
-    HasUserInfo,
     LikeInfo,
     PhotoUrls,
     RightInfo,
     Share,
-    ShareInfo,
     UserInfo,
     Visitor,
 )
@@ -87,7 +86,7 @@ class ProfileComment(FeedComment):
     comments: t.List[ProfileCommentItem] = Field(default_factory=list)
 
 
-class ProfileFeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
+class ProfileFeedOriginal(HasFid, HasCommon, HasSummary, HasMedia):
     @model_validator(mode="before")
     def remove_prefix(cls, v: dict[str, t.Any]):
         return {k.removeprefix("cell_"): i for k, i in v.items()}
@@ -99,15 +98,13 @@ class ProfileFeedOriginal(HasFid, HasCommon, HasUserInfo, HasSummary, HasMedia):
         return v
 
 
-class ProfileFeedData(HasFid, HasCommon, HasSummary, HasMedia, HasUserInfo):
+class ProfileFeedData(HasFid, HasCommon, HasSummary, HasMedia):
     like: ProfileLikeInfo = Field(default_factory=ProfileLikeInfo)
 
     comment: ProfileComment = Field(default_factory=ProfileComment)
     original: t.Union[ProfileFeedOriginal, Share, None] = Field(
         default=None, union_mode="left_to_right"
     )
-    share_info: ShareInfo = Field(
-        default_factory=ShareInfo, validation_alias=AliasPath("operation", "share_info")
-    )
+    operation: FeedOperation = Field(default_factory=FeedOperation)
 
     visitor: Visitor = Field(default_factory=Visitor)

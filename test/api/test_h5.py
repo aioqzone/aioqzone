@@ -61,16 +61,11 @@ async def upload_photos(api: QzoneH5API):
 
 async def qzone_workflow(api: QzoneH5API):
     await flow_wo_check(api)
-    info = await upload_photos(api)
+    picinfo = await upload_photos(api)
 
     feed = await api.publish_mood(
-        MOOD_TEXT, photos=info, sync_weibo=False, ugc_right=UgcRight.self
+        MOOD_TEXT, photos=picinfo, sync_weibo=False, ugc_right=UgcRight.self
     )
-    ownuin, appid = api.login.uin, 311
-    unikey = LikeData.persudo_unikey(appid, ownuin, feed.fid)
-
-    comment = await api.add_comment(ownuin, feed.fid, appid, COMMENT_TEXT)
-    await api.internal_dolike_app(appid, unikey, curkey=unikey)
 
     feed_flow = await api.get_active_feeds()
     feed_dict = {i.fid: i for i in feed_flow.vFeeds}
@@ -79,26 +74,41 @@ async def qzone_workflow(api: QzoneH5API):
     fetched_feed = feed_dict[feed.fid]
     assert fetched_feed.common.right_info.ugc_right == UgcRight.self
     assert MOOD_TEXT in fetched_feed.summary.summary
+
+    ownuin, appid = api.login.uin, 311
+    unikey = LikeData.persudo_unikey(appid, ownuin, feed.fid)
+
+    comment = await api.add_comment(
+        ownuin, feed.fid, appid, COMMENT_TEXT, busi_param=fetched_feed.operation.busi_param
+    )
+    comment_pic = await api.add_comment(
+        ownuin, feed.fid, appid, COMMENT_TEXT, [i.url for i in picinfo]
+    )
+
+    await api.internal_dolike_app(appid, unikey, curkey=unikey)
+
+    detail = await api.shuoshuo(
+        fetched_feed.fid, fetched_feed.userinfo.uin, fetched_feed.common.appid
+    )
     # BUG: dolike returns `succ` but has no effect. the fetched `isliked` is False.
     # So this assertion is disabled temperorily. FIXME!
-    # assert fetched_feed.like.isliked
-    assert fetched_feed.comment.comments
+    # assert detail.like.isliked
+    assert detail.comment.comments
 
-    comment_dict = {i.commentid: i for i in fetched_feed.comment.comments}
+    comment_dict = {i.commentid: i for i in detail.comment.comments}
     assert comment.commentid in comment_dict
 
     fetched_comment = comment_dict[comment.commentid]
     assert fetched_comment.commentLikekey == comment.commentLikekey
     assert COMMENT_TEXT in fetched_comment.content
 
-    detail = await api.shuoshuo(feed.fid, ownuin, appid)
     assert not detail.hasmore
     assert detail.summary.summary == fetched_feed.summary.summary
-    assert detail.like.isliked == fetched_feed.like.isliked
-    assert detail.comment.comments
-    assert comment.commentid in [i.commentid for i in detail.comment.comments]
+    # assert detail.like.isliked == fetched_feed.like.isliked
 
     count1 = await api.mfeeds_get_count()
+    await api.delete_comment(ownuin, fetched_feed.topicId, comment.commentid)
+
     delete = await api.delete_ugc(feed.fid, appid)
     count2 = delete.undeal_info
 
