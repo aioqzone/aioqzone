@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-04 16:34+0800\n"
+"POT-Creation-Date: 2025-10-07 23:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.1\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../../source/qqqr/up/type.rst:2
 msgid "UpLogin Types"
@@ -25,40 +25,36 @@ msgstr ""
 msgid "Response validation in `qqqr.up.captcha`"
 msgstr ""
 
-#: of qqqr.up._model.CheckResp qqqr.up._model.LoginResp qqqr.up._model.VerifyResp
-msgid "Fields"
-msgstr ""
-
-#: of qqqr.up._model.CheckResp:1
-msgid ":py:obj:`code (int) <qqqr.up._model.CheckResp.code>`"
-msgstr ""
-
-#: of qqqr.up._model.CheckResp:1
-msgid ":py:obj:`isRandSalt (int) <qqqr.up._model.CheckResp.isRandSalt>`"
-msgstr ""
-
-#: of qqqr.up._model.CheckResp:1
-msgid ":py:obj:`ptdrvs (str) <qqqr.up._model.CheckResp.ptdrvs>`"
-msgstr ""
-
-#: of qqqr.up._model.CheckResp:1
-msgid ":py:obj:`salt_repr (str) <qqqr.up._model.CheckResp.salt_repr>`"
-msgstr ""
-
-#: of qqqr.up._model.CheckResp:1
-msgid ":py:obj:`session (str) <qqqr.up._model.CheckResp.session>`"
-msgstr ""
-
-#: of qqqr.up._model.CheckResp:1
-msgid ":py:obj:`verifycode (str) <qqqr.up._model.CheckResp.verifycode>`"
-msgstr ""
-
-#: of qqqr.up._model.CheckResp:1
-msgid ":py:obj:`verifysession (str) <qqqr.up._model.CheckResp.verifysession>`"
-msgstr ""
-
 #: ../../../docstring of qqqr.up._model.CheckResp.code:1
 msgid "code = 0/2/3 hideVC; code = 1 showVC"
+msgstr ""
+
+#: ../../../docstring of qqqr.up._model.CheckResp.verifycode:1
+msgid "Alias for field number 1"
+msgstr ""
+
+#: ../../../docstring of qqqr.up._model.CheckResp.salt_repr:1
+msgid "Alias for field number 2"
+msgstr ""
+
+#: ../../../docstring of qqqr.up._model.CheckResp.verifysession:1
+msgid "Alias for field number 3"
+msgstr ""
+
+#: ../../../docstring of qqqr.up._model.CheckResp.isRandSalt:1
+msgid "Alias for field number 4"
+msgstr ""
+
+#: ../../../docstring of qqqr.up._model.CheckResp.ptdrvs:1
+msgid "Alias for field number 5"
+msgstr ""
+
+#: ../../../docstring of qqqr.up._model.CheckResp.session:1
+msgid "Alias for field number 6"
+msgstr ""
+
+#: of qqqr.up._model.LoginResp qqqr.up._model.VerifyResp
+msgid "Fields"
 msgstr ""
 
 #: of qqqr.up._model.LoginResp:1
@@ -82,9 +78,7 @@ msgid ":py:obj:`pt_ev_token (str) <qqqr.up._model.LoginResp.pt_ev_token>`"
 msgstr ""
 
 #: of qqqr.up._model.LoginResp:1
-msgid ""
-":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] | str) "
-"<qqqr.up._model.LoginResp.url>`"
+msgid ":py:obj:`url (pydantic.networks.HttpUrl | str) <qqqr.up._model.LoginResp.url>`"
 msgstr ""
 
 #: of qqqr.up._model.VerifyResp:1
@@ -430,4 +424,30 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ":py:obj:`sprite_pos (List[int]) <qqqr.up._model.Sprite.sprite_pos>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`code (int) <qqqr.up._model.CheckResp.code>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`isRandSalt (int) <qqqr.up._model.CheckResp.isRandSalt>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`ptdrvs (str) <qqqr.up._model.CheckResp.ptdrvs>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`salt_repr (str) <qqqr.up._model.CheckResp.salt_repr>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`session (str) <qqqr.up._model.CheckResp.session>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`verifycode (str) <qqqr.up._model.CheckResp.verifycode>`"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`verifysession (str) <qqqr.up._model.CheckResp.verifysession>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] "
+#~ "| str) <qqqr.up._model.LoginResp.url>`"
 #~ msgstr ""

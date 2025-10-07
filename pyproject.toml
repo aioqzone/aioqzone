@@ -1,6 +1,6 @@
 [project]
 name = "aioqzone"
-version = "1.9.5.dev4"
+version = "1.9.5.dev5"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = [{ name = "aioqzone" }]
 maintainers = [
@@ -46,6 +46,7 @@ doc = [
     "sphinx-autodoc-typehints>=1.19.5",
     "furo",
     "sphinx-intl",
+    "sphinx-inline-tabs",
 ]
 
 [project.optional-dependencies]
