@@ -5,7 +5,7 @@ from math import floor
 from os import PathLike
 from time import time
 
-from pydantic import BaseModel, Field, field_serializer, field_validator
+from pydantic import BaseModel, Field, HttpUrl, field_serializer, field_validator
 from typing_extensions import Buffer
 
 from aioqzone.utils.time import time_ms
@@ -127,7 +127,7 @@ class PhotoData(BaseModel):
 
 class AddCommentParams(QzoneRequestParams):
     uin_fields = ("uin",)
-    hostuin: int
+    hostuin: int = Field(serialization_alias="ownuin")
     fid: str = Field(serialization_alias="srcId")
     private: int = Field(serialization_alias="isPrivateComment")
     content: str = Field(min_length=1, max_length=2000)
@@ -143,9 +143,10 @@ class AddCommentParamsLegacy(QzoneRequestParams):
     topicId: str
     feedsType: int = 100
     content: str = Field(min_length=1, max_length=2000)
-    photos: t.List[PhotoData] = Field(default_factory=list, serialization_alias="richval")
+    photos: t.List[HttpUrl] = Field(default_factory=list, serialization_alias="richval")
     private: int
 
+    # defaults
     inCharset: str = "utf-8"
     outCharset: str = "utf-8"
     plat: str = "qzone"
@@ -153,12 +154,12 @@ class AddCommentParamsLegacy(QzoneRequestParams):
     isSignIn: str = ""
     format: str = "fs"
     ref: str = "feeds"
-    richtype: int = 1
+    richtype: str = "1"  # 1 if photos else empty
     paramstr: str = "2"
 
     @field_serializer("photos")
-    def richval(self, photos: t.List[PhotoData]):
-        return " ".join(i.to_richval() for i in photos)
+    def richval(self, photos: t.List[HttpUrl]):
+        return " ".join(map(str, photos))
 
 
 class DeleteCommentParams(QzoneRequestParams):
@@ -169,6 +170,7 @@ class DeleteCommentParams(QzoneRequestParams):
     commentId: int
     commentUin: int
 
+    # defaults
     inCharset: str = "utf-8"
     outCharset: str = "utf-8"
     plat: str = "qzone"

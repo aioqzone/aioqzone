@@ -243,7 +243,11 @@ class AddCommentResp(QzoneResponse):
 
 
 class AddCommentLegacyResp(QzoneResponse):
-    feeds: str
+    _data_key = None
+    smooth_policy: dict = Field(
+        default_factory=dict, validation_alias=AliasPath("result", "smoothpolicy")
+    )
+    feeds: str = ""
 
     @classmethod
     async def response_to_object(cls, response: ClientResponse):
@@ -261,7 +265,7 @@ class AddCommentLegacyResp(QzoneResponse):
         return validate_strdict(json_loads(m.group(1)))
 
 
-class DeleteCommentResp(AddCommentResp):
+class DeleteCommentResp(QzoneResponse):
     feeds: str = ""
 
     @classmethod
@@ -312,7 +316,9 @@ class PicInfo(QzoneResponse):
     pre: HttpUrl
     url: HttpUrl
     sloc: str
+    """id of small picture"""
     lloc: str
+    """id of large picture"""
     width: int
     height: int
     albumid: str
