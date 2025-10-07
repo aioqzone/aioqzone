@@ -235,6 +235,13 @@ class ShareInfo(BaseModel):
     #     return v
 
 
+class FeedOperation(BaseModel):
+    busi_param: dict = Field(default_factory=dict)
+    weixin_url: t.Union[HttpUrl, str] = Field(default="", union_mode="left_to_right")
+    qq_url: t.Union[HttpUrl, str] = Field(default="", union_mode="left_to_right")
+    share_info: ShareInfo = Field(default_factory=ShareInfo)
+
+
 class Share(BaseModel):
     common: t.Union[FeedCommon, ContentCommon] = Field(
         validation_alias="cell_comm", union_mode="left_to_right"
@@ -258,9 +265,7 @@ class FeedData(HasFid, HasCommon, HasSummary, HasMedia):
 
     comment: FeedComment = Field(default_factory=FeedComment)
     original: t.Union[FeedOriginal, Share, None] = Field(default=None, union_mode="left_to_right")
-    share_info: ShareInfo = Field(
-        default_factory=ShareInfo, validation_alias=AliasPath("operation", "share_info")
-    )
+    operation: FeedOperation = Field(default_factory=FeedOperation)
 
     # forward_list
     visitor: Visitor = Field(default_factory=Visitor)

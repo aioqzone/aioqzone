@@ -10,6 +10,7 @@ from .feed import (
     CommentItem,
     FeedComment,
     FeedCommon,
+    FeedOperation,
     FeedPic,
     FeedSummary,
     HasFid,
@@ -18,7 +19,6 @@ from .feed import (
     PhotoUrls,
     RightInfo,
     Share,
-    ShareInfo,
     UserInfo,
     Visitor,
 )
@@ -105,8 +105,6 @@ class ProfileFeedData(HasFid, HasCommon, HasSummary, HasMedia):
     original: t.Union[ProfileFeedOriginal, Share, None] = Field(
         default=None, union_mode="left_to_right"
     )
-    share_info: ShareInfo = Field(
-        default_factory=ShareInfo, validation_alias=AliasPath("operation", "share_info")
-    )
+    operation: FeedOperation = Field(default_factory=FeedOperation)
 
     visitor: Visitor = Field(default_factory=Visitor)
