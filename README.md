@@ -21,14 +21,14 @@ aioqzone封装了一些Qzone接口。
 
 - [x] [二维码登录](src/qqqr/qr/)
 - [x] [密码登录](src/qqqr/up/) (受限)
-- [x] [通过滑动验证码](src/qqqr/up/captcha/slide)
+- [x] [通过滑动验证码](src/qqqr/up/captcha/slide) ([slide-tc][slide-tc])
 - [x] [解析图片选择验证码](src/qqqr/up/captcha/select)
 - [ ] [通过网络环境检测][pychaosvm]
 - [x] 爬取HTML说说
 - [x] 爬取说说详细内容
 - [x] 点赞/取消赞
-- [x] 发布(仅文字)/修改/删除说说
-- [x] 发评论
+- [x] 发布/修改/删除说说（图文）
+- [x] 发评论/删评论（图文）
 
 ### 为什么选择 aioqzone
 
@@ -83,5 +83,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
 [aioqzone-feed]: https://github.com/aioqzone/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
 [pychaosvm]: https://github.com/aioqzone/pychaosvm "A Python envirionment for Tencent ChaosVM."
+[slide-tc]: https://github.com/aioqzone/slide-tc "An aioqzone plugin for solving slide captcha."
 [pypi]: https://pypi.org/project/aioqzone
 [org]: https://github.com/aioqzone

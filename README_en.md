@@ -18,14 +18,14 @@ English | [简体中文](README.md)
 
 - [x] [QR login](src/qqqr/qr/)
 - [x] [password login](src/qqqr/up/) (limited)
-- [x] [solve slide captcha](src/qqqr/up/captcha/slide)
+- [x] [solve slide captcha](src/qqqr/up/captcha/slide) ([slide-tc][slide-tc])
 - [x] [parse select captcha](src/qqqr/up/captcha/select)
 - [ ] [pass network environment verification][pychaosvm]
 - [x] get complete html feeds
 - [x] get feed details
 - [x] like/unlike app
-- [x] publish/update/delete text feeds
-- [x] add comment
+- [x] publish/update/delete feeds (w/ photos)
+- [x] add/delete comment (w/ photos)
 
 ### Why using this package?
 
@@ -81,4 +81,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 [home]: https://github.com/aioqzone/aioqzone "Python wrapper for Qzone web login and Qzone http api"
 [aioqzone-feed]: https://github.com/aioqzone/aioqzone-feed "aioqzone plugin providing higher level api for processing feed"
 [pychaosvm]: https://github.com/aioqzone/pychaosvm "A Python envirionment for Tencent ChaosVM."
-[pypi]: https://pypi.org/project/aioqzone
+[pypi]: https://pypi.org[slide-tc]: https://github.com/aioqzone/slide-tc "An aioqzone plugin for solving slide captcha."
+/project/aioqzone
