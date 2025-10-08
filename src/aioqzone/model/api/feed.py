@@ -41,9 +41,9 @@ class ContentCommon(BaseModel):
 
 
 class FeedCommon(ContentCommon):
-    ugckey: str
+    ugckey: str = ""
     """an underscore-joined string including `uin`, `appid`, `ugcrightkey`"""
-    ugcrightkey: str
+    ugcrightkey: str = ""
     """an identifier, for most 311 feeds, it equals to cellid (fid)."""
     right_info: RightInfo = Field(default_factory=RightInfo)
     wup_feeds_type: int = 0

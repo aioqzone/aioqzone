@@ -174,11 +174,11 @@ class QzoneStatistic(BaseModel):
 
 
 class QzoneInfo(QzoneResponse):
-    count: QzoneStatistic
+    count: QzoneStatistic = Field(default_factory=QzoneStatistic)
     cover: HttpUrl = Field(validation_alias=AliasPath("coverinfo", 0, "cover"))
-    is_friend: bool
-    is_hide: int
-    limit: int
+    is_friend: bool = False
+    is_hide: int = 0
+    limit: int = 0
     profile: QzoneProfile
 
 
