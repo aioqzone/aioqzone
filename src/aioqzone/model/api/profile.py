@@ -4,20 +4,27 @@ Qzone uses different feed schemes for ``/mqzone/profile``. This module patches :
 
 import typing as t
 
-from pydantic import AliasPath, BaseModel, Field, HttpUrl, field_validator, model_validator
+from pydantic import (
+    AliasPath,
+    BaseModel,
+    Field,
+    HttpUrl,
+    field_validator,
+    model_validator,
+)
 
 from .feed import (
     CommentItem,
     FeedComment,
-    FeedCommon,
     FeedOperation,
     FeedPic,
     FeedSummary,
+    FeedVideo,
+    HasCommon,
     HasFid,
     HasSummary,
     LikeInfo,
     PhotoUrls,
-    RightInfo,
     Share,
     UserInfo,
     Visitor,
@@ -39,20 +46,9 @@ class QzoneProfile(BaseModel):
     is_concerned: bool = False
     is_special: int
 
-
-class ProfileFeedCommon(FeedCommon):
-    ugckey: str = ""
-    ugcrightkey: str = ""
-    right_info: RightInfo = Field(default_factory=RightInfo)
-    wup_feeds_type: int = 0
-
-
-class HasCommon(BaseModel):
-    common: ProfileFeedCommon = Field(validation_alias="comm")
-
-    @property
-    def abstime(self):
-        return self.common.time
+    vip: int = 0
+    viplevel: int = 0
+    viptype: int = 0
 
 
 class ProfilePicData(BaseModel):
@@ -68,6 +64,7 @@ class ProfileFeedPic(FeedPic):
 
 class HasMedia(BaseModel):
     pic: t.Optional[ProfileFeedPic] = None
+    video: t.Optional[FeedVideo] = None
 
 
 class ProfileLikeInfo(LikeInfo):
