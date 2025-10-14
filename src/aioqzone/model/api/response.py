@@ -144,7 +144,7 @@ class IndexPageResp(FeedPageResp):
         if not scripts:
             raise TryAgain("script tag not found")
 
-        texts: t.List[str] = [s.text for s in scripts]
+        texts: t.List[str] = [s.text for s in scripts if s.text]
         script = firstn(texts, lambda s: "shine0callback" in s)
         if not script:
             raise TryAgain("data script not found")
@@ -196,7 +196,7 @@ class ProfilePagePesp(QzoneResponse):
         if not scripts:
             raise TryAgain("ProfilePageResponse: script tag not found")
 
-        texts: t.List[str] = [s.text for s in scripts]
+        texts: t.List[str] = [s.text for s in scripts if s.text]
         script = firstn(texts, lambda s: "shine0callback" in s)
         if not script:
             raise TryAgain("ProfilePageResponse: script tag not found")
@@ -255,7 +255,7 @@ class AddCommentLegacyResp(QzoneResponse):
         scripts: t.List[HtmlElement] = document_fromstring(html).xpath(
             'body/script[@type="text/javascript"]'
         )
-        texts: t.List[str] = [s.text for s in scripts]
+        texts: t.List[str] = [s.text for s in scripts if s.text]
         script = firstn(texts, lambda s: "frameElement.callback" in s)
         if not script:
             raise TryAgain("AddCommentLegacyResponse: script tag not found")
@@ -274,7 +274,7 @@ class DeleteCommentResp(QzoneResponse):
         scripts: t.List[HtmlElement] = document_fromstring(html).xpath(
             'body/script[@type="text/javascript"]'
         )
-        texts: t.List[str] = [s.text for s in scripts]
+        texts: t.List[str] = [s.text for s in scripts if s.text]
         script = firstn(texts, lambda s: "frameElement.callback" in s)
         if not script:
             raise TryAgain("DeleteCommentResponse: script tag not found")
