@@ -146,3 +146,10 @@ class AvatarApi(QzoneApi[AvatarParams, AvatarResponse]):
     http_method: t.ClassVar[TyHttpMethod] = "GET"
     host: t.ClassVar[str] = "https://qlogo2.store.qq.com"
     path: t.ClassVar[str] = "/qzone/{hostuin}/{hostuin}/{size}"
+
+
+class SetTopApi(QzoneApi[SetTopParams, SingleReturnResp]):
+    response: t.ClassVar = SingleReturnResp
+    http_method: t.ClassVar[TyHttpMethod] = "POST"
+    host: t.ClassVar[str] = "user.qzone.qq.com"
+    path: t.ClassVar[str] = "proxy/domain/ic2.qzone.qq.com/cgi-bin/feeds/cgi_settopfeed"

@@ -5,7 +5,7 @@ from math import floor
 from os import PathLike
 from time import time
 
-from pydantic import BaseModel, Field, HttpUrl, field_serializer, field_validator
+from pydantic import BaseModel, Field, HttpUrl, field_serializer
 from typing_extensions import Buffer
 
 from aioqzone.utils.time import time_ms
@@ -31,6 +31,7 @@ __all__ = [
     "PhotosPreuploadParams",
     "UgcRight",
     "PhotoData",
+    "SetTopParams",
 ]
 
 
@@ -292,3 +293,14 @@ class PhotosPreuploadParams(QzoneRequestParams):
 class AvatarParams(QzoneRequestParams):
     hostuin: int
     size: t.Literal[100, 640] = 100
+
+
+class SetTopParams(QzoneRequestParams):
+    fid: str = Field(validation_alias="key")
+    set_top: bool = Field(serialization_alias="act")
+
+    need_change: int = 0
+
+    @field_serializer("set_top")
+    def serialize_set_top(self) -> str:
+        return "set" if self.set_top else "cancel"

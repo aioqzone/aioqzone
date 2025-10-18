@@ -188,7 +188,7 @@ class ProfilePagePesp(QzoneResponse):
     qzonetoken: str
 
     @classmethod
-    async def response_to_object(cls, response: ClientResponse):
+    async def response_to_object(cls, response: ClientResponse) -> StrDict:
         html = await response.text()
         scripts: t.List[HtmlElement] = document_fromstring(html).xpath(
             'body/script[@type="application/javascript"]'
