@@ -356,3 +356,15 @@ class QzoneH5API:
                 params=AvatarParams.model_validate(locals()),
             ),
         )
+
+    async def set_top_feed(self, fid: str, set_top: bool = True) -> None:
+        """Set or unset a feed to top.
+
+        :param fid: :term:`fid`
+        :param set_top: whether to set top, default to `True`
+        """
+        await self.call(
+            SetTopApi(
+                params=SetTopParams.model_validate(locals()),
+            )
+        )
