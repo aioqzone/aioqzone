@@ -26,7 +26,7 @@ dependencies = [
     # "exceptiongroup>=1.1.1",
     "tylisten>=2.2.1",
     "pillow>=10.1.0",
-    "pychaosvm~=0.4.3",
+    "pychaosvm~=0.5.4",
 ]
 
 [project.urls]
