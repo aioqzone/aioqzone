@@ -301,6 +301,6 @@ class SetTopParams(QzoneRequestParams):
 
     need_change: int = 0
 
-    @field_serializer("set_top")
-    def serialize_set_top(self) -> str:
-        return "set" if self.set_top else "cancel"
+    @field_serializer("set_top", return_type=str)
+    def serialize_set_top(self, set_top: bool) -> str:
+        return "set" if set_top else "cancel"
