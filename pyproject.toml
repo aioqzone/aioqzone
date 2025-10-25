@@ -1,6 +1,6 @@
 [project]
 name = "aioqzone"
-version = "1.9.5.dev6"
+version = "1.9.6.dev1"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = [{ name = "aioqzone" }]
 maintainers = [
@@ -8,7 +8,7 @@ maintainers = [
 ]
 license = "AGPL-3.0"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["qzone-api", "autologin", "asyncio-spider"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -19,14 +19,14 @@ classifiers = [
 
 dependencies = [
     "aiohttp>=3.9.0",
-    "pydantic>=2.11.4",
+    "pydantic>=2.12",
     "pydantic-settings>=2.9.0",
     "rsa>=4.9.1",
     "tenacity>=8.2.3,<10.0.0",
     # "exceptiongroup>=1.1.1",
     "tylisten>=2.2.1",
-    "pillow>=10.1.0",
-    "pychaosvm~=0.4.3",
+    "pillow>=11.3.0",
+    "pychaosvm~=0.5.4",
 ]
 
 [project.urls]
@@ -40,7 +40,7 @@ Documentation = "https://aioqzone.github.io/aioqzone"
 test = ["pytest>=8.2.0", "pytest-asyncio>=1.1,<1.3"]
 dev = ["pre-commit", "ruff"]
 doc = [
-    "Sphinx>=7.0.1; python_version>='3.9' and python_version<'3.11'",
+    "Sphinx>=7.0.1; python_version>='3.10' and python_version<'3.11'",
     "Sphinx>=8.2.0; python_version>='3.11'",
     "autodoc-pydantic>=2.0.1",
     "sphinx-autodoc-typehints>=1.19.5",
@@ -50,7 +50,7 @@ doc = [
 ]
 
 [project.optional-dependencies]
-slide-captcha = ["slide-tc~=0.1.1"]
+slide-captcha = ["slide-tc~=0.1.3"]
 
 [tool.uv]
 prerelease = "if-necessary-or-explicit"
@@ -64,12 +64,11 @@ name = "aioqzone-index"
 url = "https://aioqzone.github.io/aioqzone-index/simple/"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build"]
+build-backend = "uv_build"
 
-[tool.hatch.build.targets.wheel]
-skip-excluded-dirs = true
-packages = ["src/aioqzone", "src/qqqr"]
+[tool.uv.build-backend]
+module-name = ["aioqzone", "qqqr"]
 
 [tool.pytest.ini_options]
 pythonpath = "src"
@@ -87,6 +86,6 @@ ignore = [
 ]
 
 [tool.pyright]
-pythonVersion = "3.9"
+pythonVersion = "3.10"
 pythonPlatform = "All"
 reportIncompatibleVariableOverride = "information"
