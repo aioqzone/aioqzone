@@ -19,7 +19,7 @@ classifiers = [
 
 dependencies = [
     "aiohttp>=3.9.0",
-    "pydantic>=2.11.4",
+    "pydantic>=2.12",
     "pydantic-settings>=2.9.0",
     "rsa>=4.9.1",
     "tenacity>=8.2.3,<10.0.0",
