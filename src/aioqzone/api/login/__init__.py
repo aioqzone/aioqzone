@@ -183,6 +183,22 @@ class QrLoginManager(Loginable):
             log.fatal("二维码登录异常", exc_info=True)
             raise UnexpectedLoginError from e
 
+        if self.uin:
+            return cookie
+
+        # uin in qrconfig might be 0, we could get uin after login
+        for k, v in cookie.items():
+            if not k.endswith("uin"):
+                continue
+            v = v.removeprefix("o0")
+            if not v.isdigit():
+                continue
+            try:
+                self.uin = int(v)
+            except ValueError:
+                continue
+            if self.uin:
+                break
         return cookie
 
     def h5(self, enable=True, clear_cookie=True):
