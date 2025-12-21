@@ -86,7 +86,7 @@ class QzoneH5API:
                     try:
                         return api.response.from_response_object(obj)
                     except ValidationError:
-                        log.debug(f"Error when validating {obj}", api)
+                        log.debug(f"Error when validating {obj}, {api=}")
                         raise
         else:
             raise AssertionError
