@@ -108,7 +108,7 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
             async with self.client.get(RECENT_UIN_URL, params=params) as response:
                 dev_mid_sig = response.cookies.get("dev_mid_sig")
                 m = re.search(r"ptui_fetch_dev_uin_CB\((.*)\)", r := await response.text())
-            log.debug("pt_fetch_dev_uin response:", r)
+            log.debug(f"pt_fetch_dev_uin response: {r}")
 
             if m:
                 r = FetchDevUinResp.model_validate_json(m.group(1))
@@ -143,7 +143,7 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
                 )
             m = re.search(r"ptui_qrcode_CB\((.*)\)", r := await r.text())
 
-        log.debug("ptqrshow(qr_push) response:", r)
+        log.debug(f"ptqrshow(qr_push) response: {r}")
         assert m
         resp = PushQrResp.model_validate_json(m.group(1))
         if qrsig and resp.code == 0:
