@@ -48,7 +48,7 @@ jobs:
         if: |
           github.event_name == 'workflow_dispatch' ||
           (github.event_name == 'pull_request' && github.event.action == 'closed')
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: doc/build/html
 
