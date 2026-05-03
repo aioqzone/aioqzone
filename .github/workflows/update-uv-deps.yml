@@ -22,7 +22,7 @@ jobs:
           NO_COLOR: 1
         run: |
           set -euo pipefail
-          uv lock -U --dry-run > /tmp/preview.txt 2>&1
+          uv lock -U --dry-run 2>&1 | grep -E '^(Update|Add|Remove|Downgrade)' > /tmp/preview.txt || true
           DELIM="EOF_$(date +%s)_$$"
           {
             echo "log<<$DELIM"
