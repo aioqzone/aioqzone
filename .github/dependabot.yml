@@ -4,10 +4,4 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: weekly
-      day: saturday
-
-  - package-ecosystem: uv
-    directory: "/"
-    schedule:
       interval: daily
