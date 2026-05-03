@@ -1,6 +1,6 @@
 [project]
 name = "aioqzone"
-version = "1.9.6.dev4"
+version = "1.9.6.dev5"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = [{ name = "aioqzone" }]
 maintainers = [
@@ -37,7 +37,7 @@ Documentation = "https://aioqzone.github.io/aioqzone"
 "Discussion" = "https://t.me/aioqzone_chatroom"
 
 [dependency-groups]
-test = ["pytest>=8.2.0", "pytest-asyncio>=1.1,<1.3"]
+test = ["pytest>=9.0.3", "pytest-asyncio>=1.1,<1.4"]
 dev = ["pre-commit", "ruff"]
 doc = [
     "Sphinx>=8.1.3; python_version=='3.10'",
