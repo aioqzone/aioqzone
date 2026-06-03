@@ -1,5 +1,6 @@
 # local config
 .vscode
+.zed
 .env
 uv.toml
 package-lock.json
@@ -26,3 +27,9 @@ tmp
 /archive
 /doc/*
 !/doc/source
+
+# Agents
+AGENTS.md
+CLAUDE.md
+.agents
+.claude
