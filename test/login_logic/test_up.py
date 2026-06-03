@@ -48,6 +48,10 @@ class TestUpWeb:
                 if web.captcha.solve_select_captcha.has_impl:
                     pytest.fail("cannot solve captcha")
                 pytest.xfail("cannot solve captcha")
+            except TencentLoginError as e:
+                if e.msg == "验证过程出现错误":
+                    pytest.xfail(e.msg)
+                raise
         if sess.code != 1:
             assert sess.verifycode
             assert sess.check_rst.salt

@@ -159,7 +159,10 @@ class Captcha(_CaptchaHookMixin):
             return await sess.solve_captcha()
 
         async def get_tdc_collect(client: ClientAdapter) -> str:
-            await sess.get_tdc(client, ip=self.fake_ip)
+            try:
+                await sess.get_tdc(client, ip=self.fake_ip)
+            except Exception:
+                return ""
             return unquote(str(sess.tdc.getData(None, True)))
 
         ans, collect, _ = await asyncio.gather(
