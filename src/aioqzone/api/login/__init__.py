@@ -108,7 +108,7 @@ class UpLoginManager(Loginable):
             log.warning(f"密码登录：{type(e).__name__}，重试", exc_info=True)
             log.debug(e.args, extra=e.__dict__)
             raise TryAgain from e
-        except BaseException as e:
+        except Exception as e:
             log.fatal("密码登录异常", exc_info=True)
             raise UnexpectedLoginError from e
 
@@ -173,13 +173,13 @@ class QrLoginManager(Loginable):
             )
         except UnexpectedInteraction:
             raise
-        except (KeyboardInterrupt, asyncio.CancelledError) as e:
+        except asyncio.CancelledError as e:
             raise UserBreak from e
         except (GeneratorExit, ClientError) as e:
             log.warning(f"二维码登录：{type(e).__name__}，重试", exc_info=True)
             log.debug(e.args, extra=e.__dict__)
             raise TryAgain
-        except BaseException as e:
+        except Exception as e:
             log.fatal("二维码登录异常", exc_info=True)
             raise UnexpectedLoginError from e
 

@@ -44,7 +44,7 @@ class TestUP:
             (GeneratorExit(), TryAgain),
             (ConnectError("mock"), TryAgain),
             (_fake_http_error, TryAgain),
-            (SystemExit(), UnexpectedLoginError),
+            (SystemExit(), SystemExit),
         ],
     )
     async def test_exception(
@@ -91,7 +91,7 @@ class TestQR:
             (GeneratorExit(), TryAgain),
             (ConnectError("mock"), TryAgain),
             (_fake_http_error, TryAgain),
-            (SystemExit, UnexpectedLoginError),
+            (SystemExit, SystemExit),
         ],
     )
     async def test_exception(
