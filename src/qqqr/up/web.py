@@ -2,7 +2,6 @@ import asyncio
 import logging
 import re
 import typing as t
-from contextlib import suppress
 from random import choice, random
 from time import time_ns
 
@@ -93,7 +92,7 @@ class UpWebSession(LoginSession):
             ) from e.last_attempt.exception()
         except NotImplementedError:
             raise
-        except BaseException as e:
+        except Exception as e:
             raise TencentLoginError(StatusCode.NeedCaptcha, "验证过程出现错误") from e
 
         log.info("成功通过验证码")
@@ -278,11 +277,14 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
                     # fast return so we won't always request smscode which may risk test account.
                     raise TencentLoginError(resp.code, "未实现的功能：输入验证码")
                 await self.send_sms_code(sess)
-                with suppress(BaseException):
+                try:
                     hook_results = await self.sms_code_input.results(
                         uin=self.uin, phone=resp.msg, nickname=resp.nickname
                     )
-                    sess.sms_code = firstn(hook_results, lambda c: c and len(c.strip()) >= 4)
+                except Exception:
+                    log.warning("sms_code_input hook failed", exc_info=True)
+                    hook_results = []
+                sess.sms_code = firstn(hook_results, lambda c: c and len(c.strip()) >= 4)
                 if sess.sms_code is None:
                     raise TencentLoginError(resp.code, "未获得动态(SMS)验证码")
             else:

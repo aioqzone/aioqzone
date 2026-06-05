@@ -183,3 +183,18 @@ async def test_get_tdc_collect_logs_and_returns_empty(caplog):
 
     assert result == ""
     assert "get_tdc failed" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_pass_vc_keyboard_interrupt_propagated():
+    """pass_vc should not swallow KeyboardInterrupt"""
+    from qqqr.up.web import UpWebSession
+
+    sess = UpWebSession("test_sig")
+    sess.check_rst = MagicMock()
+    sess.check_rst.session = "test_session"
+    solver = MagicMock()
+    solver.verify = AsyncMock(side_effect=KeyboardInterrupt)
+
+    with pytest.raises(KeyboardInterrupt):
+        await sess.pass_vc(solver)
