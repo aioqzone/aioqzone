@@ -104,3 +104,22 @@ async def test_h5_login(h5: UpH5Login):
 
     assert cookies["p_skey"]
     # assert cookies["pt_guid_sig"]
+
+
+# ====== Exception handling tests ======
+
+
+async def test_pass_vc_keyboard_interrupt_propagated():
+    """pass_vc should not swallow KeyboardInterrupt"""
+    from unittest.mock import AsyncMock, MagicMock
+
+    from qqqr.up.web import UpWebSession
+
+    sess = UpWebSession("test_sig")
+    sess.check_rst = MagicMock()
+    sess.check_rst.session = "test_session"
+    solver = MagicMock()
+    solver.verify = AsyncMock(side_effect=KeyboardInterrupt)
+
+    with pytest.raises(KeyboardInterrupt):
+        await sess.pass_vc(solver)

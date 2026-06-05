@@ -109,3 +109,65 @@ class TestCaptcha:
             return
 
         pytest.fail(captcha_status_description.get(r.code, ""))
+
+
+# ====== Exception handling tests ======
+
+
+async def test_get_tdc_collect_logs_and_returns_empty(caplog):
+    """get_tdc failure should log debug and return empty string"""
+    import logging
+    from unittest.mock import AsyncMock, MagicMock
+
+    captcha = Captcha(MagicMock(), 123, "https://test.com")
+    from qqqr.up.captcha.capsess import BaseTcaptchaSession as TcaptchaSession
+
+    sess = MagicMock(spec=TcaptchaSession)
+    sess.get_tdc = AsyncMock(side_effect=ValueError("test error"))
+    sess.tdc = MagicMock()
+    client = MagicMock()
+
+    with caplog.at_level(logging.DEBUG, logger="qqqr.up.captcha"):
+        result = await captcha._get_tdc_collect(sess, client)
+
+    assert result == ""
+    assert "get_tdc failed" in caplog.text
+
+
+async def test_prehandle_callback_not_found():
+    """Captcha.new should raise RuntimeError when prehandle callback not found"""
+    from unittest.mock import AsyncMock, MagicMock
+
+    captcha = Captcha(MagicMock(), 123, "https://test.com")
+    captcha.client.headers = {"User-Agent": "test-agent"}
+    mock_resp = MagicMock()
+    mock_resp.text = AsyncMock(return_value="invalid response without callback")
+    captcha.client.get = MagicMock()
+    captcha.client.get.return_value.__aenter__ = AsyncMock(return_value=mock_resp)
+    captcha.client.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    with pytest.raises(RuntimeError, match="prehandle callback not found"):
+        await captcha.new("test_sid")
+
+
+async def test_tdc_info_type_check():
+    """Captcha.verify should raise TypeError when tdc info is not str"""
+    from unittest.mock import AsyncMock, MagicMock, patch
+
+    captcha = Captcha(MagicMock(), 123, "https://test.com")
+    from qqqr.up.captcha.capsess import BaseTcaptchaSession as TcaptchaSession
+
+    sess = MagicMock(spec=TcaptchaSession)
+    sess.data_type = "test"
+    sess.tdc = MagicMock()
+    sess.tdc.getInfo = MagicMock(return_value={"info": 12345})
+    sess.prehandle = {"sess": "test", "captcha": {"common": {"pow_cfg": {"prefix": "0", "md5": "0"}}}}
+    sess.conf = {"common": {"pow_cfg": {"prefix": "0", "md5": "0"}}}
+    sess.pow_ans = 0
+    sess.duration = 50
+    sess.solve_captcha = AsyncMock(return_value="test_ans")
+
+    with patch.object(captcha, "new", AsyncMock(return_value=sess)):
+        with patch.object(captcha, "_get_tdc_collect", AsyncMock(return_value="")):
+            with pytest.raises(TypeError, match="tdc info"):
+                await captcha.verify("test_sid")
