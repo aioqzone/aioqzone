@@ -136,7 +136,8 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
         async with self.client.get(SHOW_QR, params=data) as r:
             qrsig = r.cookies.get("qrsig")
             if not push_qr:
-                assert qrsig
+                if not qrsig:
+                    raise RuntimeError("qrsig cookie not found")
                 return QR(
                     png=await r.content.read(),
                     sig=qrsig.value,
@@ -144,7 +145,8 @@ class QrLogin(LoginBase[QrSession], _QrHookMixin):
             m = re.search(r"ptui_qrcode_CB\((.*)\)", r := await r.text())
 
         log.debug(f"ptqrshow(qr_push) response: {r}")
-        assert m
+        if not m:
+            raise RuntimeError("ptui_qrcode_CB not found in response")
         resp = PushQrResp.model_validate_json(m.group(1))
         if qrsig and resp.code == 0:
             log.info("二维码已推送至用户手机端")

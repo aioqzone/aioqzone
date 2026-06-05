@@ -89,7 +89,7 @@ class QzoneH5API:
                         log.debug(f"Error when validating {obj}, {api=}")
                         raise
         else:
-            raise AssertionError
+            raise RuntimeError("max retry exceeded")
 
     async def _retry_sleep(self, *_) -> None:
         await self.login.new_cookie()

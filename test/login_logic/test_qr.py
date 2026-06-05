@@ -81,3 +81,38 @@ class TestLoop:
         assert isinstance(hist[1], (bytes, NoneType))
         assert type(hist[0]) == type(hist[1])
         assert hist[0] != hist[1]
+
+
+# ====== Exception handling tests ======
+
+
+async def test_show_without_qrsig_raises():
+    """show should raise RuntimeError when qrsig cookie not found in response"""
+    from unittest.mock import AsyncMock, MagicMock
+
+    login = QrLogin(MagicMock(), 123456)
+    mock_response = MagicMock()
+    mock_response.cookies = {}
+    mock_response.content.read = AsyncMock(return_value=b"png_data")
+    login.client.get = MagicMock()
+    login.client.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+    login.client.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    with pytest.raises(RuntimeError, match="qrsig"):
+        await login.show(push_qr=False)
+
+
+async def test_show_push_qr_no_callback_raises():
+    """show(push_qr=True) should raise RuntimeError when ptui_qrcode_CB not found"""
+    from unittest.mock import AsyncMock, MagicMock
+
+    login = QrLogin(MagicMock(), 123456)
+    mock_response = MagicMock()
+    mock_response.cookies = {}
+    mock_response.text = AsyncMock(return_value="invalid response")
+    login.client.get = MagicMock()
+    login.client.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+    login.client.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    with pytest.raises(RuntimeError, match="ptui_qrcode_CB"):
+        await login.show(push_qr=True)

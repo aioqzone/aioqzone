@@ -120,8 +120,10 @@ class LoginBase(ABC, t.Generic[_S]):
     async def _get_login_url(
         self, sess: _S, cur_cookies: t.Optional[t.Mapping[str, t.Any]] = None
     ) -> t.Dict[str, str]:
-        assert sess.login_url
-        assert not sess.logined, "This session is logined."
+        if not sess.login_url:
+            raise ValueError("login_url is required")
+        if sess.logined:
+            raise RuntimeError("This session is logined.")
 
         r = {}
         if cur_cookies is not None:

@@ -8,7 +8,7 @@ class QzoneError(RuntimeError):
         self.robj = robj
         if len(args) > 0 and isinstance(args[0], str):
             self.msg = args[0]
-        super().__init__(self, *args)
+        super().__init__(*args)
 
     def __str__(self) -> str:
         return f"QzoneCode {self.code}: {self.msg}"

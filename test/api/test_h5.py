@@ -2,15 +2,25 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Tuple
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 import pytest_asyncio
 from aiohttp import ClientResponseError
-from tenacity import RetryError
+from tenacity import RetryError, TryAgain
 
 from aioqzone.api import Loginable, UpLoginManager
 from aioqzone.api.h5 import QzoneH5API
+from aioqzone.api.login import ConstLoginMan
 from aioqzone.model import LikeData, UgcRight
+from aioqzone.model.api import IndexPageApi
+from aioqzone.model.api.response import (
+    AddCommentLegacyResp,
+    DeleteCommentResp,
+    PhotosPreuploadResponse,
+    ProfilePagePesp,
+    UploadPicResponse,
+)
 from qqqr.utils.net import ClientAdapter
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
@@ -46,7 +56,6 @@ async def flow_wo_check(api: QzoneH5API):
 
 
 async def upload_photos(api: QzoneH5API):
-    from aioqzone.model.api import PhotoData
 
     # 腾讯原创馆
     async with api.client.get(
@@ -132,3 +141,76 @@ async def test_workflow(api: QzoneH5API):
 async def test_avatar(api: QzoneH5API, size):
     resp = await api.avatar(949589999, size)
     assert resp.avatar
+
+
+# ====== Response parsing error tests ======
+
+
+async def test_add_comment_legacy_callback_not_found():
+    """AddCommentLegacyResp.response_to_object should raise TryAgain when callback not found"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(
+        return_value="""<html><body>
+<script type="text/javascript">frameElement.callback</script>
+</body></html>"""
+    )
+    with pytest.raises(TryAgain, match="callback not found"):
+        await AddCommentLegacyResp.response_to_object(mock_resp)
+
+
+async def test_delete_comment_callback_not_found():
+    """DeleteCommentResp.response_to_object should raise TryAgain when callback not found"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(
+        return_value="""<html><body>
+<script type="text/javascript">frameElement.callback</script>
+</body></html>"""
+    )
+    with pytest.raises(TryAgain, match="callback not found"):
+        await DeleteCommentResp.response_to_object(mock_resp)
+
+
+async def test_upload_pic_callback_not_found():
+    """UploadPicResponse.response_to_object should raise TryAgain when callback not found"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(return_value="""<html><body>no callback here</body></html>""")
+    with pytest.raises(TryAgain, match="callback not found"):
+        await UploadPicResponse.response_to_object(mock_resp)
+
+
+async def test_photos_preupload_callback_not_found():
+    """PhotosPreuploadResponse.response_to_object should raise TryAgain when callback not found"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(return_value="""<html><body>no callback here</body></html>""")
+    with pytest.raises(TryAgain, match="callback not found"):
+        await PhotosPreuploadResponse.response_to_object(mock_resp)
+
+
+async def test_profile_page_not_list_raises():
+    """ProfilePagePesp should raise TryAgain when data is not list"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(
+        return_value="""<html><body>
+<script type="application/javascript">window.shine0callback || return "abc123"; var FrontPage = {data: ["not_a_list"]};</script>
+</body></html>"""
+    )
+    with pytest.raises(TryAgain, match="profile not returned"):
+        await ProfilePagePesp.response_to_object(mock_resp)
+
+
+async def test_call_retry_exhausted_raises():
+    """call should raise RuntimeError when retries exhausted"""
+    client = MagicMock()
+    login = ConstLoginMan(123456)
+    login.cookie = {"p_skey": "dummy"}
+    api = QzoneH5API(client, login)
+
+    async def _no_iter():
+        return
+        yield
+
+    with patch.object(api, "_relogin_retry", new_callable=MagicMock) as mock_retry:
+        mock_retry.__aiter__ = MagicMock(return_value=_no_iter())
+
+        with pytest.raises(RuntimeError, match="max retry exceeded"):
+            await api.call(IndexPageApi())
