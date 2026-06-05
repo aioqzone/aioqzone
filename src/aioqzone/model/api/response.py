@@ -212,7 +212,8 @@ class ProfilePagePesp(QzoneResponse):
         data = script[m.end() - 1 : m.end() + entire_closing(script[m.end() - 1 :], "[")]
         data = re.sub(r",,\]$", "]", data)
         data = json_loads(data)
-        assert isinstance(data, list)
+        if not isinstance(data, list):
+            raise TryAgain("ProfilePageResponse: profile not returned")
         if len(data) < 2:
             raise TryAgain("ProfilePageResponse: profile not returned")
 
@@ -261,7 +262,8 @@ class AddCommentLegacyResp(QzoneResponse):
             raise TryAgain("AddCommentLegacyResponse: script tag not found")
 
         m = response_callback.search(script)
-        assert m
+        if not m:
+            raise TryAgain("AddCommentLegacyResponse: callback not found")
         return validate_strdict(json_loads(m.group(1)))
 
 
@@ -280,7 +282,8 @@ class DeleteCommentResp(QzoneResponse):
             raise TryAgain("DeleteCommentResponse: script tag not found")
 
         m = response_callback.search(script)
-        assert m
+        if not m:
+            raise TryAgain("DeleteCommentResponse: callback not found")
         return validate_strdict(json_loads(m.group(1)))
 
 
@@ -306,7 +309,8 @@ class UploadPicResponse(QzoneResponse):
     @classmethod
     async def response_to_object(cls, response: ClientResponse) -> StrDict:
         m = response_callback.search(await response.text())
-        assert m
+        if not m:
+            raise TryAgain("UploadPicResponse: callback not found")
         return validate_strdict(json_loads(m.group(1)))
 
 
@@ -331,10 +335,12 @@ class PhotosPreuploadResponse(QzoneResponse):
     @classmethod
     async def response_to_object(cls, response: ClientResponse) -> StrDict:
         m = response_callback.search(await response.text())
-        assert m
+        if not m:
+            raise TryAgain("PhotosPreuploadResponse: callback not found")
 
         picinfos = json_loads(m.group(1))
-        assert isinstance(picinfos, list)
+        if not isinstance(picinfos, list):
+            raise TryAgain("PhotosPreuploadResponse: picinfos not a list")
         return dict(photos=[PicInfo.from_response_object(info["picinfo"]) for info in picinfos])  # type: ignore
 
 

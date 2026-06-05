@@ -4,11 +4,18 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from aiohttp import ClientError
 from pydantic import SecretStr
+from tenacity import TryAgain
 
 from aioqzone.api.login import QrLoginManager, UpLoginManager
 from aioqzone.api.login._base import Loginable
 from aioqzone.exception import QzoneError, UnexpectedLoginError
 from aioqzone.model import QrLoginConfig, UpLoginConfig
+from aioqzone.model.api.response import (
+    AddCommentLegacyResp,
+    DeleteCommentResp,
+    PhotosPreuploadResponse,
+    UploadPicResponse,
+)
 
 
 def test_qzone_error_str():
@@ -204,9 +211,10 @@ async def test_pass_vc_keyboard_interrupt_propagated():
 async def test_qr_try_again_has_cause(client):
     """TryAgain from QrLoginManager should preserve original exception chain"""
     from aiohttp import ClientError
-    from qqqr.up.h5 import UpH5Login
-    from qqqr.qr import QrLogin
     from tenacity import TryAgain
+
+    from qqqr.qr import QrLogin
+    from qqqr.up.h5 import UpH5Login
 
     config = QrLoginConfig(uin=123456)
     man = QrLoginManager(client, config)
@@ -224,8 +232,9 @@ async def test_qr_try_again_has_cause(client):
 async def test_up_try_again_has_cause(client, up_config):
     """TryAgain from UpLoginManager should preserve original exception chain"""
     from aiohttp import ClientError
-    from qqqr.up.h5 import UpH5Login
     from tenacity import TryAgain
+
+    from qqqr.up.h5 import UpH5Login
 
     man = UpLoginManager(client, up_config)
     man.uplogin = MagicMock(spec=UpH5Login)
@@ -236,3 +245,102 @@ async def test_up_try_again_has_cause(client, up_config):
         await man._new_cookie()
 
     assert exc_info.value.__cause__ is original
+
+
+# ====== 7a: response.py assert replacements ======
+
+
+@pytest.mark.asyncio
+async def test_add_comment_legacy_callback_not_found():
+    """AddCommentLegacyResp.response_to_object should raise TryAgain when callback not found"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(
+        return_value="""<html><body>
+<script type="text/javascript">frameElement.callback</script>
+</body></html>"""
+    )
+    with pytest.raises(TryAgain, match="callback not found"):
+        await AddCommentLegacyResp.response_to_object(mock_resp)
+
+
+@pytest.mark.asyncio
+async def test_delete_comment_callback_not_found():
+    """DeleteCommentResp.response_to_object should raise TryAgain when callback not found"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(
+        return_value="""<html><body>
+<script type="text/javascript">frameElement.callback</script>
+</body></html>"""
+    )
+    with pytest.raises(TryAgain, match="callback not found"):
+        await DeleteCommentResp.response_to_object(mock_resp)
+
+
+@pytest.mark.asyncio
+async def test_upload_pic_callback_not_found():
+    """UploadPicResponse.response_to_object should raise TryAgain when callback not found"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(return_value="""<html><body>no callback here</body></html>""")
+    with pytest.raises(TryAgain, match="callback not found"):
+        await UploadPicResponse.response_to_object(mock_resp)
+
+
+@pytest.mark.asyncio
+async def test_photos_preupload_callback_not_found():
+    """PhotosPreuploadResponse.response_to_object should raise TryAgain when callback not found"""
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(return_value="""<html><body>no callback here</body></html>""")
+    with pytest.raises(TryAgain, match="callback not found"):
+        await PhotosPreuploadResponse.response_to_object(mock_resp)
+
+
+@pytest.mark.asyncio
+async def test_profile_page_not_list_raises():
+    """ProfilePagePesp should raise TryAgain when data is not list"""
+    from aioqzone.model.api.response import ProfilePagePesp
+
+    mock_resp = AsyncMock()
+    mock_resp.text = AsyncMock(
+        return_value="""<html><body>
+<script type="application/javascript">window.shine0callback || return "abc123"; var FrontPage = {data: ["not_a_list"]};</script>
+</body></html>"""
+    )
+    with pytest.raises(TryAgain, match="profile not returned"):
+        await ProfilePagePesp.response_to_object(mock_resp)
+
+
+# ====== 7c: qr/__init__.py assert replacements ======
+
+
+@pytest.mark.asyncio
+async def test_show_without_qrsig_raises():
+    """show should raise RuntimeError when qrsig cookie not found in response"""
+    from qqqr.qr import QrLogin
+
+    login = QrLogin(MagicMock(), 123456)
+    mock_response = MagicMock()
+    mock_response.cookies = {}
+    mock_response.content.read = AsyncMock(return_value=b"png_data")
+    login.client.get = MagicMock()
+    login.client.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+    login.client.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    with pytest.raises(RuntimeError, match="qrsig"):
+        await login.show(push_qr=False)
+
+
+@pytest.mark.asyncio
+async def test_show_push_qr_no_callback_raises():
+    """show(push_qr=True) should raise RuntimeError when ptui_qrcode_CB not found"""
+    from qqqr.qr import QrLogin
+
+    login = QrLogin(MagicMock(), 123456)
+    mock_response = MagicMock()
+    mock_response.cookies = {}
+    mock_response.text = AsyncMock(return_value="invalid response")
+    login.client.get = MagicMock()
+    login.client.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+    login.client.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    with pytest.raises(RuntimeError, match="ptui_qrcode_CB"):
+        await login.show(push_qr=True)
