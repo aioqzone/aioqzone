@@ -101,8 +101,7 @@ class UpLoginManager(Loginable):
                 raise TryAgain from e
             raise
         except NotImplementedError:
-            # It is known that the upstream may raise NotImplementedError
-            # when the SMS verification code is needed.
+            # intended: forwarded as NeedSmsVerify
             from qqqr.constant import StatusCode
 
             raise TencentLoginError(StatusCode.NeedSmsVerify, "需要手机验证")
@@ -175,7 +174,7 @@ class QrLoginManager(Loginable):
             )
         except UnexpectedInteraction:
             raise
-        except asyncio.CancelledError as e:
+        except (KeyboardInterrupt, asyncio.CancelledError) as e:
             raise UserBreak from e
         except (GeneratorExit, ClientError) as e:
             log.warning(f"二维码登录：{type(e).__name__}，重试", exc_info=True)

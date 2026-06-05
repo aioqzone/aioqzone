@@ -127,7 +127,8 @@ class Captcha(_CaptchaHookMixin):
                 r.raise_for_status()
                 m = re.search(CALLBACK + r"\((\{.*\})\)", await r.text("utf8"))
 
-            assert m
+            if not m:
+                raise RuntimeError("prehandle callback not found")
             return PrehandleRespValidator.validate_json(m.group(1))
 
         sess = TcaptchaSession.factory(sid, await retry_closure())
@@ -179,7 +180,8 @@ class Captcha(_CaptchaHookMixin):
             data=ans,
         )
         info = sess.tdc.getInfo(None)["info"]
-        assert isinstance(info, str)
+        if not isinstance(info, str):
+            raise TypeError(f"expected str for tdc info, got {type(info).__name__}")
 
         data = {
             "collect": collect,

@@ -118,57 +118,51 @@ async def test_up_login_manager_keyboard_interrupt(client, up_config):
 
 @pytest.mark.asyncio
 async def test_qr_login_manager_keyboard_interrupt(client, qr_config):
-    """QrLoginManager should not swallow KeyboardInterrupt"""
+    """QrLoginManager should forward KeyboardInterrupt as UserBreak"""
+    from qqqr.exception import UserBreak
+
     man = QrLoginManager(client, qr_config)
     man.qrlogin = MagicMock()
     man.qrlogin.login = AsyncMock(side_effect=KeyboardInterrupt)
 
-    with pytest.raises(KeyboardInterrupt):
+    with pytest.raises(UserBreak):
         await man._new_cookie()
 
 
 @pytest.mark.asyncio
-async def test_up_login_manager_system_exit(client, up_config):
-    """UpLoginManager should not swallow SystemExit"""
-    man = UpLoginManager(client, up_config)
-    man.uplogin = MagicMock()
-    man.uplogin.login = AsyncMock(side_effect=SystemExit)
+@pytest.mark.parametrize(
+    "manager_cls,config_fixture,attr",
+    [
+        (UpLoginManager, "up_config", "uplogin"),
+        (QrLoginManager, "qr_config", "qrlogin"),
+    ],
+)
+async def test_login_manager_system_exit(client, request, manager_cls, config_fixture, attr):
+    """Login managers should not swallow SystemExit"""
+    config = request.getfixturevalue(config_fixture)
+    man = manager_cls(client, config)
+    setattr(man, attr, MagicMock())
+    getattr(man, attr).login = AsyncMock(side_effect=SystemExit)
 
     with pytest.raises(SystemExit):
         await man._new_cookie()
 
 
 @pytest.mark.asyncio
-async def test_qr_login_manager_system_exit(client, qr_config):
-    """QrLoginManager should not swallow SystemExit"""
-    man = QrLoginManager(client, qr_config)
-    man.qrlogin = MagicMock()
-    man.qrlogin.login = AsyncMock(side_effect=SystemExit)
-
-    with pytest.raises(SystemExit):
-        await man._new_cookie()
-
-
-@pytest.mark.asyncio
-async def test_up_login_manager_wraps_unexpected_error(client, up_config):
-    """UpLoginManager should wrap unexpected errors as UnexpectedLoginError"""
-    man = UpLoginManager(client, up_config)
-    man.uplogin = MagicMock()
+@pytest.mark.parametrize(
+    "manager_cls,config_fixture,attr",
+    [
+        (UpLoginManager, "up_config", "uplogin"),
+        (QrLoginManager, "qr_config", "qrlogin"),
+    ],
+)
+async def test_login_manager_wraps_unexpected_error(client, request, manager_cls, config_fixture, attr):
+    """Login managers should wrap unexpected errors as UnexpectedLoginError"""
+    config = request.getfixturevalue(config_fixture)
+    man = manager_cls(client, config)
+    setattr(man, attr, MagicMock())
     original = ValueError("unexpected")
-    man.uplogin.login = AsyncMock(side_effect=original)
-
-    with pytest.raises(UnexpectedLoginError) as exc_info:
-        await man._new_cookie()
-    assert exc_info.value.__cause__ is original
-
-
-@pytest.mark.asyncio
-async def test_qr_login_manager_wraps_unexpected_error(client, qr_config):
-    """QrLoginManager should wrap unexpected errors as UnexpectedLoginError"""
-    man = QrLoginManager(client, qr_config)
-    man.qrlogin = MagicMock()
-    original = ValueError("unexpected")
-    man.qrlogin.login = AsyncMock(side_effect=original)
+    getattr(man, attr).login = AsyncMock(side_effect=original)
 
     with pytest.raises(UnexpectedLoginError) as exc_info:
         await man._new_cookie()
@@ -195,6 +189,46 @@ async def test_get_tdc_collect_logs_and_returns_empty(caplog):
 
 
 @pytest.mark.asyncio
+async def test_prehandle_callback_not_found():
+    """Captcha.new should raise RuntimeError when prehandle callback not found"""
+    from qqqr.up.captcha import Captcha
+
+    captcha = Captcha(MagicMock(), 123, "https://test.com")
+    captcha.client.headers = {"User-Agent": "test-agent"}
+    mock_resp = MagicMock()
+    mock_resp.text = AsyncMock(return_value="invalid response without callback")
+    captcha.client.get = MagicMock()
+    captcha.client.get.return_value.__aenter__ = AsyncMock(return_value=mock_resp)
+    captcha.client.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+    with pytest.raises(RuntimeError, match="prehandle callback not found"):
+        await captcha.new("test_sid")
+
+
+@pytest.mark.asyncio
+async def test_tdc_info_type_check():
+    """Captcha.verify should raise TypeError when tdc info is not str"""
+    from qqqr.up.captcha import Captcha
+    from qqqr.up.captcha.capsess import BaseTcaptchaSession as TcaptchaSession
+
+    captcha = Captcha(MagicMock(), 123, "https://test.com")
+    sess = MagicMock(spec=TcaptchaSession)
+    sess.data_type = "test"
+    sess.tdc = MagicMock()
+    sess.tdc.getInfo = MagicMock(return_value={"info": 12345})  # int, not str
+    sess.prehandle = {"sess": "test", "captcha": {"common": {"pow_cfg": {"prefix": "0", "md5": "0"}}}}
+    sess.conf = {"common": {"pow_cfg": {"prefix": "0", "md5": "0"}}}
+    sess.pow_ans = 0
+    sess.duration = 50
+    sess.solve_captcha = AsyncMock(return_value="test_ans")
+
+    with patch.object(captcha, "new", AsyncMock(return_value=sess)):
+        with patch.object(captcha, "_get_tdc_collect", AsyncMock(return_value="")):
+            with pytest.raises(TypeError, match="tdc info"):
+                await captcha.verify("test_sid")
+
+
+@pytest.mark.asyncio
 async def test_pass_vc_keyboard_interrupt_propagated():
     """pass_vc should not swallow KeyboardInterrupt"""
     from qqqr.up.web import UpWebSession
@@ -210,39 +244,27 @@ async def test_pass_vc_keyboard_interrupt_propagated():
 
 
 @pytest.mark.asyncio
-async def test_qr_try_again_has_cause(client):
-    """TryAgain from QrLoginManager should preserve original exception chain"""
-    from tenacity import TryAgain
+@pytest.mark.parametrize(
+    "manager_cls,config_fixture,attr,spec_cls",
+    [
+        (QrLoginManager, "qr_config", "qrlogin", "qqqr.qr.QrLogin"),
+        (UpLoginManager, "up_config", "uplogin", "qqqr.up.h5.UpH5Login"),
+    ],
+)
+async def test_try_again_has_cause(client, request, manager_cls, config_fixture, attr, spec_cls):
+    """TryAgain should preserve original exception chain"""
+    import importlib
+    module_path, cls_name = spec_cls.rsplit(".", 1)
+    spec_cls = getattr(importlib.import_module(module_path), cls_name)
 
-    from qqqr.qr import QrLogin
-
-    config = QrLoginConfig(uin=123456)
-    man = QrLoginManager(client, config)
-    man.qrlogin = MagicMock(spec=QrLogin)
+    config = request.getfixturevalue(config_fixture)
+    man = manager_cls(client, config)
+    setattr(man, attr, MagicMock(spec=spec_cls))
     original = ClientError("network error")
-    man.qrlogin.login = AsyncMock(side_effect=original)
+    getattr(man, attr).login = AsyncMock(side_effect=original)
 
     with pytest.raises(TryAgain) as exc_info:
         await man._new_cookie()
-
-    assert exc_info.value.__cause__ is original
-
-
-@pytest.mark.asyncio
-async def test_up_try_again_has_cause(client, up_config):
-    """TryAgain from UpLoginManager should preserve original exception chain"""
-    from tenacity import TryAgain
-
-    from qqqr.up.h5 import UpH5Login
-
-    man = UpLoginManager(client, up_config)
-    man.uplogin = MagicMock(spec=UpH5Login)
-    original = ClientError("network error")
-    man.uplogin.login = AsyncMock(side_effect=original)
-
-    with pytest.raises(TryAgain) as exc_info:
-        await man._new_cookie()
-
     assert exc_info.value.__cause__ is original
 
 
