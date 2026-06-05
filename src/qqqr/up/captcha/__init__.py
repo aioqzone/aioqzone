@@ -142,6 +142,14 @@ class Captcha(_CaptchaHookMixin):
     prehandle = new
     """alias of :meth:`.new`"""
 
+    async def _get_tdc_collect(self, sess: TcaptchaSession, client: ClientAdapter) -> str:
+        try:
+            await sess.get_tdc(client, ip=self.fake_ip)
+        except Exception:
+            log.debug("get_tdc failed", exc_info=True)
+            return ""
+        return unquote(str(sess.tdc.getData(None, True)))
+
     @retry(
         stop=stop_after_attempt(2),
         retry=retry_if_result(lambda rst: not rst.ticket),
@@ -158,16 +166,9 @@ class Captcha(_CaptchaHookMixin):
             await sess.get_captcha_problem(client)
             return await sess.solve_captcha()
 
-        async def get_tdc_collect(client: ClientAdapter) -> str:
-            try:
-                await sess.get_tdc(client, ip=self.fake_ip)
-            except Exception:
-                return ""
-            return unquote(str(sess.tdc.getData(None, True)))
-
         ans, collect, _ = await asyncio.gather(
             get_solve_captcha(self.client),
-            get_tdc_collect(self.client),
+            self._get_tdc_collect(sess, self.client),
             loop.run_in_executor(None, sess.solve_workload),
         )
         if not ans:

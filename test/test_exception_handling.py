@@ -1,3 +1,4 @@
+import logging
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -163,3 +164,22 @@ async def test_qr_login_manager_wraps_unexpected_error(client, qr_config):
     with pytest.raises(UnexpectedLoginError) as exc_info:
         await man._new_cookie()
     assert exc_info.value.__cause__ is original
+
+
+@pytest.mark.asyncio
+async def test_get_tdc_collect_logs_and_returns_empty(caplog):
+    """get_tdc failure should log debug and return empty string"""
+    from qqqr.up.captcha import Captcha
+    from qqqr.up.captcha.capsess import BaseTcaptchaSession as TcaptchaSession
+
+    captcha = Captcha(MagicMock(), 123, "https://test.com")
+    sess = MagicMock(spec=TcaptchaSession)
+    sess.get_tdc = AsyncMock(side_effect=ValueError("test error"))
+    sess.tdc = MagicMock()
+    client = MagicMock()
+
+    with caplog.at_level(logging.DEBUG, logger="qqqr.up.captcha"):
+        result = await captcha._get_tdc_collect(sess, client)
+
+    assert result == ""
+    assert "get_tdc failed" in caplog.text
