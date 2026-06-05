@@ -1,15 +1,17 @@
 import logging
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from aiohttp import ClientError
 from pydantic import SecretStr
 from tenacity import TryAgain
 
-from aioqzone.api.login import QrLoginManager, UpLoginManager
+from aioqzone.api.h5 import QzoneH5API
+from aioqzone.api.login import ConstLoginMan, QrLoginManager, UpLoginManager
 from aioqzone.api.login._base import Loginable
 from aioqzone.exception import QzoneError, UnexpectedLoginError
 from aioqzone.model import QrLoginConfig, UpLoginConfig
+from aioqzone.model.api import IndexPageApi
 from aioqzone.model.api.response import (
     AddCommentLegacyResp,
     DeleteCommentResp,
@@ -344,3 +346,26 @@ async def test_show_push_qr_no_callback_raises():
 
     with pytest.raises(RuntimeError, match="ptui_qrcode_CB"):
         await login.show(push_qr=True)
+
+
+# ====== 8: h5/model.py AssertionError -> RuntimeError ======
+
+
+@pytest.mark.asyncio
+async def test_call_retry_exhausted_raises():
+    """call should raise RuntimeError when retries exhausted"""
+    client = MagicMock()
+    login = ConstLoginMan(123456)
+    # Set cookie so gtk > 0 (call checks gtk before reaching the patched retry)
+    login.cookie = {"p_skey": "dummy"}
+    api = QzoneH5API(client, login)
+
+    async def _no_iter():
+        return
+        yield  # make it an async generator that yields nothing
+
+    with patch.object(api, "_relogin_retry", new_callable=MagicMock) as mock_retry:
+        mock_retry.__aiter__ = MagicMock(return_value=_no_iter())
+
+        with pytest.raises(RuntimeError, match="max retry exceeded"):
+            await api.call(IndexPageApi())

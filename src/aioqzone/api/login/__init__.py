@@ -101,6 +101,8 @@ class UpLoginManager(Loginable):
                 raise TryAgain from e
             raise
         except NotImplementedError:
+            # It is known that the upstream may raise NotImplementedError
+            # when the SMS verification code is needed.
             from qqqr.constant import StatusCode
 
             raise TencentLoginError(StatusCode.NeedSmsVerify, "需要手机验证")
