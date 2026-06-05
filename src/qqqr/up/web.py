@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import re
 import typing as t
@@ -17,7 +16,7 @@ from qqqr.utils.net import ClientAdapter, get_all_cookie
 
 from ._model import CheckResp, CheckRespValidator, LoginResp, RedirectCookies, VerifyResp
 from .captcha import Captcha
-from .encrypt import PasswdEncoder, TeaEncoder
+from .encrypt import TeaEncoder
 
 CHECK_URL = "https://ssl.ptlogin2.qq.com/check"
 LOGIN_URL = "https://ssl.ptlogin2.qq.com/login"

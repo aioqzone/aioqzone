@@ -212,11 +212,9 @@ async def test_pass_vc_keyboard_interrupt_propagated():
 @pytest.mark.asyncio
 async def test_qr_try_again_has_cause(client):
     """TryAgain from QrLoginManager should preserve original exception chain"""
-    from aiohttp import ClientError
     from tenacity import TryAgain
 
     from qqqr.qr import QrLogin
-    from qqqr.up.h5 import UpH5Login
 
     config = QrLoginConfig(uin=123456)
     man = QrLoginManager(client, config)
@@ -233,7 +231,6 @@ async def test_qr_try_again_has_cause(client):
 @pytest.mark.asyncio
 async def test_up_try_again_has_cause(client, up_config):
     """TryAgain from UpLoginManager should preserve original exception chain"""
-    from aiohttp import ClientError
     from tenacity import TryAgain
 
     from qqqr.up.h5 import UpH5Login
