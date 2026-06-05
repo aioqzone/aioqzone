@@ -198,3 +198,41 @@ async def test_pass_vc_keyboard_interrupt_propagated():
 
     with pytest.raises(KeyboardInterrupt):
         await sess.pass_vc(solver)
+
+
+@pytest.mark.asyncio
+async def test_qr_try_again_has_cause(client):
+    """TryAgain from QrLoginManager should preserve original exception chain"""
+    from aiohttp import ClientError
+    from qqqr.up.h5 import UpH5Login
+    from qqqr.qr import QrLogin
+    from tenacity import TryAgain
+
+    config = QrLoginConfig(uin=123456)
+    man = QrLoginManager(client, config)
+    man.qrlogin = MagicMock(spec=QrLogin)
+    original = ClientError("network error")
+    man.qrlogin.login = AsyncMock(side_effect=original)
+
+    with pytest.raises(TryAgain) as exc_info:
+        await man._new_cookie()
+
+    assert exc_info.value.__cause__ is original
+
+
+@pytest.mark.asyncio
+async def test_up_try_again_has_cause(client, up_config):
+    """TryAgain from UpLoginManager should preserve original exception chain"""
+    from aiohttp import ClientError
+    from qqqr.up.h5 import UpH5Login
+    from tenacity import TryAgain
+
+    man = UpLoginManager(client, up_config)
+    man.uplogin = MagicMock(spec=UpH5Login)
+    original = ClientError("network error")
+    man.uplogin.login = AsyncMock(side_effect=original)
+
+    with pytest.raises(TryAgain) as exc_info:
+        await man._new_cookie()
+
+    assert exc_info.value.__cause__ is original

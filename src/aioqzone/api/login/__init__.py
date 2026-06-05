@@ -178,7 +178,7 @@ class QrLoginManager(Loginable):
         except (GeneratorExit, ClientError) as e:
             log.warning(f"二维码登录：{type(e).__name__}，重试", exc_info=True)
             log.debug(e.args, extra=e.__dict__)
-            raise TryAgain
+            raise TryAgain from e
         except Exception as e:
             log.fatal("二维码登录异常", exc_info=True)
             raise UnexpectedLoginError from e
