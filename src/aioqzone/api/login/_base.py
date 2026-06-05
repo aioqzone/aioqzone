@@ -57,7 +57,7 @@ class Loginable(ABC):
             async with self.lock:
                 try:
                     self.cookie = await self._new_cookie()
-                except BaseException as e:
+                except Exception as e:
                     self.ch_login_notify.add_awaitable(self.login_failed.emit(self.uin, e))
                     return False
                 else:

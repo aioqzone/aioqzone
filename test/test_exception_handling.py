@@ -1,3 +1,7 @@
+from unittest.mock import AsyncMock
+
+import pytest
+from aioqzone.api.login._base import Loginable
 from aioqzone.exception import QzoneError
 
 
@@ -29,3 +33,48 @@ def test_qzone_error_args_not_contain_self():
     assert err.args == ("test message",), "args should contain only the message"
     for arg in err.args:
         assert arg is not err, "args should not contain self"
+
+
+class DummyLoginable(Loginable):
+    async def _new_cookie(self):
+        return {}
+
+
+@pytest.mark.asyncio
+async def test_keyboard_interrupt_propagated():
+    """KeyboardInterrupt should not be swallowed by login"""
+    man = DummyLoginable(123456)
+    man._new_cookie = AsyncMock(side_effect=KeyboardInterrupt)
+
+    with pytest.raises(KeyboardInterrupt):
+        await man.new_cookie()
+
+
+@pytest.mark.asyncio
+async def test_system_exit_propagated():
+    """SystemExit should not be swallowed by login"""
+    man = DummyLoginable(123456)
+    man._new_cookie = AsyncMock(side_effect=SystemExit)
+
+    with pytest.raises(SystemExit):
+        await man.new_cookie()
+
+
+@pytest.mark.asyncio
+async def test_generator_exit_propagated():
+    """GeneratorExit should not be swallowed by login"""
+    man = DummyLoginable(123456)
+    man._new_cookie = AsyncMock(side_effect=GeneratorExit)
+
+    with pytest.raises(GeneratorExit):
+        await man.new_cookie()
+
+
+@pytest.mark.asyncio
+async def test_exception_triggers_login_failed():
+    """Normal Exception should be caught and trigger login_failed"""
+    man = DummyLoginable(123456)
+    man._new_cookie = AsyncMock(side_effect=ValueError("test error"))
+
+    result = await man.new_cookie()
+    assert result is False
