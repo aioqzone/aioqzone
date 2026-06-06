@@ -158,6 +158,8 @@ class Captcha(_CaptchaHookMixin):
     )
     async def verify(self, sid: str, *, loop: t.Optional[asyncio.AbstractEventLoop] = None):
         """
+        :param sid: login session id
+        :param loop: event loop
         :raise NotImplementedError: cannot solve captcha
         """
         sess = await self.new(sid)

@@ -45,6 +45,7 @@ class LoginBase(ABC, t.Generic[_S]):
     ):
         """
         :param client: network client
+        :param uin: QQ number
         :param h5: simulate h5 access
         :param app: contains appid and daid. This specify which app you are logining.
         :param proxy: specify where to redirect after login. This can be got from login HTTP request workload.

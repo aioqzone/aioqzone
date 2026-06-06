@@ -28,6 +28,7 @@ class BaseTcaptchaSession(ABC):
     ) -> None:
         """
         :param session: login session id, got from :meth:`UpWebLogin.new`
+        :param prehandle: prehandle response
         """
         super().__init__()
         self.session = session
