@@ -167,7 +167,7 @@ wheels = [
 
 [[package]]
 name = "aioqzone"
-version = "1.9.7.dev1"
+version = "1.9.7.dev2"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
