@@ -20,6 +20,8 @@ class QzoneH5API:
         self, client: ClientAdapter, loginman: Loginable, *, retry_if_login_expire: bool = True
     ) -> None:
         """
+        :param client: network client
+        :param loginman: login manager
         :param retry_if_login_expire: if we should retry if login expired.
         """
         super().__init__()
@@ -97,7 +99,7 @@ class QzoneH5API:
     async def index(self) -> IndexPageResp:
         """This api is the redirect page after h5 login, which is also the landing (main) page of h5 qzone.
 
-        :raise `RuntimeError`: if any failure occurs in data parsing.
+        :raise `RuntimeError`: if max retry exceeded.
         """
 
         r = await self.call(IndexPageApi())
@@ -122,7 +124,7 @@ class QzoneH5API:
 
         :param attach_info: The ``attach_info`` field from last call.
             Pass an empty string equals to call :meth:`.index`.
-        :return: If success, the ``data`` field of the response.
+        :return: If success, the response.
         """
         if not self.qzone_tokens.get(self.login.uin) or not attach_info:
             return await self.index()
@@ -137,7 +139,7 @@ class QzoneH5API:
         :param hostuin: uin of the user
         :param attach_info: The ``attach_info`` field from last call.
             Pass an empty string equals to call :meth:`.index`.
-        :return: If success, the ``data`` field of the response.
+        :return: If success, the response.
         """
         if not self.qzone_tokens.get(hostuin) or not attach_info:
             return (await self.profile(hostuin)).feedpage
@@ -213,6 +215,7 @@ class QzoneH5API:
         :param content: comment content
         :param photos: photos to be attached, usually returned by :meth:`.preupload_photos`
         :param busi_param: optional encoded params from :obj:`FeedOperation.operation.busi_param`
+        :param feedsType: feed type
         :param abstime: required if `appid != 311`
         :param private: is private comment
 
@@ -288,6 +291,11 @@ class QzoneH5API:
         quality: t.Union[int, float] = 70,
     ) -> UploadPicResponse:
         """
+        :param picture: image data or path
+        :param width: image width, if provided with height, the image will not be compressed
+        :param height: image height, if provided with width, the image will not be compressed
+        :param quality: compression quality, default to 70
+
         .. versionchanged:: 1.8.5
 
             In version <= 1.8.4, user is responsible for compressing a image and this api
@@ -324,6 +332,8 @@ class QzoneH5API:
         """Preupload photos before publishing a feed.
 
         :param upload_pics: List of :obj:`.UploadPicResponse`, usually returned by :meth:`.upload_pic`
+        :param cur_num: current photo number, default to 0
+        :param upload_hd: whether to upload HD version, default to False
 
         .. seealso:: :meth:`.upload_pic`
         """

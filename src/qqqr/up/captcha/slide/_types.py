@@ -113,11 +113,10 @@ class SlideCaptchaSession(BaseTcaptchaSession):
 
     async def get_captcha_problem(self, client: ClientAdapter):
         """
-        The get_captcha_problem function is a coroutine that accepts a TcaptchaSession object as an argument.
-        It then uses the selfion to make an HTTP GET request to the captcha images (the problem). The images
-        will be stored in the given selfion.
+        Fetch captcha images (background and puzzle piece) using the provided client.
+        The images will be stored in :obj:`self.cdn_imgs`.
 
-        :param self: captcha selfion
+        :param client: network client
         :return: None
         """
 
@@ -137,8 +136,7 @@ class SlideCaptchaSession(BaseTcaptchaSession):
 
         This function will also call :meth:`TDC.set_data` to imitate human behavior when solving captcha.
 
-        :param self: Store the information of the current selfion
-        :return: None
+        :return: answer string, or empty string if failed
         """
         assert self.cdn_imgs
 

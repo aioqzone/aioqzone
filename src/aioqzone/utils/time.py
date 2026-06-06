@@ -72,7 +72,7 @@ def sementic_time(timestamp: float, cur_ts: Optional[float] = None) -> str:
     """reverse of :meth:`.approx_ts`
 
     :param timestamp: timestamp in second
-    :param cur_timestamp: current timestamp
+    :param cur_ts: current timestamp
     :return: a relative sementic time description in Chinese
     """
     now = datetime.fromtimestamp(cur_ts, TIME_ZONE) if cur_ts else datetime.now(TIME_ZONE)

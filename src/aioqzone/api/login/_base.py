@@ -46,7 +46,7 @@ class Loginable(ABC):
         an actual login at the same time, other requests will block until the first is complete
         and share the cookie from this single login.
 
-        :return: cookie. Shouldn't be a cached one.
+        :return: True if login succeeded, False otherwise.
         """
         if self.lock.locked():
             last_gtk = self.gtk
