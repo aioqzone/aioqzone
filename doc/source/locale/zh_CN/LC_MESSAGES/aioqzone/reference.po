@@ -38,7 +38,7 @@ msgstr "abstime"
 #: ../../source/aioqzone/reference.rst:13
 msgid ""
 "A timestamp represents when the feed is created. All feeds have this field. If not, generate a "
-"persudo one is easy."
+"pseudo one is easy."
 msgstr "表示 feed 创建时的时间戳。所有 feed 都有此字段。如果没有，生成一个伪时间戳也很容易。"
 
 #: ../../source/aioqzone/reference.rst:16

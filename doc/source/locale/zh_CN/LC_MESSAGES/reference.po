@@ -37,7 +37,7 @@ msgstr "abstime"
 #: ../../source/reference.rst:13
 msgid ""
 "A timestamp represents when the feed is created. All feeds have this field. If not, generate a "
-"persudo one is easy."
+"pseudo one is easy."
 msgstr ""
 
 #: ../../source/reference.rst:16

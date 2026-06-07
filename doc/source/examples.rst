@@ -270,7 +270,7 @@ like/unlike mood
 
     # for feeds without forward, curkey and unikey are the same.
     # you can construct them by host uin and fid:
-    # unikey = LikeData.persudo_unikey(appid, hostuin, feed.fid)
+    # unikey = LikeData.pseudo_unikey(appid, hostuin, feed.fid)
 
     await api.internal_dolike_app(appid, unikey, curkey=unikey, like=True)  # like
     await api.internal_dolike_app(appid, unikey, curkey=unikey, like=False) # unlike

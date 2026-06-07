@@ -8,8 +8,8 @@ from .config import *
 from .entity import *
 
 
-class PersudoCurkey(str):
-    """Persudo curkey string helper."""
+class PseudoCurkey(str):
+    """Pseudo curkey string helper."""
 
     def __new__(cls, uin: int, abstime: int):
         return str.__new__(cls, cls.build(uin, abstime))
@@ -52,11 +52,11 @@ class LikeData(BaseModel):
     abstime: int
 
     @staticmethod
-    def persudo_curkey(uin: int, abstime: int):
-        return str(PersudoCurkey(uin, abstime))
+    def pseudo_curkey(uin: int, abstime: int):
+        return str(PseudoCurkey(uin, abstime))
 
     @staticmethod
-    def persudo_unikey(appid: int, uin: int, fid: str):
+    def pseudo_unikey(appid: int, uin: int, fid: str):
         if appid == 311:
             return f"https://user.qzone.qq.com/{uin}/mood/{fid}"
 

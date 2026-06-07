@@ -39,9 +39,9 @@ msgid ""
 "not designed to represent responses from Qzone."
 msgstr ""
 
-#: aioqzone.model.protocol.PersudoCurkey:1 of
-msgid "Persudo curkey string helper."
-msgstr "Persudo curkey 字符串辅助类。"
+#: aioqzone.model.protocol.PseudoCurkey:1 of
+msgid "Pseudo curkey string helper."
+msgstr "Pseudo curkey 字符串辅助类。"
 
 #: aioqzone.model.protocol.AlbumData:1 of
 msgid "Album data model."
@@ -260,4 +260,3 @@ msgstr ""
 #~ ":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] "
 #~ "| str) <aioqzone.model.protocol.entity.LinkEntity.url>`"
 #~ msgstr ""
-
