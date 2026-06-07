@@ -8,21 +8,35 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-07 23:39+0800\n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/qqqr/up/type.rst:2
 msgid "UpLogin Types"
-msgstr ""
+msgstr "UP 登录类型"
 
 #: of qqqr.up._model:1
-msgid "Response validation in `qqqr.up.captcha`"
+msgid "Response models for UP login APIs."
+msgstr "UP 登录 API 的响应模型。"
+
+#: of qqqr.up._model:3
+msgid ""
+"Defines :class:`CheckResp`, :class:`LoginResp`, and :class:`VerifyResp` used by the UP login "
+"flow."
+msgstr "定义 UP 登录流程使用的 :class:`CheckResp`、:class:`LoginResp` 和 :class:`VerifyResp`。"
+
+#: of qqqr.up._model.CheckResp:1
+msgid "Response from the ``check`` API."
+msgstr "``check`` API 的响应。"
+
+#: of qqqr.up._model.CheckResp:3
+msgid "Fields: code, uin, session, isRandSalt, salt, ptdrvs, verifycode, verifysession."
 msgstr ""
 
 #: ../../../docstring of qqqr.up._model.CheckResp.code:1
@@ -53,6 +67,10 @@ msgstr ""
 msgid "Alias for field number 6"
 msgstr ""
 
+#: of qqqr.up._model.LoginResp:1
+msgid "Response from the ``login`` API."
+msgstr "``login`` API 的响应。"
+
 #: of qqqr.up._model.LoginResp qqqr.up._model.VerifyResp
 msgid "Fields"
 msgstr ""
@@ -81,6 +99,18 @@ msgstr ""
 msgid ":py:obj:`url (pydantic.networks.HttpUrl | str) <qqqr.up._model.LoginResp.url>`"
 msgstr ""
 
+#: ../../../docstring of qqqr.up._model.LoginResp.code:1
+msgid "Status code (see :class:`~qqqr.constant.StatusCode`)"
+msgstr "状态码（参见 :class:`~qqqr.constant.StatusCode`）"
+
+#: ../../../docstring of qqqr.up._model.LoginResp.cookies:1
+msgid "Login cookies on success"
+msgstr "登录成功后的 cookie"
+
+#: of qqqr.up._model.VerifyResp:1
+msgid "Response from the captcha verify API."
+msgstr "验证码验证 API 的响应。"
+
 #: of qqqr.up._model.VerifyResp:1
 msgid ":py:obj:`code (int) <qqqr.up._model.VerifyResp.code>`"
 msgstr ""
@@ -100,6 +130,14 @@ msgstr ""
 #: of qqqr.up._model.VerifyResp:1
 msgid ":py:obj:`verifycode (str) <qqqr.up._model.VerifyResp.verifycode>`"
 msgstr ""
+
+#: ../../../docstring of qqqr.up._model.VerifyResp.code:1
+msgid "Verification result code"
+msgstr "验证结果码"
+
+#: ../../../docstring of qqqr.up._model.VerifyResp.ticket:1
+msgid "Verification ticket"
+msgstr "验证票据"
 
 #~ msgid "Response validation in `qqqr.up.captcha`"
 #~ msgstr ""
@@ -451,3 +489,4 @@ msgstr ""
 #~ ":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] "
 #~ "| str) <qqqr.up._model.LoginResp.url>`"
 #~ msgstr ""
+

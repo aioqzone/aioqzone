@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../../source/qqqr/jsjson.rst:2
 msgid "Parsing Javascript Dictionary"
-msgstr ""
+msgstr "解析 JavaScript 字典"
 
 #: of qqqr.utils.jsjson.AstLoader:1
 msgid ":class:`AstLoader` uses standard :mod:`ast` module to parse the js/json"

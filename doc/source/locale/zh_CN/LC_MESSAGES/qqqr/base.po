@@ -8,18 +8,51 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-04 16:34+0800\n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.1\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/qqqr/base.rst:2
 msgid "QQQR Bases"
-msgstr ""
+msgstr "QQQR 基类"
+
+#: of qqqr.base:1
+msgid "Base classes for all QQQR login flows."
+msgstr "所有 QQQR 登录流程的基类。"
+
+#: of qqqr.base:3
+msgid ""
+"Defines :class:`LoginSession` (data container) and :class:`LoginBase` (login procedure). All "
+"``xxLogin`` and ``xxSession`` classes inherit from these."
+msgstr "定义了 :class:`LoginSession`（数据容器）和 :class:`LoginBase`（登录流程）。所有 ``xxLogin`` 和 ``xxSession`` 类都继承自它们。"
+
+#: of qqqr.base.LoginSession:1
+msgid "A LoginSession collects all data generated or received during login."
+msgstr "LoginSession 收集登录过程中生成或接收的所有数据。"
+
+#: ../../../docstring of qqqr.base.LoginSession.login_url:1
+msgid "GET this login url to get cookies."
+msgstr "GET 此登录 URL 以获取 cookies。"
+
+#: ../../../docstring of qqqr.base.LoginSession.logined:1
+msgid "whether this session is logined."
+msgstr "此 session 是否已登录。"
+
+#: of qqqr.base.LoginBase:1
+msgid "Base class for login procedures."
+msgstr "登录流程的基类。"
+
+#: of qqqr.base.LoginBase:3
+msgid ""
+"Handles common login setup: client configuration, user-agent selection, login page URL "
+"construction, and cookie retrieval. Subclasses implement :meth:`new` and :meth:`login` for "
+"specific login flows."
+msgstr "处理通用登录设置：客户端配置、User-Agent 选择、登录页面 URL 构建和 cookie 获取。子类实现 :meth:`new` 和 :meth:`login` 以支持特定的登录流程。"
 
 #: of qqqr.base.LoginBase.deviceId:1
 msgid "a js fingerprint. :rtype: :sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`str\\``"
@@ -29,40 +62,58 @@ msgstr ""
 msgid "https://github.com/fingerprintjs/fingerprintjs"
 msgstr ""
 
-#: of qqqr.base.LoginBase.login:1
-msgid "Block until cookie is received."
-msgstr ""
+#: of qqqr.base.LoginBase.login_page_url:1
+msgid "Build the xlogin page URL with configured parameters."
+msgstr "使用配置的参数构建 xlogin 页面 URL。"
 
-#: of qqqr.base.LoginBase.login qqqr.base.LoginBase.new
+#: of qqqr.base.LoginBase.login_page_url:3
+msgid "Includes appid, daid, proxy URLs, and optional app info."
+msgstr "包含 appid、daid、代理 URL 和可选的 app 信息。"
+
+#: of qqqr.base.LoginBase.login:1
+msgid "Block until login cookie is received."
+msgstr "阻塞直到获取到登录 cookie。"
+
+#: of qqqr.base.LoginBase.login:3
+msgid ""
+"The implementation should handle the full login flow: creating a session, checking status, "
+"solving captcha if needed, and returning the cookie dict."
+msgstr "实现应处理完整的登录流程：创建 session、检查状态、必要时解决验证码、返回 cookie 字典。"
+
+#: ../../source/qqqr/base.rst
 msgid "返回类型"
 msgstr ""
 
-#: of qqqr.base.LoginBase.login:4
+#: of qqqr.base.LoginBase.login:7
 msgid ""
 ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Dict\\`\\\\ "
 "\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:class\\:\\`str\\`\\]`"
 msgstr ""
 
+#: ../../source/qqqr/base.rst
+msgid "返回"
+msgstr ""
+
+#: of qqqr.base.LoginBase.login:8
+msgid "dict of login cookies"
+msgstr "登录 cookie 字典"
+
+#: ../../source/qqqr/base.rst
+msgid "抛出"
+msgstr ""
+
+#: of qqqr.base.LoginBase.login:9
+msgid "if login fails"
+msgstr "如果登录失败"
+
 #: of qqqr.base.LoginBase.new:1
 msgid "Create a new :class:`LoginSession`."
-msgstr ""
+msgstr "创建一个新的 :class:`LoginSession`。"
 
 #: of qqqr.base.LoginBase.new:4
 msgid ""
 ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.TypeVar\\`\\\\ "
 "\\\\\\(\\`\\`\\_S\\`\\`\\, bound\\= \\:py\\:class\\:\\`\\~qqqr.base.LoginSession\\`\\)`"
-msgstr ""
-
-#: of qqqr.base.LoginSession:1
-msgid "A LoginSession collects all data generated or received during login."
-msgstr ""
-
-#: ../../../docstring of qqqr.base.LoginSession.login_url:1
-msgid "GET this login url to get cookies."
-msgstr ""
-
-#: ../../../docstring of qqqr.base.LoginSession.logined:1
-msgid "whether this session is logined."
 msgstr ""
 
 #~ msgid "Return type"
@@ -73,3 +124,7 @@ msgstr ""
 
 #~ msgid ":py:class:`~typing.TypeVar`\\(``_S``, bound= :py:class:`~qqqr.base.LoginSession`)"
 #~ msgstr ""
+
+#~ msgid "Block until cookie is received."
+#~ msgstr ""
+

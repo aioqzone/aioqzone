@@ -1,3 +1,9 @@
+"""UP (uin-password) login flow for web endpoint.
+
+Defines :class:`UpWebSession` (login state) and :class:`UpWebLogin` (login
+procedure with captcha and SMS verification support).
+"""
+
 import logging
 import re
 import typing as t
@@ -24,6 +30,13 @@ log = logging.getLogger(__name__)
 
 
 class UpWebSession(LoginSession):
+    """Session state for UP login.
+
+    Stores verification results, check responses, SMS ticket, and login
+    history. Properties expose the current verification code and session
+    id needed for login requests.
+    """
+
     pt_ev_token = ""
 
     def __init__(
@@ -39,32 +52,38 @@ class UpWebSession(LoginSession):
         self.login_history: t.List[LoginResp] = []
 
     def set_check_result(self, check: CheckResp):
+        """Store the check API response and update session state."""
         self.check_rst = check
 
     @property
     def pastcode(self) -> int:
+        """The response code from the last login attempt, or 0 if none."""
         if self.login_history:
             return self.login_history[-1].code
         return 0
 
     @property
     def sid(self) -> str:
+        """The login session id from the check response."""
         return self.check_rst.session
 
     @property
     def code(self):
+        """The current verification code (verify result > check result)."""
         if self.verify_rst:
             return self.verify_rst.code
         return self.check_rst.code
 
     @property
     def verifycode(self):
+        """The current verification string (verify result > check result)."""
         if self.verify_rst:
             return self.verify_rst.verifycode
         return self.check_rst.verifycode
 
     @property
     def verifysession(self):
+        """The current verification session (verify result > check result)."""
         if self.verify_rst:
             return self.verify_rst.ticket
         return self.check_rst.verifysession
@@ -245,6 +264,17 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
         return resp
 
     async def login(self):
+        """Execute the full UP login flow.
+
+        1. Creates a new :class:`UpWebSession`
+        2. Calls the ``check`` API to determine login requirements
+        3. If captcha is needed, passes it via :meth:`UpWebSession.pass_vc`
+        4. Loops :meth:`try_login` until authenticated or error
+        5. If SMS verification is needed, triggers the ``sms_code_input`` hook
+
+        :returns: dict of login cookies
+        :raises TencentLoginError: if login fails at any step
+        """
         sess = await self.new()
         await self.check(sess)
 

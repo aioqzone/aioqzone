@@ -1,3 +1,8 @@
+"""QR login API response models.
+
+TypedDicts for poll, fetch-device-uin, and push-QR API responses.
+"""
+
 import typing as t
 
 from pydantic import BaseModel, Field
@@ -7,18 +12,26 @@ from qqqr.type import RedirectCookies
 
 
 class PollResp(BaseModel):
-    code: int
-    url: t.Union[HttpUrl, str]
-    msg: str
-    nickname: str
-    cookies: t.Optional[RedirectCookies] = None
+    """Response from the QR poll API."""
+
+    code: int  #: status code (see :class:`~qqqr.constant.StatusCode`)
+    url: t.Union[HttpUrl, str]  #: callback URL after authentication
+    msg: str  #: result message
+    nickname: str  #: user nickname
+    cookies: t.Optional[RedirectCookies] = None  #: redirect cookies
 
 
 class FetchDevUinResp(BaseModel):
-    code: int = Field(validation_alias="errcode")
-    uin_list: t.List[int] = Field(default_factory=list, validation_alias="data")
+    """Response from the fetch-device-uin API."""
+
+    code: int = Field(validation_alias="errcode")  #: result code
+    uin_list: t.List[int] = Field(
+        default_factory=list, validation_alias="data"
+    )  #: device QQ number list
 
 
 class PushQrResp(BaseModel):
-    code: int = Field(validation_alias="ec")
-    message: str = Field(default="", validation_alias="em")
+    """Response from the push-QR API."""
+
+    code: int = Field(validation_alias="ec")  #: result code
+    message: str = Field(default="", validation_alias="em")  #: result message

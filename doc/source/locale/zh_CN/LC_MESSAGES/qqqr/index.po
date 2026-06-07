@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../source/qqqr/index.rst:3
 msgid "QQQR"
-msgstr ""
+msgstr "QQQR"
 
 #: of qqqr:1
 msgid ""
@@ -54,8 +54,8 @@ msgstr ""
 
 #: ../../source/qqqr/index.rst:28
 msgid "Table of Contents"
-msgstr ""
+msgstr "目录"
 
 #: ../../source/qqqr/index.rst:41
 msgid "Miscellaneous"
-msgstr ""
+msgstr "其他"

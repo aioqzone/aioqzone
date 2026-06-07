@@ -23,4 +23,4 @@ msgstr "用户名-密码登录"
 
 #: ../../source/qqqr/up/index.rst:13
 msgid "Encrypt and Captcha"
-msgstr ""
+msgstr "加密与验证码"

@@ -8,18 +8,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-07 23:39+0800\n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/qqqr/qr/type.rst:2
 msgid "QrLogin Types"
+msgstr "QR 登录类型"
+
+#: of qqqr.qr.type:1
+msgid "QR login API response models."
+msgstr "QR 登录 API 响应模型。"
+
+#: of qqqr.qr.type:3
+msgid "TypedDicts for poll, fetch-device-uin, and push-QR API responses."
 msgstr ""
+
+#: of qqqr.qr.type.PollResp:1
+msgid "Response from the QR poll API."
+msgstr "QR 轮询 API 的响应。"
 
 #: of qqqr.qr.type.FetchDevUinResp qqqr.qr.type.PollResp qqqr.qr.type.PushQrResp
 msgid "Fields"
@@ -45,6 +57,30 @@ msgstr ""
 msgid ":py:obj:`url (pydantic.networks.HttpUrl | str) <qqqr.qr.type.PollResp.url>`"
 msgstr ""
 
+#: ../../../docstring of qqqr.qr.type.PollResp.code:1
+msgid "status code (see :class:`~qqqr.constant.StatusCode`)"
+msgstr "状态码（参见 :class:`~qqqr.constant.StatusCode`）"
+
+#: ../../../docstring of qqqr.qr.type.PollResp.cookies:1
+msgid "redirect cookies"
+msgstr ""
+
+#: ../../../docstring of qqqr.qr.type.PollResp.msg:1 qqqr.qr.type.PushQrResp.message:1
+msgid "result message"
+msgstr "结果消息"
+
+#: ../../../docstring of qqqr.qr.type.PollResp.nickname:1
+msgid "user nickname"
+msgstr ""
+
+#: ../../../docstring of qqqr.qr.type.PollResp.url:1
+msgid "callback URL after authentication"
+msgstr ""
+
+#: of qqqr.qr.type.FetchDevUinResp:1
+msgid "Response from the fetch-device-uin API."
+msgstr "获取设备 UIN API 的响应。"
+
 #: of qqqr.qr.type.FetchDevUinResp:1
 msgid ":py:obj:`code (int) <qqqr.qr.type.FetchDevUinResp.code>`"
 msgstr ""
@@ -52,6 +88,18 @@ msgstr ""
 #: of qqqr.qr.type.FetchDevUinResp:1
 msgid ":py:obj:`uin_list (List[int]) <qqqr.qr.type.FetchDevUinResp.uin_list>`"
 msgstr ""
+
+#: ../../../docstring of qqqr.qr.type.FetchDevUinResp.code:1 qqqr.qr.type.PushQrResp.code:1
+msgid "result code"
+msgstr "结果码"
+
+#: ../../../docstring of qqqr.qr.type.FetchDevUinResp.uin_list:1
+msgid "device QQ number list"
+msgstr ""
+
+#: of qqqr.qr.type.PushQrResp:1
+msgid "Response from the push-QR API."
+msgstr "推送 QR API 的响应。"
 
 #: of qqqr.qr.type.PushQrResp:1
 msgid ":py:obj:`code (int) <qqqr.qr.type.PushQrResp.code>`"
@@ -71,3 +119,4 @@ msgstr ""
 #~ ":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] "
 #~ "| str) <qqqr.qr.type.PollResp.url>`"
 #~ msgstr ""
+

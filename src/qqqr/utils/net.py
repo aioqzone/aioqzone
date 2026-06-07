@@ -1,3 +1,10 @@
+"""HTTP client adapter and utilities.
+
+Wraps :class:`aiohttp.ClientSession` as :class:`ClientAdapter`, and provides
+:func:`raise_for_status`, :func:`get_all_cookie`, and :func:`use_mobile_ua`
+for QQQR's HTTP communication needs.
+"""
+
 from http.cookies import SimpleCookie
 from random import random
 from secrets import token_hex

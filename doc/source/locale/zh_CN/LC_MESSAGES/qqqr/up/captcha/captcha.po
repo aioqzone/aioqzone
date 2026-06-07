@@ -8,24 +8,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-04 16:34+0800\n"
+"POT-Creation-Date: 2026-06-07 10:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.1\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/qqqr/up/captcha/captcha.rst:2
 msgid "Captcha and TcaptchaSession"
-msgstr ""
+msgstr "验证码与 TcaptchaSession"
 
 #: of qqqr.up.captcha.Captcha.base64_ua:1
 msgid "The base64_ua function encodes the User-Agent header in base64."
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.base64_ua qqqr.up.captcha.Captcha.new
+#: ../../source/qqqr/up/captcha/captcha.rst
 msgid "返回"
 msgstr ""
 
@@ -37,7 +37,7 @@ msgstr ""
 msgid "``prehandle``. Call this method to generate a new verify session."
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.new
+#: ../../source/qqqr/up/captcha/captcha.rst
 msgid "参数"
 msgstr ""
 
@@ -45,7 +45,7 @@ msgstr ""
 msgid "login session id, got from :meth:`UpWebLogin.new`"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.new
+#: ../../source/qqqr/up/captcha/captcha.rst
 msgid "返回类型"
 msgstr ""
 
@@ -61,11 +61,19 @@ msgstr ""
 msgid "alias of :meth:`.new`"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.verify
+#: of qqqr.up.captcha.Captcha.verify:2
+msgid "login session id"
+msgstr ""
+
+#: of qqqr.up.captcha.Captcha.verify:4
+msgid "event loop"
+msgstr ""
+
+#: ../../source/qqqr/up/captcha/captcha.rst
 msgid "抛出"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.verify:1
+#: of qqqr.up.captcha.Captcha.verify:5
 msgid "cannot solve captcha"
 msgstr ""
 
@@ -164,3 +172,4 @@ msgstr ""
 
 #~ msgid ":py:class:`~qqqr.up.captcha.capsess.BaseTcaptchaSession`"
 #~ msgstr ""
+

@@ -1,3 +1,9 @@
+"""tylisten hook definitions for QQQR login events.
+
+Defines hooks for QR code events, SMS code input, and captcha solving
+that downstream code can subscribe to.
+"""
+
 import typing as t
 
 from tylisten import hookdef

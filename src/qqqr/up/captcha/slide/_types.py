@@ -1,3 +1,8 @@
+"""Slide captcha types and session implementation.
+
+Models for slide-captcha render data and :class:`SlideCaptchaSession`.
+"""
+
 import asyncio
 import logging
 import typing as t
@@ -59,18 +64,24 @@ except ImportError:
 
 
 class MoveCfg(BaseModel):
+    """Slide move configuration (notably the target position)."""
+
     track_limit: str
     move_factor: t.List[int]
     data_type: str = Field(validation_alias=AliasPath("data_type", 0))
 
 
 class FgElemCfg(Sprite):
+    """Foreground (sliding piece) element configuration."""
+
     id: int
     init_pos: t.List[int]
     move_cfg: t.Optional[MoveCfg] = None
 
 
 class FgBindingCfg(BaseModel):
+    """Foreground binding configuration for sliding piece."""
+
     master: int
     slave: int
     bind_type: str
@@ -78,6 +89,8 @@ class FgBindingCfg(BaseModel):
 
 
 class SlideBgElemCfg(CommonBgElmConf, Sprite):
+    """Background element config specific to slide captcha."""
+
     img_url: str
     """relative url to get jigsaw puzzle image (background with dimmed piece shape)."""
     init_pos: t.List[int] = Field(default=[0, 0])
@@ -85,6 +98,8 @@ class SlideBgElemCfg(CommonBgElmConf, Sprite):
 
 
 class SlideRender(CommonRender):
+    """Slide captcha render configuration."""
+
     bg: SlideBgElemCfg = Field(alias="bg_elem_cfg")
     """Background (puzzle)"""
     fg_binding_list: t.List[FgBindingCfg] = Field(default=[])
