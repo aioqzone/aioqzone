@@ -53,7 +53,7 @@ msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.new:6
 msgid "a up login session"
-msgstr "一个 UP 登录 session"
+msgstr "一个账号密码登录 session"
 
 #: of qqqr.up.web.UpWebLogin.check:1
 msgid ""
@@ -75,7 +75,7 @@ msgstr "发送验证短信（获取动态码）"
 
 #: of qqqr.up.web.UpWebLogin.send_sms_code:4
 msgid "The up login session to send sms code"
-msgstr "要发送短信验证码的 UP 登录 session"
+msgstr "要发送短信验证码的账号密码登录 session"
 
 #: of qqqr.up.web.UpWebLogin.try_login:1
 msgid ""
@@ -97,7 +97,7 @@ msgstr "登录响应"
 
 #: of qqqr.up.web.UpWebLogin.login:1
 msgid "Execute the full UP login flow."
-msgstr "执行完整的 UP 登录流程。"
+msgstr "执行完整的账号密码登录流程。"
 
 #: of qqqr.up.web.UpWebLogin.login:3
 msgid "Creates a new :class:`UpWebSession`"

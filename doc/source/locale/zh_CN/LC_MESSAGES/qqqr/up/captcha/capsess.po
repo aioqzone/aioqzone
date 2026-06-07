@@ -25,14 +25,14 @@ msgstr "验证码 Session"
 
 #: of qqqr.up.captcha.capsess.BaseTcaptchaSession:1
 msgid "Base class for all captcha sessions."
-msgstr ""
+msgstr "所有验证码 session 的基类。"
 
 #: of qqqr.up.captcha.capsess.BaseTcaptchaSession:3
 msgid ""
 "Holds captcha configuration, solves the PoW workload, fetches the TDC JavaScript, and dispatches"
 " captcha problem solving to hooks. Subclasses implement :meth:`get_captcha_problem` and "
 ":meth:`solve_captcha`."
-msgstr ""
+msgstr "保存验证码配置、解决 PoW 工作负载、获取 TDC JavaScript，并将验证码问题解决分发到钩子。子类实现 :meth:`get_captcha_problem` 和 :meth:`solve_captcha`。"
 
 #: ../../source/qqqr/up/captcha/capsess.rst:9
 msgid "Slide Captcha Session"
@@ -40,11 +40,11 @@ msgstr "滑动验证码 Session"
 
 #: of qqqr.up.captcha.slide._types:1
 msgid "Slide captcha types and session implementation."
-msgstr ""
+msgstr "滑动验证码类型和 session 实现。"
 
 #: of qqqr.up.captcha.slide._types:3
 msgid "Models for slide-captcha render data and :class:`SlideCaptchaSession`."
-msgstr ""
+msgstr "滑动验证码渲染数据的模型和 :class:`SlideCaptchaSession`。"
 
 #: ../../source/qqqr/up/captcha/capsess.rst:13
 msgid "Select Captcha Session"
@@ -52,11 +52,11 @@ msgstr "选择验证码 Session"
 
 #: of qqqr.up.captcha.select._types:1
 msgid "Select captcha types and session implementation."
-msgstr ""
+msgstr "选择验证码类型和 session 实现。"
 
 #: of qqqr.up.captcha.select._types:3
 msgid ""
 "Models for select-captcha render data and the :class:`SelectCaptchaSession` that orchestrates "
 "problem fetching and solving via hooks."
-msgstr ""
+msgstr "选择验证码渲染数据的模型和 :class:`SelectCaptchaSession`，它通过钩子协调问题获取和解决。"
 

@@ -63,15 +63,15 @@ msgstr "上次登录的时间戳。0表示自初始化以来未曾登录。"
 #: ../../../docstring aioqzone.api.login._base.Loginable.uin:1 of
 #, fuzzy
 msgid "Login QQ number"
-msgstr "登录管理器"
+msgstr "登录 QQ 号"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.cookie:1 of
 msgid "Cached cookie."
 msgstr "缓存的 cookie"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.lock:1 of
-msgid "Lock for cookie refresh serialization"
-msgstr "用于 cookie 刷新序列化的锁"
+msgid "Lock to serialize concurrent cookie refresh attempts"
+msgstr "用于串行化并发 cookie 刷新尝试的锁"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.ch_login_notify:1 of
 msgid "Future Store for emit login events."

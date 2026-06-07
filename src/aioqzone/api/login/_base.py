@@ -40,7 +40,7 @@ class Loginable(ABC):
         super().__init__()
         self.uin = uin  #: Login QQ number
         self.cookie: Dict[str, str] = {}
-        self.lock = asyncio.Lock()  #: Lock for cookie refresh serialization
+        self.lock = asyncio.Lock()  #: Lock to serialize concurrent cookie refresh attempts
         self.ch_login_notify = ch_login_notify or FutureStore()
 
         self.login_success = MT.login_success()

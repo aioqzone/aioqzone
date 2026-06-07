@@ -70,7 +70,7 @@ msgstr ""
 
 #: aioqzone.model.protocol.LikeData:1 of
 msgid "Like data model with helper methods for key construction."
-msgstr "点赞数据模型，包含密钥构建的辅助方法。"
+msgstr "点赞数据模型，包含 key 构建的辅助方法。"
 
 #: aioqzone.model.protocol.LikeData:1 of
 msgid ":py:obj:`abstime (int) <aioqzone.model.protocol.LikeData.abstime>`"

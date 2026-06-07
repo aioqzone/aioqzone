@@ -132,7 +132,7 @@ msgstr ""
 #: of
 #, fuzzy
 msgid "If success, the response."
-msgstr "如果成功调用，返回返回值的 ``data`` 域。"
+msgstr "成功时返回响应。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_feeds:1 of
 #, fuzzy
