@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
@@ -22,9 +21,8 @@ msgid "aioqzone Exceptions"
 msgstr "aioqzone 异常"
 
 #: aioqzone.exception:1 of
-#, fuzzy
 msgid "aioqzone exception hierarchy."
-msgstr "aioqzone 异常"
+msgstr "aioqzone 异常层次结构。"
 
 #: aioqzone.exception:3 of
 msgid ""

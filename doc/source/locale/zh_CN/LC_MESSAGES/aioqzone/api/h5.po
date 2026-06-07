@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
@@ -24,9 +23,8 @@ msgid "Qzone H5 API"
 msgstr "Qzone H5 接口"
 
 #: aioqzone.api.h5.model.QzoneH5API:1 of
-#, fuzzy
 msgid "Main Qzone H5 API client."
-msgstr "Qzone H5 接口"
+msgstr "主要 Qzone H5 API 客户端。"
 
 #: aioqzone.api.h5.model.QzoneH5API:3 of
 msgid ""
@@ -113,16 +111,14 @@ msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.
 msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:1 of
-#, fuzzy
 msgid ""
 "Get next page. If :obj:`.qzone_tokens` has not cached a qzonetoken of the login uin or "
 ":obj:`attach_info` is empty, this method will call :meth:`.index` and return its response."
-msgstr "获取下一页。如果 :obj:`.qzonetoken` 尚未解析或者 :obj:`attach_info` 为空，此函数将调用:meth:`index` 并返回其结果。"
+msgstr "获取下一页。如果 :obj:`.qzone_tokens` 未缓存登录 uin 的 qzonetoken 或 :obj:`attach_info` 为空，则此方法将调用 :meth:`.index` 并返回其响应。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:5 aioqzone.api.h5.model.QzoneH5API.get_feeds:8 of
-#, fuzzy
 msgid "The ``attach_info`` field from last call. Pass an empty string equals to call :meth:`.index`."
-msgstr "上一次调用返回值中的``attach_info``域。如果传入一个空串，将会调用:meth:`index`。"
+msgstr "上一次调用返回的 ``attach_info`` 字段。传入空字符串等同于调用 :meth:`.index`。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:7 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.FeedPageResp\\``"
@@ -130,17 +126,15 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.get_active_feeds:8 aioqzone.api.h5.model.QzoneH5API.get_feeds:11
 #: of
-#, fuzzy
 msgid "If success, the response."
 msgstr "成功时返回响应。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_feeds:1 of
-#, fuzzy
 msgid ""
 "Get next page of the given :obj:`uin`. If :obj:`.qzone_tokens` has not cached qzonetoken of "
 "given :obj:`uin` or :obj:`attach_info` is empty, it will call :meth:`.profile` and return its "
 ":obj:`~ProfileResp.feedpage` field."
-msgstr "获取下一页。如果 :obj:`.qzonetoken` 尚未解析或者 :obj:`attach_info` 为空，此函数将调用:meth:`index` 并返回其结果。"
+msgstr "获取指定 :obj:`uin` 的下一页。如果 :obj:`.qzone_tokens` 未缓存给定 :obj:`uin` 的 qzonetoken 或 :obj:`attach_info` 为空，将调用 :meth:`.profile` 并返回其 :obj:`~ProfileResp.feedpage` 字段。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_feeds:10 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.ProfileResp\\``"

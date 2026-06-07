@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 11:23+0800\n"
+"POT-Creation-Date: 2026-06-07 17:19+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -24,9 +23,8 @@ msgid "Messages"
 msgstr "消息"
 
 #: ../../source/aioqzone/messages.rst:5
-#, fuzzy
-msgid "QR Login Messages"
-msgstr "消息"
+msgid "Manager-specific Messages"
+msgstr "各登录方式特有的消息"
 
 #: of qqqr.message:1
 msgid "tylisten hook definitions for QQQR login events."
@@ -37,6 +35,10 @@ msgid ""
 "Defines hooks for QR code events, SMS code input, and captcha solving that downstream code can "
 "subscribe to."
 msgstr "定义二维码事件、短信验证码输入和验证码解决的钩子，供下游代码订阅。"
+
+#: ../../source/aioqzone/messages.rst:10
+msgid "QR Login Messages"
+msgstr "二维码登录消息"
 
 #: ../../source/aioqzone/messages.rst
 msgid "参数"
@@ -60,8 +62,7 @@ msgstr "此刷新由用户请求"
 msgid "返回类型"
 msgstr ""
 
-#: ../../../docstring aioqzone.message.login_failed:6 aioqzone.message.login_success:5 of
-#: qqqr.message.qr_cancelled:4 qqqr.message.qr_fetched:5
+#: ../../../docstring of qqqr.message.qr_cancelled:4 qqqr.message.qr_fetched:5
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:data\\:\\`\\~typing.Any\\``"
 msgstr ""
 
@@ -69,10 +70,9 @@ msgstr ""
 msgid "qr cancelled"
 msgstr "二维码已取消"
 
-#: ../../source/aioqzone/messages.rst:14
-#, fuzzy
+#: ../../source/aioqzone/messages.rst:16
 msgid "UP Login Messages"
-msgstr "消息"
+msgstr "密码登录消息"
 
 #: ../../../docstring of qqqr.message.sms_code_input:1
 msgid "uin"
@@ -146,7 +146,7 @@ msgstr ""
 msgid "the left position of the target area."
 msgstr "目标区域的左侧位置。"
 
-#: ../../source/aioqzone/messages.rst:25
+#: ../../source/aioqzone/messages.rst:23
 msgid "Unified Login Messages"
 msgstr "统一登录消息"
 
@@ -159,86 +159,3 @@ msgid ""
 "Defines :func:`login_success` and :func:`login_failed` hooks, and re-exports QR/UP/captcha hooks"
 " from :mod:`qqqr.message`."
 msgstr "定义 :func:`login_success` 和 :func:`login_failed` 钩子，并从 :mod:`qqqr.message` 重新导出 QR/UP/验证码钩子。"
-
-#: ../../../docstring aioqzone.message.login_success:1 of
-msgid "Login success."
-msgstr "登录成功。"
-
-#: ../../../docstring aioqzone.message.login_failed:3 aioqzone.message.login_success:3 of
-msgid "login uin"
-msgstr "登录 uin"
-
-#: ../../../docstring aioqzone.message.login_failed:1 of
-msgid "Login failed."
-msgstr "登录失败。"
-
-#: ../../../docstring aioqzone.message.login_failed:4 of
-msgid "exception or error message"
-msgstr "异常或错误消息"
-
-#~ msgid "Fields"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`exc (str) <aioqzone.message.login_failed.exc>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`method (Literal['qr'] | Literal['up']) <aioqzone.message.login_failed.method>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`uin (int) <aioqzone.message.login_failed.uin>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`method (Literal['qr'] | Literal['up']) <aioqzone.message.login_success.method>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`uin (int) <aioqzone.message.login_success.uin>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`png (bytes) <qqqr.message.qr_fetched.png>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`times (int) <qqqr.message.qr_fetched.times>`"
-#~ msgstr ""
-
-#~ msgid "QR bytes (png format)"
-#~ msgstr ""
-
-#~ msgid "QR **expire** times in this session"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`sms_code (str) <qqqr.message.sms_code_input.sms_code>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`uin (int) <qqqr.message.sms_code_input.uin>`"
-#~ msgstr ""
-
-#~ msgid "User received SMS verify code."
-#~ msgstr ""
-
-#~ msgid "uin"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`nickname (str) <qqqr.message.sms_code_required.nickname>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`phone (str) <qqqr.message.sms_code_required.phone>`"
-#~ msgstr ""
-
-#~ msgid ":py:obj:`uin (int) <qqqr.message.sms_code_required.uin>`"
-#~ msgstr ""
-
-#~ msgid "Nickname of current login user."
-#~ msgstr ""
-
-#~ msgid "User's binded phone number."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Optional QR bytes (png format). If None, the "
-#~ "QR is pushed to user's mobile and there is"
-#~ " no need to scan."
-#~ msgstr ""
-
-#~ msgid "this refresh is requested by user"
-#~ msgstr ""
-

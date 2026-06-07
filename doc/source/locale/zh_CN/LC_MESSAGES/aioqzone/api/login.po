@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
@@ -24,14 +23,12 @@ msgid "Login Managers"
 msgstr "登录管理器"
 
 #: ../../source/aioqzone/api/login.rst:7
-#, fuzzy
 msgid "Loginable"
 msgstr "Loginable"
 
 #: aioqzone.api.login._base:1 of
-#, fuzzy
 msgid "Abstract login manager base."
-msgstr "登录管理器"
+msgstr "抽象登录管理器基类。"
 
 #: aioqzone.api.login._base:3 of
 msgid ""
@@ -40,9 +37,8 @@ msgid ""
 msgstr "定义 :class:`Loginable` 抽象基类 — 所有登录管理器实现的接口。提供 cookie 缓存、gtk 计算和登录事件触发。"
 
 #: aioqzone.api.login._base.Loginable:1 of
-#, fuzzy
 msgid "Abstract login manager interface."
-msgstr "登陆管理器的抽象类"
+msgstr "抽象登录管理器接口。"
 
 #: aioqzone.api.login._base.Loginable:3 of
 msgid ""
@@ -61,7 +57,6 @@ msgid "Last login time stamp. 0 represents no login since created."
 msgstr "上次登录的时间戳。0表示自初始化以来未曾登录。"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.uin:1 of
-#, fuzzy
 msgid "Login QQ number"
 msgstr "登录 QQ 号"
 
@@ -129,9 +124,8 @@ msgid "True if login succeeded, False otherwise."
 msgstr "登录成功返回 True，否则返回 False。"
 
 #: aioqzone.api.login._base.Loginable.gtk:1 of
-#, fuzzy
 msgid "Calculate g_token(gtk) using ``p_skey`` or ``skey`` field in the cookie."
-msgstr "使用 cookie 中的 ``pskey`` 字段计算 gtk。"
+msgstr "使用 cookie 中的 ``p_skey`` 或 ``skey`` 字段计算 gtk。"
 
 #: aioqzone.api.login._base.Loginable.gtk:3 of
 msgid "g_token"
@@ -146,9 +140,8 @@ msgid ":meth:`qqqr.utils.encrypt.gtk`"
 msgstr ":meth:`qqqr.utils.encrypt.gtk`"
 
 #: ../../source/aioqzone/api/login.rst:13
-#, fuzzy
 msgid "Built-in Login Managers"
-msgstr "内建的登陆管理器"
+msgstr "内建的登录管理器"
 
 #: aioqzone.api.login:1 of
 msgid ""
@@ -201,9 +194,8 @@ msgid "Login config instance"
 msgstr "登录配置实例"
 
 #: aioqzone.api.login.UpLoginManager.h5:1 of
-#, fuzzy
 msgid "Change :obj:`.uplogin` to h5 login proxy."
-msgstr "将 :obj:`.qrlogin` 和 :obj:`.uplogin` 切换到H5登录。"
+msgstr "将 :obj:`.uplogin` 切换到 H5 登录。"
 
 #: aioqzone.api.login.QrLoginManager.h5:4 aioqzone.api.login.UpLoginManager.h5:4 of
 msgid "use h5 mode or not"
@@ -224,9 +216,8 @@ msgid ""
 msgstr "封装 :class:`~qqqr.qr.QrLogin`，通过 ``qr_fetched`` 钩子触发二维码图片供下游显示。"
 
 #: aioqzone.api.login.QrLoginManager.h5:1 of
-#, fuzzy
 msgid "Change :obj:`.qrlogin` to h5 login proxy."
-msgstr "将 :obj:`.qrlogin` 和 :obj:`.uplogin` 切换到H5登录。"
+msgstr "将 :obj:`.qrlogin` 切换到 H5 登录。"
 
 #~ msgid ""
 #~ "Collect some built-in login manager w/o caching."
