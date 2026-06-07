@@ -28,7 +28,7 @@ msgid ""
 "A wrapper of :class:`.QzoneWebRawAPI`. It will validate the returns from "
 ":class:`.QzoneWebRawAPI`, and return a typed response. The value returned is usually one or more"
 " :class:`BaseModel`, sometimes just a basic type if not needed."
-msgstr ""
+msgstr "一个 :class:`.QzoneWebRawAPI` 的封装。它会验证 :class:`.QzoneWebRawAPI` 的返回结果，并返回类型化响应。返回值通常是 :class:`BaseModel` 及其子类，有时也可能返回基础类型。"
 
 #: aioqzone.api.web.model.QzoneWebAPI:5 of
 msgid "rename to ``QzoneWebAPI``"
@@ -36,7 +36,7 @@ msgstr "更名为 ``QzoneWebAPI``"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments:1 of
 msgid "Get complete html of a given feed"
-msgstr ""
+msgstr "获取指定 feed 的完整 HTML"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail
@@ -54,11 +54,11 @@ msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments:6 of
 msgid "feed id"
-msgstr ""
+msgstr "feed id"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments:8 of
 msgid "feedstype in html"
-msgstr ""
+msgstr "HTML 中的 feed 类型"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail
@@ -76,7 +76,7 @@ msgstr ""
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:8
 #: aioqzone.api.web.model.QzoneWebAPI.get_feeds_count:3 of
 msgid "error http response code"
-msgstr ""
+msgstr "HTTP 响应码错误"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments:11
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:9
@@ -85,7 +85,7 @@ msgstr ""
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:9
 #: aioqzone.api.web.model.QzoneWebAPI.get_feeds_count:4 of
 msgid "error qzone response code"
-msgstr ""
+msgstr "Qzone 响应码错误"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail
@@ -105,7 +105,7 @@ msgstr ""
 msgid ""
 "All error that may be raised from :meth:`.login.new_cookie`, which depends on the login manager "
 "you passed in."
-msgstr ""
+msgstr "可能从 :meth:`.login.new_cookie` 引发的所有错误，具体取决于传入的登录管理器。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail
@@ -133,19 +133,19 @@ msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_getcomments:15 of
 msgid "response dict"
-msgstr ""
+msgstr "响应字典"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:1 of
 msgid "Get detail of a given msg."
-msgstr ""
+msgstr "获取指定消息的详细信息。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:4 of
 msgid "owner uin"
-msgstr ""
+msgstr "所属者 uin"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:6 of
 msgid "feed id, named fid, tid or feedkey"
-msgstr ""
+msgstr "feed id，也称为 fid、tid 或 feedkey"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:12 of
 msgid ":py:class:`~aioqzone.model.response.web.FeedDetailRep`"
@@ -153,23 +153,23 @@ msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:13 of
 msgid "a dict represents the feed in detail."
-msgstr ""
+msgstr "表示 feed 详细信息的字典。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msgdetail:15 of
 msgid "share msg is not support, i.e. `appid=311`"
-msgstr ""
+msgstr "不支持分享消息，例如 `appid=311`"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msglist:1 of
 msgid "Get msg(feed?) list of a user."
-msgstr ""
+msgstr "获取用户的 msg（feed？）列表。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msglist:6 of
 msgid "number, defaults to 20"
-msgstr ""
+msgstr "数量，默认为 20"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msglist:8 of
 msgid "start position, defaults to 0"
-msgstr ""
+msgstr "起始位置，默认为 0"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msglist:14 of
 msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.model.response.web.MsgListElm`]"
@@ -177,19 +177,19 @@ msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_msglist:15 of
 msgid "a list of messages"
-msgstr ""
+msgstr "消息列表"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_publish:1 of
 msgid "Publish a feed. appid=311."
-msgstr ""
+msgstr "发布 feed。appid=311。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_publish:4 of
 msgid "text content."
-msgstr ""
+msgstr "文本内容。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_publish:6 of
 msgid "feed access right, defaults to 0 (Not used till now)"
-msgstr ""
+msgstr "feed 访问权限，默认为 0（尚未使用）"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_publish:12 of
 msgid ":py:class:`~aioqzone.model.response.web.PublishResp`"
@@ -197,19 +197,19 @@ msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_publish:13 of
 msgid "qzone response as is, containing feed html and fid."
-msgstr ""
+msgstr "Qzone 原始响应，包含 feed HTML 和 fid。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.emotion_publish:16 of
 msgid "This api is under development. It has basic functions only."
-msgstr ""
+msgstr "此 API 正在开发中，仅提供基本功能。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.feeds3_html_more:1 of
 msgid "This will call :meth:`.QzoneWebRawAPI.feeds3_html_more`."
-msgstr ""
+msgstr "将调用 :meth:`.QzoneWebRawAPI.feeds3_html_more`。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.feeds3_html_more:4 of
 msgid ":obj:`~.FeedMoreResp.aux` field of last return (pagenum - 1)."
-msgstr ""
+msgstr "上次返回的 :obj:`~.FeedMoreResp.aux` 字段（页码 - 1）。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.feeds3_html_more:5 of
 msgid ":py:class:`~aioqzone.model.response.web.FeedMoreResp`"
@@ -219,27 +219,27 @@ msgstr ""
 msgid ""
 "a validated and typed response with a list of :obj:`~.FeedMoreResp.feeds` and "
 ":obj:`~.FeedMoreResp.aux` info."
-msgstr ""
+msgstr "包含 :obj:`~.FeedMoreResp.feeds` 列表和 :obj:`~.FeedMoreResp.aux` 信息的已验证类型化响应。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.feeds3_html_more:10 of
 msgid "use `aux` instead of previous `trans` keyword."
-msgstr ""
+msgstr "使用 `aux` 替代之前的 `trans` 关键字。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:1 of
 msgid "Get detail of an album, including raw image url."
-msgstr ""
+msgstr "获取相册详细信息，包括原始图片 URL。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:4 of
 msgid "Necessary album data"
-msgstr ""
+msgstr "必要的相册数据"
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:6 of
 msgid "pic num"
-msgstr ""
+msgstr "图片数量"
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:11 of
 msgid "maybe data is corruptted"
-msgstr ""
+msgstr "数据可能已损坏"
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:13 of
 msgid ":py:class:`~typing.List`\\[:py:class:`~aioqzone.model.response.web.FloatViewPhoto`]"
@@ -247,17 +247,17 @@ msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:14 of
 msgid "album details"
-msgstr ""
+msgstr "相册详情"
 
 #: aioqzone.api.web.model.QzoneWebAPI.floatview_photo_list:17 of
 msgid ""
 "This api is a 'slow' api, means it always returns an error code, requesting a retry a moment "
 "later. Use :meth:`.emotion_msgdetail` to get raw photo/video in a feed."
-msgstr ""
+msgstr "此 API 是一个"慢"API，即它总是返回错误码，要求稍后重试。使用 :meth:`.emotion_msgdetail` 获取 feed 中的原始照片/视频。"
 
 #: aioqzone.api.web.model.QzoneWebAPI.get_feeds_count:1 of
 msgid "Get feeds update count (new feeds, new photos, new comments, etc)"
-msgstr ""
+msgstr "获取 feed 更新数量（新 feed、新照片、新评论等）"
 
 #: aioqzone.api.web.model.QzoneWebAPI.get_feeds_count:7 of
 msgid ":py:class:`~aioqzone.model.response.web.FeedsCount`"
@@ -265,13 +265,13 @@ msgstr ""
 
 #: aioqzone.api.web.model.QzoneWebAPI.get_feeds_count:8 of
 msgid "update counts"
-msgstr ""
+msgstr "更新计数"
 
 #: aioqzone.api.web.model.QzoneWebAPI.get_feeds_count:11 of
 msgid ""
 "This api is also the 'keep-alive' signal to avoid cookie from expiring. Call this api every 300s"
 " can help keep cookie alive."
-msgstr ""
+msgstr "此 API 也是避免 cookie 过期的"保活"信号。每 300 秒调用一次有助于保持 cookie 有效。"
 
 #~ msgid "rename to ``QzoneAPI``"
 #~ msgstr ""

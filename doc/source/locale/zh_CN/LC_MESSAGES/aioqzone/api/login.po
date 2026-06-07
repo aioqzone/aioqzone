@@ -71,7 +71,7 @@ msgstr "缓存的 cookie"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.lock:1 of
 msgid "Lock for cookie refresh serialization"
-msgstr ""
+msgstr "用于 cookie 刷新序列化的锁"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.ch_login_notify:1 of
 msgid "Future Store for emit login events."
@@ -79,11 +79,11 @@ msgstr "用于触发登录事件的 Future Store。"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.login_success:1 of
 msgid "Emitted after a successful login."
-msgstr ""
+msgstr "登录成功后触发。"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.login_failed:1 of
 msgid "Emitted after a failed login attempt."
-msgstr ""
+msgstr "登录失败后触发。"
 
 #: aioqzone.api.login.ConstLoginMan._new_cookie:1 aioqzone.api.login._base.Loginable._new_cookie:1 of
 msgid "Subclasses *must* implement this method to return a cookie dict."
@@ -193,12 +193,12 @@ msgstr "封装 :class:`~qqqr.up.UpWebLogin` 或 :class:`~qqqr.up.UpH5Login`，�
 #: ../../../docstring aioqzone.api.login.QrLoginManager.client:1
 #: aioqzone.api.login.UpLoginManager.client:1 of
 msgid "HTTP client"
-msgstr ""
+msgstr "HTTP 客户端"
 
 #: ../../../docstring aioqzone.api.login.QrLoginManager.config:1
 #: aioqzone.api.login.UpLoginManager.config:1 of
 msgid "Login config instance"
-msgstr ""
+msgstr "登录配置实例"
 
 #: aioqzone.api.login.UpLoginManager.h5:1 of
 #, fuzzy

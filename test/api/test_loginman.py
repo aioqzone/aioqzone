@@ -281,7 +281,9 @@ async def test_login_manager_system_exit(client, request, manager_cls, config_fi
         (QrLoginManager, "qr_config", "qrlogin"),
     ],
 )
-async def test_login_manager_wraps_unexpected_error(client, request, manager_cls, config_fixture, attr):
+async def test_login_manager_wraps_unexpected_error(
+    client, request, manager_cls, config_fixture, attr
+):
     """Login managers should wrap unexpected errors as UnexpectedLoginError"""
     config = request.getfixturevalue(config_fixture)
     man = manager_cls(client, config)
@@ -305,6 +307,7 @@ async def test_login_manager_wraps_unexpected_error(client, request, manager_cls
 async def test_try_again_has_cause(client, request, manager_cls, config_fixture, attr, spec_cls):
     """TryAgain should preserve original exception chain"""
     import importlib
+
     module_path, cls_name = spec_cls.rsplit(".", 1)
     spec_cls = getattr(importlib.import_module(module_path), cls_name)
 

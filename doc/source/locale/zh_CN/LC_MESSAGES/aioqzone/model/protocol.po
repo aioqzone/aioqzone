@@ -54,7 +54,7 @@ msgstr "相册数据模型。"
 #: aioqzone.model.protocol.entity.HasContent aioqzone.model.protocol.entity.LinkEntity
 #: aioqzone.model.protocol.entity.TextEntity of
 msgid "Fields"
-msgstr ""
+msgstr "字段"
 
 #: aioqzone.model.protocol.AlbumData:1 of
 msgid ":py:obj:`hostuin (int) <aioqzone.model.protocol.AlbumData.hostuin>`"
@@ -202,7 +202,7 @@ msgstr ""
 
 #: ../../../docstring aioqzone.model.protocol.config.LoginConfig.uin:1 of
 msgid "Login uin (qq)."
-msgstr ""
+msgstr "登录 uin（QQ 号）。"
 
 #: aioqzone.model.protocol.config.UpLoginConfig:1 of
 msgid ""
@@ -220,7 +220,7 @@ msgstr ""
 
 #: ../../../docstring aioqzone.model.protocol.config.UpLoginConfig.pwd:1 of
 msgid "User password."
-msgstr ""
+msgstr "用户密码。"
 
 #: aioqzone.model.protocol.config.QrLoginConfig:1 of
 msgid ""

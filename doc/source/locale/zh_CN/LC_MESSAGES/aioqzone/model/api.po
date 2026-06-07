@@ -61,7 +61,7 @@ msgstr "下方所有 Qzone API 的基类。"
 #: aioqzone.model.api.response.ProfileResp aioqzone.model.api.response.PublishMoodResp
 #: aioqzone.model.api.response.UploadPicResponse of
 msgid "Fields"
-msgstr ""
+msgstr "字段"
 
 #: aioqzone.model.api.QzoneApi:1 of
 msgid ":py:obj:`params (aioqzone.model.api.TyRequest) <aioqzone.model.api.QzoneApi.params>`"
@@ -143,7 +143,7 @@ msgstr "发布前预上传照片。POST ``/cgi-bin/upload/cgi_upload_pic_v2``。
 
 #: ../../source/aioqzone/model/api.rst:12
 msgid "Parameters"
-msgstr ""
+msgstr "参数"
 
 #: aioqzone.model.api.request:1 of
 msgid "Qzone API request parameter models."

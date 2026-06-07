@@ -21,11 +21,11 @@ msgstr ""
 
 #: ../../source/aioqzone/model/response.rst:2
 msgid "Response Models"
-msgstr ""
+msgstr "响应模型"
 
 #: ../../source/aioqzone/model/response.rst:5
 msgid "H5 Responses"
-msgstr ""
+msgstr "H5 响应"
 
 #: aioqzone.model.response.h5.CellId aioqzone.model.response.h5.CommentItem
 #: aioqzone.model.response.h5.FeedComment aioqzone.model.response.h5.FeedCommon
@@ -41,7 +41,7 @@ msgstr ""
 #: aioqzone.model.response.h5.Share aioqzone.model.response.h5.ShareInfo
 #: aioqzone.model.response.h5.UserInfo of
 msgid "Fields"
-msgstr ""
+msgstr "字段"
 
 #: aioqzone.model.response.h5.CellId:1 of
 msgid ":py:obj:`cellid (str) <aioqzone.model.response.h5.CellId.cellid>`"
