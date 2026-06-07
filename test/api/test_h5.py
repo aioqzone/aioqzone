@@ -85,7 +85,7 @@ async def qzone_workflow(api: QzoneH5API):
     assert MOOD_TEXT in fetched_feed.summary.summary
 
     ownuin, appid = api.login.uin, 311
-    unikey = LikeData.persudo_unikey(appid, ownuin, feed.fid)
+    unikey = LikeData.pseudo_unikey(appid, ownuin, feed.fid)
 
     comment = await api.add_comment(
         ownuin, feed.fid, appid, COMMENT_TEXT, busi_param=fetched_feed.operation.busi_param

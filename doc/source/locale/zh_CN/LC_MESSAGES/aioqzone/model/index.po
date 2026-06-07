@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
@@ -21,4 +20,4 @@ msgstr ""
 
 #: ../../source/aioqzone/model/index.rst:2
 msgid "aioqzone Models"
-msgstr ""
+msgstr "aioqzone 模型"

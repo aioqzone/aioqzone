@@ -1,3 +1,9 @@
+"""UP login flow for mobile H5 endpoint.
+
+Extends :class:`~qqqr.up.web.UpWebLogin` with H5-specific check/login URLs
+and parameters.
+"""
+
 import logging
 import re
 from random import random
@@ -14,8 +20,15 @@ LOGIN_URL = "https://ui.ptlogin2.qq.com/ssl/login"
 
 
 class UpH5Login(UpWebLogin):
+    """UP login using the mobile H5 endpoint.
+
+    Uses ``ui.ptlogin2.qq.com`` instead of ``ssl.ptlogin2.qq.com``,
+    with H5-specific parameters.
+    """
+
     @property
     def login_page_url(self):
+        """Build the H5 login page URL with H5-specific parameters."""
         params = dict(
             pt_hide_ad=1,
             style=9,
@@ -28,6 +41,10 @@ class UpH5Login(UpWebLogin):
         return URL("https://ui.ptlogin2.qq.com/cgi-bin/login").with_query(params)
 
     async def check(self, sess: UpWebSession):
+        """Call the H5 ``check`` API to determine login requirements.
+
+        :param sess: Session from :meth:`~UpWebLogin.new`
+        """
         data = dict(
             pt_tea=2,
             uin=self.uin,

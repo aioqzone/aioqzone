@@ -3,59 +3,66 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-25 16:08+0800\n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/qqqr/qr/login.rst:2
 msgid "QrLogin and QrSession"
-msgstr ""
+msgstr "QR 登录与 QrSession"
 
 #: of qqqr.qr.QR:1
 msgid "Class :class:`QR` represents a QR code."
-msgstr ""
+msgstr ":class:`QR` 类表示一个二维码。"
 
 #: ../../../docstring of qqqr.qr.QR.png:1
 msgid "QR code content. If None, the QR is pushed to user's client."
-msgstr ""
+msgstr "二维码内容。如果为 None，二维码已推送到用户客户端。"
 
 #: ../../../docstring of qqqr.qr.QR.expired:1
 msgid "Whether the QR code is expired."
-msgstr ""
+msgstr "二维码是否已过期。"
 
 #: of qqqr.qr.QR.pushed:1
 msgid "Whether the QR code is pushed to user's client."
-msgstr ""
+msgstr "二维码是否已推送到用户客户端。"
+
+#: of qqqr.qr.QrSession:1
+msgid "Session state for QR login."
+msgstr "QR 登录的 session 状态。"
+
+#: of qqqr.qr.QrSession:3
+msgid "Tracks QR code refreshes, expiration times, and current QR image."
+msgstr "跟踪二维码刷新次数、过期时间和当前二维码图片。"
 
 #: ../../../docstring of qqqr.qr.QrSession.refreshed:1
 msgid "QR code refresh times counter."
-msgstr ""
+msgstr "二维码刷新次数计数器。"
 
 #: ../../../docstring of qqqr.qr.QrSession.current_qr:1
 msgid "A :class:`QrSession` keeps a :class:`QR` object as current QR code."
-msgstr ""
+msgstr ":class:`QrSession` 持有一个 :class:`QR` 对象作为当前二维码。"
 
 #: of qqqr.qr.QrSession.new_qr:1
 msgid "Add a new QR code to this session."
-msgstr ""
+msgstr "向此 session 添加一个新的二维码。"
 
 #: of qqqr.qr.QrLogin.new:1
 msgid "Create a :class:`QrSession`. This method will:"
-msgstr ""
+msgstr "创建一个 :class:`QrSession`。此方法将："
 
 #: of qqqr.qr.QrLogin.new:3
 msgid "GET ``xlogin`` url to get ``pt_login_sig`` cookie;"
-msgstr ""
+msgstr "GET ``xlogin`` URL 以获取 ``pt_login_sig`` cookie；"
 
 #: of qqqr.qr.QrLogin.new:5
 msgid "Try \"quick login\" (the QR code is pushed to user's client);"
@@ -65,17 +72,17 @@ msgstr ""
 msgid ""
 "Whether the QR code is pushed or not, a :class:`QR` object is created and is hold by the "
 "returned :class:`QrSession`."
-msgstr ""
+msgstr "无论二维码是否已推送，都会创建一个 :class:`QR` 对象，并由返回的 :class:`QrSession` 持有。"
 
-#: of qqqr.qr.QrLogin.login qqqr.qr.QrLogin.new qqqr.qr.QrLogin.show
+#: ../../source/qqqr/qr/login.rst
 msgid "参数"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.login:18 qqqr.qr.QrLogin.new:11
 msgid "Do not try to push the QR code to user's client."
-msgstr ""
+msgstr "不要尝试将二维码推送到用户客户端。"
 
-#: of qqqr.qr.QrLogin.new qqqr.qr.QrLogin.poll qqqr.qr.QrLogin.show
+#: ../../source/qqqr/qr/login.rst
 msgid "返回类型"
 msgstr ""
 
@@ -83,25 +90,25 @@ msgstr ""
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~qqqr.qr.QrSession\\``"
 msgstr ""
 
-#: of qqqr.qr.QrLogin.new qqqr.qr.QrLogin.poll qqqr.qr.QrLogin.show
+#: ../../source/qqqr/qr/login.rst
 msgid "返回"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.new:13
 msgid "a :class:`QrSession`"
-msgstr ""
+msgstr "一个 :class:`QrSession`"
 
 #: of qqqr.qr.QrLogin.login:25 qqqr.qr.QrLogin.new:17
 msgid "Added :obj:`no_push` param."
-msgstr ""
+msgstr "添加了 :obj:`no_push` 参数。"
 
 #: of qqqr.qr.QrLogin.show:1
 msgid "This method will call ``ptqrshow`` api and wrap the response QR bytes into :class:`QR`."
-msgstr ""
+msgstr "此方法将调用 ``ptqrshow`` API 并将响应中的二维码字节封装为 :class:`QR`。"
 
 #: of qqqr.qr.QrLogin.show:4
 msgid "push QR to mobile client."
-msgstr ""
+msgstr "将二维码推送到移动客户端。"
 
 #: of qqqr.qr.QrLogin.show:5
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~qqqr.qr.QR\\``"
@@ -109,19 +116,19 @@ msgstr ""
 
 #: of qqqr.qr.QrLogin.show:6
 msgid "a :class:`QR` object."
-msgstr ""
+msgstr "一个 :class:`QR` 对象。"
 
 #: of qqqr.qr.QrLogin.poll:1
 msgid "Poll QR status."
-msgstr ""
+msgstr "轮询二维码状态。"
 
-#: of qqqr.qr.QrLogin.login qqqr.qr.QrLogin.poll
+#: ../../source/qqqr/qr/login.rst
 msgid "抛出"
 msgstr ""
 
 #: of qqqr.qr.QrLogin.poll:3
 msgid "if response status code != 200"
-msgstr ""
+msgstr "如果响应状态码 != 200"
 
 #: of qqqr.qr.QrLogin.poll:5
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~qqqr.qr.type.PollResp\\``"
@@ -129,45 +136,45 @@ msgstr ""
 
 #: of qqqr.qr.QrLogin.poll:6
 msgid "a poll response object"
-msgstr ""
+msgstr "一个轮询响应对象"
 
 #: of qqqr.qr.QrLogin.login:1
 msgid "Loop until cookie is returned or max :obj:`refresh_times` exceeds."
-msgstr ""
+msgstr "循环直到获取到 cookie 或超过最大 :obj:`refresh_times` 次数。"
 
 #: of qqqr.qr.QrLogin.login:3
 msgid "This method will emit :obj:`.qr_fetched` event if a new qrcode is fetched."
-msgstr ""
+msgstr "此方法在获取到新二维码时会触发 :obj:`.qr_fetched` 事件。"
 
 #: of qqqr.qr.QrLogin.login:5
 msgid ""
 "If the QR code is not scanned after :obj:`refresh_times`, it will raise "
 ":exc:`~qqqr.exception.UserTimeout`."
-msgstr ""
+msgstr "如果二维码在 :obj:`refresh_times` 次后仍未扫描，将引发 :exc:`~qqqr.exception.UserTimeout`。"
 
 #: of qqqr.qr.QrLogin.login:8
 msgid "If :obj:`.refresh` is set, it will refresh qrcode at once without increasing expire counter."
-msgstr ""
+msgstr "如果设置了 :obj:`.refresh`，将立即刷新二维码而不增加过期计数器。"
 
 #: of qqqr.qr.QrLogin.login:10
 msgid "If :obj:`.cancel` is set, it will raise :exc:`~qqqr.exception.UserBreak` before next polling."
-msgstr ""
+msgstr "如果设置了 :obj:`.cancel`，将在下次轮询前引发 :exc:`~qqqr.exception.UserBreak`。"
 
 #: of qqqr.qr.QrLogin.login:14
 msgid "max qr expire times."
-msgstr ""
+msgstr "最大二维码过期次数。"
 
 #: of qqqr.qr.QrLogin.login:16
 msgid "interval between two status polling, in seconds, default as 3."
-msgstr ""
+msgstr "两次状态轮询之间的间隔，单位为秒，默认为 3。"
 
 #: of qqqr.qr.QrLogin.login:20
 msgid "if the QR code is not scanned after :obj:`refresh_times` expires."
-msgstr ""
+msgstr "如果二维码在 :obj:`refresh_times` 次过期后仍未扫描。"
 
 #: of qqqr.qr.QrLogin.login:21
 msgid "if :obj:`.cancel` is set."
-msgstr ""
+msgstr "如果设置了 :obj:`.cancel`。"
 
 #~ msgid "Return type"
 #~ msgstr ""
@@ -255,3 +262,4 @@ msgstr ""
 
 #~ msgid "Loop until cookie is returned or max `refresh_times` exceeds."
 #~ msgstr ""
+

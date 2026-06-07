@@ -1,0 +1,48 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2025, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../source/qqqr/constant.rst:2
+msgid "QQQR Constants"
+msgstr "QQQR 常量"
+
+#: of qqqr.constant:1
+msgid "date: 2021-07-20"
+msgstr ""
+
+#: ../../../docstring of qqqr.constant.QzoneProxy:1
+msgid "Built-in web Qzone Proxy."
+msgstr "内置 Web 端 Qzone 代理。"
+
+#: ../../../docstring of qqqr.constant.QzoneH5Proxy:1
+msgid "Built-in H5 Qzone Proxy."
+msgstr "内置 H5 端 Qzone 代理。"
+
+#: ../../../docstring of qqqr.constant.QzoneAppid:1
+msgid "Built-in web Qzone appid and daid."
+msgstr "内置 Web 端 Qzone appid 和 daid。"
+
+#: ../../../docstring of qqqr.constant.QzoneH5Appid:1
+msgid "Built-in H5 Qzone appid and daid."
+msgstr "内置 H5 端 Qzone appid 和 daid。"
+
+#: of qqqr.constant.StatusCode:1
+msgid "Qzone response code in login."
+msgstr "登录中的 Qzone 响应码。"
+

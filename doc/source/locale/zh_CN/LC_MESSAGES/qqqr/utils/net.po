@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2025, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../source/qqqr/utils/net.rst:2
+msgid "QQQR Network Utilities"
+msgstr "QQQR 网络工具"
+
+#: of qqqr.utils.net:1
+msgid "HTTP client adapter and utilities."
+msgstr "HTTP 客户端适配器和工具。"
+
+#: of qqqr.utils.net:3
+msgid ""
+"Wraps :class:`aiohttp.ClientSession` as :class:`ClientAdapter`, and provides "
+":func:`raise_for_status`, :func:`get_all_cookie`, and :func:`use_mobile_ua` for QQQR's HTTP "
+"communication needs."
+msgstr "封装 :class:`aiohttp.ClientSession` 为 :class:`ClientAdapter`，并提供 :func:`raise_for_status`、:func:`get_all_cookie` 和 :func:`use_mobile_ua` 以满足 QQQR 的 HTTP 通信需求。"
+
+#: of qqqr.utils.net.raise_for_status:1
+msgid "A checker more strict than :meth:`~aiohttp.ClientResponse.raise_for_status`."
+msgstr "比 :meth:`~aiohttp.ClientResponse.raise_for_status` 更严格的检查器。"
+
+#: ../../source/qqqr/utils/net.rst
+msgid "参数"
+msgstr ""
+
+#: of qqqr.utils.net.raise_for_status:4
+msgid "Client response to check."
+msgstr "要检查的客户端响应。"
+
+#: of qqqr.utils.net.raise_for_status:6
+msgid "Overwrite codes that can be accepted, If not given, default is `(200, )`"
+msgstr ""
+
+#: ../../source/qqqr/utils/net.rst
+msgid "抛出"
+msgstr ""
+
+#: of qqqr.utils.net.raise_for_status:8
+msgid "if status not in :obj:`accept_code`"
+msgstr "如果状态码不在 :obj:`accept_code` 中"
+
+#: of qqqr.utils.net.get_all_cookie:1
+msgid "An adapter to get all response cookies from a response object."
+msgstr "从响应对象获取所有响应 cookie 的适配器。"
+
+#: ../../source/qqqr/utils/net.rst
+msgid "返回类型"
+msgstr ""
+
+#: of qqqr.utils.net.get_all_cookie:4
+msgid ""
+":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Dict\\`\\\\ "
+"\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:class\\:\\`str\\`\\]`"
+msgstr ""

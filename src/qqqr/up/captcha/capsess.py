@@ -1,3 +1,9 @@
+"""Base captcha session and factory.
+
+Defines :class:`BaseTcaptchaSession` ABC and its :meth:`factory` which
+dispatches to the correct ``xxCaptchaSession`` based on data type.
+"""
+
 import asyncio
 import logging
 import typing as t
@@ -17,6 +23,13 @@ log = logging.getLogger(__name__)
 
 
 class BaseTcaptchaSession(ABC):
+    """Base class for all captcha sessions.
+
+    Holds captcha configuration, solves the PoW workload, fetches the
+    TDC JavaScript, and dispatches captcha problem solving to hooks.
+    Subclasses implement :meth:`get_captcha_problem` and :meth:`solve_captcha`.
+    """
+
     data_type: str
     mouse_track: "asyncio.Future[t.Optional[t.List[t.Tuple[int, int]]]]"
     solve_captcha_hook: HookSpec
@@ -37,6 +50,7 @@ class BaseTcaptchaSession(ABC):
         self.mouse_track = asyncio.get_event_loop().create_future()
 
     def parse_captcha_data(self):
+        """Parse the raw captcha config from the prehandle response."""
         assert self.prehandle["captcha"]
         self.conf = self.prehandle["captcha"]
 
@@ -81,8 +95,16 @@ class BaseTcaptchaSession(ABC):
     async def get_tdc(
         self, client: ClientAdapter, ua: t.Optional[str] = None, ip: t.Optional[str] = None
     ):
-        """
-        .. note:: If :obj:`.mouse_track` should be set, set it before calling this method.
+        """Fetch and prepare the TDC (Tencent Device Collector) JavaScript.
+
+        Fetches the TDC JS from the CDN and executes it via
+        :func:`chaosvm.prepare` to generate device fingerprint data.
+
+        .. note:: If :attr:`.mouse_track` should be set, set it before calling this method.
+
+        :param client: HTTP client for fetching the JS
+        :param ua: User-Agent override (defaults to client header)
+        :param ip: IP override (defaults to prehandle uip)
         """
         from chaosvm import prepare
 
@@ -96,7 +118,11 @@ class BaseTcaptchaSession(ABC):
             )
 
     @abstractmethod
-    async def get_captcha_problem(self, client: ClientAdapter): ...
+    async def get_captcha_problem(self, client: ClientAdapter):
+        """Fetch and prepare captcha problem data from CDN.
+
+        :param client: HTTP client for fetching captcha images/data
+        """
 
     @abstractmethod
     async def solve_captcha(self) -> str:
@@ -105,6 +131,16 @@ class BaseTcaptchaSession(ABC):
 
     @classmethod
     def factory(cls, session: str, prehandle: PrehandleResp):
+        """Factory method: create the correct session type based on captcha data.
+
+        Inspects ``prehandle["captcha"]["render"]["bg_elem_cfg"]["click_cfg"]["data_type"]``
+        and returns the appropriate ``xxCaptchaSession`` subclass.
+
+        :param session: login session id
+        :param prehandle: prehandle response with captcha config
+        :returns: a :class:`SlideCaptchaSession`, :class:`SelectCaptchaSession`,
+            or raises :class:`NotImplementedError` for click captcha
+        """
         assert prehandle["captcha"]
 
         try:

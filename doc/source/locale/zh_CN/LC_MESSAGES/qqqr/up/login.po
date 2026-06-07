@@ -3,43 +3,42 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-26 21:18+0800\n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/qqqr/up/login.rst:3
 msgid "UpLogin and UpSession"
-msgstr ""
+msgstr "账号密码登录与UpSession"
 
 #: of qqqr.up.web.UpWebLogin:3
 msgid ""
 ":class:`~qqqr.up.encrypt.TeaEncoder` is the unique :class:`~qqqr.up.encrypt.PasswdEncoder`. "
 "``NodeEncoder`` is removed."
-msgstr ""
+msgstr ":class:`~qqqr.up.encrypt.TeaEncoder` 是唯一的 :class:`~qqqr.up.encrypt.PasswdEncoder`。``NodeEncoder`` 已被移除。"
 
 #: of qqqr.up.web.UpWebLogin.new:1
 msgid "Create a :class:`UpWebSession`. This will trigger a GET to ``xlogin`` url."
-msgstr ""
+msgstr "创建一个 :class:`UpWebSession`。这将触发对 ``xlogin`` URL 的 GET 请求。"
 
-#: of qqqr.up.web.UpWebLogin.new
+#: ../../source/qqqr/up/login.rst
 msgid "抛出"
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.new:3
 msgid "if response status != 200"
-msgstr ""
+msgstr "如果响应状态 != 200"
 
-#: of qqqr.up.web.UpWebLogin.new qqqr.up.web.UpWebLogin.try_login
+#: ../../source/qqqr/up/login.rst
 msgid "返回类型"
 msgstr ""
 
@@ -47,46 +46,45 @@ msgstr ""
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~qqqr.up.web.UpWebSession\\``"
 msgstr ""
 
-#: of qqqr.up.web.UpWebLogin.new qqqr.up.web.UpWebLogin.try_login
+#: ../../source/qqqr/up/login.rst
 msgid "返回"
 msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.new:6
 msgid "a up login session"
-msgstr ""
+msgstr "一个密码登录 session"
 
-#: of qqqr.up.h5.UpH5Login.check:1 qqqr.up.web.UpWebLogin.check:1
+#: of qqqr.up.web.UpWebLogin.check:1
 msgid ""
 "This will call ``check`` api of Qzone, and receive result about whether this login needs a "
 "captcha, sms verification, etc."
-msgstr ""
+msgstr "将调用 Qzone 的 ``check`` API，获取此登录是否需要验证码、短信验证等的结果。"
 
-#: of qqqr.up.h5.UpH5Login.check qqqr.up.web.UpWebLogin.check qqqr.up.web.UpWebLogin.send_sms_code
-#: qqqr.up.web.UpWebLogin.try_login
+#: ../../source/qqqr/up/login.rst
 msgid "参数"
 msgstr ""
 
-#: of qqqr.up.h5.UpH5Login.check:5 qqqr.up.web.UpWebLogin.check:5
+#: of qqqr.up.web.UpWebLogin.check:5
 msgid "Session got from :meth:`~UpWebLogin.new`."
-msgstr ""
+msgstr "从 :meth:`~UpWebLogin.new` 获取的 session。"
 
 #: of qqqr.up.web.UpWebLogin.send_sms_code:1
 msgid "Send verify sms (to get dynamic code)"
-msgstr ""
+msgstr "发送验证短信（获取动态码）"
 
 #: of qqqr.up.web.UpWebLogin.send_sms_code:4
 msgid "The up login session to send sms code"
-msgstr ""
+msgstr "要发送短信验证码的账号密码登录 session"
 
 #: of qqqr.up.web.UpWebLogin.try_login:1
 msgid ""
 "Check if current session meets the login condition. It takes a session object and returns "
 "response of this try."
-msgstr ""
+msgstr "检查当前 session 是否满足登录条件。接收一个 session 对象并返回此次尝试的响应。"
 
 #: of qqqr.up.web.UpWebLogin.try_login:5
 msgid "Store the session information"
-msgstr ""
+msgstr "存储 session 信息"
 
 #: of qqqr.up.web.UpWebLogin.try_login:6
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~qqqr.up.\\_model.LoginResp\\``"
@@ -94,8 +92,115 @@ msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.try_login:7
 msgid "A login response"
-msgstr ""
+msgstr "登录响应"
 
 #: of qqqr.up.web.UpWebLogin.login:1
-msgid "Block until cookie is received."
+msgid "Execute the full UP login flow."
+msgstr "执行完整的账号密码登录流程。"
+
+#: of qqqr.up.web.UpWebLogin.login:3
+msgid "Creates a new :class:`UpWebSession`"
+msgstr "创建一个新的 :class:`UpWebSession`"
+
+#: of qqqr.up.web.UpWebLogin.login:4
+msgid "Calls the ``check`` API to determine login requirements"
+msgstr "调用 ``check`` API 确定登录要求"
+
+#: of qqqr.up.web.UpWebLogin.login:5
+msgid "If captcha is needed, passes it via :meth:`UpWebSession.pass_vc`"
+msgstr "如果需要验证码，通过 :meth:`UpWebSession.pass_vc` 处理"
+
+#: of qqqr.up.web.UpWebLogin.login:6
+msgid "Loops :meth:`try_login` until authenticated or error"
+msgstr "循环 :meth:`try_login` 直到认证成功或出错"
+
+#: of qqqr.up.web.UpWebLogin.login:7
+msgid "If SMS verification is needed, triggers the ``sms_code_input`` hook"
+msgstr "如果需要短信验证，触发 ``sms_code_input`` 钩子"
+
+#: of qqqr.up.web.UpWebLogin.login:9
+msgid "dict of login cookies"
+msgstr "登录 cookie 字典"
+
+#: of qqqr.up.web.UpWebLogin.login:10
+msgid "if login fails at any step"
+msgstr "如果任何步骤登录失败"
+
+#: of qqqr.up.h5.UpH5Login:1
+msgid "UP login using the mobile H5 endpoint."
+msgstr "使用移动端 H5 端点的账号密码登录。"
+
+#: of qqqr.up.h5.UpH5Login:3
+msgid "Uses ``ui.ptlogin2.qq.com`` instead of ``ssl.ptlogin2.qq.com``, with H5-specific parameters."
+msgstr "使用 ``ui.ptlogin2.qq.com`` 替代 ``ssl.ptlogin2.qq.com``，并带有 H5 特定的参数。"
+
+#: of qqqr.up.UpH5Login.login_page_url:1
+msgid "Build the H5 login page URL with H5-specific parameters."
+msgstr "使用 H5 特定参数构建 H5 登录页面 URL。"
+
+#: of qqqr.up.h5.UpH5Login.check:1
+msgid "Call the H5 ``check`` API to determine login requirements."
+msgstr "调用 H5 的 ``check`` API 确定登录要求。"
+
+#: of qqqr.up.h5.UpH5Login.check:4
+msgid "Session from :meth:`~UpWebLogin.new`"
+msgstr "从 :meth:`~UpWebLogin.new` 获取的 session"
+
+#: of qqqr.up.web.UpWebSession:1
+msgid "Session state for UP login."
+msgstr "账号密码登录的 session 状态。"
+
+#: of qqqr.up.web.UpWebSession:3
+msgid ""
+"Stores verification results, check responses, SMS ticket, and login history. Properties expose "
+"the current verification code and session id needed for login requests."
+msgstr "存储验证结果、check 响应、短信票据和登录历史。属性暴露当前验证码和登录请求所需的 session id。"
+
+#: of qqqr.up.web.UpWebSession.set_check_result:1
+msgid "Store the check API response and update session state."
+msgstr "存储 check API 响应并更新 session 状态。"
+
+#: of qqqr.up.web.UpWebSession.pastcode:1
+msgid "The response code from the last login attempt, or 0 if none."
+msgstr "上次登录尝试的响应码，如果没有则为 0。"
+
+#: of qqqr.up.web.UpWebSession.sid:1
+msgid "The login session id from the check response."
+msgstr "来自 check 响应的登录 session id。"
+
+#: of qqqr.up.web.UpWebSession.code:1
+msgid "The current verification code (verify result > check result)."
+msgstr "当前验证码（verify 结果优先于 check 结果）。"
+
+#: of qqqr.up.web.UpWebSession.verifycode:1
+msgid "The current verification string (verify result > check result)."
+msgstr "当前验证字符串（verify 结果优先于 check 结果）。"
+
+#: of qqqr.up.web.UpWebSession.verifysession:1
+msgid "The current verification session (verify result > check result)."
+msgstr "当前验证 session（verify 结果优先于 check 结果）。"
+
+#: of qqqr.up.web.UpWebSession.pass_vc:1
+msgid ""
+"The `pass_vc` function is used to pass the verification tcaptcha. It is called when "
+":meth:`.try_login` returns a :obj:`StatusCode.NeedCaptcha` code."
+msgstr "`pass_vc` 函数用于通过 Tcaptcha 验证。当 :meth:`.try_login` 返回 :obj:`StatusCode.NeedCaptcha` 码时调用。"
+
+#: of qqqr.up.web.UpWebSession.pass_vc:5
+msgid "the :class:`Captcha` object"
+msgstr ":class:`Captcha` 对象"
+
+#: of qqqr.up.web.UpWebSession.pass_vc:6
+msgid "if cannot solve this captcha"
+msgstr "如果无法解决此验证码"
+
+#: of qqqr.up.web.UpWebSession.pass_vc:7
+msgid "if failed to pass captcha"
+msgstr "如果未能通过验证码"
+
+#: of qqqr.up.web.UpWebSession.pass_vc:9
+msgid ":sphinx_autodoc_typehints_type:`\\:py\\:obj\\:\\`None\\``"
 msgstr ""
+
+#~ msgid "Block until cookie is received."
+#~ msgstr ""

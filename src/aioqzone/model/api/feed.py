@@ -1,3 +1,10 @@
+"""Feed data models.
+
+Defines the core feed data structures including :class:`FeedData`,
+:class:`FeedCommon`, :class:`UserInfo`, feed media types, and related
+enums. These models represent the Qzone feed JSON structure.
+"""
+
 import typing as t
 from enum import IntEnum
 

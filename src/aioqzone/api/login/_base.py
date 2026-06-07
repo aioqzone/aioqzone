@@ -1,3 +1,10 @@
+"""Abstract login manager base.
+
+Defines :class:`Loginable` ABC — the interface all login managers
+implement. Provides cookie caching, gtk computation, and login event
+emission.
+"""
+
 import asyncio
 from abc import ABC, abstractmethod
 from time import time
@@ -10,7 +17,17 @@ from qqqr.utils.encrypt import gtk
 
 
 class Loginable(ABC):
-    """Abstract class represents a login manager."""
+    """Abstract login manager interface.
+
+    Subclasses implement :meth:`_new_cookie` to provide the actual login
+    flow (QR, UP, or static cookie). This base class handles cookie
+    caching, gtk computation, and login event emission.
+
+    .. seealso::
+        :class:`~aioqzone.api.login.ConstLoginMan`,
+        :class:`~aioqzone.api.login.UpLoginManager`,
+        :class:`~aioqzone.api.login.QrLoginManager`
+    """
 
     last_login: float = 0
     """Last login time stamp. 0 represents no login since created."""
@@ -21,13 +38,15 @@ class Loginable(ABC):
 
     def __init__(self, uin: int, ch_login_notify: Optional[FutureStore] = None) -> None:
         super().__init__()
-        self.uin = uin
+        self.uin = uin  #: Login QQ number
         self.cookie: Dict[str, str] = {}
-        self.lock = asyncio.Lock()
+        self.lock = asyncio.Lock()  #: Lock to serialize concurrent cookie refresh attempts
         self.ch_login_notify = ch_login_notify or FutureStore()
 
         self.login_success = MT.login_success()
+        """Emitted after a successful login."""
         self.login_failed = MT.login_failed()
+        """Emitted after a failed login attempt."""
 
     @abstractmethod
     async def _new_cookie(self) -> Dict[str, str]:

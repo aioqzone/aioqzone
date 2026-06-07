@@ -1,3 +1,9 @@
+"""Shared type definitions for QQQR.
+
+Defines :class:`PT_QR_APP`, :class:`Proxy`, :class:`APPID`, and
+:class:`RedirectCookies` used throughout the login flow.
+"""
+
 import sys
 from dataclasses import dataclass
 

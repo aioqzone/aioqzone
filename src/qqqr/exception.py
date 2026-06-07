@@ -1,3 +1,10 @@
+"""QQQR exception hierarchy.
+
+Defines :class:`TencentLoginError` (base login error),
+:class:`UnexpectedInteraction`, :class:`UserBreak`, and
+:class:`UserTimeout`.
+"""
+
 import typing as t
 
 

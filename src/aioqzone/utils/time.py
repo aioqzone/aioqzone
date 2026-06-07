@@ -1,3 +1,10 @@
+"""Time utility functions for feed timestamp handling.
+
+Provides :func:`time_ms`, :func:`dayspac`, :func:`approx_ts`, and
+:func:`sementic_time` for converting between Qzone timestamps and
+human-readable time descriptions.
+"""
+
 import time
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional, Union

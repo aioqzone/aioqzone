@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
@@ -19,7 +18,7 @@ msgstr ""
 
 #: ../../source/qqqr/index.rst:3
 msgid "QQQR"
-msgstr ""
+msgstr "QQQR"
 
 #: of qqqr:1
 msgid ""
@@ -54,8 +53,8 @@ msgstr ""
 
 #: ../../source/qqqr/index.rst:28
 msgid "Table of Contents"
-msgstr ""
+msgstr "目录"
 
 #: ../../source/qqqr/index.rst:41
 msgid "Miscellaneous"
-msgstr ""
+msgstr "其他"

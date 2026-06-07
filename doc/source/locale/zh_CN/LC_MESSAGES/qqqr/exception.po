@@ -3,47 +3,52 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 10:49+0800\n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/qqqr/exception.rst:2
-#, fuzzy
 msgid "QQQR Exceptions"
 msgstr "QQQR 异常"
 
+#: of qqqr.exception:1
+msgid "QQQR exception hierarchy."
+msgstr "QQQR 异常层次结构。"
+
+#: of qqqr.exception:3
+msgid ""
+"Defines :class:`TencentLoginError` (base login error), :class:`UnexpectedInteraction`, "
+":class:`UserBreak`, and :class:`UserTimeout`."
+msgstr "定义 :class:`TencentLoginError`、:class:`UnexpectedInteraction`、:class:`UserBreak` 和 :class:`UserTimeout`。"
+
 #: of qqqr.exception.TencentLoginError:1
-#, fuzzy
 msgid "This exception represents that an error occured in Qzone **login**, with at least an error code."
-msgstr "这个异常表示 Qzone 登录期间发生了一个错误。此异常至少包含一个来自 Qzone 的错误码。"
+msgstr "此异常表示 Qzone 登录过程中发生了错误，至少包含一个错误码。"
 
 #: of qqqr.exception.UnexpectedInteraction:1
 msgid "Represents that user didn't interact as expected."
-msgstr ""
+msgstr "表示用户没有按预期进行交互。"
 
 #: of qqqr.exception.UserBreak:1
-#, fuzzy
 msgid "Represents that user cancels the login spontaneously."
-msgstr "这个异常应当在用户主动停止 Qzone 登录时被抛出。"
+msgstr "表示用户主动中断了登录过程。"
 
 #: of qqqr.exception.UserBreak:5
 msgid "Inherit from :exc:`UnexpectedInteraction`."
 msgstr ""
 
 #: of qqqr.exception.UserTimeout:1
-#, fuzzy
 msgid "Represents that user doesn't interact as expected in a time."
-msgstr "这个异常应当在用户主动停止 Qzone 登录时被抛出。"
+msgstr "表示用户未在预期时间内完成交互。"
 
 #~ msgid ""
 #~ "Once we await a hook, we expect that if "
@@ -76,3 +81,4 @@ msgstr "这个异常应当在用户主动停止 Qzone 登录时被抛出。"
 
 #~ msgid "Do not inherit from :exc:`KeyboardInterrupt`."
 #~ msgstr ""
+

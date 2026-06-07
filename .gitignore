@@ -28,8 +28,14 @@ tmp
 /doc/*
 !/doc/source
 
-# Agents
+# Agent files
 AGENTS.md
 CLAUDE.md
 .agents
 .claude
+.codegraph
+docs/*/specs
+docs/*/plans
+
+# Agent workspace artifacts (not for version control)
+docs/superpowers/

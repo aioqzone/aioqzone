@@ -10,6 +10,8 @@ from pydantic import BaseModel, Field, HttpUrl
 
 
 class HasContent(BaseModel):
+    """Mixin for models that contain content text."""
+
     content: str = ""
 
 
@@ -67,4 +69,6 @@ class LinkEntity(ConEntity):
 
 
 class HasConEntity(HasContent):
+    """Mixin for models that contain content entities."""
+
     entities: Optional[List[ConEntity]] = Field(default=None, alias="conlist")

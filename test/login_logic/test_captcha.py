@@ -161,7 +161,10 @@ async def test_tdc_info_type_check():
     sess.data_type = "test"
     sess.tdc = MagicMock()
     sess.tdc.getInfo = MagicMock(return_value={"info": 12345})
-    sess.prehandle = {"sess": "test", "captcha": {"common": {"pow_cfg": {"prefix": "0", "md5": "0"}}}}
+    sess.prehandle = {
+        "sess": "test",
+        "captcha": {"common": {"pow_cfg": {"prefix": "0", "md5": "0"}}},
+    }
     sess.conf = {"common": {"pow_cfg": {"prefix": "0", "md5": "0"}}}
     sess.pow_ans = 0
     sess.duration = 50

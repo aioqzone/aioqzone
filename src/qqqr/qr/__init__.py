@@ -1,3 +1,9 @@
+"""QR code login flow.
+
+Defines :class:`QR` (QR code data), :class:`QrSession` (login session state),
+and :class:`QrLogin` (login procedure with poll and push support).
+"""
+
 import asyncio
 import logging
 import re
@@ -43,6 +49,11 @@ class QR:
 
 
 class QrSession(LoginSession):
+    """Session state for QR login.
+
+    Tracks QR code refreshes, expiration times, and current QR image.
+    """
+
     def __init__(
         self,
         first_qr: QR,

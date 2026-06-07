@@ -3,49 +3,48 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-04 16:34+0800\n"
+"POT-Creation-Date: 2026-06-07 10:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.1\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/qqqr/up/captcha/captcha.rst:2
 msgid "Captcha and TcaptchaSession"
-msgstr ""
+msgstr "验证码与 TcaptchaSession"
 
 #: of qqqr.up.captcha.Captcha.base64_ua:1
 msgid "The base64_ua function encodes the User-Agent header in base64."
-msgstr ""
+msgstr "base64_ua 函数对 User-Agent 头进行 base64 编码。"
 
-#: of qqqr.up.captcha.Captcha.base64_ua qqqr.up.captcha.Captcha.new
+#: ../../source/qqqr/up/captcha/captcha.rst
 msgid "返回"
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.base64_ua:3
 msgid "A string containing the base64 encoded user agent"
-msgstr ""
+msgstr "包含 base64 编码后的 User-Agent 字符串"
 
 #: of qqqr.up.captcha.Captcha.new:1
 msgid "``prehandle``. Call this method to generate a new verify session."
-msgstr ""
+msgstr "``prehandle``。调用此方法生成新的验证 session。"
 
-#: of qqqr.up.captcha.Captcha.new
+#: ../../source/qqqr/up/captcha/captcha.rst
 msgid "参数"
 msgstr ""
 
 #: of qqqr.up.captcha.Captcha.new:4
 msgid "login session id, got from :meth:`UpWebLogin.new`"
-msgstr ""
+msgstr "登录 session id，从 :meth:`UpWebLogin.new` 获取"
 
-#: of qqqr.up.captcha.Captcha.new
+#: ../../source/qqqr/up/captcha/captcha.rst
 msgid "返回类型"
 msgstr ""
 
@@ -55,19 +54,27 @@ msgstr ""
 
 #: of qqqr.up.captcha.Captcha.new:6
 msgid "a tcaptcha session"
-msgstr ""
+msgstr "一个 tcaptcha session"
 
 #: of qqqr.up.captcha.Captcha.new:1
 msgid "alias of :meth:`.new`"
-msgstr ""
+msgstr " :meth:`.new` 的别名"
 
-#: of qqqr.up.captcha.Captcha.verify
+#: of qqqr.up.captcha.Captcha.verify:2
+msgid "login session id"
+msgstr "登录 session id"
+
+#: of qqqr.up.captcha.Captcha.verify:4
+msgid "event loop"
+msgstr "事件循环"
+
+#: ../../source/qqqr/up/captcha/captcha.rst
 msgid "抛出"
 msgstr ""
 
-#: of qqqr.up.captcha.Captcha.verify:1
+#: of qqqr.up.captcha.Captcha.verify:5
 msgid "cannot solve captcha"
-msgstr ""
+msgstr "无法解决验证码"
 
 #~ msgid "Returns"
 #~ msgstr ""

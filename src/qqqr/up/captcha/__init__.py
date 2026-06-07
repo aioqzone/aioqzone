@@ -1,3 +1,10 @@
+"""Captcha verification interface.
+
+Defines :class:`Captcha` (verification procedure) which wraps the
+tcaptcha flow and delegates captcha-solving to ``xxCaptchaSession``
+instances via tylisten hooks.
+"""
+
 import asyncio
 import base64
 import json

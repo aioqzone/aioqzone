@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022-2025, aioqzone
+# This file is distributed under the same license as the aioqzone package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: aioqzone \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-07 10:42+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../source/qqqr/type.rst:2
+msgid "QQQR Shared Types"
+msgstr "QQQR 共享类型"
+
+#: of qqqr.type:1
+msgid "Shared type definitions for QQQR."
+msgstr "QQQR 的共享类型定义。"
+
+#: of qqqr.type:3
+msgid ""
+"Defines :class:`PT_QR_APP`, :class:`Proxy`, :class:`APPID`, and :class:`RedirectCookies` used "
+"throughout the login flow."
+msgstr "定义在整个登录流程中使用的 :class:`PT_QR_APP`、:class:`Proxy`、:class:`APPID` 和 :class:`RedirectCookies`。"
+
+#: of qqqr.type.RedirectCookies
+msgid "Fields"
+msgstr ""
+
+#: of qqqr.type.RedirectCookies:1
+msgid ":py:obj:`pt_guid_sig (str) <qqqr.type.RedirectCookies.pt_guid_sig>`"
+msgstr ""
+
+#: of qqqr.type.RedirectCookies:1
+msgid ":py:obj:`pt_recent_uins (str) <qqqr.type.RedirectCookies.pt_recent_uins>`"
+msgstr ""
+
+#: of qqqr.type.RedirectCookies:1
+msgid ":py:obj:`ptcz (str) <qqqr.type.RedirectCookies.ptcz>`"
+msgstr ""
+
+#: of qqqr.type.RedirectCookies:1
+msgid ":py:obj:`superkey (str) <qqqr.type.RedirectCookies.superkey>`"
+msgstr ""
+
+#: of qqqr.type.RedirectCookies:1
+msgid ":py:obj:`supertoken (str) <qqqr.type.RedirectCookies.supertoken>`"
+msgstr ""
+

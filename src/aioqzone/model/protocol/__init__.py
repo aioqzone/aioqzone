@@ -8,7 +8,9 @@ from .config import *
 from .entity import *
 
 
-class PersudoCurkey(str):
+class PseudoCurkey(str):
+    """Pseudo curkey string helper."""
+
     def __new__(cls, uin: int, abstime: int):
         return str.__new__(cls, cls.build(uin, abstime))
 
@@ -31,6 +33,8 @@ class PersudoCurkey(str):
 
 
 class AlbumData(BaseModel):
+    """Album data model."""
+
     topicid: str
     pickey: str
     hostuin: int
@@ -38,6 +42,8 @@ class AlbumData(BaseModel):
 
 # LikeData is not a response of any API. It's just a type def.
 class LikeData(BaseModel):
+    """Like data model with helper methods for key construction."""
+
     unikey: str
     curkey: str
     appid: int
@@ -46,11 +52,11 @@ class LikeData(BaseModel):
     abstime: int
 
     @staticmethod
-    def persudo_curkey(uin: int, abstime: int):
-        return str(PersudoCurkey(uin, abstime))
+    def pseudo_curkey(uin: int, abstime: int):
+        return str(PseudoCurkey(uin, abstime))
 
     @staticmethod
-    def persudo_unikey(appid: int, uin: int, fid: str):
+    def pseudo_unikey(appid: int, uin: int, fid: str):
         if appid == 311:
             return f"https://user.qzone.qq.com/{uin}/mood/{fid}"
 

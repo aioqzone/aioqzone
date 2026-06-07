@@ -10,3 +10,6 @@ UpLogin and UpSession
 
 .. autoclass:: UpH5Login
     :members:
+
+.. autoclass:: qqqr.up.web.UpWebSession
+    :members:

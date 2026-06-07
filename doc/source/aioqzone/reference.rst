@@ -11,7 +11,7 @@ Here we will explain some common used abbreviation and alias in aioqzone.
 
     abstime
         A timestamp represents when the feed is created.
-        All feeds have this field. If not, generate a persudo one is easy.
+        All feeds have this field. If not, generate a pseudo one is easy.
 
         In Qzone interface, this is called ``created_time`` sometimes.
 

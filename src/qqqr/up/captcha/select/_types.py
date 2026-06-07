@@ -1,3 +1,9 @@
+"""Select captcha types and session implementation.
+
+Models for select-captcha render data and the :class:`SelectCaptchaSession`
+that orchestrates problem fetching and solving via hooks.
+"""
+
 import asyncio
 import logging
 import typing as t
@@ -18,10 +24,14 @@ log = logging.getLogger(__name__)
 
 
 class SelectBgElemCfg(CommonBgElmConf, Sprite):
+    """Background element config specific to select captcha."""
+
     img_url: str
 
 
 class SelectRegion(BaseModel):
+    """A selectable region on the captcha image."""
+
     id: int
     box: t.Tuple[int, int, int, int] = Field(validation_alias="range")
     left: int = Field(validation_alias=AliasPath("range", 0))
@@ -31,6 +41,8 @@ class SelectRegion(BaseModel):
 
 
 class SelectJsonPayload(BaseModel):
+    """Parsed JSON payload from select captcha render."""
+
     select_region_list: t.List[SelectRegion]
     prompt_id: int
     picture_ids: t.List[int]
@@ -40,7 +52,9 @@ class SelectJsonPayload(BaseModel):
 
 
 class SelectRender(CommonRender):
-    instruction: str
+    """Select captcha render configuration."""
+
+    instruction: str  #: the question/prompt for selection
     bg: SelectBgElemCfg = Field(alias="bg_elem_cfg")
     verify_trigger_cfg: dict
     color_scheme: str  # pydantic_extra_types.color
@@ -53,18 +67,30 @@ class SelectRender(CommonRender):
 
 
 class SelectCaptchaSession(BaseTcaptchaSession):
+    """Captcha session for select-type captcha.
+
+    Fetches region images, dispatches problem to the ``solve_select_captcha``
+    hook, and returns the answer as comma-separated picture IDs.
+    """
+
     solve_captcha_hook: solve_select_captcha.TyInst
 
     def __init__(self, session: str, prehandle: "PrehandleResp") -> None:
+        """Initialize select captcha session."""
         super().__init__(session, prehandle)
         self.mouse_track.set_result(None)
 
     def parse_captcha_data(self):
+        """Parse select-specific render data from captcha config."""
         super().parse_captcha_data()
         self.render = SelectRender.model_validate(self.conf["render"])
         self.data_type = self.render.bg.cfg["data_type"]
 
     async def get_captcha_problem(self, client: ClientAdapter):
+        """Fetch the select captcha images, crop to regions, and store.
+
+        :param client: HTTP client for fetching the background image
+        """
         async with client.get(self._cdn_join(self.render.bg.img_url)) as r:
             img = frombytes(await r.content.read())
 
@@ -74,6 +100,10 @@ class SelectCaptchaSession(BaseTcaptchaSession):
         self.cdn_imgs = [imgs[i] for i in self.render.json_payload.picture_ids]
 
     async def solve_captcha(self) -> str:
+        """Dispatch to ``solve_select_captcha`` hook and format answer.
+
+        :returns: comma-separated picture IDs, or empty string if no answer
+        """
         if not self.solve_captcha_hook.has_impl:
             log.warning("solve_captcha_hook has no impls.")
             return ""

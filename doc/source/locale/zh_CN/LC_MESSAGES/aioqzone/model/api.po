@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the aioqzone package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-07 23:39+0800\n"
+"POT-Creation-Date: 2026-06-07 11:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -17,15 +16,26 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/aioqzone/model/api.rst:2
 msgid "H5 API definations"
-msgstr ""
+msgstr "H5 API 定义"
+
+#: aioqzone.model.api:1 of
+msgid "Qzone API endpoint definitions."
+msgstr "Qzone API 端点定义。"
+
+#: aioqzone.model.api:3 of
+msgid ""
+"Each class in this module defines a Qzone H5 API endpoint — its URL, HTTP method, request params"
+" type, and response type. The :class:`QzoneApi` base class provides common infrastructure; "
+"concrete subclasses wire up specific endpoints."
+msgstr "此模块中的每个类定义一个 Qzone H5 API 端点 — 其 URL、HTTP 方法、请求参数类型和响应类型。:class:`QzoneApi` 基类提供通用基础设施；具体子类连接特定端点。"
 
 #: aioqzone.model.api.QzoneApi:1 of
 msgid "The base class for all Qzone APIs below."
-msgstr ""
+msgstr "下方所有 Qzone API 的基类。"
 
 #: aioqzone.model.api.AddCommentApi aioqzone.model.api.AddOperationApi aioqzone.model.api.FeedPageApi
 #: aioqzone.model.api.GetCountApi aioqzone.model.api.GetFeedsApi aioqzone.model.api.IndexPageApi
@@ -39,17 +49,18 @@ msgstr ""
 #: aioqzone.model.api.request.DolikeParam aioqzone.model.api.request.GetCountParams
 #: aioqzone.model.api.request.GetFeedsParams aioqzone.model.api.request.PhotoData
 #: aioqzone.model.api.request.PhotosPreuploadParams aioqzone.model.api.request.ProfileParams
-#: aioqzone.model.api.request.PublishMoodParams aioqzone.model.api.request.ShuoshuoParams
-#: aioqzone.model.api.request.UploadPicParams aioqzone.model.api.response.AddCommentLegacyResp
-#: aioqzone.model.api.response.AddCommentResp aioqzone.model.api.response.AvatarResponse
-#: aioqzone.model.api.response.DeleteCommentResp aioqzone.model.api.response.DeleteUgcResp
-#: aioqzone.model.api.response.DetailResp aioqzone.model.api.response.FeedCount
-#: aioqzone.model.api.response.FeedPageResp aioqzone.model.api.response.IndexPageResp
-#: aioqzone.model.api.response.PhotosPreuploadResponse aioqzone.model.api.response.PicInfo
-#: aioqzone.model.api.response.ProfilePagePesp aioqzone.model.api.response.ProfileResp
-#: aioqzone.model.api.response.PublishMoodResp aioqzone.model.api.response.UploadPicResponse of
+#: aioqzone.model.api.request.PublishMoodParams aioqzone.model.api.request.SetTopParams
+#: aioqzone.model.api.request.ShuoshuoParams aioqzone.model.api.request.UploadPicParams
+#: aioqzone.model.api.response.AddCommentLegacyResp aioqzone.model.api.response.AddCommentResp
+#: aioqzone.model.api.response.AvatarResponse aioqzone.model.api.response.DeleteCommentResp
+#: aioqzone.model.api.response.DeleteUgcResp aioqzone.model.api.response.DetailResp
+#: aioqzone.model.api.response.FeedCount aioqzone.model.api.response.FeedPageResp
+#: aioqzone.model.api.response.IndexPageResp aioqzone.model.api.response.PhotosPreuploadResponse
+#: aioqzone.model.api.response.PicInfo aioqzone.model.api.response.ProfilePagePesp
+#: aioqzone.model.api.response.ProfileResp aioqzone.model.api.response.PublishMoodResp
+#: aioqzone.model.api.response.UploadPicResponse of
 msgid "Fields"
-msgstr ""
+msgstr "字段"
 
 #: aioqzone.model.api.QzoneApi:1 of
 msgid ":py:obj:`params (aioqzone.model.api.TyRequest) <aioqzone.model.api.QzoneApi.params>`"
@@ -59,11 +70,59 @@ msgstr ""
 msgid ":py:obj:`referer (str) <aioqzone.model.api.QzoneApi.referer>`"
 msgstr ""
 
+#: aioqzone.model.api.IndexPageApi:1 of
+msgid "H5 Qzone landing page API. GET ``/mqzone/index``. Returns :class:`IndexPageResp` with qzonetoken."
+msgstr "H5 Qzone 首页 API。GET ``/mqzone/index``。返回包含 qzonetoken 的 :class:`IndexPageResp`。"
+
+#: aioqzone.model.api.UserProfileApi:1 of
+msgid "User profile page API. GET ``/mqzone/profile``. Returns :class:`ProfilePagePesp`."
+msgstr "用户个人资料页面 API。GET ``/mqzone/profile``。返回 :class:`ProfilePagePesp`。"
+
+#: aioqzone.model.api.FeedPageApi:1 of
+msgid "Active feeds pagination API. GET ``/mqzone_feeds/getActiveFeeds``. Returns :class:`FeedPageResp`."
+msgstr "活跃 feed 分页 API。GET ``/mqzone_feeds/getActiveFeeds``。返回 :class:`FeedPageResp`。"
+
+#: aioqzone.model.api.ShuoshuoApi:1 of
+msgid "Feed detail (shuoshuo) API. GET ``/mqzone_detail/shuoshuo``. Returns :class:`DetailResp`."
+msgstr "Feed 详情（说说）API。GET ``/mqzone_detail/shuoshuo``。返回 :class:`DetailResp`。"
+
+#: aioqzone.model.api.GetFeedsApi:1 of
+msgid "User feeds pagination API. GET ``/get_feeds``. Returns :class:`ProfileResp`."
+msgstr "用户 feed 分页 API。GET ``/get_feeds``。返回 :class:`ProfileResp`。"
+
+#: aioqzone.model.api.GetCountApi:1 of
+msgid "New feeds count / keep-alive API. GET ``/feeds/mfeeds_get_count``. Returns :class:`FeedCount`."
+msgstr "新 feed 数/保活 API。GET ``/feeds/mfeeds_get_count``。返回 :class:`FeedCount`。"
+
 #: aioqzone.model.api.GetCountApi:1 of
 msgid ""
 ":py:obj:`params (aioqzone.model.api.request.GetCountParams) "
 "<aioqzone.model.api.GetCountApi.params>`"
 msgstr ""
+
+#: aioqzone.model.api.LikeApi:1 of
+msgid "Like a feed. POST ``/cgi-bin/likes/internal_dolike_app``. Returns :class:`SingleReturnResp`."
+msgstr "点赞 feed。POST ``/cgi-bin/likes/internal_dolike_app``。返回 :class:`SingleReturnResp`。"
+
+#: aioqzone.model.api.UnlikeApi:1 of
+msgid "Unlike a feed. POST ``/cgi-bin/likes/internal_unlike_app``. Extends :class:`LikeApi`."
+msgstr "取消点赞 feed。POST ``/cgi-bin/likes/internal_unlike_app``。继承 :class:`LikeApi`。"
+
+#: aioqzone.model.api.AddCommentApi:1 of
+msgid "Add comment (JSON API). POST ``/qzoneOperation/addComment``. Returns :class:`AddCommentResp`."
+msgstr "添加评论（JSON API）。POST ``/qzoneOperation/addComment``。返回 :class:`AddCommentResp`。"
+
+#: aioqzone.model.api.ListFriendApi:1 of
+msgid "List friends (reserved, not yet wired). GET ``/friend/mfriend_list``."
+msgstr "列出好友（预留，尚未接入）。GET ``/friend/mfriend_list``。"
+
+#: aioqzone.model.api.PublishMoodApi:1 of
+msgid "Publish a mood feed. POST ``/mood/publish_mood``. Returns :class:`PublishMoodResp`."
+msgstr "发表说说。POST ``/mood/publish_mood``。返回 :class:`PublishMoodResp`。"
+
+#: aioqzone.model.api.AddOperationApi:1 of
+msgid "Generic operation API. POST ``/operation/operation_add``."
+msgstr "通用操作 API。POST ``/operation/operation_add``。"
 
 #: aioqzone.model.api.AddOperationApi:1 of
 msgid ""
@@ -71,9 +130,29 @@ msgid ""
 "<aioqzone.model.api.AddOperationApi.response>`"
 msgstr ""
 
+#: aioqzone.model.api.UploadPicApi:1 of
+msgid "Upload image. POST ``/cgi-bin/upload/cgi_upload_pic_v2``. Returns :class:`UploadPicResponse`."
+msgstr "上传图片。POST ``/cgi-bin/upload/cgi_upload_pic_v2``。返回 :class:`UploadPicResponse`。"
+
+#: aioqzone.model.api.PhotosPreuploadApi:1 of
+msgid ""
+"Preupload photos before publishing. POST ``/cgi-bin/upload/cgi_upload_pic_v2``. Returns "
+":class:`PhotosPreuploadResponse`."
+msgstr "发布前预上传照片。POST ``/cgi-bin/upload/cgi_upload_pic_v2``。返回 :class:`PhotosPreuploadResponse`。"
+
 #: ../../source/aioqzone/model/api.rst:12
 msgid "Parameters"
-msgstr ""
+msgstr "参数"
+
+#: aioqzone.model.api.request:1 of
+msgid "Qzone API request parameter models."
+msgstr "Qzone API 请求参数模型。"
+
+#: aioqzone.model.api.request:3 of
+msgid ""
+"Defines :class:`QzoneRequestParams` and its subclasses for each API endpoint. Each subclass "
+"carries fields specific to that endpoint and provides :meth:`build_params` for serialization."
+msgstr "定义 :class:`QzoneRequestParams` 及其每个 API 端点的子类。每个子类携带该端点特有的字段，并提供 :meth:`build_params` 用于序列化。"
 
 #: aioqzone.model.api.request.ActiveFeedsParams:1 of
 msgid ":py:obj:`attach_info (str) <aioqzone.model.api.request.ActiveFeedsParams.attach_info>`"
@@ -153,11 +232,11 @@ msgstr ""
 #: aioqzone.model.api.request.ShuoshuoParams.busi_param aioqzone.model.api.response.FeedData.original
 #: aioqzone.model.api.response.ProfileFeedData.original of
 msgid "Constraints"
-msgstr ""
+msgstr "约束"
 
 #: ../../../docstring aioqzone.model.api.request.ShuoshuoParams.busi_param:1 of
 msgid "**max_length** = 100"
-msgstr ""
+msgstr "**max_length** = 100"
 
 #: aioqzone.model.api.request.GetCountParams:1 of
 msgid ":py:obj:`format (str) <aioqzone.model.api.request.GetCountParams.format>`"
@@ -215,13 +294,13 @@ msgstr ""
 #: aioqzone.model.api.request.AddCommentParamsLegacy.content:1
 #: aioqzone.model.api.request.PublishMoodParams.content:1 of
 msgid "**min_length** = 1"
-msgstr ""
+msgstr "**min_length** = 1"
 
 #: ../../../docstring aioqzone.model.api.request.AddCommentParams.content:1
 #: aioqzone.model.api.request.AddCommentParamsLegacy.content:1
 #: aioqzone.model.api.request.PublishMoodParams.content:1 of
 msgid "**max_length** = 2000"
-msgstr ""
+msgstr "**max_length** = 2000"
 
 #: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
 msgid ":py:obj:`content (str) <aioqzone.model.api.request.AddCommentParamsLegacy.content>`"
@@ -437,6 +516,7 @@ msgstr ""
 msgid "返回类型"
 msgstr ""
 
+#: aioqzone.model.api.request.SetTopParams.serialize_set_top:2
 #: aioqzone.model.api.request.UploadPicParams.b64_picture:2 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`str\\``"
 msgstr ""
@@ -493,7 +573,7 @@ msgstr ""
 
 #: aioqzone.model.api.feed.UgcRight:1 of
 msgid "An enumeration."
-msgstr ""
+msgstr "枚举类型。"
 
 #: aioqzone.model.api.request.PhotoData:1 of
 msgid ":py:obj:`albumid (str) <aioqzone.model.api.request.PhotoData.albumid>`"
@@ -531,14 +611,37 @@ msgstr ""
 msgid ":py:obj:`width (int) <aioqzone.model.api.request.PhotoData.width>`"
 msgstr ""
 
+#: aioqzone.model.api.request.SetTopParams:1 of
+msgid ":py:obj:`fid (str) <aioqzone.model.api.request.SetTopParams.fid>`"
+msgstr ""
+
+#: aioqzone.model.api.request.SetTopParams:1 of
+msgid ":py:obj:`need_change (int) <aioqzone.model.api.request.SetTopParams.need_change>`"
+msgstr ""
+
+#: aioqzone.model.api.request.SetTopParams:1 of
+msgid ":py:obj:`set_top (bool) <aioqzone.model.api.request.SetTopParams.set_top>`"
+msgstr ""
+
 #: ../../source/aioqzone/model/api.rst:19
 msgid "Responses"
-msgstr ""
+msgstr "响应"
+
+#: aioqzone.model.api.response:1 of
+msgid "Qzone API response models."
+msgstr "Qzone API 响应模型。"
+
+#: aioqzone.model.api.response:3 of
+msgid ""
+"Defines :class:`QzoneResponse` base class and its subclasses for each API endpoint. Includes "
+"factory methods :meth:`~QzoneResponse.from_response_object` and "
+":meth:`~QzoneResponse.response_to_object` for HTTP response parsing."
+msgstr "定义 :class:`QzoneResponse` 基类及其每个 API 端点的子类。包含 :meth:`~QzoneResponse.from_response_object` 和 :meth:`~QzoneResponse.response_to_object` 工厂方法用于 HTTP 响应解析。"
 
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:1
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:1 of
 msgid "Parses the response text or object recieved from Qzone API."
-msgstr ""
+msgstr "解析从 Qzone API 接收的响应文本或对象。"
 
 #: ../../source/aioqzone/model/api.rst
 msgid "参数"
@@ -547,7 +650,7 @@ msgstr ""
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:4
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:4 of
 msgid "the parsed response object. see `.response_to_object`"
-msgstr ""
+msgstr "解析后的响应对象，参见 `.response_to_object`"
 
 #: ../../source/aioqzone/model/api.rst
 msgid "抛出"
@@ -556,7 +659,7 @@ msgstr ""
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:5
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:5 of
 msgid "if returned result code != 0"
-msgstr ""
+msgstr "如果返回结果码 != 0"
 
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:7
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:7 of
@@ -570,11 +673,12 @@ msgstr ""
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:8
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:8 of
 msgid "Self"
-msgstr ""
+msgstr "Self"
 
 #: aioqzone.model.api.response.AvatarResponse.response_to_object:2
 #: aioqzone.model.api.response.IndexPageResp.response_to_object:2
 #: aioqzone.model.api.response.PhotosPreuploadResponse.response_to_object:2
+#: aioqzone.model.api.response.ProfilePagePesp.response_to_object:2
 #: aioqzone.model.api.response.QzoneResponse.response_to_object:2
 #: aioqzone.model.api.response.UploadPicResponse.response_to_object:2 of
 msgid ""
@@ -586,7 +690,7 @@ msgstr ""
 msgid ""
 "Represents RESPonse from get feed page operation. Used to validate response data in "
 ":meth:`aioqzone.api.h5.QzoneH5API.index` and :meth:`aioqzone.api.h5.QzoneH5API.getActivateFeeds`"
-msgstr ""
+msgstr "表示获取 feed 页面操作的响应。用于验证 :meth:`aioqzone.api.h5.QzoneH5API.index` 和 :meth:`aioqzone.api.h5.QzoneH5API.getActivateFeeds` 中的响应数据。"
 
 #: aioqzone.model.api.response.FeedPageResp:1 of
 msgid ":py:obj:`attachinfo (str) <aioqzone.model.api.response.FeedPageResp.attachinfo>`"
@@ -648,7 +752,7 @@ msgstr ""
 
 #: aioqzone.model.api.response.DetailResp of
 msgid "Validators"
-msgstr ""
+msgstr "验证器"
 
 #: aioqzone.model.api.response.DetailResp:1 of
 msgid ""
@@ -659,7 +763,7 @@ msgstr ""
 #: ../../../docstring aioqzone.model.api.response.DetailResp.attach_info
 #: aioqzone.model.api.response.DetailResp.hasmore of
 msgid "Validated by"
-msgstr ""
+msgstr "由以下验证"
 
 #: ../../../docstring aioqzone.model.api.response.DetailResp.attach_info:1
 #: aioqzone.model.api.response.DetailResp.hasmore:1 of
@@ -687,12 +791,12 @@ msgid ":py:obj:`visitor_cnt (int) <aioqzone.model.api.response.FeedCount.visitor
 msgstr ""
 
 #: of pydantic._internal._model_construction.init_private_attributes:1
-msgid "This function is meant to behave like a BaseModel method to initialise private attributes."
-msgstr ""
+msgid "This function is meant to behave like a BaseModel method to initialize private attributes."
+msgstr "此函数旨在模拟 BaseModel 方法来初始化私有属性。"
 
 #: of pydantic._internal._model_construction.init_private_attributes:3
 msgid "It takes context as an argument since that's what pydantic-core passes when calling it."
-msgstr ""
+msgstr "它接受 context 作为参数，因为 pydantic-core 调用时会传递该参数。"
 
 #: of pydantic._internal._model_construction.init_private_attributes:5
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:obj\\:\\`None\\``"
@@ -700,11 +804,11 @@ msgstr ""
 
 #: of pydantic._internal._model_construction.init_private_attributes:7
 msgid "Args:"
-msgstr ""
+msgstr "参数："
 
 #: of pydantic._internal._model_construction.init_private_attributes:8
 msgid "self: The BaseModel instance. context: The context."
-msgstr ""
+msgstr "self: BaseModel 实例。context: 上下文。"
 
 #: aioqzone.model.api.response.AddCommentResp:1 of
 msgid ""
@@ -815,7 +919,7 @@ msgstr ""
 #: ../../../docstring aioqzone.model.api.response.FeedData.original:1
 #: aioqzone.model.api.response.ProfileFeedData.original:1 of
 msgid "**union_mode** = left_to_right"
-msgstr ""
+msgstr "**union_mode** = left_to_right"
 
 #: aioqzone.model.api.response.PicInfo:1 of
 msgid ":py:obj:`albumid (str) <aioqzone.model.api.response.PicInfo.albumid>`"
@@ -847,11 +951,11 @@ msgstr ""
 
 #: ../../../docstring aioqzone.model.api.response.PicInfo.lloc:1 of
 msgid "id of large picture"
-msgstr ""
+msgstr "大图 id"
 
 #: ../../../docstring aioqzone.model.api.response.PicInfo.sloc:1 of
 msgid "id of small picture"
-msgstr ""
+msgstr "小图 id"
 
 #: aioqzone.model.api.profile.ProfileFeedData:1 of
 msgid ""
@@ -1031,3 +1135,7 @@ msgstr ""
 #~ ":py:obj:`share_info (aioqzone.model.api.feed.ShareInfo) "
 #~ "<aioqzone.model.api.profile.ProfileFeedData.share_info>`"
 #~ msgstr ""
+
+#~ msgid "This function is meant to behave like a BaseModel method to initialise private attributes."
+#~ msgstr ""
+

@@ -1,4 +1,8 @@
-"""Response validation in `qqqr.up.captcha`"""
+"""Response models for UP login APIs.
+
+Defines :class:`CheckResp`, :class:`LoginResp`, and :class:`VerifyResp`
+used by the UP login flow.
+"""
 
 import typing as t
 
@@ -8,6 +12,11 @@ from qqqr.type import RedirectCookies
 
 
 class CheckResp(t.NamedTuple):
+    """Response from the ``check`` API.
+
+    Fields: code, uin, session, isRandSalt, salt, ptdrvs, verifycode, verifysession.
+    """
+
     code: int
     """code = 0/2/3 hideVC; code = 1 showVC
     """
@@ -26,18 +35,22 @@ class CheckResp(t.NamedTuple):
 
 
 class LoginResp(BaseModel):
-    code: int
+    """Response from the ``login`` API."""
+
+    code: int  #: Status code (see :class:`~qqqr.constant.StatusCode`)
     url: t.Union[HttpUrl, str]
     msg: str
     nickname: str
     pt_ev_token: str = ""
-    cookies: t.Optional[RedirectCookies] = None
+    cookies: t.Optional[RedirectCookies] = None  #: Login cookies on success
 
 
 class VerifyResp(BaseModel):
-    code: int = Field(alias="errorCode")
+    """Response from the captcha verify API."""
+
+    code: int = Field(alias="errorCode")  #: Verification result code
     verifycode: str = Field(alias="randstr")
-    ticket: str
+    ticket: str  #: Verification ticket
     errMessage: str
     sess: str
 

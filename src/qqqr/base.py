@@ -1,3 +1,9 @@
+"""Base classes for all QQQR login flows.
+
+Defines :class:`LoginSession` (data container) and :class:`LoginBase` (login
+procedure). All ``xxLogin`` and ``xxSession`` classes inherit from these.
+"""
+
 import typing as t
 from abc import ABC, abstractmethod
 from time import time
@@ -32,6 +38,13 @@ _S = t.TypeVar("_S", bound=LoginSession)
 
 
 class LoginBase(ABC, t.Generic[_S]):
+    """Base class for login procedures.
+
+    Handles common login setup: client configuration, user-agent selection,
+    login page URL construction, and cookie retrieval. Subclasses implement
+    :meth:`new` and :meth:`login` for specific login flows.
+    """
+
     def __init__(
         self,
         client: ClientAdapter,
@@ -82,6 +95,10 @@ class LoginBase(ABC, t.Generic[_S]):
 
     @property
     def login_page_url(self):
+        """Build the xlogin page URL with configured parameters.
+
+        Includes appid, daid, proxy URLs, and optional app info.
+        """
         params = {
             "hide_title_bar": 1,
             "style": 22,
@@ -110,7 +127,15 @@ class LoginBase(ABC, t.Generic[_S]):
 
     @abstractmethod
     async def login(self) -> t.Dict[str, str]:
-        """Block until cookie is received."""
+        """Block until login cookie is received.
+
+        The implementation should handle the full login flow:
+        creating a session, checking status, solving captcha if needed,
+        and returning the cookie dict.
+
+        :returns: dict of login cookies
+        :raises TencentLoginError: if login fails
+        """
         raise NotImplementedError
 
     async def _pt_login_sig(self) -> str:
