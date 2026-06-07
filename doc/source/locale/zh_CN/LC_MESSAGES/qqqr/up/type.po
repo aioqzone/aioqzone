@@ -19,17 +19,17 @@ msgstr ""
 
 #: ../../source/qqqr/up/type.rst:2
 msgid "UpLogin Types"
-msgstr "UP 登录类型"
+msgstr "账号密码登录类型"
 
 #: of qqqr.up._model:1
 msgid "Response models for UP login APIs."
-msgstr "UP 登录 API 的响应模型。"
+msgstr "账号密码登录 API 的响应模型。"
 
 #: of qqqr.up._model:3
 msgid ""
 "Defines :class:`CheckResp`, :class:`LoginResp`, and :class:`VerifyResp` used by the UP login "
 "flow."
-msgstr "定义 UP 登录流程使用的 :class:`CheckResp`、:class:`LoginResp` 和 :class:`VerifyResp`。"
+msgstr "定义账号密码登录流程使用的 :class:`CheckResp`、:class:`LoginResp` 和 :class:`VerifyResp`。"
 
 #: of qqqr.up._model.CheckResp:1
 msgid "Response from the ``check`` API."

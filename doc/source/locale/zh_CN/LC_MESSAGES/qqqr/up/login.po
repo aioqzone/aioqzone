@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../source/qqqr/up/login.rst:3
 msgid "UpLogin and UpSession"
-msgstr "UP 登录与 Session"
+msgstr "账号密码登录与 Session"
 
 #: of qqqr.up.web.UpWebLogin:3
 msgid ""
@@ -129,7 +129,7 @@ msgstr "如果任何步骤登录失败"
 
 #: of qqqr.up.h5.UpH5Login:1
 msgid "UP login using the mobile H5 endpoint."
-msgstr "使用移动端 H5 端点的 UP 登录。"
+msgstr "使用移动端 H5 端点的账号密码登录。"
 
 #: of qqqr.up.h5.UpH5Login:3
 msgid "Uses ``ui.ptlogin2.qq.com`` instead of ``ssl.ptlogin2.qq.com``, with H5-specific parameters."
@@ -149,7 +149,7 @@ msgstr "从 :meth:`~UpWebLogin.new` 获取的 session"
 
 #: of qqqr.up.web.UpWebSession:1
 msgid "Session state for UP login."
-msgstr "UP 登录的 session 状态。"
+msgstr "账号密码登录的 session 状态。"
 
 #: of qqqr.up.web.UpWebSession:3
 msgid ""

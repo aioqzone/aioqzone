@@ -48,7 +48,7 @@ msgstr "登陆管理器的抽象类"
 msgid ""
 "Subclasses implement :meth:`_new_cookie` to provide the actual login flow (QR, UP, or static "
 "cookie). This base class handles cookie caching, gtk computation, and login event emission."
-msgstr "子类实现 :meth:`_new_cookie` 以提供实际的登录流程（QR、UP 或静态 cookie）。此基类处理 cookie 缓存、gtk 计算和登录事件触发。"
+msgstr "子类实现 :meth:`_new_cookie` 以提供实际的登录流程（QR、账号密码或静态 cookie）。此基类处理 cookie 缓存、gtk 计算和登录事件触发。"
 
 #: aioqzone.api.login._base.Loginable:8 of
 msgid ""
