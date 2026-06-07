@@ -43,7 +43,7 @@ msgstr ""
 
 #: of qqqr.utils.net.raise_for_status:4
 msgid "Client response to check."
-msgstr ""
+msgstr "要检查的客户端响应。"
 
 #: of qqqr.utils.net.raise_for_status:6
 msgid "Overwrite codes that can be accepted, If not given, default is `(200, )`"
@@ -55,7 +55,7 @@ msgstr ""
 
 #: of qqqr.utils.net.raise_for_status:8
 msgid "if status not in :obj:`accept_code`"
-msgstr ""
+msgstr "如果状态码不在 :obj:`accept_code` 中"
 
 #: of qqqr.utils.net.get_all_cookie:1
 msgid "An adapter to get all response cookies from a response object."
@@ -70,4 +70,3 @@ msgid ""
 ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Dict\\`\\\\ "
 "\\\\\\[\\:py\\:class\\:\\`str\\`\\, \\:py\\:class\\:\\`str\\`\\]`"
 msgstr ""
-

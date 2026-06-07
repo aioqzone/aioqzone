@@ -36,7 +36,7 @@ msgstr "``check`` API 的响应。"
 
 #: of qqqr.up._model.CheckResp:3
 msgid "Fields: code, uin, session, isRandSalt, salt, ptdrvs, verifycode, verifysession."
-msgstr ""
+msgstr "字段：code, uin, session, isRandSalt, salt, ptdrvs, verifycode, verifysession。"
 
 #: ../../../docstring of qqqr.up._model.CheckResp.code:1
 msgid "code = 0/2/3 hideVC; code = 1 showVC"
@@ -488,4 +488,3 @@ msgstr "验证票据"
 #~ ":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] "
 #~ "| str) <qqqr.up._model.LoginResp.url>`"
 #~ msgstr ""
-

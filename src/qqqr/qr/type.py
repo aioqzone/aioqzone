@@ -1,6 +1,6 @@
 """QR login API response models.
 
-TypedDicts for poll, fetch-device-uin, and push-QR API responses.
+TypedDicts for poll, fetch_device_uin, and push_qr API responses.
 """
 
 import typing as t
@@ -22,7 +22,7 @@ class PollResp(BaseModel):
 
 
 class FetchDevUinResp(BaseModel):
-    """Response from the fetch-device-uin API."""
+    """Response from the fetch_device_uin API."""
 
     code: int = Field(validation_alias="errcode")  #: result code
     uin_list: t.List[int] = Field(
@@ -31,7 +31,7 @@ class FetchDevUinResp(BaseModel):
 
 
 class PushQrResp(BaseModel):
-    """Response from the push-QR API."""
+    """Response from the push_qr API."""
 
     code: int = Field(validation_alias="ec")  #: result code
     message: str = Field(default="", validation_alias="em")  #: result message

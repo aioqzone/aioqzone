@@ -154,7 +154,7 @@ class UpWebLogin(LoginBase[UpWebSession], _UpHookMixin):
 
         :raise `aiohttp.ClientResponseError`: if response status != 200
 
-        :return: a up login session
+        :return: a UP login session
         """
         return UpWebSession(await self._pt_login_sig())
 

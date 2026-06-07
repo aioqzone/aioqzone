@@ -25,8 +25,8 @@ msgid "QR login API response models."
 msgstr "QR 登录 API 响应模型。"
 
 #: of qqqr.qr.type:3
-msgid "TypedDicts for poll, fetch-device-uin, and push-QR API responses."
-msgstr ""
+msgid "TypedDicts for poll, fetch_device_uin, and push_qr API responses."
+msgstr "定义 poll、fetch_device_uin 和 push_qr API 响应的 TypedDict。"
 
 #: of qqqr.qr.type.PollResp:1
 msgid "Response from the QR poll API."
@@ -62,7 +62,7 @@ msgstr "状态码（参见 :class:`~qqqr.constant.StatusCode`）"
 
 #: ../../../docstring of qqqr.qr.type.PollResp.cookies:1
 msgid "redirect cookies"
-msgstr ""
+msgstr "重定向 cookie"
 
 #: ../../../docstring of qqqr.qr.type.PollResp.msg:1 qqqr.qr.type.PushQrResp.message:1
 msgid "result message"
@@ -70,15 +70,15 @@ msgstr "结果消息"
 
 #: ../../../docstring of qqqr.qr.type.PollResp.nickname:1
 msgid "user nickname"
-msgstr ""
+msgstr "用户昵称"
 
 #: ../../../docstring of qqqr.qr.type.PollResp.url:1
 msgid "callback URL after authentication"
-msgstr ""
+msgstr "认证后的回调 URL"
 
 #: of qqqr.qr.type.FetchDevUinResp:1
-msgid "Response from the fetch-device-uin API."
-msgstr "获取设备 UIN API 的响应。"
+msgid "Response from the fetch_device_uin API."
+msgstr "fetch_device_uin API 的响应。"
 
 #: of qqqr.qr.type.FetchDevUinResp:1
 msgid ":py:obj:`code (int) <qqqr.qr.type.FetchDevUinResp.code>`"
@@ -94,10 +94,10 @@ msgstr "结果码"
 
 #: ../../../docstring of qqqr.qr.type.FetchDevUinResp.uin_list:1
 msgid "device QQ number list"
-msgstr ""
+msgstr "设备 QQ 号列表"
 
 #: of qqqr.qr.type.PushQrResp:1
-msgid "Response from the push-QR API."
+msgid "Response from the push_qr API."
 msgstr "推送 QR API 的响应。"
 
 #: of qqqr.qr.type.PushQrResp:1
@@ -118,4 +118,3 @@ msgstr ""
 #~ ":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] "
 #~ "| str) <qqqr.qr.type.PollResp.url>`"
 #~ msgstr ""
-

@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../../source/qqqr/up/login.rst:3
 msgid "UpLogin and UpSession"
-msgstr "账号密码登录与 Session"
+msgstr "账号密码登录与UpSession"
 
 #: of qqqr.up.web.UpWebLogin:3
 msgid ""
@@ -52,7 +52,7 @@ msgstr ""
 
 #: of qqqr.up.web.UpWebLogin.new:6
 msgid "a up login session"
-msgstr "一个账号密码登录 session"
+msgstr "一个密码登录 session"
 
 #: of qqqr.up.web.UpWebLogin.check:1
 msgid ""
@@ -204,4 +204,3 @@ msgstr ""
 
 #~ msgid "Block until cookie is received."
 #~ msgstr ""
-
