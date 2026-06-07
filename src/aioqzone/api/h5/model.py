@@ -1,3 +1,9 @@
+"""Qzone H5 API client.
+
+Defines :class:`QzoneH5API` — the main API entry point for all Qzone H5
+operations including feed fetching, commenting, liking, and photo upload.
+"""
+
 import logging
 import typing as t
 from os import PathLike
@@ -14,7 +20,15 @@ log = logging.getLogger(__name__)
 
 
 class QzoneH5API:
+    """Main Qzone H5 API client.
+
+    Wraps Qzone HTTP endpoints behind typed API methods. Handles login
+    state, automatic token injection, and retry-on-login-expire logic.
+    All methods delegate to :meth:`call` for actual HTTP dispatch.
+    """
+
     qzone_tokens: t.Dict[int, str]
+    """Cached qzonetokens keyed by host uin."""
 
     def __init__(
         self, client: ClientAdapter, loginman: Loginable, *, retry_if_login_expire: bool = True
@@ -49,6 +63,16 @@ class QzoneH5API:
         self.qzone_tokens = {}
 
     async def call(self, api: QzoneApi[TyRequest, TyResponse]) -> TyResponse:
+        """Execute an API call with full lifecycle management.
+
+        Builds params, injects authentication (g_tk, qzonetoken, cookies),
+        dispatches HTTP request, parses response, and handles retry on
+        login expiry.
+
+        :param api: the API definition to call
+        :returns: typed response object
+        :raises RuntimeError: if max retry exceeded
+        """
         params: t.Dict[str, t.Any] = api.params.build_params(self.login.uin)
         if api.http_method == "GET":
             data = {}

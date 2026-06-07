@@ -1,3 +1,9 @@
+"""tylisten hook definitions for aioqzone events.
+
+Defines :func:`login_success` and :func:`login_failed` hooks, and
+re-exports QR/UP/captcha hooks from :mod:`qqqr.message`.
+"""
+
 import typing as t
 
 from tylisten import hookdef

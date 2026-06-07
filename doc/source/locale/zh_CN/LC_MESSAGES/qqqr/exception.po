@@ -31,7 +31,7 @@ msgstr "QQQR 异常"
 msgid ""
 "Defines :class:`TencentLoginError` (base login error), :class:`UnexpectedInteraction`, "
 ":class:`UserBreak`, and :class:`UserTimeout`."
-msgstr "定义 :class:`TencentLoginError`（登录基础错误）、:class:`UnexpectedInteraction`、:class:`UserBreak` 和 :class:`UserTimeout`。"
+msgstr "定义 :class:`TencentLoginError`、:class:`UnexpectedInteraction`、:class:`UserBreak` 和 :class:`UserTimeout`。"
 
 #: of qqqr.exception.TencentLoginError:1
 #, fuzzy

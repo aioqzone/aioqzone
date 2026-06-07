@@ -1,3 +1,9 @@
+"""Content entity parsing utilities.
+
+Provides :func:`finfo_box_entities` and :func:`split_entities` for
+extracting structured entities from feed content HTML.
+"""
+
 import re
 from typing import List
 
@@ -38,6 +44,12 @@ RE_ENTITY = re.compile(entity_rules, re.VERBOSE)
 
 
 def finfo_box_entities(finfo: HtmlElement) -> List[ConEntity]:
+    """Extract entities from a feed info box HTML element.
+
+    :param finfo: parsed HTML element of the feed info box
+    :returns: list of entity dicts
+    """
+
     def yield_children(elm: HtmlElement):
         if elm.text is not None:
             yield elm.text
@@ -72,6 +84,11 @@ def finfo_box_entities(finfo: HtmlElement) -> List[ConEntity]:
 
 
 def split_entities(s: str) -> List[ConEntity]:
+    """Split a content string into text and entity segments.
+
+    :param s: raw content string with entity markup
+    :returns: list of text/entity segment dicts
+    """
     entities: List[ConEntity] = []
     pos = 0
     for m in RE_ENTITY.finditer(s):

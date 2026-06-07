@@ -29,7 +29,7 @@ msgstr "所有 QQQR 登录流程的基类。"
 msgid ""
 "Defines :class:`LoginSession` (data container) and :class:`LoginBase` (login procedure). All "
 "``xxLogin`` and ``xxSession`` classes inherit from these."
-msgstr "定义了 :class:`LoginSession`（数据容器）和 :class:`LoginBase`（登录流程）。所有 ``xxLogin`` 和 ``xxSession`` 类都继承自它们。"
+msgstr "定义 :class:`LoginSession` 和 :class:`LoginBase`。所有 ``xxLogin`` 和 ``xxSession`` 类都继承自它们。"
 
 #: of qqqr.base.LoginSession:1
 msgid "A LoginSession collects all data generated or received during login."

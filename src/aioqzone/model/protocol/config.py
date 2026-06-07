@@ -1,3 +1,10 @@
+"""Login configuration models.
+
+Defines :class:`LoginConfig`, :class:`UpLoginConfig`, and
+:class:`QrLoginConfig` — pydantic :class:`BaseSettings` models for
+login parameters.
+"""
+
 import typing as t
 from ipaddress import IPv4Address
 

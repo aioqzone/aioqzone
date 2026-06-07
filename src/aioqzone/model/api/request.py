@@ -1,3 +1,10 @@
+"""Qzone API request parameter models.
+
+Defines :class:`QzoneRequestParams` and its subclasses for each API
+endpoint. Each subclass carries fields specific to that endpoint and
+provides :meth:`build_params` for serialization.
+"""
+
 import typing as t
 from base64 import b64encode
 from io import BytesIO

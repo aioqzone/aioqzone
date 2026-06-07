@@ -12,7 +12,13 @@ uni_cur_key = re.compile(r'data-unikey="([^"]*)"[^d]*data-curkey="([^"]*)"')
 MATCH_PAIR = {"{": "}", "[": "]"}
 
 
-def entire_closing(string: str, inc="{"):
+def entire_closing(string: str, inc="{") -> int:
+    """Find the matching closing bracket for the first opening bracket.
+
+    :param string: input string
+    :param inc: opening bracket character (default ``{``)
+    :returns: index of the matching closing bracket, or ``-1``
+    """
     dec = MATCH_PAIR[inc]
     cnt = 0
     for i, c in enumerate(string):

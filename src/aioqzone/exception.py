@@ -1,3 +1,10 @@
+"""aioqzone exception hierarchy.
+
+Defines :class:`QzoneError` (HTTP OK but Qzone returned an error code),
+:class:`UnexpectedLoginError`, and :class:`CorruptError`.
+"""
+
+
 class QzoneError(RuntimeError):
     """HTTP OK, but Qzone returns an error code."""
 

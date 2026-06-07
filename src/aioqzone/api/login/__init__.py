@@ -42,6 +42,12 @@ class ConstLoginMan(Loginable):
         *,
         ch_login_notify: t.Optional[FutureStore] = None,
     ) -> None:
+        """Initialize with a pre-existing cookie dict.
+
+        :param uin: QQ number
+        :param cookie: pre-existing cookie dict
+        :param ch_login_notify: whether to enable login event emission
+        """
         super().__init__(uin, ch_login_notify=ch_login_notify)
         self.cookie = {} if cookie is None else cookie
 
@@ -63,17 +69,30 @@ class ConstLoginMan(Loginable):
 
 
 class UpLoginManager(Loginable):
+    """Login manager using uin-password authentication.
+
+    Wraps :class:`~qqqr.up.UpWebLogin` (or :class:`~qqqr.up.UpH5Login`)
+    and provides cookie refresh, captcha/SMS handling via hooks.
+    """
+
     def __init__(
         self,
         client: ClientAdapter,
         config: UpLoginConfig,
         *,
-        h5=True,
+        h5: bool = True,
         ch_login_notify: t.Optional[FutureStore] = None,
     ) -> None:
+        """Initialize UP (uin-password) login manager.
+
+        :param client: HTTP client
+        :param config: UP login config including uin and password
+        :param h5: use H5 endpoint (default True)
+        :param ch_login_notify: enable login event emission
+        """
         super().__init__(config.uin, ch_login_notify=ch_login_notify)
-        self.client = client
-        self.config = config
+        self.client = client  #: HTTP client
+        self.config = config  #: Login config instance
         self.h5(h5, clear_cookie=False)  # init uplogin
 
     @retry(
@@ -143,17 +162,30 @@ class UpLoginManager(Loginable):
 
 
 class QrLoginManager(Loginable):
+    """Login manager using QR code authentication.
+
+    Wraps :class:`~qqqr.qr.QrLogin` and emits QR image via the
+    ``qr_fetched`` hook for downstream display.
+    """
+
     def __init__(
         self,
         client: ClientAdapter,
         config: QrLoginConfig,
         *,
-        h5=True,
+        h5: bool = True,
         ch_login_notify: t.Optional[FutureStore] = None,
     ) -> None:
+        """Initialize QR code login manager.
+
+        :param client: HTTP client
+        :param config: QR login config including uin
+        :param h5: use H5 endpoint (default True)
+        :param ch_login_notify: enable login event emission
+        """
         super().__init__(config.uin, ch_login_notify=ch_login_notify)
-        self.client = client
-        self.config = config
+        self.client = client  #: HTTP client
+        self.config = config  #: Login config instance
         self.h5(h5, clear_cookie=False)  # init uplogin
 
     async def _new_cookie(self) -> t.Dict[str, str]:

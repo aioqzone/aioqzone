@@ -1,3 +1,10 @@
+"""Qzone API response models.
+
+Defines :class:`QzoneResponse` base class and its subclasses for each
+API endpoint. Includes factory methods :meth:`~QzoneResponse.from_response_object`
+and :meth:`~QzoneResponse.response_to_object` for HTTP response parsing.
+"""
+
 import re
 import typing as t
 from contextlib import suppress
