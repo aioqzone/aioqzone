@@ -21,33 +21,33 @@ msgstr ""
 
 #: ../../source/aioqzone/reference.rst:2
 msgid "References"
-msgstr ""
+msgstr "参考"
 
 #: ../../source/aioqzone/reference.rst:6
 msgid "Terms"
-msgstr ""
+msgstr "术语"
 
 #: ../../source/aioqzone/reference.rst:8
 msgid "Here we will explain some common used abbreviation and alias in aioqzone."
-msgstr ""
+msgstr "这里解释 aioqzone 中常用的缩写和别名。"
 
 #: ../../source/aioqzone/reference.rst:11
 msgid "abstime"
-msgstr ""
+msgstr "abstime"
 
 #: ../../source/aioqzone/reference.rst:13
 msgid ""
 "A timestamp represents when the feed is created. All feeds have this field. If not, generate a "
 "persudo one is easy."
-msgstr ""
+msgstr "表示 feed 创建时的时间戳。所有 feed 都有此字段。如果没有，生成一个伪时间戳也很容易。"
 
 #: ../../source/aioqzone/reference.rst:16
 msgid "In Qzone interface, this is called ``created_time`` sometimes."
-msgstr ""
+msgstr "在 Qzone 接口中，有时称为 ``created_time``。"
 
 #: ../../source/aioqzone/reference.rst:17
 msgid "appid"
-msgstr ""
+msgstr "appid"
 
 #: ../../source/aioqzone/reference.rst:19
 msgid ""
@@ -57,7 +57,7 @@ msgstr ""
 
 #: ../../source/aioqzone/reference.rst:21
 msgid "fid"
-msgstr ""
+msgstr "fid"
 
 #: ../../source/aioqzone/reference.rst:23
 msgid ""
@@ -67,12 +67,12 @@ msgstr ""
 
 #: ../../source/aioqzone/reference.rst:26
 msgid "In Qzone interface, `fid` is also named as ``tid``, ``feedkey``, etc."
-msgstr ""
+msgstr "在 Qzone 接口中，`fid` 也称为 ``tid``、``feedkey`` 等。"
 
 #: ../../source/aioqzone/reference.rst:27
 msgid "uin"
-msgstr ""
+msgstr "uin"
 
 #: ../../source/aioqzone/reference.rst:29
 msgid "Known as ``QQ``, which identifies an account."
-msgstr ""
+msgstr "即 ``QQ`` 号，用于标识一个账户。"

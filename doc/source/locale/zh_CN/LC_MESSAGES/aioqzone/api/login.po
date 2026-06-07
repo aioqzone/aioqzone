@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-07 23:39+0800\n"
+"POT-Creation-Date: 2026-06-07 11:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/aioqzone/api/login.rst:2
 msgid "Login Managers"
@@ -28,20 +28,61 @@ msgstr "登录管理器"
 msgid "Loginable"
 msgstr ""
 
+#: aioqzone.api.login._base:1 of
+#, fuzzy
+msgid "Abstract login manager base."
+msgstr "登录管理器"
+
+#: aioqzone.api.login._base:3 of
+msgid ""
+"Defines :class:`Loginable` ABC — the interface all login managers implement. Provides cookie "
+"caching, gtk computation, and login event emission."
+msgstr "定义 :class:`Loginable` 抽象基类 — 所有登录管理器实现的接口。提供 cookie 缓存、gtk 计算和登录事件触发。"
+
 #: aioqzone.api.login._base.Loginable:1 of
-msgid "Abstract class represents a login manager."
+#, fuzzy
+msgid "Abstract login manager interface."
 msgstr "登陆管理器的抽象类"
+
+#: aioqzone.api.login._base.Loginable:3 of
+msgid ""
+"Subclasses implement :meth:`_new_cookie` to provide the actual login flow (QR, UP, or static "
+"cookie). This base class handles cookie caching, gtk computation, and login event emission."
+msgstr "子类实现 :meth:`_new_cookie` 以提供实际的登录流程（QR、UP 或静态 cookie）。此基类处理 cookie 缓存、gtk 计算和登录事件触发。"
+
+#: aioqzone.api.login._base.Loginable:8 of
+msgid ""
+":class:`~aioqzone.api.login.ConstLoginMan`, :class:`~aioqzone.api.login.UpLoginManager`, "
+":class:`~aioqzone.api.login.QrLoginManager`"
+msgstr ""
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.last_login:1 of
 msgid "Last login time stamp. 0 represents no login since created."
 msgstr "上次登录的时间戳。0表示自初始化以来未曾登录。"
 
+#: ../../../docstring aioqzone.api.login._base.Loginable.uin:1 of
+#, fuzzy
+msgid "Login QQ number"
+msgstr "登录管理器"
+
 #: ../../../docstring aioqzone.api.login._base.Loginable.cookie:1 of
 msgid "Cached cookie."
 msgstr "缓存的 cookie"
 
+#: ../../../docstring aioqzone.api.login._base.Loginable.lock:1 of
+msgid "Lock for cookie refresh serialization"
+msgstr ""
+
 #: ../../../docstring aioqzone.api.login._base.Loginable.ch_login_notify:1 of
 msgid "Future Store for emit login events."
+msgstr "用于触发登录事件的 Future Store。"
+
+#: ../../../docstring aioqzone.api.login._base.Loginable.login_success:1 of
+msgid "Emitted after a successful login."
+msgstr ""
+
+#: ../../../docstring aioqzone.api.login._base.Loginable.login_failed:1 of
+msgid "Emitted after a failed login attempt."
 msgstr ""
 
 #: aioqzone.api.login.ConstLoginMan._new_cookie:1 aioqzone.api.login._base.Loginable._new_cookie:1 of
@@ -84,8 +125,8 @@ msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`bool\\``"
 msgstr ""
 
 #: aioqzone.api.login._base.Loginable.new_cookie:9 of
-msgid "cookie. Shouldn't be a cached one."
-msgstr "cookie 字典。不允许返回缓存的 cookie。"
+msgid "True if login succeeded, False otherwise."
+msgstr ""
 
 #: aioqzone.api.login._base.Loginable.gtk:1 of
 #, fuzzy
@@ -139,6 +180,26 @@ msgstr ""
 msgid "a :class:`.ConstLoginMan` instance"
 msgstr ""
 
+#: aioqzone.api.login.UpLoginManager:1 of
+msgid "Login manager using uin-password authentication."
+msgstr "使用账号密码认证的登录管理器。"
+
+#: aioqzone.api.login.UpLoginManager:3 of
+msgid ""
+"Wraps :class:`~qqqr.up.UpWebLogin` (or :class:`~qqqr.up.UpH5Login`) and provides cookie refresh,"
+" captcha/SMS handling via hooks."
+msgstr "封装 :class:`~qqqr.up.UpWebLogin` 或 :class:`~qqqr.up.UpH5Login`，通过钩子提供 cookie 刷新、验证码/短信处理。"
+
+#: ../../../docstring aioqzone.api.login.QrLoginManager.client:1
+#: aioqzone.api.login.UpLoginManager.client:1 of
+msgid "HTTP client"
+msgstr ""
+
+#: ../../../docstring aioqzone.api.login.QrLoginManager.config:1
+#: aioqzone.api.login.UpLoginManager.config:1 of
+msgid "Login config instance"
+msgstr ""
+
 #: aioqzone.api.login.UpLoginManager.h5:1 of
 #, fuzzy
 msgid "Change :obj:`.uplogin` to h5 login proxy."
@@ -151,6 +212,16 @@ msgstr "是否以H5登录"
 #: aioqzone.api.login.QrLoginManager.h5:6 aioqzone.api.login.UpLoginManager.h5:6 of
 msgid "remove existing login cookie in :obj:`~Loginable.cookie`!"
 msgstr "移除 :obj:`~Loginable.cookie` 中缓存的 cookie！"
+
+#: aioqzone.api.login.QrLoginManager:1 of
+msgid "Login manager using QR code authentication."
+msgstr "使用二维码认证的登录管理器。"
+
+#: aioqzone.api.login.QrLoginManager:3 of
+msgid ""
+"Wraps :class:`~qqqr.qr.QrLogin` and emits QR image via the ``qr_fetched`` hook for downstream "
+"display."
+msgstr "封装 :class:`~qqqr.qr.QrLogin`，通过 ``qr_fetched`` 钩子触发二维码图片供下游显示。"
 
 #: aioqzone.api.login.QrLoginManager.h5:1 of
 #, fuzzy
@@ -248,3 +319,7 @@ msgstr "将 :obj:`.qrlogin` 和 :obj:`.uplogin` 切换到H5登录。"
 
 #~ msgid ":py:class:`bool`"
 #~ msgstr ""
+
+#~ msgid "cookie. Shouldn't be a cached one."
+#~ msgstr "cookie 字典。不允许返回缓存的 cookie。"
+

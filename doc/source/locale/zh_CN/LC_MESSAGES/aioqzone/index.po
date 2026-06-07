@@ -19,4 +19,4 @@ msgstr ""
 
 #: ../../source/aioqzone/index.rst:2
 msgid "aioqzone"
-msgstr ""
+msgstr "aioqzone"

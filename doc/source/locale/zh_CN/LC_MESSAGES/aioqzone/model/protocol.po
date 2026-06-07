@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-07 23:39+0800\n"
+"POT-Creation-Date: 2026-06-07 11:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/aioqzone/model/protocol.rst:2
 msgid "Protocol Types"
@@ -39,6 +39,14 @@ msgid ""
 "not designed to represent responses from Qzone."
 msgstr ""
 
+#: aioqzone.model.protocol.PersudoCurkey:1 of
+msgid "Persudo curkey string helper."
+msgstr "Persudo curkey 字符串辅助类。"
+
+#: aioqzone.model.protocol.AlbumData:1 of
+msgid "Album data model."
+msgstr "相册数据模型。"
+
 #: aioqzone.model.protocol.AlbumData aioqzone.model.protocol.LikeData
 #: aioqzone.model.protocol.config.LoginConfig aioqzone.model.protocol.config.QrLoginConfig
 #: aioqzone.model.protocol.config.UpLoginConfig aioqzone.model.protocol.entity.AtEntity
@@ -59,6 +67,10 @@ msgstr ""
 #: aioqzone.model.protocol.AlbumData:1 of
 msgid ":py:obj:`topicid (str) <aioqzone.model.protocol.AlbumData.topicid>`"
 msgstr ""
+
+#: aioqzone.model.protocol.LikeData:1 of
+msgid "Like data model with helper methods for key construction."
+msgstr "点赞数据模型，包含密钥构建的辅助方法。"
 
 #: aioqzone.model.protocol.LikeData:1 of
 msgid ":py:obj:`abstime (int) <aioqzone.model.protocol.LikeData.abstime>`"
@@ -93,6 +105,10 @@ msgid ""
 "This module defines feed text entities. Entities take place of \"contents\" since this "
 "simplifies and details the works of rich-text stringify."
 msgstr ""
+
+#: aioqzone.model.protocol.entity.HasContent:1 of
+msgid "Mixin for models that contain content text."
+msgstr "包含内容文本的模型的 Mixin。"
 
 #: aioqzone.model.protocol.entity.HasContent:1 of
 msgid ":py:obj:`content (str) <aioqzone.model.protocol.entity.HasContent.content>`"
@@ -157,6 +173,10 @@ msgid ":py:obj:`url (pydantic.networks.HttpUrl | str) <aioqzone.model.protocol.e
 msgstr ""
 
 #: aioqzone.model.protocol.entity.HasConEntity:1 of
+msgid "Mixin for models that contain content entities."
+msgstr "包含内容实体的模型的 Mixin。"
+
+#: aioqzone.model.protocol.entity.HasConEntity:1 of
 msgid ""
 ":py:obj:`entities (List[aioqzone.model.protocol.entity.ConEntity] | None) "
 "<aioqzone.model.protocol.entity.HasConEntity.entities>`"
@@ -165,6 +185,16 @@ msgstr ""
 #: ../../source/aioqzone/model/protocol.rst:22
 msgid "Login Configs"
 msgstr ""
+
+#: aioqzone.model.protocol.config:1 of
+msgid "Login configuration models."
+msgstr "登录配置模型。"
+
+#: aioqzone.model.protocol.config:3 of
+msgid ""
+"Defines :class:`LoginConfig`, :class:`UpLoginConfig`, and :class:`QrLoginConfig` — pydantic "
+":class:`BaseSettings` models for login parameters."
+msgstr "定义 :class:`LoginConfig`、:class:`UpLoginConfig` 和 :class:`QrLoginConfig` — 登录参数的 pydantic :class:`BaseSettings` 模型。"
 
 #: aioqzone.model.protocol.config.LoginConfig:1 of
 msgid ":py:obj:`uin (int) <aioqzone.model.protocol.config.LoginConfig.uin>`"
@@ -230,3 +260,4 @@ msgstr ""
 #~ ":py:obj:`url (pydantic_core._pydantic_core.Url[pydantic_core._pydantic_core.Url] "
 #~ "| str) <aioqzone.model.protocol.entity.LinkEntity.url>`"
 #~ msgstr ""
+

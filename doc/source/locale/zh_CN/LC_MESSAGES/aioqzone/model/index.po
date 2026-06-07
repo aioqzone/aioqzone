@@ -21,4 +21,4 @@ msgstr ""
 
 #: ../../source/aioqzone/model/index.rst:2
 msgid "aioqzone Models"
-msgstr ""
+msgstr "aioqzone 模型"

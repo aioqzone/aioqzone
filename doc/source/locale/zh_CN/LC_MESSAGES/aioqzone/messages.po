@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: aioqzone \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-10 10:49+0800\n"
+"POT-Creation-Date: 2026-06-07 11:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.1\n"
+"Generated-By: Babel 2.18.0\n"
 
 #: ../../source/aioqzone/messages.rst:2
 msgid "Messages"
@@ -28,8 +28,17 @@ msgstr "消息"
 msgid "QR Login Messages"
 msgstr "消息"
 
-#: aioqzone.message.login_failed aioqzone.message.login_success of qqqr.message.qr_fetched
-#: qqqr.message.sms_code_input qqqr.message.solve_select_captcha qqqr.message.solve_slide_captcha
+#: of qqqr.message:1
+msgid "tylisten hook definitions for QQQR login events."
+msgstr "QQQR 登录事件的 tylisten 钩子定义。"
+
+#: of qqqr.message:3
+msgid ""
+"Defines hooks for QR code events, SMS code input, and captcha solving that downstream code can "
+"subscribe to."
+msgstr "定义二维码事件、短信验证码输入和验证码解决的钩子，供下游代码订阅。"
+
+#: ../../source/aioqzone/messages.rst
 msgid "参数"
 msgstr ""
 
@@ -37,19 +46,17 @@ msgstr ""
 msgid ""
 "Optional QR bytes (png format). If None, the QR is pushed to user's mobile and there is no need "
 "to scan."
-msgstr ""
+msgstr "可选的二维码字节数据（png 格式）。如果为 None，则二维码已推送到用户手机，无需扫描。"
 
 #: ../../../docstring of qqqr.message.qr_fetched:2
 msgid "QR **expire** times in this session"
-msgstr ""
+msgstr "此 session 中二维码**过期**次数"
 
 #: ../../../docstring of qqqr.message.qr_fetched:3
 msgid "this refresh is requested by user"
-msgstr ""
+msgstr "此刷新由用户请求"
 
-#: aioqzone.message.login_failed aioqzone.message.login_success of qqqr.message.qr_cancelled
-#: qqqr.message.qr_fetched qqqr.message.sms_code_input qqqr.message.solve_select_captcha
-#: qqqr.message.solve_slide_captcha
+#: ../../source/aioqzone/messages.rst
 msgid "返回类型"
 msgstr ""
 
@@ -60,7 +67,7 @@ msgstr ""
 
 #: ../../../docstring of qqqr.message.qr_cancelled:1
 msgid "qr cancelled"
-msgstr ""
+msgstr "二维码已取消"
 
 #: ../../source/aioqzone/messages.rst:14
 #, fuzzy
@@ -69,15 +76,15 @@ msgstr "消息"
 
 #: ../../../docstring of qqqr.message.sms_code_input:1
 msgid "uin"
-msgstr ""
+msgstr "uin"
 
 #: ../../../docstring of qqqr.message.sms_code_input:2
 msgid "User's binded phone number."
-msgstr ""
+msgstr "用户绑定的手机号。"
 
 #: ../../../docstring of qqqr.message.sms_code_input:3
 msgid "Nickname of current login user."
-msgstr ""
+msgstr "当前登录用户的昵称。"
 
 #: ../../../docstring of qqqr.message.sms_code_input:4
 msgid ""
@@ -85,25 +92,25 @@ msgid ""
 "\\\\\\[\\:py\\:class\\:\\`str\\`\\]`"
 msgstr ""
 
-#: of qqqr.message.sms_code_input qqqr.message.solve_select_captcha qqqr.message.solve_slide_captcha
+#: ../../source/aioqzone/messages.rst
 msgid "返回"
 msgstr ""
 
 #: ../../../docstring of qqqr.message.sms_code_input:5
 msgid "User received SMS verify code."
-msgstr ""
+msgstr "用户收到的短信验证码。"
 
 #: ../../../docstring of qqqr.message.solve_select_captcha:1
 msgid "This hook asks answers for a select captcha."
-msgstr ""
+msgstr "此钩子请求选择验证码的答案。"
 
 #: ../../../docstring of qqqr.message.solve_select_captcha:3
 msgid "the question of the select captcha"
-msgstr ""
+msgstr "选择验证码的问题"
 
 #: ../../../docstring of qqqr.message.solve_select_captcha:4
 msgid "the choice images of the select captcha"
-msgstr ""
+msgstr "选择验证码的选项图片"
 
 #: ../../../docstring of qqqr.message.solve_select_captcha:6
 msgid ""
@@ -113,23 +120,23 @@ msgstr ""
 
 #: ../../../docstring of qqqr.message.solve_select_captcha:7
 msgid "the image indexes which satisfy the question. Empty list will be treated as no answer."
-msgstr ""
+msgstr "满足问题的图片索引。空列表将被视为无答案。"
 
 #: ../../../docstring of qqqr.message.solve_slide_captcha:1
 msgid "This hook asks answers for a slide captcha."
-msgstr ""
+msgstr "此钩子请求滑动验证码的答案。"
 
 #: ../../../docstring of qqqr.message.solve_slide_captcha:3
 msgid "the slide captcha background (with a dimmed target area)"
-msgstr ""
+msgstr "滑动验证码背景（带有暗淡的目标区域）"
 
 #: ../../../docstring of qqqr.message.solve_slide_captcha:4
 msgid "the slide piece (corresponding to the target area)"
-msgstr ""
+msgstr "滑动块（对应目标区域）"
 
 #: ../../../docstring of qqqr.message.solve_slide_captcha:5
 msgid "the (x, y) position of the initial piece."
-msgstr ""
+msgstr "初始滑动块的 (x, y) 位置。"
 
 #: ../../../docstring of qqqr.message.solve_slide_captcha:7
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`int\\``"
@@ -137,27 +144,37 @@ msgstr ""
 
 #: ../../../docstring of qqqr.message.solve_slide_captcha:8
 msgid "the left position of the target area."
-msgstr ""
+msgstr "目标区域的左侧位置。"
 
 #: ../../source/aioqzone/messages.rst:25
 msgid "Unified Login Messages"
-msgstr ""
+msgstr "统一登录消息"
+
+#: aioqzone.message:1 of
+msgid "tylisten hook definitions for aioqzone events."
+msgstr "aioqzone 事件的 tylisten 钩子定义。"
+
+#: aioqzone.message:3 of
+msgid ""
+"Defines :func:`login_success` and :func:`login_failed` hooks, and re-exports QR/UP/captcha hooks"
+" from :mod:`qqqr.message`."
+msgstr "定义 :func:`login_success` 和 :func:`login_failed` 钩子，并从 :mod:`qqqr.message` 重新导出 QR/UP/验证码钩子。"
 
 #: ../../../docstring aioqzone.message.login_success:1 of
 msgid "Login success."
-msgstr ""
+msgstr "登录成功。"
 
 #: ../../../docstring aioqzone.message.login_failed:3 aioqzone.message.login_success:3 of
 msgid "login uin"
-msgstr ""
+msgstr "登录 uin"
 
 #: ../../../docstring aioqzone.message.login_failed:1 of
 msgid "Login failed."
-msgstr ""
+msgstr "登录失败。"
 
 #: ../../../docstring aioqzone.message.login_failed:4 of
 msgid "exception or error message"
-msgstr ""
+msgstr "异常或错误消息"
 
 #~ msgid "Fields"
 #~ msgstr ""
@@ -224,3 +241,4 @@ msgstr ""
 
 #~ msgid "this refresh is requested by user"
 #~ msgstr ""
+
