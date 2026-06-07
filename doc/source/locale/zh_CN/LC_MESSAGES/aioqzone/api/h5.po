@@ -55,7 +55,7 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.call:8 of
 msgid "the API definition to call"
-msgstr ""
+msgstr "要调用的 API 定义"
 
 #: ../../source/aioqzone/api/h5.rst
 msgid "返回类型"
@@ -74,7 +74,7 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.call:10 of
 msgid "typed response object"
-msgstr ""
+msgstr "类型化响应对象"
 
 #: ../../source/aioqzone/api/h5.rst
 msgid "抛出"
@@ -82,7 +82,7 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.call:11 of
 msgid "if max retry exceeded"
-msgstr ""
+msgstr "如果超过最大重试次数"
 
 #: aioqzone.api.h5.model.QzoneH5API.index:1 of
 msgid "This api is the redirect page after h5 login, which is also the landing (main) page of h5 qzone."
@@ -90,7 +90,7 @@ msgstr "此接口为H5登录后的重定向页面，也是H5空间的主页。"
 
 #: aioqzone.api.h5.model.QzoneH5API.index:3 of
 msgid "if max retry exceeded."
-msgstr ""
+msgstr "如果超过最大重试次数。"
 
 #: aioqzone.api.h5.model.QzoneH5API.index:6 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.IndexPageResp\\``"
@@ -102,11 +102,11 @@ msgstr "获取用户的个人资料页面。"
 
 #: aioqzone.api.h5.model.QzoneH5API.get_feeds:6 aioqzone.api.h5.model.QzoneH5API.profile:4 of
 msgid "uin of the user"
-msgstr ""
+msgstr "用户的 uin"
 
 #: aioqzone.api.h5.model.QzoneH5API.profile:6 of
 msgid "timestamp in seconds, default as current time."
-msgstr ""
+msgstr "时间戳（秒），默认为当前时间。"
 
 #: aioqzone.api.h5.model.QzoneH5API.profile:8 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.ProfilePagePesp\\``"
@@ -153,7 +153,7 @@ msgstr "此接口可用于获取说说的详细信息。"
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:6 aioqzone.api.h5.model.QzoneH5API.delete_ugc:4
 #: aioqzone.api.h5.model.QzoneH5API.set_top_feed:4 aioqzone.api.h5.model.QzoneH5API.shuoshuo:4 of
 msgid ":term:`fid`"
-msgstr ""
+msgstr ":term:`fid`"
 
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:6 of
 msgid "uin of the owner of the given feed"
@@ -162,7 +162,7 @@ msgstr "给定说说的发布人的uin"
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:8 aioqzone.api.h5.model.QzoneH5API.delete_ugc:6
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:8 of
 msgid ":term:`appid`"
-msgstr ""
+msgstr ":term:`appid`"
 
 #: aioqzone.api.h5.model.QzoneH5API.shuoshuo:10 of
 msgid "optional encoded params"
@@ -194,31 +194,31 @@ msgstr "评论 feed。如果提供了 :obj:`photos`，将使用旧版评论 API�
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:4 aioqzone.api.h5.model.QzoneH5API.delete_comment:4 of
 msgid "Feed owner uin"
-msgstr ""
+msgstr "Feed 所有者的 uin"
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:10 of
 msgid "comment content"
-msgstr ""
+msgstr "评论内容"
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:12 aioqzone.api.h5.model.QzoneH5API.publish_mood:6 of
 msgid "photos to be attached, usually returned by :meth:`.preupload_photos`"
-msgstr ""
+msgstr "要附加的照片，通常由 :meth:`.preupload_photos` 返回"
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:14 of
 msgid "optional encoded params from :obj:`FeedOperation.operation.busi_param`"
-msgstr ""
+msgstr "来自 :obj:`FeedOperation.operation.busi_param` 的可选编码参数"
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:16 of
 msgid "feed type"
-msgstr ""
+msgstr "feed 类型"
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:18 of
 msgid "required if `appid != 311`"
-msgstr ""
+msgstr "当 `appid != 311` 时必须提供"
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:20 of
 msgid "is private comment"
-msgstr ""
+msgstr "是否私密评论"
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:21 of
 msgid ""
@@ -229,11 +229,11 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:23 aioqzone.api.h5.model.QzoneH5API.publish_mood:13 of
 msgid ":meth:`.preupload_photos`, :meth:`.upload_pic`"
-msgstr ""
+msgstr ":meth:`.preupload_photos`、:meth:`.upload_pic`"
 
 #: aioqzone.api.h5.model.QzoneH5API.add_comment:27 of
 msgid "added support for legacy comment api (with photos)."
-msgstr ""
+msgstr "增加了对带照片的旧版评论 API 的支持。"
 
 #: aioqzone.api.h5.model.QzoneH5API.delete_comment:1 of
 msgid "Delete a comment."
@@ -241,11 +241,11 @@ msgstr "删除评论。"
 
 #: aioqzone.api.h5.model.QzoneH5API.delete_comment:10 of
 msgid "id of the comment to be deleted"
-msgstr ""
+msgstr "要删除的评论 id"
 
 #: aioqzone.api.h5.model.QzoneH5API.delete_comment:12 of
 msgid "uin of the comment owner, default as None, means the login uin"
-msgstr ""
+msgstr "评论所有者的 uin，默认为 None 表示登录 uin"
 
 #: aioqzone.api.h5.model.QzoneH5API.delete_comment:14 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.DeleteCommentResp\\``"
@@ -257,11 +257,11 @@ msgstr "发布 feed。"
 
 #: aioqzone.api.h5.model.QzoneH5API.publish_mood:4 of
 msgid "feed content"
-msgstr ""
+msgstr "feed 内容"
 
 #: aioqzone.api.h5.model.QzoneH5API.publish_mood:8 of
 msgid "sync to weibo, default to false"
-msgstr ""
+msgstr "同步到微博，默认为 false"
 
 #: aioqzone.api.h5.model.QzoneH5API.publish_mood:10 of
 msgid "access right, default to \"Available to Everyone\"."
@@ -273,19 +273,19 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.upload_pic:2 of
 msgid "image data or path"
-msgstr ""
+msgstr "图片数据或路径"
 
 #: aioqzone.api.h5.model.QzoneH5API.upload_pic:4 of
 msgid "image width, if provided with height, the image will not be compressed"
-msgstr ""
+msgstr "图片宽度，如果同时提供了 height，图片不会被压缩"
 
 #: aioqzone.api.h5.model.QzoneH5API.upload_pic:6 of
 msgid "image height, if provided with width, the image will not be compressed"
-msgstr ""
+msgstr "图片高度，如果同时提供了 width，图片不会被压缩"
 
 #: aioqzone.api.h5.model.QzoneH5API.upload_pic:8 of
 msgid "compression quality, default to 70"
-msgstr ""
+msgstr "压缩质量，默认为 70"
 
 #: aioqzone.api.h5.model.QzoneH5API.upload_pic:9 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.UploadPicResponse\\``"
@@ -295,14 +295,14 @@ msgstr ""
 msgid ""
 "In version <= 1.8.4, user is responsible for compressing a image and this api encode the "
 ":obj:`picture` with Base64 and send it to Qzone *ASIS* ."
-msgstr ""
+msgstr "1.8.4 及更早版本中，用户负责压缩图片，此 API 将 :obj:`picture` 用 Base64 编码并按原样发送到 Qzone。"
 
 #: aioqzone.api.h5.model.QzoneH5API.upload_pic:16 of
 msgid ""
 "Since version 1.8.5, we recognize a compressed image by :obj:`width` and :obj:`height` "
 "parameters. If :obj:`width` and :obj:`height` is provided, this API will keep the former "
 "behavior. If not provided, the image will be compressed with the given quality."
-msgstr ""
+msgstr "自 1.8.5 版本起，通过 :obj:`width` 和 :obj:`height` 参数识别已压缩的图片。如果提供了 :obj:`width` 和 :obj:`height`，保持原有行为；否则图片将按指定质量压缩。"
 
 #: aioqzone.api.h5.model.QzoneH5API.preupload_photos:1 of
 msgid "Preupload photos before publishing a feed."
@@ -310,15 +310,15 @@ msgstr "发布 feed 前预上传照片。"
 
 #: aioqzone.api.h5.model.QzoneH5API.preupload_photos:4 of
 msgid "List of :obj:`.UploadPicResponse`, usually returned by :meth:`.upload_pic`"
-msgstr ""
+msgstr ":obj:`.UploadPicResponse` 列表，通常由 :meth:`.upload_pic` 返回"
 
 #: aioqzone.api.h5.model.QzoneH5API.preupload_photos:6 of
 msgid "current photo number, default to 0"
-msgstr ""
+msgstr "当前照片数量，默认为 0"
 
 #: aioqzone.api.h5.model.QzoneH5API.preupload_photos:8 of
 msgid "whether to upload HD version, default to False"
-msgstr ""
+msgstr "是否上传高清版本，默认为 False"
 
 #: aioqzone.api.h5.model.QzoneH5API.preupload_photos:9 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.PhotosPreuploadResponse\\``"
@@ -326,7 +326,7 @@ msgstr ""
 
 #: aioqzone.api.h5.model.QzoneH5API.preupload_photos:11 of
 msgid ":meth:`.upload_pic`"
-msgstr ""
+msgstr ":meth:`.upload_pic`"
 
 #: aioqzone.api.h5.model.QzoneH5API.delete_ugc:1 of
 msgid "Delete a feed."
@@ -342,11 +342,11 @@ msgstr "从 uin 获取头像。无需登录。"
 
 #: aioqzone.api.h5.model.QzoneH5API.avatar:4 of
 msgid "the uin whose avatar to be get"
-msgstr ""
+msgstr "要获取头像的 uin"
 
 #: aioqzone.api.h5.model.QzoneH5API.avatar:6 of
 msgid "availible sizes: `100`|`640`"
-msgstr ""
+msgstr "可用尺寸：`100`|`640`"
 
 #: aioqzone.api.h5.model.QzoneH5API.avatar:8 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~aioqzone.model.api.response.AvatarResponse\\``"
@@ -358,7 +358,7 @@ msgstr "设置或取消置顶 feed。"
 
 #: aioqzone.api.h5.model.QzoneH5API.set_top_feed:6 of
 msgid "whether to set top, default to `True`"
-msgstr ""
+msgstr "是否置顶，默认为 `True`"
 
 #: aioqzone.api.h5.model.QzoneH5API.set_top_feed:8 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:obj\\:\\`None\\``"

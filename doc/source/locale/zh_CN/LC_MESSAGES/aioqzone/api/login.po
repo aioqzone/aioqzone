@@ -26,7 +26,7 @@ msgstr "登录管理器"
 #: ../../source/aioqzone/api/login.rst:7
 #, fuzzy
 msgid "Loginable"
-msgstr ""
+msgstr "Loginable"
 
 #: aioqzone.api.login._base:1 of
 #, fuzzy
@@ -54,7 +54,7 @@ msgstr "子类实现 :meth:`_new_cookie` 以提供实际的登录流程（QR、�
 msgid ""
 ":class:`~aioqzone.api.login.ConstLoginMan`, :class:`~aioqzone.api.login.UpLoginManager`, "
 ":class:`~aioqzone.api.login.QrLoginManager`"
-msgstr ""
+msgstr ":class:`~aioqzone.api.login.ConstLoginMan`、:class:`~aioqzone.api.login.UpLoginManager`、:class:`~aioqzone.api.login.QrLoginManager`"
 
 #: ../../../docstring aioqzone.api.login._base.Loginable.last_login:1 of
 msgid "Last login time stamp. 0 represents no login since created."
@@ -126,7 +126,7 @@ msgstr ""
 
 #: aioqzone.api.login._base.Loginable.new_cookie:9 of
 msgid "True if login succeeded, False otherwise."
-msgstr ""
+msgstr "登录成功返回 True，否则返回 False。"
 
 #: aioqzone.api.login._base.Loginable.gtk:1 of
 #, fuzzy
@@ -135,7 +135,7 @@ msgstr "使用 cookie 中的 ``pskey`` 字段计算 gtk。"
 
 #: aioqzone.api.login._base.Loginable.gtk:3 of
 msgid "g_token"
-msgstr ""
+msgstr "g_token"
 
 #: aioqzone.api.login._base.Loginable.gtk:5 of
 msgid "``0`` denotes no existing login."
@@ -143,7 +143,7 @@ msgstr "``0`` 表示登录失效/不存在。"
 
 #: aioqzone.api.login._base.Loginable.gtk:6 of
 msgid ":meth:`qqqr.utils.encrypt.gtk`"
-msgstr ""
+msgstr ":meth:`qqqr.utils.encrypt.gtk`"
 
 #: ../../source/aioqzone/api/login.rst:13
 #, fuzzy
@@ -162,7 +162,7 @@ msgstr "一个使用外部提供的 cookie 的登录管理器。"
 
 #: aioqzone.api.login.ConstLoginMan.from_loginable:1 of
 msgid "Create a :class:`.ConstLoginMan` from another :class:`.Loginable` instance."
-msgstr ""
+msgstr "从另一个 :class:`.Loginable` 实例创建 :class:`.ConstLoginMan`。"
 
 #: ../../source/aioqzone/api/login.rst
 msgid "参数"
@@ -170,7 +170,7 @@ msgstr ""
 
 #: aioqzone.api.login.ConstLoginMan.from_loginable:4 of
 msgid "any :class:`.Loginable` instance"
-msgstr ""
+msgstr "任意 :class:`.Loginable` 实例"
 
 #: aioqzone.api.login.ConstLoginMan.from_loginable:5 of
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:class\\:\\`\\~typing.Self\\``"
@@ -178,7 +178,7 @@ msgstr ""
 
 #: aioqzone.api.login.ConstLoginMan.from_loginable:6 of
 msgid "a :class:`.ConstLoginMan` instance"
-msgstr ""
+msgstr "一个 :class:`.ConstLoginMan` 实例"
 
 #: aioqzone.api.login.UpLoginManager:1 of
 msgid "Login manager using uin-password authentication."

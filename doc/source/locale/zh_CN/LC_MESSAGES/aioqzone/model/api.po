@@ -21,11 +21,11 @@ msgstr ""
 
 #: ../../source/aioqzone/model/api.rst:2
 msgid "H5 API definations"
-msgstr ""
+msgstr "H5 API 定义"
 
 #: aioqzone.model.api:1 of
 msgid "Qzone API endpoint definitions."
-msgstr ""
+msgstr "Qzone API 端点定义。"
 
 #: aioqzone.model.api:3 of
 msgid ""
@@ -233,11 +233,11 @@ msgstr ""
 #: aioqzone.model.api.request.ShuoshuoParams.busi_param aioqzone.model.api.response.FeedData.original
 #: aioqzone.model.api.response.ProfileFeedData.original of
 msgid "Constraints"
-msgstr ""
+msgstr "约束"
 
 #: ../../../docstring aioqzone.model.api.request.ShuoshuoParams.busi_param:1 of
 msgid "**max_length** = 100"
-msgstr ""
+msgstr "**max_length** = 100"
 
 #: aioqzone.model.api.request.GetCountParams:1 of
 msgid ":py:obj:`format (str) <aioqzone.model.api.request.GetCountParams.format>`"
@@ -295,13 +295,13 @@ msgstr ""
 #: aioqzone.model.api.request.AddCommentParamsLegacy.content:1
 #: aioqzone.model.api.request.PublishMoodParams.content:1 of
 msgid "**min_length** = 1"
-msgstr ""
+msgstr "**min_length** = 1"
 
 #: ../../../docstring aioqzone.model.api.request.AddCommentParams.content:1
 #: aioqzone.model.api.request.AddCommentParamsLegacy.content:1
 #: aioqzone.model.api.request.PublishMoodParams.content:1 of
 msgid "**max_length** = 2000"
-msgstr ""
+msgstr "**max_length** = 2000"
 
 #: aioqzone.model.api.request.AddCommentParamsLegacy:1 of
 msgid ":py:obj:`content (str) <aioqzone.model.api.request.AddCommentParamsLegacy.content>`"
@@ -574,7 +574,7 @@ msgstr ""
 
 #: aioqzone.model.api.feed.UgcRight:1 of
 msgid "An enumeration."
-msgstr ""
+msgstr "枚举类型。"
 
 #: aioqzone.model.api.request.PhotoData:1 of
 msgid ":py:obj:`albumid (str) <aioqzone.model.api.request.PhotoData.albumid>`"
@@ -626,7 +626,7 @@ msgstr ""
 
 #: ../../source/aioqzone/model/api.rst:19
 msgid "Responses"
-msgstr ""
+msgstr "响应"
 
 #: aioqzone.model.api.response:1 of
 msgid "Qzone API response models."
@@ -642,7 +642,7 @@ msgstr "定义 :class:`QzoneResponse` 基类及其每个 API 端点的子类。�
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:1
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:1 of
 msgid "Parses the response text or object recieved from Qzone API."
-msgstr ""
+msgstr "解析从 Qzone API 接收的响应文本或对象。"
 
 #: ../../source/aioqzone/model/api.rst
 msgid "参数"
@@ -651,7 +651,7 @@ msgstr ""
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:4
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:4 of
 msgid "the parsed response object. see `.response_to_object`"
-msgstr ""
+msgstr "解析后的响应对象，参见 `.response_to_object`"
 
 #: ../../source/aioqzone/model/api.rst
 msgid "抛出"
@@ -660,7 +660,7 @@ msgstr ""
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:5
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:5 of
 msgid "if returned result code != 0"
-msgstr ""
+msgstr "如果返回结果码 != 0"
 
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:7
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:7 of
@@ -674,7 +674,7 @@ msgstr ""
 #: aioqzone.model.api.response.ProfilePagePesp.from_response_object:8
 #: aioqzone.model.api.response.QzoneResponse.from_response_object:8 of
 msgid "Self"
-msgstr ""
+msgstr "Self"
 
 #: aioqzone.model.api.response.AvatarResponse.response_to_object:2
 #: aioqzone.model.api.response.IndexPageResp.response_to_object:2
@@ -691,7 +691,7 @@ msgstr ""
 msgid ""
 "Represents RESPonse from get feed page operation. Used to validate response data in "
 ":meth:`aioqzone.api.h5.QzoneH5API.index` and :meth:`aioqzone.api.h5.QzoneH5API.getActivateFeeds`"
-msgstr ""
+msgstr "表示获取 feed 页面操作的响应。用于验证 :meth:`aioqzone.api.h5.QzoneH5API.index` 和 :meth:`aioqzone.api.h5.QzoneH5API.getActivateFeeds` 中的响应数据。"
 
 #: aioqzone.model.api.response.FeedPageResp:1 of
 msgid ":py:obj:`attachinfo (str) <aioqzone.model.api.response.FeedPageResp.attachinfo>`"
@@ -753,7 +753,7 @@ msgstr ""
 
 #: aioqzone.model.api.response.DetailResp of
 msgid "Validators"
-msgstr ""
+msgstr "验证器"
 
 #: aioqzone.model.api.response.DetailResp:1 of
 msgid ""
@@ -764,7 +764,7 @@ msgstr ""
 #: ../../../docstring aioqzone.model.api.response.DetailResp.attach_info
 #: aioqzone.model.api.response.DetailResp.hasmore of
 msgid "Validated by"
-msgstr ""
+msgstr "由以下验证"
 
 #: ../../../docstring aioqzone.model.api.response.DetailResp.attach_info:1
 #: aioqzone.model.api.response.DetailResp.hasmore:1 of
@@ -793,11 +793,11 @@ msgstr ""
 
 #: of pydantic._internal._model_construction.init_private_attributes:1
 msgid "This function is meant to behave like a BaseModel method to initialize private attributes."
-msgstr ""
+msgstr "此函数旨在模拟 BaseModel 方法来初始化私有属性。"
 
 #: of pydantic._internal._model_construction.init_private_attributes:3
 msgid "It takes context as an argument since that's what pydantic-core passes when calling it."
-msgstr ""
+msgstr "它接受 context 作为参数，因为 pydantic-core 调用时会传递该参数。"
 
 #: of pydantic._internal._model_construction.init_private_attributes:5
 msgid ":sphinx_autodoc_typehints_type:`\\:py\\:obj\\:\\`None\\``"
@@ -805,11 +805,11 @@ msgstr ""
 
 #: of pydantic._internal._model_construction.init_private_attributes:7
 msgid "Args:"
-msgstr ""
+msgstr "参数："
 
 #: of pydantic._internal._model_construction.init_private_attributes:8
 msgid "self: The BaseModel instance. context: The context."
-msgstr ""
+msgstr "self: BaseModel 实例。context: 上下文。"
 
 #: aioqzone.model.api.response.AddCommentResp:1 of
 msgid ""
@@ -920,7 +920,7 @@ msgstr ""
 #: ../../../docstring aioqzone.model.api.response.FeedData.original:1
 #: aioqzone.model.api.response.ProfileFeedData.original:1 of
 msgid "**union_mode** = left_to_right"
-msgstr ""
+msgstr "**union_mode** = left_to_right"
 
 #: aioqzone.model.api.response.PicInfo:1 of
 msgid ":py:obj:`albumid (str) <aioqzone.model.api.response.PicInfo.albumid>`"
@@ -952,11 +952,11 @@ msgstr ""
 
 #: ../../../docstring aioqzone.model.api.response.PicInfo.lloc:1 of
 msgid "id of large picture"
-msgstr ""
+msgstr "大图 id"
 
 #: ../../../docstring aioqzone.model.api.response.PicInfo.sloc:1 of
 msgid "id of small picture"
-msgstr ""
+msgstr "小图 id"
 
 #: aioqzone.model.api.profile.ProfileFeedData:1 of
 msgid ""
