@@ -197,6 +197,11 @@ class PublishMoodParams(QzoneRequestParams):
     )
     ugc_right: UgcRight = UgcRight.all
 
+    allow_uins: t.List[int] = Field(default_factory=list)
+    """When ugc_right=part (16), only these QQ users can see this shuoshuo."""
+    deny_uins: t.List[int] = Field(default_factory=list)
+    """When ugc_right=blacklist (128), these QQ users cannot see this shuoshuo."""
+
     opr_type: str = "publish_shuoshuo"
     format: str = "json"
     # lat: int
@@ -206,6 +211,10 @@ class PublishMoodParams(QzoneRequestParams):
     @field_serializer("photos")
     def richval(self, photos: t.List[PhotoData]):
         return " ".join(i.to_richval() for i in photos)
+
+    @field_serializer("allow_uins", "deny_uins")
+    def uinlist_to_str(self, uins: t.List[int]) -> str:
+        return ",".join(str(u) for u in uins) if uins else ""
 
 
 class DeleteUgcParams(QzoneRequestParams):
