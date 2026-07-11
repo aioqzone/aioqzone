@@ -292,6 +292,8 @@ class QzoneH5API:
         photos: t.Optional[t.Sequence[t.Union[PhotoData, PicInfo]]] = None,
         sync_weibo=False,
         ugc_right: UgcRight = UgcRight.all,
+        allow_uins: t.Optional[t.Sequence[int]] = None,
+        deny_uins: t.Optional[t.Sequence[int]] = None,
     ) -> PublishMoodResp:
         """Publish a feed.
 
@@ -299,12 +301,18 @@ class QzoneH5API:
         :param photos: photos to be attached, usually returned by :meth:`.preupload_photos`
         :param sync_weibo: sync to weibo, default to false
         :param ugc_right: access right, default to "Available to Everyone".
+        :param allow_uins: when ``ugc_right=part``, only these QQ users can see this feed.
+        :param deny_uins: when ``ugc_right=blacklist``, these QQ users cannot see this feed.
 
         .. seealso:: :meth:`.preupload_photos`, :meth:`.upload_pic`
         """
         photos = photos or []
+        kw = dict(locals())
+        kw.pop("self")
+        kw["allow_uins"] = kw.get("allow_uins") or []
+        kw["deny_uins"] = kw.get("deny_uins") or []
         return await self.call(
-            PublishMoodApi(params=PublishMoodParams.model_validate(locals(), from_attributes=True))
+            PublishMoodApi(params=PublishMoodParams.model_validate(kw, from_attributes=True))
         )
 
     async def upload_pic(
