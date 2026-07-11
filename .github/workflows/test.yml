@@ -9,6 +9,11 @@ on:
     branches:
       - beta
       - release
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to test'
+        required: true
 
 concurrency:
   group: test-${{ github.ref_name }}
@@ -16,7 +21,7 @@ concurrency:
 
 jobs:
   install-test:
-    if: github.event_name != 'pull_request' || github.event.action != 'opened' || startsWith(github.head_ref, 'deps/')
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository && (github.event.action != 'opened' || startsWith(github.head_ref, 'deps/'))
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -26,6 +31,8 @@ jobs:
       #       check-out repo and set-up python
       #----------------------------------------------
       - uses: actions/checkout@v7
+        with:
+            ref: ${{ github.event.inputs.pr_number && format('refs/pull/{0}/head', github.event.inputs.pr_number) || github.ref }}
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
