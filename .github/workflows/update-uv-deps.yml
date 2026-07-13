@@ -8,14 +8,17 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  actions: write
 
 jobs:
   update-deps:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
       - name: Preview updates
         id: preview
         env:
@@ -29,28 +32,37 @@ jobs:
             head -n 50 /tmp/preview.txt
             echo "$DELIM"
           } >> "$GITHUB_OUTPUT"
-      - name: Update lockfile
-        id: update
+      - name: Update deps/uv branch
+        if: github.event_name == 'schedule'
         env:
           NO_COLOR: 1
         run: |
           set -euo pipefail
-          uv lock -U
-          if [ -z "$(git status --porcelain uv.lock)" ]; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Create Pull Request
-        if: steps.update.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
-        run: |
-          set -euo pipefail
-          BRANCH="deps/update-uv-$(date +%Y%m%d%H%M%S)"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH"
+
+          git fetch origin beta
+          git fetch origin deps/uv 2>/dev/null || true
+
+          # Setup deps/uv branch
+          if git show-ref --verify --quiet refs/remotes/origin/deps/uv; then
+            git checkout -B deps/uv origin/deps/uv
+            git rebase origin/beta || {
+              echo "Rebase conflict, resetting deps/uv to beta"
+              git checkout -B deps/uv origin/beta
+            }
+          else
+            echo "Creating deps/uv from beta"
+            git checkout -b deps/uv origin/beta
+          fi
+
+          uv lock -U
+
+          if [ -z "$(git status --porcelain uv.lock)" ]; then
+            echo "No changes to uv.lock"
+            exit 0
+          fi
+
           git add uv.lock
           COMMIT_DELIM="COMMITMSG_$(date +%s)_$$"
           git commit -F - << "$COMMIT_DELIM"
@@ -58,11 +70,48 @@ jobs:
 
           ${{ steps.preview.outputs.log }}
           $COMMIT_DELIM
-          git push origin "$BRANCH"
+          git push origin deps/uv --force-with-lease
+
+      - name: Create Pull Request
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
+        run: |
+          set -euo pipefail
+          git fetch origin beta
+          git fetch origin deps/uv 2>/dev/null || true
+
+          if ! git show-ref --verify --quiet refs/remotes/origin/deps/uv; then
+            echo "::warning::deps/uv branch does not exist. Run the scheduled workflow first."
+            exit 0
+          fi
+
+          # Check if deps/uv has diff from beta
+          DIFF_COUNT=$(git rev-list --count origin/beta..origin/deps/uv)
+          if [ "$DIFF_COUNT" -eq 0 ]; then
+            echo "No pending updates on deps/uv. Nothing to merge."
+            exit 0
+          fi
+
+          # Check for existing PR
+          EXISTING_PR=$(gh pr list --head deps/uv --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR #$EXISTING_PR already exists from deps/uv to beta"
+            exit 0
+          fi
+
+          # Use actual accumulated commit log as PR body
+          git checkout -B deps/uv origin/deps/uv
+          {
+            echo "Dependency updates accumulated on deps/uv:"
+            echo ""
+            git log origin/beta..origin/deps/uv --oneline --no-decorate
+          } > /tmp/pr-body.txt
+
           PR_URL=$(gh pr create \
-            --base "${{ github.ref_name }}" \
-            --head "$BRANCH" \
+            --base beta \
+            --head deps/uv \
             --title "chore(deps): update dependencies" \
-            --body "${{ steps.preview.outputs.log }}" \
-            --label dependencies)
-          gh pr merge "$PR_URL" --auto --rebase
+            --body-file /tmp/pr-body.txt \
+            --label python,dependencies)
+          echo "Created PR: $PR_URL"
