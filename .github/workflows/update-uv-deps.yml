@@ -8,7 +8,6 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  actions: write
 
 jobs:
   update-deps:
@@ -42,8 +41,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Fetch both branches
-          git fetch origin beta deps/uv 2>/dev/null || git fetch origin beta
+          git fetch origin beta
+          git fetch origin deps/uv 2>/dev/null || true
 
           # Setup deps/uv branch
           if git show-ref --verify --quiet refs/remotes/origin/deps/uv; then
@@ -79,7 +78,8 @@ jobs:
           GH_TOKEN: ${{ secrets.AUTO_MERGE_PAT }}
         run: |
           set -euo pipefail
-          git fetch origin beta deps/uv 2>/dev/null || git fetch origin beta
+          git fetch origin beta
+          git fetch origin deps/uv 2>/dev/null || true
 
           if ! git show-ref --verify --quiet refs/remotes/origin/deps/uv; then
             echo "::warning::deps/uv branch does not exist. Run the scheduled workflow first."
@@ -93,10 +93,25 @@ jobs:
             exit 0
           fi
 
+          # Check for existing PR
+          EXISTING_PR=$(gh pr list --head deps/uv --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR #$EXISTING_PR already exists from deps/uv to beta"
+            exit 0
+          fi
+
+          # Use actual accumulated commit log as PR body
+          git checkout -B deps/uv origin/deps/uv
+          {
+            echo "Dependency updates accumulated on deps/uv:"
+            echo ""
+            git log origin/beta..origin/deps/uv --oneline --no-decorate
+          } > /tmp/pr-body.txt
+
           PR_URL=$(gh pr create \
             --base beta \
             --head deps/uv \
             --title "chore(deps): update dependencies" \
-            --body "${{ steps.preview.outputs.log }}" \
+            --body-file /tmp/pr-body.txt \
             --label python,dependencies)
           echo "Created PR: $PR_URL"
