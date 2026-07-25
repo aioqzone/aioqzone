@@ -410,3 +410,27 @@ class QzoneH5API:
                 params=SetTopParams.model_validate(locals()),
             )
         )
+
+    async def get_visitor(self, page: int = 1) -> VisitorResp:
+        """Get today / total visitor count.
+
+        :param page: page number
+
+        .. note::
+
+           Contributed by hexadecimal233.
+        """
+        return await self.call(VisitorApi(params=VisitorParams.model_validate(locals())))
+
+    async def get_message(self, hostUin: int, num: int = 10, start: int = 0) -> MessageBoardResp:
+        """Get message board messages.
+
+        :param hostUin: QQ of the profile owner
+        :param num: number of messages to fetch
+        :param start: start offset
+
+        .. note::
+
+           Contributed by hexadecimal233.
+        """
+        return await self.call(MessageBoardApi(params=MessageBoardParams.model_validate(locals())))

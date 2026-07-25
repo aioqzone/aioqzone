@@ -39,6 +39,8 @@ __all__ = [
     "UgcRight",
     "PhotoData",
     "SetTopParams",
+    "VisitorParams",
+    "MessageBoardParams",
 ]
 
 
@@ -320,3 +322,18 @@ class SetTopParams(QzoneRequestParams):
     @field_serializer("set_top", return_type=str)
     def serialize_set_top(self, set_top: bool) -> str:
         return "set" if set_top else "cancel"
+
+
+class VisitorParams(QzoneRequestParams):
+    uin_fields = ("uin",)
+    mask: int = 7
+    page: int = 1
+    fupdate: int = 1
+    clear: int = 1
+
+
+class MessageBoardParams(QzoneRequestParams):
+    uin_fields = ("uin",)
+    hostUin: int
+    num: int = 10
+    start: int = 0
