@@ -422,7 +422,9 @@ class QzoneH5API:
         """
         return await self.call(VisitorApi(params=VisitorParams.model_validate(locals())))
 
-    async def get_message(self, hostUin: int, num: int = 10, start: int = 0) -> MessageBoardResp:
+    async def get_message_board(
+        self, hostUin: int, num: int = 10, start: int = 0
+    ) -> MessageBoardResp:
         """Get message board messages.
 
         :param hostUin: QQ of the profile owner
