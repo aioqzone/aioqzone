@@ -197,3 +197,16 @@ class SetTopApi(QzoneApi[SetTopParams, SingleReturnResp]):
     http_method: t.ClassVar[TyHttpMethod] = "POST"
     host: t.ClassVar[str] = "user.qzone.qq.com"
     path: t.ClassVar[str] = "proxy/domain/ic2.qzone.qq.com/cgi-bin/feeds/cgi_settopfeed"
+
+
+class VisitorApi(QzoneApi[VisitorParams, VisitorResp]):
+    response: t.ClassVar = VisitorResp
+    http_method: t.ClassVar[TyHttpMethod] = "GET"
+    path: t.ClassVar[str] = "/proxy/domain/g.qzone.qq.com/cgi-bin/friendshow/cgi_get_visitor_more"
+
+
+class MessageBoardApi(QzoneApi[MessageBoardParams, MessageBoardResp]):
+    response: t.ClassVar = MessageBoardResp
+    http_method: t.ClassVar[TyHttpMethod] = "GET"
+    host: t.ClassVar[str] = "https://user.qzone.qq.com"
+    path: t.ClassVar[str] = "/proxy/domain/m.qzone.qq.com/cgi-bin/new/get_msgb"

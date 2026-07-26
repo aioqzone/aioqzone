@@ -123,6 +123,13 @@ async def qzone_workflow(api: QzoneH5API):
 
     assert count1 == count2
 
+    visitor = await api.get_visitor()
+    assert visitor.page > 0
+
+    board = await api.get_message_board(ownuin)
+    assert board.auditNum is not None
+    assert board.auditON is not None
+
 
 async def test_workflow(api: QzoneH5API):
     try:
