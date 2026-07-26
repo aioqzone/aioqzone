@@ -9,11 +9,6 @@ on:
     branches:
       - beta
       - release
-  workflow_dispatch:
-    inputs:
-      pr_number:
-        description: 'PR number to test'
-        required: true
 
 concurrency:
   group: test-${{ github.ref_name }}
@@ -21,8 +16,9 @@ concurrency:
 
 jobs:
   install-test:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository && (github.event.action != 'opened' || startsWith(github.head_ref, 'deps/'))
+    if: github.event.pull_request.head.repo.full_name == github.repository && (github.event.action != 'opened' || startsWith(github.head_ref, 'deps/'))
     runs-on: ubuntu-latest
+    environment: test_secrets
     strategy:
       matrix:
         python-version: ["3.14", "3.11", "3.10"]
@@ -32,7 +28,7 @@ jobs:
       #----------------------------------------------
       - uses: actions/checkout@v7
         with:
-            ref: ${{ github.event.inputs.pr_number && format('refs/pull/{0}/head', github.event.inputs.pr_number) || github.ref }}
+            ref: ${{ github.ref }}
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
@@ -51,11 +47,3 @@ jobs:
           echo "::group::pytest outputs"
           uv run pytest test --log-cli-level=WARNING
           echo "::endgroup::"
-
-      - name: Request Changes
-        env:
-          GH_TOKEN: ${{ secrets.COMMENT_PAT }} # the reviewer PAT
-        run: |
-          if [[ $GH_TOKEN != "" ]]; then
-              gh pr review ${{ github.event.pull_request.number }} -r -b "Some test(s) failed."
-          fi
