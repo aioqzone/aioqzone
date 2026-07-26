@@ -1,6 +1,6 @@
 [project]
 name = "aioqzone"
-version = "1.9.8.dev1"
+version = "1.9.9.dev1"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = [{ name = "aioqzone" }]
 maintainers = [
