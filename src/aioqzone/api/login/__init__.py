@@ -8,7 +8,14 @@ import logging
 import typing as t
 
 from aiohttp import ClientError
-from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from tenacity import (
+    RetryCallState,
+    TryAgain,
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+)
 from tylisten import FutureStore
 from typing_extensions import Self
 
@@ -29,6 +36,20 @@ __all__ = [
     "QrLoginConfig",
     "UpLoginConfig",
 ]
+
+
+def _reraise_last_attempt(retry_state: RetryCallState) -> t.NoReturn:
+    """Re-raise the last attempt exception instead of tenacity's ``RetryError``.
+
+    tenacity >= 9.2.1 unwraps ``TryAgain`` to its cause when ``reraise=True``,
+    which would surface the underlying ``ClientError`` (or ``GeneratorExit``)
+    rather than the documented :exc:`TryAgain`. Re-raising the attempt's own
+    exception keeps the public contract stable across tenacity versions.
+    """
+    outcome = retry_state.outcome
+    if outcome is None:
+        raise RuntimeError("retry outcome is unexpectedly None")
+    raise outcome.result()
 
 
 @t.final
@@ -99,7 +120,7 @@ class UpLoginManager(Loginable):
         stop=stop_after_attempt(2),
         wait=wait_exponential(min=1, max=6),
         retry=retry_if_exception_type(TryAgain),
-        reraise=True,
+        retry_error_callback=_reraise_last_attempt,
     )
     async def _new_cookie(self) -> t.Dict[str, str]:
         """
