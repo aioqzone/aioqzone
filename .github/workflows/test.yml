@@ -23,8 +23,7 @@ jobs:
   install-test:
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (github.event.pull_request.head.repo.full_name == github.repository &&
-       startsWith(github.head_ref, 'deps/'))
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     environment: test_secrets
     strategy:
