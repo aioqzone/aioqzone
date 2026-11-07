@@ -191,7 +191,7 @@ wheels = [
 
 [[package]]
 name = "aioqzone"
-version = "1.10.1.dev1"
+version = "1.10.2.dev1"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
@@ -2269,14 +2269,14 @@ wheels = [
 
 [[package]]
 name = "tylisten"
-version = "2.3.1"
+version = "2.5.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f6/e4/d3790c825bcd9fbba92ac8e312958a04c05d4c533f2f48044603be6a49f0/tylisten-2.3.1.tar.gz", hash = "sha256:175b68fa738c8c963a7a63068e46a3eafb460dda77630afaee39a27cc66501be", size = 5758, upload-time = "2025-12-17T03:25:20.732Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/18/b0/f98e16a4b90b244732fee142934bbdff305d04d687b3f286e21512253afa/tylisten-2.5.1.tar.gz", hash = "sha256:6f118bc6e529c3e988508afa4310b0f31157d5a5e1e9cf8c24e5ace0d79315f2", size = 8617, upload-time = "2026-11-07T10:11:38.16Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/af/fb/a1b377d7817df35556dd85f9de38f39592104b22211ea7a81454b50b4aa8/tylisten-2.3.1-py3-none-any.whl", hash = "sha256:f42cd26fe641bdb9d516eaad3008c6ab53ddd69033344fce192fd0f51f42ae37", size = 8141, upload-time = "2025-12-17T03:25:21.65Z" },
+    { url = "https://files.pythonhosted.org/packages/e7/40/8be9f13b95f84be8eb6ef272850b8206d6ff2fff691362b4d74e80c83b7a/tylisten-2.5.1-py3-none-any.whl", hash = "sha256:70e924e28ce6c4317ca090fc6cb261c4a5a32391dc2a5e9db78951af168a8b47", size = 10426, upload-time = "2026-11-07T10:11:37.093Z" },
 ]
 
 [[package]]
