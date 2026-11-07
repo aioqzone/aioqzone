@@ -2,9 +2,26 @@ name: Sphinx Build and Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: Deploy the built HTML to GitHub Pages
+        required: false
+        type: boolean
+        default: true
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to build documentation from
+        required: false
+        type: string
+        default: ''
+      deploy:
+        description: Deploy the built HTML to GitHub Pages
+        required: false
+        type: boolean
+        default: false
   pull_request:
     types:
-      - review_requested
       - closed
     branches:
       - beta
@@ -13,7 +30,7 @@ on:
       - .github/workflows/sphinx.yml
 
 concurrency:
-  group: pages
+  group: ${{ (!inputs.deploy && github.event_name != 'pull_request') && format('pages-test-{0}', github.run_id) || 'pages' }}
   cancel-in-progress: true
 
 jobs:
@@ -23,6 +40,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}
       - uses: actions/configure-pages@v6
       - uses: astral-sh/setup-uv@v7
         with:
@@ -46,7 +65,7 @@ jobs:
 
       - name: Upload artifact
         if: |
-          github.event_name == 'workflow_dispatch' ||
+          (github.event_name != 'pull_request' && inputs.deploy) ||
           (github.event_name == 'pull_request' && github.event.action == 'closed')
         uses: actions/upload-pages-artifact@v5
         with:
@@ -54,7 +73,7 @@ jobs:
 
   deploy:
     if: |
-      github.event_name == 'workflow_dispatch' ||
+      (github.event_name != 'pull_request' && inputs.deploy) ||
       (github.event_name == 'pull_request' && github.event.action == 'closed')
     environment:
       name: github-pages

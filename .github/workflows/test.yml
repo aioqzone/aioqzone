@@ -2,21 +2,29 @@
 name: Test Poetry Project
 
 on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to test
+        required: true
+        type: number
   pull_request:
     types:
-      - review_requested
       - opened
     branches:
       - beta
       - release
 
 concurrency:
-  group: test-${{ github.ref_name }}
+  group: test-${{ github.event_name == 'workflow_dispatch' && format('pr-{0}', inputs.pr_number) || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
   install-test:
-    if: github.event.pull_request.head.repo.full_name == github.repository && (github.event.action != 'opened' || startsWith(github.head_ref, 'deps/'))
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       startsWith(github.head_ref, 'deps/'))
     runs-on: ubuntu-latest
     environment: test_secrets
     strategy:
@@ -26,9 +34,20 @@ jobs:
       #----------------------------------------------
       #       check-out repo and set-up python
       #----------------------------------------------
+      - name: Verify pull request
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          if [ "$(gh pr view "$PR_NUMBER" --json isCrossRepository --jq '.isCrossRepository')" = "true" ]; then
+            echo "::error::Refusing to run tests for a pull request from a fork"
+            exit 1
+          fi
       - uses: actions/checkout@v7
         with:
-            ref: ${{ github.ref }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/pull/{0}/head', inputs.pr_number) || github.ref }}
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
@@ -47,3 +66,10 @@ jobs:
           echo "::group::pytest outputs"
           uv run pytest test --log-cli-level=WARNING
           echo "::endgroup::"
+
+  doc-test:
+    if: github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/sphinx.yml
+    with:
+      ref: ${{ format('refs/pull/{0}/head', inputs.pr_number) }}
+      deploy: false
