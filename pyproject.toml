@@ -1,6 +1,6 @@
 [project]
 name = "aioqzone"
-version = "1.9.10.dev1"
+version = "1.10.1.dev1"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = [{ name = "aioqzone" }]
 maintainers = [
@@ -8,7 +8,7 @@ maintainers = [
 ]
 license = "AGPL-3.0-or-later"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = ["qzone-api", "autologin", "asyncio-spider"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -25,7 +25,7 @@ dependencies = [
     "tenacity>=8.2.3,<10.0.0",
     # "exceptiongroup>=1.1.1",
     "tylisten>=2.2.1",
-    "pillow>=11.3.0",
+    "pillow>=13.0.0",
     "pychaosvm~=0.5.4",
 ]
 
@@ -37,15 +37,14 @@ Documentation = "https://aioqzone.github.io/aioqzone"
 "Discussion" = "https://t.me/aioqzone_chatroom"
 
 [dependency-groups]
-test = ["pytest>=9.0.3", "pytest-asyncio>=1.1,<1.4"]
+test = ["pytest>=9.0.3", "pytest-asyncio~=1.1"]
 dev = [
     "pre-commit",
     "ruff",
     "ty",
 ]
 doc = [
-    "Sphinx>=8.1.3; python_version=='3.10'",
-    "Sphinx~=9.0; python_version>='3.11'",
+    "Sphinx~=9.0",
     "autodoc-pydantic>=2.2.0",
     "sphinx-autodoc-typehints~=3.0",
     "furo",
