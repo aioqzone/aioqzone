@@ -41,10 +41,11 @@ class AstLoader:
         :return: A :obj:`JsonValue` object.
         """
         js = dedent(js).replace(r"\/", "/")
-        node = ast.parse(js, mode="eval")
+        node = ast.parse(js, filename=filename, mode="eval")
         node = ast.fix_missing_locations(cls.RewriteUndef().visit(node))
-        code = compile(node, filename, mode="eval")
-        return eval(code)
+        # Parse as a data literal only. Never compile/eval the input: it comes from
+        # remote responses and must not be executed as Python code.
+        return ast.literal_eval(node)
 
 
 def json_loads(js: str) -> JsonValue:
