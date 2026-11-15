@@ -1,6 +1,6 @@
 [project]
 name = "aioqzone"
-version = "1.10.2.dev1"
+version = "1.11.0"
 description = "A Python wrapper for Qzone login and H5 APIs."
 authors = [{ name = "aioqzone" }]
 maintainers = [
@@ -8,7 +8,7 @@ maintainers = [
 ]
 license = "AGPL-3.0-or-later"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11.5"
 keywords = ["qzone-api", "autologin", "asyncio-spider"]
 classifiers = [
     "Development Status :: 4 - Beta",
