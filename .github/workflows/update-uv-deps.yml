@@ -49,6 +49,7 @@ jobs:
             git checkout -B deps/uv origin/deps/uv
             git rebase origin/beta || {
               echo "Rebase conflict, resetting deps/uv to beta"
+              git rebase --abort || true
               git checkout -B deps/uv origin/beta
             }
           else
